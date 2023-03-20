@@ -2,4 +2,13 @@
 plugins {
     id 'com.android.application' version '7.4.2' apply false
     id 'com.android.library' version '7.4.2' apply false
+    id "org.sonarqube" version "3.5.0.2730"
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "SE2-group-gamma_monopoly"
+        property "sonar.organization", "se2-group-gamma"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
