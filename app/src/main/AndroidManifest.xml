@@ -17,12 +17,6 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.Monopoly.NoActionBar"
             android:screenOrientation="landscape"
-
-
-
-
-
-
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

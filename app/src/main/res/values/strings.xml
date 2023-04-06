@@ -9,4 +9,7 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="join">Join</string>
+    <string name="key">Key:</string>
+    <string name="name">Name:</string>
 </resources>
