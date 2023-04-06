@@ -12,4 +12,7 @@
     <string name="join_game">Join Game</string>
     <string name="host_game">Host Game</string>
     <string name="monopoly">Monopoly</string>
+    <string name="name">Name</string>
+    <string name="join">Join</string>
+    <string name="key">Key</string>
 </resources>
