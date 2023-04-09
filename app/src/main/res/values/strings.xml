@@ -15,4 +15,11 @@
     <string name="name">Name</string>
     <string name="join">Join</string>
     <string name="key">Key</string>
+    <string name="background">Background</string>
+    <string name="number_of_players">Number of players</string>
+    <string name="maximum_time">Maximum Time</string>
+    <string name="username">Username</string>
+    <string name="lobbyname">Lobbyname</string>
+    <string name="create_lobby">Create Lobby</string>
+    <string name="game_key">Game Key</string>
 </resources>

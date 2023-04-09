@@ -5,8 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FirstFragment"
-    android:background="@drawable/monopolymain"
+
     >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/mybg"/>
 
     <TextView
         android:id="@+id/textview_first"
@@ -15,7 +21,8 @@
         android:text="@string/monopoly"
         android:textColor="#FFFFFF"
         android:textColorLink="#B5A3A3"
-        android:textSize="34sp"
+        android:textSize="38sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.222"
@@ -28,6 +35,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:contentDescription="@string/action_settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -46,7 +55,7 @@
         app:layout_constraintVertical_bias="0.812" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/host_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/host_game"

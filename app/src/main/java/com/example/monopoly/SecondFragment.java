@@ -1,6 +1,7 @@
 package com.example.monopoly;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,6 @@ public class SecondFragment extends Fragment {
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-
         binding = FragmentSecondBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
@@ -30,6 +30,14 @@ public class SecondFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(SecondFragment.this)
+                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
+            }
+        });
+
+        binding.button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(SecondFragment.this)
