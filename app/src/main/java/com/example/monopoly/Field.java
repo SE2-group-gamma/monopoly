@@ -1,6 +1,7 @@
 package com.example.monopoly;
 
 import android.graphics.Color;
+import android.media.Image;
 
 public class Field {
 
@@ -14,8 +15,9 @@ public class Field {
     private int houseCost;      //Price per house
     private int mortgageValue;
     private int mortgageCancellationValue;
+    private Image img;
 
-    public Field(int id, String name, String type, Color col, int cost, int houses, int houseCost, int mortgageValue, int mortgageCancellationValue) {
+    public Field(int id, String name, String type, Color col, int cost, int houses, int houseCost, int mortgageValue, int mortgageCancellationValue, Image img) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -25,6 +27,7 @@ public class Field {
         this.houseCost = houseCost;
         this.mortgageValue = mortgageValue;
         this.mortgageCancellationValue = mortgageCancellationValue;
+        this.img = img;
     }
 
     public void setCost(int cost) {
