@@ -11,17 +11,18 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.databinding.FragmentSecondBinding;
+import com.example.monopoly.databinding.SettingsBinding;
 
-public class SecondFragment extends Fragment {
+public class Settings extends Fragment {
 
-    private FragmentSecondBinding binding;
+    private SettingsBinding binding;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = FragmentSecondBinding.inflate(inflater, container, false);
+        binding = SettingsBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }
@@ -29,21 +30,26 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
+        binding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
+                NavHostFragment.findNavController(Settings.this)
+                        .navigate(R.id.action_Settings_to_FirstFragment);
             }
         });
 
-        binding.button4.setOnClickListener(new View.OnClickListener() {
+        binding.saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
+                // TODO
+                // Save Settings here
+                // read from switch via binding
+                NavHostFragment.findNavController(Settings.this)
+                        .navigate(R.id.action_Settings_to_FirstFragment);
             }
         });
+
+
     }
 
     @Override

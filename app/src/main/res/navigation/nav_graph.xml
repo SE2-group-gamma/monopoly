@@ -13,20 +13,23 @@
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            app:destination="@id/JoinGame" />
         <action
             android:id="@+id/action_FirstFragment_to_ThirdFragment"
             app:destination="@id/ThirdFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_Settings"
+            app:destination="@id/Settings" />
 
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.monopoly.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        android:id="@+id/JoinGame"
+        android:name="com.example.monopoly.JoinGame"
+        android:label="Join Game"
+        tools:layout="@layout/join_game">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            android:id="@+id/action_JoinGame_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
     <fragment
@@ -37,6 +40,17 @@
 
         <action
             android:id="@+id/action_ThirdFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/Settings"
+        android:name="com.example.monopoly.Settings"
+        android:label="Settings"
+        tools:layout="@layout/settings">
+
+        <action
+            android:id="@+id/action_Settings_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
 </navigation>
