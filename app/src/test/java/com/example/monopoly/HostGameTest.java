@@ -2,7 +2,7 @@ package com.example.monopoly;
 
 import junit.framework.TestCase;
 
-public class ThirdFragmentTest extends TestCase {
+public class HostGameTest extends TestCase {
 
     public void testOnCreateView() {
     }

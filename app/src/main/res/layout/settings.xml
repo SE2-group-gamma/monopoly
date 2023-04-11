@@ -50,7 +50,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/back"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                tools:ignore="VisualLintBounds" />
         </TableRow>
 
         <TableRow
@@ -88,7 +89,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/placeholder"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="VisualLintBounds" />
             <Switch
                 android:id="@+id/switch2"
                 android:layout_width="wrap_content"
@@ -97,7 +99,7 @@
                 android:textColor="@color/white"
                 android:thumbTint="@color/white"
                 android:trackTint="@color/white"
-                tools:ignore="TouchTargetSizeCheck,UseSwitchCompatOrMaterialXml" />
+                tools:ignore="TouchTargetSizeCheck,UseSwitchCompatOrMaterialXml,VisualLintBounds" />
 
         </TableRow>
 
@@ -136,7 +138,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/placeholder"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:ignore="VisualLintBounds" />
             <Switch
                 android:id="@+id/switch4"
                 android:layout_width="wrap_content"
@@ -145,7 +148,7 @@
                 android:textColor="@color/white"
                 android:thumbTint="@color/white"
                 android:trackTint="@color/white"
-                tools:ignore="TouchTargetSizeCheck,UseSwitchCompatOrMaterialXml" />
+                tools:ignore="TouchTargetSizeCheck,UseSwitchCompatOrMaterialXml,VisualLintBounds" />
         </TableRow>
 
         <TableRow

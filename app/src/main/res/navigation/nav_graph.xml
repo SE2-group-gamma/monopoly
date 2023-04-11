@@ -16,7 +16,7 @@
             app:destination="@id/JoinGame" />
         <action
             android:id="@+id/action_FirstFragment_to_ThirdFragment"
-            app:destination="@id/ThirdFragment" />
+            app:destination="@id/HostGame" />
         <action
             android:id="@+id/action_FirstFragment_to_Settings"
             app:destination="@id/Settings" />
@@ -33,13 +33,13 @@
             app:destination="@id/FirstFragment" />
     </fragment>
     <fragment
-        android:id="@+id/ThirdFragment"
-        android:name="com.example.monopoly.ThirdFragment"
-        android:label="Third Fragment"
-        tools:layout="@layout/fragment_third">
+        android:id="@+id/HostGame"
+        android:name="com.example.monopoly.HostGame"
+        android:label="Host Game"
+        tools:layout="@layout/host_game">
 
         <action
-            android:id="@+id/action_ThirdFragment_to_FirstFragment"
+            android:id="@+id/action_HostGame_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
 

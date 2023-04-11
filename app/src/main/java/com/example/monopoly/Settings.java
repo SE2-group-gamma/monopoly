@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.monopoly.databinding.FragmentSecondBinding;
 import com.example.monopoly.databinding.SettingsBinding;
 
 public class Settings extends Fragment {
@@ -19,7 +18,7 @@ public class Settings extends Fragment {
 
     @Override
     public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
+            @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
         binding = SettingsBinding.inflate(inflater, container, false);
@@ -30,23 +29,16 @@ public class Settings extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(Settings.this)
-                        .navigate(R.id.action_Settings_to_FirstFragment);
-            }
-        });
+        binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(Settings.this)
+                .navigate(R.id.action_Settings_to_FirstFragment));
 
-        binding.saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO
-                // Save Settings here
-                // read from switch via binding
-                NavHostFragment.findNavController(Settings.this)
-                        .navigate(R.id.action_Settings_to_FirstFragment);
-            }
+        binding.saveButton.setOnClickListener(view12 -> {
+            // TODO: Save Settings here
+            boolean sound = binding.switch1.isChecked();
+            boolean placeholder = binding.switch2.isChecked();
+
+            NavHostFragment.findNavController(Settings.this)
+                    .navigate(R.id.action_Settings_to_FirstFragment);
         });
 
 

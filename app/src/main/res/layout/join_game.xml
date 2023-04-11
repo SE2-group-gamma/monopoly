@@ -50,7 +50,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/back"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                tools:ignore="VisualLintBounds" />
         </TableRow>
 
         <TableRow
@@ -65,7 +66,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/back"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                tools:ignore="VisualLintBounds" />
 
 
             <EditText
@@ -74,19 +76,20 @@
                 android:layout_height="wrap_content"
                 android:autofillHints=""
                 android:backgroundTint="@color/white"
-                android:textColorHint="@color/white"
                 android:gravity="center"
+                android:hint="@string/game_key"
                 android:inputType="text"
-                android:hint="Game Key"
                 android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 android:textSize="16sp"
-                 />
+                tools:ignore="TouchTargetSizeCheck" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/back"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                tools:ignore="VisualLintBounds" />
 
         </TableRow>
 
@@ -103,7 +106,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/back"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                tools:ignore="VisualLintBounds" />
 
             <EditText
                 android:id="@+id/userInput"
@@ -111,19 +115,20 @@
                 android:layout_height="wrap_content"
                 android:autofillHints=""
                 android:backgroundTint="@color/white"
-                android:textColorHint="@color/white"
                 android:gravity="center"
+                android:hint="@string/username"
                 android:inputType="text"
-                android:hint="Username"
                 android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 android:textSize="16sp"
-                />
+                tools:ignore="TouchTargetSizeCheck" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/back"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                tools:ignore="VisualLintBounds" />
 
         </TableRow>
 
@@ -139,7 +144,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/back"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                tools:ignore="ButtonStyle,VisualLintBounds" />
 
             <Button
                 android:id="@+id/joinButton"
@@ -155,13 +161,14 @@
                 android:paddingBottom="12dp"
                 android:paddingStart="30dp"
                 android:paddingEnd="30dp"
-                />
+                tools:ignore="ButtonStyle" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/back"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                tools:ignore="ButtonStyle,VisualLintBounds" />
 
         </TableRow>
 
