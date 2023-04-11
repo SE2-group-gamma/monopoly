@@ -30,4 +30,6 @@
     <string name="test142763">Test142763</string>
     <string name="maximum_time_min">Maximum Time (min)</string>
     <string name="app_name_uppercase">Monopoly</string>
+    <string name="lobby">Lobby</string>
+    <string name="start_game">Start Game</string>
 </resources>

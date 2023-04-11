@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_JoinGame_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_JoinGame_to_Lobby"
+            app:destination="@id/Lobby" />
     </fragment>
     <fragment
         android:id="@+id/HostGame"
@@ -41,6 +44,9 @@
         <action
             android:id="@+id/action_HostGame_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_HostGame_to_Lobby"
+            app:destination="@id/Lobby" />
     </fragment>
 
     <fragment
@@ -53,4 +59,16 @@
             android:id="@+id/action_Settings_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/Lobby"
+        android:name="com.example.monopoly.Lobby"
+        android:label="Lobby"
+        tools:layout="@layout/lobby">
+
+        <action
+            android:id="@+id/action_Lobby_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
+
 </navigation>
