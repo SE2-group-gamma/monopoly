@@ -15,6 +15,9 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.databinding.HostGameBinding;
 
+import java.text.DecimalFormatSymbols;
+import java.util.Random;
+
 public class HostGame extends Fragment {
 
     private HostGameBinding binding;
@@ -41,7 +44,7 @@ public class HostGame extends Fragment {
                 binding.seekBar.setPadding(30,0,30,0);
                 binding.seekBar2.setPadding(30,0,30,0);
                 setSeekBar(binding.seekBar,2,false, binding.textViewSeekBar);
-                setSeekBar(binding.seekBar2,5,false, binding.textViewSeekBar2);
+                setSeekBar(binding.seekBar2,2,false, binding.textViewSeekBar2);
             }
         });
 
@@ -83,9 +86,20 @@ public class HostGame extends Fragment {
             String lobby = binding.lobbyInput.getText().toString();
             int playerCount = binding.seekBar.getProgress();
             int maxTimeMin = binding.seekBar2.getProgress();
+            if(user.isEmpty() && lobby.isEmpty()){
+                binding.userInput.setError("No Input");
+                binding.lobbyInput.setError("No Input");
+            }
+            else if(user.isEmpty()){
+                binding.userInput.setError("No Input");
+            } else if (lobby.isEmpty()) {
+                binding.lobbyInput.setError("No Input");
+            } else {
+                NavHostFragment.findNavController(HostGame.this)
+                        .navigate(R.id.action_HostGame_to_Lobby);
+                //new Lobby(generateLobbyKey(),lobby);
+            }
 
-            /*NavHostFragment.findNavController(HostGame.this)
-                    .navigate(R.id.action_HostGame_to_FirstFragment);*/
         });
     }
 
@@ -97,7 +111,7 @@ public class HostGame extends Fragment {
 
     public void setSeekBar(SeekBar seekBar, int progress, boolean fromUser, TextView textView){
         int width = seekBar.getWidth();
-        if(!fromUser){
+        if(seekBar.equals(binding.seekBar)){
             width += seekBar.getThumbOffset();
             //Log.d("bool","false");
         }
@@ -110,8 +124,18 @@ public class HostGame extends Fragment {
         Log.d("getX",""+seekBar.getX());
         Log.d("setX",""+ (seekBar.getX() + val + seekBar.getThumbOffset() / 2));
         */
-        textView.setText("" + progress);
+        if(seekBar.equals(binding.seekBar)){
+            textView.setText("" + (progress+2));
+        }else if(progress==10){
+            textView.setText("" + DecimalFormatSymbols.getInstance().getInfinity());
+        }else{
+            textView.setText("" + (progress*5));
+        }
         textView.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
+    }
+
+    private int generateLobbyKey(){
+        return new Random().nextInt(9000) + 1000;
     }
 
 

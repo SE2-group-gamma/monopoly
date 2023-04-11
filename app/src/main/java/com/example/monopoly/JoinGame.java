@@ -37,8 +37,17 @@ public class JoinGame extends Fragment {
             String user = binding.userInput.getText().toString();
             String key = binding.keyInput.getText().toString();
 
-            NavHostFragment.findNavController(JoinGame.this)
-                    .navigate(R.id.action_JoinGame_to_FirstFragment);
+            if(user.isEmpty() && key.isEmpty()){
+                binding.userInput.setError("No Input");
+                binding.keyInput.setError("No Input");
+            }else if(user.isEmpty()){
+                binding.userInput.setError("No Input");
+            }else if(key.isEmpty()){
+                binding.keyInput.setError("No Input");
+            }else{
+                NavHostFragment.findNavController(JoinGame.this)
+                        .navigate(R.id.action_JoinGame_to_Lobby);
+            }
         });
     }
 

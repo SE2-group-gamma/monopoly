@@ -80,7 +80,7 @@
                 android:hint="@string/game_key"
                 android:inputType="text"
                 android:textColor="@color/white"
-                android:textColorHint="@color/white"
+                android:textColorHint="@android:color/darker_gray"
                 android:textSize="16sp"
                 tools:ignore="TouchTargetSizeCheck" />
 
@@ -119,7 +119,7 @@
                 android:hint="@string/username"
                 android:inputType="text"
                 android:textColor="@color/white"
-                android:textColorHint="@color/white"
+                android:textColorHint="@android:color/darker_gray"
                 android:textSize="16sp"
                 tools:ignore="TouchTargetSizeCheck" />
 
