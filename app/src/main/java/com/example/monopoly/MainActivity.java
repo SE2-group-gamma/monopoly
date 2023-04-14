@@ -1,5 +1,7 @@
 package com.example.monopoly;
 
+import android.content.Context;
+import android.net.nsd.NsdManager;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -17,6 +19,12 @@ import com.example.monopoly.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+import network.Client;
+import network.NSD;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,8 +51,12 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-    }
 
+        NsdManager manager = (NsdManager) getSystemService(Context.NSD_SERVICE);
+        NSD nsd = new NSD();
+        nsd.start(manager);
+
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
