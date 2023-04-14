@@ -89,7 +89,7 @@ public class NSD extends Thread {
                 host = nsdServiceInfo.getHost();
 
                 Client client = new Client(host, port);
-                client.run(request);
+                client.run();
 
             }
         };

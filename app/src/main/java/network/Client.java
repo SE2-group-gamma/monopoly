@@ -10,14 +10,23 @@ import java.net.Socket;
 public class Client extends Thread {
     private InetAddress host;
     private int port;
-    private String response;
+    public String response;
+    public String request;
+
+
 
     Client(InetAddress host, int port) {
         this.host = host;
         this.port = port;
     }
 
-    public void run(String request) {
+    public void setRequest(String request){
+        this.request = request;
+    }
+    public String getResponse(){
+        return response;
+    }
+    public void run() {
         try {
 
             Socket clientSocket = new Socket(host, port);
