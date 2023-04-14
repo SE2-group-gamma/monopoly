@@ -20,12 +20,7 @@ public class Lobby extends Fragment {
 
     private int key;
     private String lobbyname;
-/*
-    public Lobby(int key, String lobbyname) {
-        this.key = key;
-        this.lobbyname = lobbyname;
-    }
-*/
+
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -42,6 +37,7 @@ public class Lobby extends Fragment {
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+                // TODO: Set textView with key from Lobby
                 //binding.textViewKey.setText("Game-Key: "+key);
             }
         });

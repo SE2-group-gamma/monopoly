@@ -81,7 +81,6 @@ public class HostGame extends Fragment {
                 .navigate(R.id.action_HostGame_to_FirstFragment));
 
         binding.createButton.setOnClickListener(view12 -> {
-            // TODO: create Lobby here
             String user = binding.userInput.getText().toString();
             String lobby = binding.lobbyInput.getText().toString();
             int playerCount = binding.seekBar.getProgress();
@@ -95,9 +94,13 @@ public class HostGame extends Fragment {
             } else if (lobby.isEmpty()) {
                 binding.lobbyInput.setError("No Input");
             } else {
+                LobbyKey lobbyKey = new LobbyKey();
+                int key = lobbyKey.generateKey();
+
+                // TODO: create Lobby with key here (Server Side)
+
                 NavHostFragment.findNavController(HostGame.this)
                         .navigate(R.id.action_HostGame_to_Lobby);
-                //new Lobby(generateLobbyKey(),lobby);
             }
 
         });
@@ -111,9 +114,17 @@ public class HostGame extends Fragment {
 
     public void setSeekBar(SeekBar seekBar, int progress, boolean fromUser, TextView textView){
         int width = seekBar.getWidth();
-        if(seekBar.equals(binding.seekBar)){
+        if(!fromUser && seekBar.equals(binding.seekBar)){
+            width += seekBar.getThumbOffset()*3;
+        }else{
             width += seekBar.getThumbOffset();
-            //Log.d("bool","false");
+        }
+
+        if(!fromUser && seekBar.equals(binding.seekBar2)){
+            width += seekBar.getThumbOffset()*6;
+        }
+        else {
+            width -= seekBar.getThumbOffset();
         }
         int val = (progress * (width - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
         /*
@@ -129,14 +140,9 @@ public class HostGame extends Fragment {
         }else if(progress==10){
             textView.setText("" + DecimalFormatSymbols.getInstance().getInfinity());
         }else{
-            textView.setText("" + (progress*5));
+            textView.setText("" + ((progress*5)+10));
         }
         textView.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
     }
-
-    private int generateLobbyKey(){
-        return new Random().nextInt(9000) + 1000;
-    }
-
 
 }
