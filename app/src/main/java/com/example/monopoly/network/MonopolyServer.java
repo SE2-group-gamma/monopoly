@@ -23,6 +23,15 @@ public class MonopolyServer extends Thread{
         this.isListening = false;
     }
 
+    // Constructor for testing
+    public MonopolyServer(int maxNumberOfClients, ServerSocket serverSocket) throws IOException {
+        this.serverSocket = serverSocket;
+        this.localPort = this.serverSocket.getLocalPort();
+        this.maxNumberOfClients = maxNumberOfClients;
+        this.clients = new ArrayList<ClientHandler>();
+        this.isListening = false;
+    }
+
     @Override
     public void run() {
         this.isListening = true;
