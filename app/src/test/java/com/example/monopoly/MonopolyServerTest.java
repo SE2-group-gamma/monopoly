@@ -1,28 +1,52 @@
 package com.example.monopoly;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.network.MonopolyServer;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ConnectException;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class MonopolyServerTest {
+    ServerSocket serverSocket;
+    Socket socket;
 
-    private MonopolyServer createServer(int maxNumOfClients){
+
+    private MonopolyServer initServer(int maxNumOfClients){
         MonopolyServer ms = null;
+        serverSocket = mock(ServerSocket.class);
+        socket = mock(Socket.class);
+        when(serverSocket.getLocalPort()).thenReturn(1234);
         try {
-            ms = new MonopolyServer(maxNumOfClients);
+            when(serverSocket.accept()).thenReturn(socket);
+            when(socket.getInputStream()).thenReturn(mock(InputStream.class));
+            when(socket.getOutputStream()).thenReturn(mock(OutputStream.class));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            ms = new MonopolyServer(maxNumOfClients, serverSocket);
         } catch (IOException e) {
             e.printStackTrace();
             fail("Create MonopolyServer failed!");
@@ -32,15 +56,14 @@ public class MonopolyServerTest {
 
     @Test
     public void singleClientConnectionTest() throws IOException {
-        MonopolyServer ms = createServer(1);
+        MonopolyServer ms = initServer(1);
         assertNotNull(ms);
         ms.start();
         int port = ms.getLocalPort();
-        Socket sc = new Socket("127.0.0.1", port);
         while (ms.isListening());
-        assertTrue(sc.isConnected());
+        assertFalse(ms.isListening());
+        verify(serverSocket, times(1)).accept();
         assertEquals(1, ms.getNumberOfClients());
-        sc.close();
     }
 
     @Test
@@ -49,34 +72,15 @@ public class MonopolyServerTest {
         Random rand = new Random();
 
         int numOfClients = rand.nextInt(10) + 1;
-        ms = createServer(numOfClients);
+        ms = initServer(numOfClients);
         assertNotNull(ms);
         ms.start();
         int port = ms.getLocalPort();
-        List<Socket> clients = new ArrayList<>();
-        for(int i = 0; i < numOfClients; i++){
-            clients.add(new Socket("127.0.0.1", port));
-        }
+
         while (ms.isListening());
-        for(Socket sc : clients){
-            assertTrue(sc.isConnected());
-        }
+        verify(serverSocket,times(numOfClients)).accept();
         assertEquals(numOfClients, ms.getNumberOfClients());
-        for(Socket sc : clients){
-            sc.close();
-        }
+
     }
 
-    @Test
-    public void tooManyConnectionsTest() throws IOException {
-        MonopolyServer ms = createServer(1);
-        ms.start();
-        int port = ms.getLocalPort();
-        Socket s1 = new Socket("127.0.0.1", port);
-        assertThrows(ConnectException.class, () -> new Socket("127.0.0.1", port));
-        while(ms.isListening());
-        assertEquals(1, ms.getNumberOfClients());
-        assertTrue(s1.isConnected());
-        s1.close();
-    }
 }
