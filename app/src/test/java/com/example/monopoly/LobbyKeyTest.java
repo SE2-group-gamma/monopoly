@@ -24,6 +24,8 @@ public class LobbyKeyTest extends TestCase {
         assertNotEquals(key1, key2);
         assertNotEquals(key1, key3);
         assertNotEquals(key2, key3);
+
+
     }
 
 }
