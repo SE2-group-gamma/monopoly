@@ -9,7 +9,7 @@ public class Player {
     private boolean alive;
     private boolean inPrison;
 
-    public Player(String username, Color col, double capital, boolean alive, boolean inPrison) {
+    public Player(String username, Color col, double capital, boolean alive) {
         this.username = username;
         this.col = col;
         this.capital = capital;
