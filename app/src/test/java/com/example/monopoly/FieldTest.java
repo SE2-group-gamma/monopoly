@@ -37,14 +37,14 @@ class FieldTest {
         field = new Field(0,"Billa","Ereignis",col,100,3,owner,50000,33000,30000,img);
     }
     @Test
-    void setCost() {
+    void setGetCost() {
         assertEquals(field.getCost(),100);
         field.setCost(10);
         assertEquals(field.getCost(),10);
     }
 
     @Test
-    void setHouses() {
+    void setGetHouses() {
         assertEquals(field.getHouses(),3);
         field.setHouses(10);
         assertEquals(field.getHouses(),10);
@@ -59,7 +59,7 @@ class FieldTest {
     }
 
     @Test
-    void getHouseCost() throws NoSuchFieldException {
+    void getHouseCost() {
         assertEquals(field.getHouseCost(), 50000);
     }
 
@@ -91,20 +91,6 @@ class FieldTest {
     @Test
     void getCol() {
         assertEquals(field.getCol(),col);
-    }
-
-    @Test
-    void getCost() {
-        assertEquals(field.getCost(),100);
-        field.setCost(120);
-        assertEquals(field.getCost(),120);
-    }
-
-    @Test
-    void getHouses() {
-        assertEquals(field.getHouses(),3);
-        field.setHouses(5);
-        assertEquals(field.getHouses(),5);
     }
 
 }
