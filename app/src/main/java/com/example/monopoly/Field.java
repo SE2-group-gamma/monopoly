@@ -17,13 +17,14 @@ public class Field {
     private int mortgageCancellationValue;
     private Image img;
 
-    public Field(int id, String name, String type, Color col, int cost, int houses, int houseCost, int mortgageValue, int mortgageCancellationValue, Image img) {
+    public Field(int id, String name, String type, Color col, int cost, int houses, Player owner, int houseCost, int mortgageValue, int mortgageCancellationValue, Image img) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.col = col;
         this.cost = cost;
         this.houses = houses;
+        this.owner = owner;
         this.houseCost = houseCost;
         this.mortgageValue = mortgageValue;
         this.mortgageCancellationValue = mortgageCancellationValue;
