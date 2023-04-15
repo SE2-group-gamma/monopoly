@@ -111,6 +111,7 @@
                 android:id="@+id/textView52"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:paddingEnd="20dp"
                 android:text="@string/maximum_time_min"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
@@ -158,10 +159,10 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="start|center"
                 android:orientation="horizontal"
                 android:textAlignment="center"
-                android:layout_weight="1">
+                >
 
                 <EditText
                     android:id="@+id/userInput"
@@ -176,7 +177,6 @@
                     android:textColorHint="@android:color/darker_gray"
                     android:textSize="16sp"
                     tools:ignore="TouchTargetSizeCheck" />
-
             </LinearLayout>
 
             <Button
@@ -199,10 +199,10 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="start|center"
                 android:orientation="horizontal"
                 android:textAlignment="center"
-                android:layout_weight="1">
+                >
 
                 <EditText
                     android:id="@+id/lobbyInput"
@@ -218,33 +218,18 @@
                     android:textSize="16sp"
                     tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/back"
-                android:visibility="invisible" />
-
-
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            >
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/back"
-                android:visibility="invisible" />
-
+            <TextView
+                />
+            <TextView
+                />
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="end|center"
                 android:orientation="horizontal"
                 android:textAlignment="center"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                >
                 <Button
                     android:id="@+id/create_button"
                     android:layout_width="wrap_content"
@@ -258,17 +243,17 @@
                     android:paddingBottom="12dp"
                     android:paddingStart="30dp"
                     android:paddingEnd="30dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    />
             </LinearLayout>
-
-            <Button
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/back"
-                android:visibility="invisible" />
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="10dp"
+                 />
+
         </TableRow>
-
-
     </TableLayout>
 
 </FrameLayout>
