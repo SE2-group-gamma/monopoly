@@ -8,10 +8,11 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 public class Client extends Thread {
-    public InetAddress host;
-    public int port;
-    public String response;
-    public String request;
+    private InetAddress host;
+    private int port;
+    private Socket clientSocket;
+    private String response;
+    private String request;
 
 
     public Client(InetAddress host, int port) {
@@ -38,7 +39,7 @@ public class Client extends Thread {
     public void run() {
         try {
 
-            Socket clientSocket = new Socket(host, port);
+            clientSocket = new Socket(host, port);
 
             DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));

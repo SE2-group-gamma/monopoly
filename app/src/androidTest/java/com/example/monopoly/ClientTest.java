@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -13,13 +14,15 @@ public class ClientTest {
 
 private String request = "request";
 private String response = "response";
+Client client;
+
 
 
     @Test
-    public void testClientSocketRequest() throws UnknownHostException {
+    public void testClientSocketRequest() throws IOException {
         byte IPAddress[] = { 127, 0, 0, 1 };
         InetAddress address = InetAddress.getByAddress(IPAddress);
-        Client client = new Client(address,0);
+        client = new Client(address,0);
         client.setRequest(request);
         assertEquals(client.getRequest(),request);
     }
@@ -28,11 +31,11 @@ private String response = "response";
     public void testClientSocketResponse() throws UnknownHostException {
         byte IPAddress[] = { 127, 0, 0, 1 };
         InetAddress address = InetAddress.getByAddress(IPAddress);
-        Client client = new Client(address,0);
+        client = new Client(address,0);
         client.setResponse(response);
         assertEquals(client.getResponse(),response);
     }
-    
+
 
 
 }
