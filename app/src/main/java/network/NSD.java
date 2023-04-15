@@ -9,7 +9,7 @@ import java.net.InetAddress;
 public class NSD extends Thread {
 
     private String nsdTag = "NSD";
-    private String serviceType = "_http._tcp.";
+    private String serviceType = "_monopoly";
     private NsdManager manager;
     private NsdManager.DiscoveryListener discoveryListener;
     private NsdManager.ResolveListener resolveListener;

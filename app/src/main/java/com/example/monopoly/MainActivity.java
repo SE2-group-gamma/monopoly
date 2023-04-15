@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Inizialize NSDManager for client-sided Network Service Discovery
         NsdManager manager = (NsdManager) getSystemService(Context.NSD_SERVICE);
         NSD nsd = new NSD();
         nsd.start(manager);

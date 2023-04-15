@@ -8,24 +8,33 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 public class Client extends Thread {
-    private InetAddress host;
-    private int port;
+    public InetAddress host;
+    public int port;
     public String response;
     public String request;
 
 
-
-    Client(InetAddress host, int port) {
+    public Client(InetAddress host, int port) {
         this.host = host;
         this.port = port;
     }
 
-    public void setRequest(String request){
+    public void setRequest(String request) {
         this.request = request;
     }
-    public String getResponse(){
+
+    public String getRequest() {
+        return request;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
+    }
+
+    public String getResponse() {
         return response;
     }
+
     public void run() {
         try {
 
