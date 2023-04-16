@@ -143,7 +143,7 @@ public class HostGame extends Fragment {
         }else{
             textView.setText("" + ((progress*5)+10));
         }
-        textView.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
+        textView.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2.0f);
     }
 
 }
