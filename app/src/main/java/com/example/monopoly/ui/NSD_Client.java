@@ -1,15 +1,17 @@
-package com.example.monopoly.network;
+package com.example.monopoly.ui;
 
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.util.Log;
 
+import com.example.monopoly.network.Client;
+
 import java.net.InetAddress;
 
-public class NSD_Client extends Thread {
+public class NSD_Client {
 
-    private String nsdTag = "NSD";
-    private String serviceType = "_http._tcp";
+    private String nsdTag = "monopoly";
+    private String serviceType = "_monopoly._tcp";
 
     /*
     serviceType needs to be changed to "_monopoly" after service is registered, otherwise App will not start
@@ -94,7 +96,7 @@ public class NSD_Client extends Thread {
                 host = nsdServiceInfo.getHost();
 
                 Client client = new Client(host, port);
-                client.run();
+                client.start();
 
             }
         };
