@@ -70,5 +70,4 @@
             android:id="@+id/action_Lobby_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
-
 </navigation>
