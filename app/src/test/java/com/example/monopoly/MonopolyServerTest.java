@@ -55,6 +55,19 @@ public class MonopolyServerTest {
     }
 
     @Test
+    public void createMonopolyServerTest(){
+        MonopolyServer ms = null;
+        try {
+            ms = new MonopolyServer(10);
+        } catch (IOException e) {
+            fail();
+            e.printStackTrace();
+        }
+        assertNotNull(ms);
+        assertTrue(ms.getLocalPort() != 0);
+    }
+
+    @Test
     public void singleClientConnectionTest() throws IOException {
         MonopolyServer ms = initServer(1);
         assertNotNull(ms);
