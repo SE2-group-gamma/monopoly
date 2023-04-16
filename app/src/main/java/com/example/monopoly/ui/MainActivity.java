@@ -1,9 +1,10 @@
 package com.example.monopoly.ui;
 
+import android.content.Context;
+import android.net.nsd.NsdManager;
 import android.os.Bundle;
 
 import com.example.monopoly.R;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -46,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+        //Inizialize NSDManager for client-sided Network Service Discovery
+        NsdManager manager = (NsdManager) getSystemService(Context.NSD_SERVICE);
+        NSD_Client nsd = new NSD_Client();
+        nsd.start(manager);
 
     }
 
