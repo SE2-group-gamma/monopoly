@@ -1,12 +1,13 @@
 package com.example.monopoly;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import junit.framework.TestCase;
+import com.example.monopoly.utils.LobbyKey;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class LobbyKeyTest extends TestCase {
+public class LobbyKeyTest {
 
     @Test
     public void testGenerateKeyRange() {

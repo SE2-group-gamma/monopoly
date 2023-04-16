@@ -55,13 +55,25 @@ public class MonopolyServerTest {
     }
 
     @Test
+    public void createMonopolyServerTest(){
+        MonopolyServer ms = null;
+        try {
+            ms = new MonopolyServer(10);
+        } catch (IOException e) {
+            fail();
+            e.printStackTrace();
+        }
+        assertNotNull(ms);
+        assertTrue(ms.getLocalPort() != 0);
+    }
+
+    @Test
     public void singleClientConnectionTest() throws IOException {
         MonopolyServer ms = initServer(1);
         assertNotNull(ms);
         ms.start();
         int port = ms.getLocalPort();
-        while (ms.isListening());
-        assertFalse(ms.isListening());
+        while (ms.isAlive());
         verify(serverSocket, times(1)).accept();
         assertEquals(1, ms.getNumberOfClients());
     }
@@ -76,8 +88,7 @@ public class MonopolyServerTest {
         assertNotNull(ms);
         ms.start();
         int port = ms.getLocalPort();
-
-        while (ms.isListening());
+        while (ms.isAlive());
         verify(serverSocket,times(numOfClients)).accept();
         assertEquals(numOfClients, ms.getNumberOfClients());
 
