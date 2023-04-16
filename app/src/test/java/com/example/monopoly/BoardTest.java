@@ -1,6 +1,7 @@
 package com.example.monopoly;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.example.monopoly.gamelogic.Board;
+import com.example.monopoly.gamelogic.Field;
 
 import org.junit.jupiter.api.BeforeAll;
 

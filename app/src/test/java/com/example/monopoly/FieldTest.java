@@ -1,15 +1,11 @@
 package com.example.monopoly;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import android.graphics.Color;
 import android.media.Image;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -18,10 +14,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import org.mockito.Mock;
+
+import com.example.monopoly.gamelogic.Field;
+import com.example.monopoly.gamelogic.Player;
 
 class FieldTest {
     static Field field;

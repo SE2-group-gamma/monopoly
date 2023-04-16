@@ -1,4 +1,4 @@
-package com.example.monopoly;
+package com.example.monopoly.gamelogic;
 
 import android.graphics.Color;
 
