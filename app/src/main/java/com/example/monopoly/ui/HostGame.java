@@ -14,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 
 import com.example.monopoly.R;
+import com.example.monopoly.databinding.HostGameBinding;
 import com.example.monopoly.utils.LobbyKey;
 
 import java.text.DecimalFormatSymbols;

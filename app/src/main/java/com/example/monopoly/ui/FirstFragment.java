@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
+import com.example.monopoly.databinding.FragmentFirstBinding;
 
 public class FirstFragment extends Fragment {
 
