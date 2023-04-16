@@ -60,8 +60,7 @@ public class MonopolyServerTest {
         assertNotNull(ms);
         ms.start();
         int port = ms.getLocalPort();
-        while (ms.isListening());
-        assertFalse(ms.isListening());
+        while (ms.isAlive());
         verify(serverSocket, times(1)).accept();
         assertEquals(1, ms.getNumberOfClients());
     }
@@ -76,8 +75,7 @@ public class MonopolyServerTest {
         assertNotNull(ms);
         ms.start();
         int port = ms.getLocalPort();
-
-        while (ms.isListening());
+        while (ms.isAlive());
         verify(serverSocket,times(numOfClients)).accept();
         assertEquals(numOfClients, ms.getNumberOfClients());
 
