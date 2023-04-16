@@ -26,6 +26,13 @@ android {
     }
     buildFeatures {
         viewBinding true
+        dataBinding true
+    }
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+            finalizedBy jacocoTestReport
+        }
     }
     testOptions {
         unitTests.all {
