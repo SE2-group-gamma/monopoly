@@ -2,7 +2,6 @@ package com.example.monopoly.ui;
 
 import android.content.Context;
 import android.net.nsd.NsdManager;
-import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +19,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.HostGameBinding;
 import com.example.monopoly.network.MonopolyServer;
-import com.example.monopoly.network.NSDServer;
 import com.example.monopoly.utils.LobbyKey;
 
 import java.io.IOException;

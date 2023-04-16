@@ -1,4 +1,4 @@
-package com.example.monopoly.network;
+package com.example.monopoly.ui;
 
 import android.content.Context;
 import android.net.nsd.NsdManager;
