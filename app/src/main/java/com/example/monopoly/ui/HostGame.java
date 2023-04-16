@@ -1,6 +1,9 @@
 package com.example.monopoly.ui;
 
+import android.content.Context;
+import android.net.nsd.NsdManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +18,10 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.HostGameBinding;
+import com.example.monopoly.network.MonopolyServer;
 import com.example.monopoly.utils.LobbyKey;
 
+import java.io.IOException;
 import java.text.DecimalFormatSymbols;
 
 public class HostGame extends Fragment {
@@ -98,6 +103,15 @@ public class HostGame extends Fragment {
                 LobbyKey lobbyKey = new LobbyKey();
                 int key = lobbyKey.generateKey();
 
+                MonopolyServer ms = null;
+                NSDServer nsdServer = new NSDServer((NsdManager) getActivity().getSystemService(Context.NSD_SERVICE));
+                try {
+                    ms = new MonopolyServer(playerCount);
+                    nsdServer.registerNSDService(ms.getLocalPort());
+                } catch (IOException e) {
+                    Log.e("MonopolyServer", "Server creation failed");
+                }
+
                 // TODO: create Lobby with key here (Server Side)
 
                 NavHostFragment.findNavController(HostGame.this)
@@ -145,5 +159,4 @@ public class HostGame extends Fragment {
         }
         textView.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2.0f);
     }
-
 }
