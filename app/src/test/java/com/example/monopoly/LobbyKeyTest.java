@@ -3,6 +3,8 @@ package com.example.monopoly;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.example.monopoly.utils.LobbyKey;
+
 import org.junit.jupiter.api.Test;
 
 public class LobbyKeyTest {

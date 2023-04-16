@@ -1,4 +1,4 @@
-package com.example.monopoly;
+package com.example.monopoly.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,16 +7,16 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 
-import com.example.monopoly.databinding.HostGameBinding;
+import com.example.monopoly.R;
+import com.example.monopoly.utils.LobbyKey;
 
 import java.text.DecimalFormatSymbols;
-import java.util.Random;
 
 public class HostGame extends Fragment {
 
