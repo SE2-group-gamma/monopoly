@@ -20,11 +20,7 @@ import com.example.monopoly.databinding.ActivityMainBinding;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import network.Client;
-import network.NSD;
+import network.NSD_Client;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Inizialize NSDManager for client-sided Network Service Discovery
         NsdManager manager = (NsdManager) getSystemService(Context.NSD_SERVICE);
-        NSD nsd = new NSD();
+        NSD_Client nsd = new NSD_Client();
         nsd.start(manager);
 
     }

@@ -1,6 +1,7 @@
 package com.example.monopoly;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 import org.junit.Test;
 
@@ -15,26 +16,37 @@ public class ClientTest {
 private String request = "request";
 private String response = "response";
 Client client;
-
+byte IPAddress[] = { 127, 0, 0, 1 };
 
 
     @Test
-    public void testClientSocketRequest() throws IOException {
-        byte IPAddress[] = { 127, 0, 0, 1 };
+    public void testConnectionRefused() throws IOException {
         InetAddress address = InetAddress.getByAddress(IPAddress);
         client = new Client(address,0);
-        client.setRequest(request);
-        assertEquals(client.getRequest(),request);
+
+        assertThrows(RuntimeException.class, () -> {
+            client.run();
+        });
+
     }
 
     @Test
-    public void testClientSocketResponse() throws UnknownHostException {
-        byte IPAddress[] = { 127, 0, 0, 1 };
+    public void testClientGettersSetters() throws UnknownHostException {
         InetAddress address = InetAddress.getByAddress(IPAddress);
         client = new Client(address,0);
         client.setResponse(response);
+        client.setRequest(request);
         assertEquals(client.getResponse(),response);
+        assertEquals(client.getRequest(),request);
     }
+
+    /*
+    TO-DO:
+
+    testClientConnectionEstablished()
+    testClientDiscovery()
+
+     */
 
 
 

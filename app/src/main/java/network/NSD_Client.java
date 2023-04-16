@@ -6,10 +6,15 @@ import android.util.Log;
 
 import java.net.InetAddress;
 
-public class NSD extends Thread {
+public class NSD_Client extends Thread {
 
     private String nsdTag = "NSD";
-    private String serviceType = "_monopoly";
+    private String serviceType = "_http._tcp";
+
+    /*
+    serviceType needs to be changed to "_monopoly" after service is registered, otherwise App will not start
+    */
+
     private NsdManager manager;
     private NsdManager.DiscoveryListener discoveryListener;
     private NsdManager.ResolveListener resolveListener;
