@@ -38,6 +38,7 @@ public class MonopolyServer extends Thread{
         while(isListening() && this.clients.size() < maxNumberOfClients){
             ClientHandler clientHandler = null;
             try {
+                // serverSocket.accept() waits for Clients to connect
                 clientHandler = new ClientHandler(serverSocket.accept());
             } catch (IOException e) {
                 throw new RuntimeException(e);
