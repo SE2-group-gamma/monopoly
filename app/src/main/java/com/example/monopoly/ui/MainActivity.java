@@ -5,7 +5,6 @@ import android.net.nsd.NsdManager;
 import android.os.Bundle;
 
 import com.example.monopoly.R;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,7 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
-import network.NSD_Client;
+import com.example.monopoly.network.NSD_Client;
 
 public class MainActivity extends AppCompatActivity {
 
