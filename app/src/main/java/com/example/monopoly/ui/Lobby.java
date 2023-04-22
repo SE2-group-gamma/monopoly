@@ -47,8 +47,8 @@ public class Lobby extends Fragment {
         binding.startButton.setOnClickListener(view12 -> {
             // TODO: join into game
 
-            /*NavHostFragment.findNavController(Lobby.this)
-                    .navigate(R.id.action_JoinGame_to_FirstFragment);*/
+            NavHostFragment.findNavController(Lobby.this)
+                    .navigate(R.id.action_JoinGame_to_GameBoard);
         });
     }
 
