@@ -3,20 +3,29 @@ package com.example.monopoly.gamelogic;
 import java.util.ArrayList;
 
 public class ChanceCardCollection {
-    private ArrayList<ChanceCard> list = new ArrayList<ChanceCard>();
+    private ArrayList<ChanceCard> allChanceCards = new ArrayList<ChanceCard>();
+
+    private ArrayList<ChanceCard> chanceCardDeck = new ArrayList<ChanceCard>();
 
 
-
-    public void setList(ArrayList list) {
-        this.list = list;
+    public void setChanceCardDeck(ArrayList chanceCardDeck) {
+        this.chanceCardDeck = chanceCardDeck;
     }
 
-    public ArrayList getList() {
-        return list;
+    public ArrayList<ChanceCard> getChanceCardDeck() {
+        return chanceCardDeck;
+    }
+
+    public void setAllChanceCards(ArrayList allChanceCards) {
+        this.allChanceCards = allChanceCards;
+    }
+
+    public ArrayList<ChanceCard> getAllChanceCards() {
+        return allChanceCards;
     }
 
     public void addToCollection(ChanceCard card){
-        list.add(card);
+        allChanceCards.add(card);
     }
 
     public void fillList() {
@@ -66,5 +75,25 @@ public class ChanceCardCollection {
         card10.setFunction("You have been elected Chairman of the Board. Pay each player $50.");
         addToCollection(card10);
     }
+
+    public void addCardsToDeck(){
+        //add all ChanceCards from collection to deck
+    }
+
+    public void removeCardFromDeck(int index){
+        //remove card with given index from deck
+
+    }
+
+    public void drawFromDeck(){
+        //generate a random number between 0 and 10
+
+        //if generated index is still available in deck, return card with index to player
+            //else generate a new index
+
+        //remove card from deck
+    }
+
+
 
 }

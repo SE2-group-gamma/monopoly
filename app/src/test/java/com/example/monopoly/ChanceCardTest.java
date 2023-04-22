@@ -4,7 +4,6 @@ import com.example.monopoly.gamelogic.ChanceCard;
 import com.example.monopoly.gamelogic.ChanceCardCollection;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,7 +20,7 @@ public class ChanceCardTest {
         list = new ArrayList<ChanceCard>();
         collection = new ChanceCardCollection();
         collection.fillList();
-        list = collection.getList();
+        list = collection.getAllChanceCards();
     }
 
     @Test
