@@ -1,5 +1,7 @@
 package com.example.monopoly.network;
 
+import com.example.monopoly.gamelogic.ChanceCard;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -38,7 +40,6 @@ public class Client extends Thread {
 
     public void run() {
         try {
-
             clientSocket = new Socket(host, port);
 
             DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
