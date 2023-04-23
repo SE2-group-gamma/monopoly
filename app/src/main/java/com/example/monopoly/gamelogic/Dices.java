@@ -25,7 +25,10 @@ public class Dices {
     public void rollDicesFlawed(int sum) throws IllegalArgumentException{
         if(sum < 2 || sum > 12) throw new IllegalArgumentException("Invalid sum of two dices: " + sum);
         this.isLastRollFlawed = true;
-        this.dice1 = random.nextInt(6)+1;
+        if (sum > 6)
+            this.dice1 = random.nextInt(6)+1;
+        else
+            this.dice1 = random.nextInt(sum-1)+1;
         this.dice2 = sum - this.dice1;
     }
 
