@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.monopoly.R;
+import com.example.monopoly.databinding.FragmentDiceBinding;
+import com.example.monopoly.gamelogic.Dices;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +30,8 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private Sensor accelerometer;
     private float lastX, lastY, lastZ;
     private static final float SHAKE_THRESHOLD = 50;
+    private FragmentDiceBinding binding;
+    private Dices dices;
 
     public DiceFragment() {
         // Required empty public constructor
@@ -56,13 +60,15 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         this.lastZ = -1f;
         this.sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         this.accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        this.dices = new Dices();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dice, container, false);
+        this.binding = FragmentDiceBinding.inflate(getLayoutInflater());
+        return this.binding.getRoot();
     }
 
     @Override
@@ -81,10 +87,10 @@ public class DiceFragment extends Fragment implements SensorEventListener {
 
             float speed = (Math.abs(x+y+z -lastX-lastY-lastZ)/timeDifference) * 10000;
 
-            Log.i("SHAKE_DETECTION", "SENSOR EVENT Speed: " + speed);
-
             if(speed > SHAKE_THRESHOLD){
                 Log.i("SHAKE_DETECTION", "Shake detected!");
+                dices.rollDices();
+                binding.diceResultView.setText(String.format("%d & %d", dices.getDice1(), dices.getDice2()));
             }
 
             lastX = x;
