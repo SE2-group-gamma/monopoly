@@ -58,6 +58,10 @@
         <action
             android:id="@+id/action_Settings_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_Settings_to_DiceFragment"
+            app:destination="@id/DiceFragment"
+            />
     </fragment>
 
     <fragment
@@ -70,4 +74,11 @@
             android:id="@+id/action_Lobby_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/DiceFragment"
+        android:name="com.example.monopoly.ui.DiceFragment"
+        android:label="DiceFragment"
+        tools:layout="@layout/fragment_dice"
+        />
 </navigation>

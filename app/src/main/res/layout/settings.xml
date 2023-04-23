@@ -190,6 +190,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/back"
                 android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/sensorTestBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TestSensor" />
         </TableRow>
 
 
