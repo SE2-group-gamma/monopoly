@@ -16,7 +16,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="1"
-        android:scrollbars="none">
+        android:scrollbars="vertical">
 
 
         <TableLayout
@@ -289,36 +289,6 @@
 
                     android:textSize="16sp"
                     tools:ignore="TouchTargetSizeCheck" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/back"
-                    android:visibility="invisible" />
-
-                <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="User 4"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-
-                <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="User1234567"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-
             </TableRow>
         </TableLayout>
     </ScrollView>
