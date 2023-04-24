@@ -7,67 +7,22 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.example.monopoly.ui.FirstFragment"
+        android:name="com.example.testmonopoly.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/JoinGame" />
-        <action
-            android:id="@+id/action_FirstFragment_to_ThirdFragment"
-            app:destination="@id/HostGame" />
-        <action
-            android:id="@+id/action_FirstFragment_to_Settings"
-            app:destination="@id/Settings" />
-
+            app:destination="@id/SecondFragment" />
     </fragment>
     <fragment
-        android:id="@+id/JoinGame"
-        android:name="com.example.monopoly.ui.JoinGame"
-        android:label="Join Game"
-        tools:layout="@layout/join_game">
+        android:id="@+id/SecondFragment"
+        android:name="com.example.testmonopoly.SecondFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_second">
 
         <action
-            android:id="@+id/action_JoinGame_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-        <action
-            android:id="@+id/action_JoinGame_to_Lobby"
-            app:destination="@id/Lobby" />
-    </fragment>
-    <fragment
-        android:id="@+id/HostGame"
-        android:name="com.example.monopoly.ui.HostGame"
-        android:label="Host Game"
-        tools:layout="@layout/host_game">
-
-        <action
-            android:id="@+id/action_HostGame_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-        <action
-            android:id="@+id/action_HostGame_to_Lobby"
-            app:destination="@id/Lobby" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/Settings"
-        android:name="com.example.monopoly.ui.Settings"
-        android:label="Settings"
-        tools:layout="@layout/settings">
-
-        <action
-            android:id="@+id/action_Settings_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/Lobby"
-        android:name="com.example.monopoly.ui.Lobby"
-        android:label="Lobby"
-        tools:layout="@layout/lobby">
-
-        <action
-            android:id="@+id/action_Lobby_to_FirstFragment"
+            android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
 </navigation>
