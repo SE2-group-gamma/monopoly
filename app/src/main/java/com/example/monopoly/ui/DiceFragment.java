@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.FragmentDiceBinding;
@@ -90,12 +91,35 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             if(speed > SHAKE_THRESHOLD){
                 Log.i("SHAKE_DETECTION", "Shake detected!");
                 dices.rollDices();
-                // set dice images
+                setDiceImage(binding.imageDice1, dices.getDice1());
+                setDiceImage(binding.imageDice2,dices.getDice2());
             }
 
             lastX = x;
             lastY = y;
             lastZ = z;
+        }
+    }
+
+    private void setDiceImage(ImageView diceImage, int number){
+        switch (number) {
+            case 1:
+                diceImage.setImageResource(R.drawable.dice_1);
+                break;
+            case 2:
+                diceImage.setImageResource(R.drawable.dice_2);
+            case 3:
+                diceImage.setImageResource(R.drawable.dice_3);
+                break;
+            case 4:
+                diceImage.setImageResource(R.drawable.dice_4);
+                break;
+            case 5:
+                diceImage.setImageResource(R.drawable.dice_5);
+                break;
+            case 6:
+                diceImage.setImageResource(R.drawable.dice_6);
+                break;
         }
     }
 
