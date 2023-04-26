@@ -40,6 +40,10 @@ public class Dices {
         return dice2;
     }
 
+    public int getSum() {
+        return dice1 + dice2;
+    }
+
     public boolean isLastRollFlawed() {
         return isLastRollFlawed;
     }

@@ -67,4 +67,14 @@ public class DicesTest {
         Dices dices = new Dices();
         assertThrows(IllegalArgumentException.class, () -> {dices.rollDicesFlawed(100);});
     }
+
+    @Test
+    public void testSum(){
+        Dices dices = new Dices();
+
+        for(int i = 0; i < 10; i++){
+            dices.rollDices();
+            assertEquals(dices.getDice1()+ dices.getDice2(), dices.getSum());
+        }
+    }
 }
