@@ -90,7 +90,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             if(speed > SHAKE_THRESHOLD){
                 Log.i("SHAKE_DETECTION", "Shake detected!");
                 dices.rollDices();
-                binding.diceResultView.setText(String.format("%d & %d", dices.getDice1(), dices.getDice2()));
+                // set dice images
             }
 
             lastX = x;

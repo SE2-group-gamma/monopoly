@@ -7,15 +7,28 @@
     android:layout_height="match_parent"
     tools:context=".ui.DiceFragment">
 
-    <TextView
-        android:id="@+id/diceResultView"
-        android:layout_width="179dp"
-        android:layout_height="187dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="24sp"
+    <ImageView
+        android:id="@+id/imageDice1"
+        android:layout_width="209dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="95dp"
+        android:layout_marginBottom="96dp"
+        android:src="@drawable/dice_1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageDice2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageDice2"
+        android:layout_width="209dp"
+        android:layout_height="220dp"
+        android:layout_marginStart="122dp"
+        android:layout_marginTop="95dp"
+        android:layout_marginBottom="96dp"
+        android:src="@drawable/dice_1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageDice1"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
