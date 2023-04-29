@@ -1,6 +1,7 @@
 package com.example.monopoly.gamelogic;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class ChanceCardCollection {
     private ArrayList<ChanceCard> allChanceCards = new ArrayList<ChanceCard>();
@@ -91,10 +92,17 @@ public class ChanceCardCollection {
     public void drawFromDeck(){
         //generate a random number between 0 and 10
 
+
         //if generated index is still available in deck, return card with index to player
             //else generate a new index
 
         //remove card from deck
+    }
+
+    public int generateRandom(){
+        Random r = new Random();
+        int random = r.nextInt(allChanceCards.size());
+        return random;
     }
 
 
