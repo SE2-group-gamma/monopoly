@@ -74,10 +74,13 @@ public class ChanceCardCollection {
         ChanceCard card10 = new ChanceCard(10);
         card10.setFunction("You have been elected Chairman of the Board. Pay each player $50.");
         addToCollection(card10);
+
+        addCardsToDeck();
     }
 
     public void addCardsToDeck(){
-        //add all ChanceCards from collection to deck
+        chanceCardDeck = allChanceCards;
+
     }
 
     public void removeCardFromDeck(int index){

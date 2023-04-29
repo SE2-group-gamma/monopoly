@@ -13,26 +13,41 @@ import java.util.ArrayList;
 public class ChanceCardTest {
 
     public ChanceCardCollection collection;
-    public ArrayList<ChanceCard> list;
+    public ArrayList<ChanceCard> allCards;
+    public ArrayList<ChanceCard> deck;
 
     @BeforeEach
     public void createCollection(){
-        list = new ArrayList<ChanceCard>();
+        allCards = new ArrayList<ChanceCard>();
         collection = new ChanceCardCollection();
         collection.fillList();
-        list = collection.getAllChanceCards();
+        allCards = collection.getAllChanceCards();
+        deck = collection.getChanceCardDeck();
     }
 
     @Test
     public void testFill(){
-        Assertions.assertEquals(11,list.size());
+        Assertions.assertEquals(11, allCards.size());
     }
 
     @Test
-    public void printCollection(){
-        for (int i =0; i<list.size(); i++){
-            ChanceCard card = (ChanceCard) list.get(i);
+    public void printAllChanceCards(){
+        for (int i = 0; i< allCards.size(); i++){
+            ChanceCard card = (ChanceCard) allCards.get(i);
             System.out.println(card.getFunction());
         }
+        Assertions.assertEquals(10,allCards.size());
+    }
+
+    @Test
+    public void printDeck(){
+        ChanceCard newCard = new ChanceCard(deck.size()+1);
+        newCard.setFunction("test");
+        deck.add(newCard);
+        for (int i = 0; i< deck.size(); i++){
+            ChanceCard card = (ChanceCard) deck.get(i);
+            System.out.println(card.getFunction());
+        }
+        Assertions.assertEquals(11,deck.size());
     }
 }
