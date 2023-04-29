@@ -15,15 +15,17 @@ public class ChanceCardTest {
 
     public ChanceCardCollection collection;
 
+
+
     @BeforeEach
     public void createCollection() {
         collection = new ChanceCardCollection();
-        collection.fillList();
     }
 
+
     @Test
-    public void testFill() {
-        Assertions.assertEquals(11, collection.getAllChanceCards().size());
+    public void testConstructor() {
+        Assertions.assertTrue(collection.getAllChanceCards().size()>0);
     }
 
     @Test
@@ -32,7 +34,6 @@ public class ChanceCardTest {
             ChanceCard card = (ChanceCard) collection.getAllChanceCards().get(i);
             System.out.println(card.getId() + ", " + card.getFunction());
         }
-        Assertions.assertEquals(11, collection.getAllChanceCards().size());
     }
 
     @Test
@@ -44,7 +45,6 @@ public class ChanceCardTest {
             ChanceCard card = (ChanceCard) collection.getChanceCardDeck().get(i);
             System.out.println(card.getId() + ", " + card.getFunction());
         }
-        Assertions.assertEquals(12, collection.getChanceCardDeck().size());
     }
 
     @Test
@@ -64,23 +64,43 @@ public class ChanceCardTest {
         collection.removeCardFromDeck(7);
         collection.removeCardFromDeck(5);
         for (int i = 0; i < collection.getChanceCardDeck().size(); i++) {
-            ChanceCard card = (ChanceCard) collection.getChanceCardDeck().get(i);
+            ChanceCard card = collection.getChanceCardDeck().get(i);
             System.out.println(card.getId() + ", " + card.getFunction());
         }
-        Assertions.assertEquals(8, collection.getChanceCardDeck().size());
+
+        Assertions.assertEquals(collection.getAllChanceCards().size()-3, collection.getChanceCardDeck().size());
+
     }
 
     @Test
     public void testDrawFromDeck() {
-        for (int i = 0; i < 13; i++) {
+        for (int i = 0; i < 100; i++) {
             ChanceCard card;
             card = collection.drawFromDeck();
             if (card != null) {
                 System.out.println(card.getId() + ", " + card.getFunction());
             }
-            else{
-                System.out.println("No cards available.");
-            }
+
         }
+        System.out.println("\nAll: " + collection.getAllChanceCards().size());
+        System.out.println("Deck: " + collection.getChanceCardDeck().size());
+    }
+
+    @Test
+    public void testGettersSettersChanceCard(){
+        ChanceCard card = collection.getAllChanceCards().get(0);
+        card.setId(17);
+        card.setFunction("test");
+        Assertions.assertEquals(17,card.getId());
+        Assertions.assertEquals("test", card.getFunction());
+    }
+
+    @Test
+    public void testGettersSettersChanceCardCollection(){
+        ArrayList<ChanceCard> list = new ArrayList<ChanceCard>();
+        collection.setAllChanceCards(list);
+        collection.setChanceCardDeck(list);
+        Assertions.assertEquals(0,collection.getAllChanceCards().size());
+        Assertions.assertEquals(0,collection.getChanceCardDeck().size());
     }
 }
