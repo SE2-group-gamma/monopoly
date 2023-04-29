@@ -25,7 +25,7 @@ public class ChanceCardCollection {
         return allChanceCards;
     }
 
-    public void addToCollection(ChanceCard card){
+    public void addToCollection(ChanceCard card) {
         allChanceCards.add(card);
     }
 
@@ -79,32 +79,29 @@ public class ChanceCardCollection {
         addCardsToDeck();
     }
 
-    public void addCardsToDeck(){
+    public void addCardsToDeck() {
         chanceCardDeck = allChanceCards;
 
     }
 
-    public void removeCardFromDeck(int index){
-        //remove card with given index from deck
-
+    public void removeCardFromDeck(int index) {
+        chanceCardDeck.remove(index);
     }
 
-    public void drawFromDeck(){
-        //generate a random number between 0 and 10
-
-
-        //if generated index is still available in deck, return card with index to player
-            //else generate a new index
-
-        //remove card from deck
+    public ChanceCard drawFromDeck() {
+        int random = generateRandom();
+        if (random >= 0) {
+            ChanceCard card = chanceCardDeck.get(random);
+            chanceCardDeck.remove(random);
+            return card;
+        } else return null;
     }
 
-    public int generateRandom(){
+    public int generateRandom() {
         Random r = new Random();
-        int random = r.nextInt(allChanceCards.size());
+        int random = r.nextInt(chanceCardDeck.size()) - 1;
         return random;
     }
-
 
 
 }

@@ -30,19 +30,19 @@ public class ChanceCardTest {
     public void printAllChanceCards() {
         for (int i = 0; i < collection.getAllChanceCards().size(); i++) {
             ChanceCard card = (ChanceCard) collection.getAllChanceCards().get(i);
-            System.out.println(card.getFunction());
+            System.out.println(card.getId() + ", " + card.getFunction());
         }
         Assertions.assertEquals(11, collection.getAllChanceCards().size());
     }
 
     @Test
     public void printDeck() {
-        ChanceCard newCard = new ChanceCard(collection.getChanceCardDeck().size() + 1);
+        ChanceCard newCard = new ChanceCard(collection.getChanceCardDeck().size());
         newCard.setFunction("test");
         collection.getChanceCardDeck().add(newCard);
         for (int i = 0; i < collection.getChanceCardDeck().size(); i++) {
             ChanceCard card = (ChanceCard) collection.getChanceCardDeck().get(i);
-            System.out.println(card.getFunction());
+            System.out.println(card.getId() + ", " + card.getFunction());
         }
         Assertions.assertEquals(12, collection.getChanceCardDeck().size());
     }
@@ -56,5 +56,31 @@ public class ChanceCardTest {
             Assertions.assertTrue(random <= collection.getChanceCardDeck().size());
         }
 
+    }
+
+    @Test
+    public void testRemove() {
+        collection.removeCardFromDeck(2);
+        collection.removeCardFromDeck(7);
+        collection.removeCardFromDeck(5);
+        for (int i = 0; i < collection.getChanceCardDeck().size(); i++) {
+            ChanceCard card = (ChanceCard) collection.getChanceCardDeck().get(i);
+            System.out.println(card.getId() + ", " + card.getFunction());
+        }
+        Assertions.assertEquals(8, collection.getChanceCardDeck().size());
+    }
+
+    @Test
+    public void testDrawFromDeck() {
+        for (int i = 0; i < 13; i++) {
+            ChanceCard card;
+            card = collection.drawFromDeck();
+            if (card != null) {
+                System.out.println(card.getId() + ", " + card.getFunction());
+            }
+            else{
+                System.out.println("No cards available.");
+            }
+        }
     }
 }
