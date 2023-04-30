@@ -14,10 +14,13 @@ public class Client extends Thread {
     private String response;
     private String request;
 
+    private TurnManager turnManager;
 
-    public Client(InetAddress host, int port) {
+
+    public Client(InetAddress host, int port, TurnManager turnManager) {
         this.host = host;
         this.port = port;
+        this.turnManager = turnManager;
     }
 
     public void setRequest(String request) {
@@ -44,8 +47,11 @@ public class Client extends Thread {
             DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
+
             outToServer.writeBytes(request + 'n');
             response = inFromServer.readLine();
+
+            turnManager.handleClientTurn(this, inFromServer, outToServer);
 
             clientSocket.close();
 

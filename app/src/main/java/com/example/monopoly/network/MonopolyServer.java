@@ -37,11 +37,12 @@ public class MonopolyServer extends Thread{
     @Override
     public void run() {
         this.isListening = true;
+        this.turnManager = new TurnManager(this.clients);
         while(isListening() && this.clients.size() < maxNumberOfClients){
             ClientHandler clientHandler = null;
             try {
                 // serverSocket.accept() waits for Clients to connect
-                clientHandler = new ClientHandler(serverSocket.accept());
+                clientHandler = new ClientHandler(serverSocket.accept(), this.turnManager);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -49,7 +50,7 @@ public class MonopolyServer extends Thread{
             this.clients.add(clientHandler);
         }
 
-        this.turnManager = new TurnManager(clients);
+
         this.turnManager.start();
         try {
             stopListening();

@@ -13,10 +13,14 @@ public class TurnManager {
     private List<ClientHandler> clientHandlers;
     private boolean isServerTurn;
 
+    private Client client;
+
+
     public TurnManager(List<ClientHandler> clientHandlers) {
         this.clientHandlers = clientHandlers;
         this.currentIndex = 0;
         this.isServerTurn = true;
+
     }
 
     public void handleClientHandlerTurn(ClientHandler clientHandler, BufferedReader in, BufferedWriter out) throws IOException {
@@ -91,5 +95,9 @@ public class TurnManager {
         }
 
         clientHandlers.get(0).giveTurn();
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

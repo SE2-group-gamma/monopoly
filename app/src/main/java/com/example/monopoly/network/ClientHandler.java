@@ -18,7 +18,7 @@ public class ClientHandler extends Thread{
 
     private TurnManager turnManager;
 
-    public ClientHandler(Socket client) {
+    public ClientHandler(Socket client, TurnManager turnManager) {
         this.client = client;
         this.turnManager = turnManager;
         this.turn = false;
