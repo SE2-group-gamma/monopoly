@@ -15,6 +15,8 @@ public class MonopolyServer extends Thread{
     private int maxNumberOfClients;
     private boolean isListening;
 
+    private TurnManager turnManager;
+
     public MonopolyServer(int maxNumberOfClients) throws IOException {
         this.serverSocket = new ServerSocket(0);
         this.localPort = serverSocket.getLocalPort();
@@ -46,6 +48,9 @@ public class MonopolyServer extends Thread{
             clientHandler.start();
             this.clients.add(clientHandler);
         }
+
+        this.turnManager = new TurnManager(clients);
+        this.turnManager.start();
         try {
             stopListening();
         } catch (IOException e) {
