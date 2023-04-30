@@ -25,6 +25,11 @@ public class Client extends Thread {
         this.turnManager = turnManager;
     }
 
+    public Client(InetAddress host, int port) {
+        this.host = host;
+        this.port = port;
+    }
+
     public void setRequest(String request) {
         this.request = request;
     }
