@@ -1,5 +1,7 @@
 package com.example.monopoly.network;
 
+import com.example.monopoly.gamelogic.ClientLoop;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -52,6 +54,9 @@ public class Client extends Thread {
             response = inFromServer.readLine();
 
             turnManager.handleClientTurn(this, inFromServer, outToServer);
+            ClientLoop clientLoop = new ClientLoop(this);
+            clientLoop.start();
+
 
             clientSocket.close();
 

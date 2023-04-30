@@ -26,7 +26,7 @@ public class TurnManager {
     public void handleClientHandlerTurn(ClientHandler clientHandler, BufferedReader in, BufferedWriter out) throws IOException {
         synchronized (this) {
             try {
-                // This loop now checks if it's the clientHandler's turn and if the server's turn is over
+
                 while (!clientHandler.isTurn() || isServerTurn) {
                     wait();
                 }
@@ -41,7 +41,7 @@ public class TurnManager {
                         }
                     }
 
-                    // Update the turn
+
                     currentIndex = (currentIndex + 1) % clientHandlers.size();
                     clientHandlers.get(currentIndex).giveTurn();
                     isServerTurn = true;
