@@ -39,11 +39,11 @@ public class ChanceCardCollection {
         addToAllChanceCards(card0);
 
         ChanceCard card1 = new ChanceCard(1);
-        card1.setFunction("Advance to <Location1>. If you pass Go, collect $200.");
+        card1.setFunction("Advance to Strandbad. If you pass Go, collect $200.");
         addToAllChanceCards(card1);
 
         ChanceCard card2 = new ChanceCard(2);
-        card2.setFunction("Advance to <Location2>. If you pass Go, collect $200.");
+        card2.setFunction("Advance to Lindwurm. If you pass Go, collect $200.");
         addToAllChanceCards(card2);
 
         ChanceCard card3 = new ChanceCard(3);
@@ -72,12 +72,48 @@ public class ChanceCardCollection {
         addToAllChanceCards(card8);
 
         ChanceCard card9 = new ChanceCard(9);
-        card9.setFunction("Take a trip to <Railway Station>.");
+        card9.setFunction("Take a trip to S-Bahn Wien.");
         addToAllChanceCards(card9);
 
         ChanceCard card10 = new ChanceCard(10);
         card10.setFunction("You have been elected Chairman of the Board. Pay each player $50.");
         addToAllChanceCards(card10);
+
+        ChanceCard card11 = new ChanceCard(11);
+        card11.setFunction("Advance to City Arkaden. If you pass Go, collect $200.");
+        addToAllChanceCards(card11);
+
+        ChanceCard card12 = new ChanceCard(12);
+        card12.setFunction("Get out of Jail Free.");
+        addToAllChanceCards(card12);
+
+        ChanceCard card13 = new ChanceCard(13);
+        card13.setFunction("Go to Jail directly.");
+        addToAllChanceCards(card13);
+
+        ChanceCard card14 = new ChanceCard(14);
+        card14.setFunction("Parking Ticket! Pay $15.");
+        addToAllChanceCards(card14);
+
+        ChanceCard card15 = new ChanceCard(15);
+        card15.setFunction("Advance two spaces.");
+        addToAllChanceCards(card15);
+
+        ChanceCard card16 = new ChanceCard(16);
+        card16.setFunction("Go to Jail directly.");
+        addToAllChanceCards(card16);
+
+        ChanceCard card17 = new ChanceCard(17);
+        card17.setFunction("Happy Birthday! Receive $100.");
+        addToAllChanceCards(card17);
+
+        ChanceCard card18 = new ChanceCard(18);
+        card18.setFunction("Go back one space.");
+        addToAllChanceCards(card18);
+
+        ChanceCard card19 = new ChanceCard(19);
+        card19.setFunction("Advance to Rathaus. If you pass Go, collect $200. ");
+        addToAllChanceCards(card19);
 
         addCardsToDeck();
     }
