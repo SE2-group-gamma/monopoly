@@ -15,6 +15,7 @@ public class Money {
     }
     // can also be added to Player class and delete this one
     // transfer Money between players e.g rent
+     /*
     public void transferMoneyPlayerToPlayer(Player sender, Player receiver, double amount){
         double senderMoney = sender.getCapital();
         sender.setCapital(senderMoney-amount);
@@ -23,7 +24,7 @@ public class Money {
         receiver.setCapital(receiverMoney+amount);
     }
     // transfer Money between Player and Bank
-    /*public void transferMoneyBankToPlayer(Player sender,Bank bank, double amount){
+   public void transferMoneyBankToPlayer(Player sender,Bank bank, double amount){
         double senderMoney = sender.getCapital();
         sender.setCapital(senderMoney-amount);
 
