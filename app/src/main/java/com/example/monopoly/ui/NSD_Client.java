@@ -29,6 +29,9 @@ public class NSD_Client {
     public void start(NsdManager manager){
         this.manager = manager;
 
+        Client client = new Client(host, port,null);
+        client.start();
+
         initializeDiscoveryListener();
         initializeResolveListener();
 
@@ -95,8 +98,8 @@ public class NSD_Client {
                 port = nsdServiceInfo.getPort();
                 host = nsdServiceInfo.getHost();
 
-                Client client = new Client(host, port);
-                client.start();
+                //Client client = new Client(host, port);
+                //client.start();
 
             }
         };

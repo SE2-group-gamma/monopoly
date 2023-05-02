@@ -16,7 +16,7 @@ public class MonopolyServer extends Thread{
     private boolean isListening;
 
     public MonopolyServer(int maxNumberOfClients) throws IOException {
-        this.serverSocket = new ServerSocket(0);
+        this.serverSocket = new ServerSocket(6969);
         this.localPort = serverSocket.getLocalPort();
         this.maxNumberOfClients = maxNumberOfClients;
         this.clients = new ArrayList<ClientHandler>();
@@ -35,6 +35,7 @@ public class MonopolyServer extends Thread{
     @Override
     public void run() {
         this.isListening = true;
+        //Log.d("",""+this.maxNumberOfClients);
         while(isListening() && this.clients.size() < maxNumberOfClients){
             ClientHandler clientHandler = null;
             try {

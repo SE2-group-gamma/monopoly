@@ -1,6 +1,7 @@
 package com.example.monopoly.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.LobbyBinding;
+import com.example.monopoly.network.Client;
+import com.example.monopoly.network.MonopolyServer;
 
 public class Lobby extends Fragment {
 
@@ -25,6 +28,7 @@ public class Lobby extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+        Client.subscribe(this,"Lobby");
         binding = LobbyBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
@@ -36,6 +40,9 @@ public class Lobby extends Fragment {
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+                MonopolyServer x = HostGame.getMonopolyServer();
+                //Log.d("",""+x.getNumberOfClients());
+                //Log.d("",""+x.getNumberOfClients());
                 // TODO: Set textView with key from Lobby
                 //binding.textViewKey.setText("Game-Key: "+key);
             }

@@ -49,11 +49,11 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
         //Inizialize NSDManager for client-sided Network Service Discovery
-        NsdManager manager = (NsdManager) getSystemService(Context.NSD_SERVICE);
+        /*NsdManager manager = (NsdManager) getSystemService(Context.NSD_SERVICE);
         NSD_Client nsd = new NSD_Client();
-        nsd.start(manager);
-
+        nsd.start(manager);*/
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

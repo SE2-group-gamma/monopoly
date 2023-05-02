@@ -1,8 +1,10 @@
 package com.example.monopoly.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.nsd.NsdManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,9 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.HostGameBinding;
+import com.example.monopoly.gamelogic.Player;
+import com.example.monopoly.network.Client;
+import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.network.MonopolyServer;
 import com.example.monopoly.utils.LobbyKey;
 
@@ -27,7 +32,7 @@ import java.text.DecimalFormatSymbols;
 public class HostGame extends Fragment {
 
     private HostGameBinding binding;
-
+    private static MonopolyServer ms;
 
 
     @Override
@@ -35,13 +40,19 @@ public class HostGame extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+        Client.subscribe(this,"HostGame");
         binding = HostGameBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
-
+    public static MonopolyServer getMonopolyServer() {
+        return ms;
+    }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+
+
+
         super.onViewCreated(view, savedInstanceState);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -113,6 +124,28 @@ public class HostGame extends Fragment {
                 }
 
                 // TODO: create Lobby with key here (Server Side)
+                ms.start();
+
+                //NsdManager manager = (NsdManager) getSystemService(Context.NSD_SERVICE);
+                //NSD_Client nsd = new NSD_Client();
+                //nsd.start(manager);
+                Player player = new Player(user, new Color(),500.00,true);
+                Client c = new Client(null,0,player);
+                c.start();
+
+
+
+                try {
+                    Thread.sleep(50);
+                    c.writeToServer("HostGame|playerJoined|"+player.getUsername());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                //Bundle bundle = new Bundle();
+                //bundle.putParcelable("server", (Parcelable) ms);
 
                 NavHostFragment.findNavController(HostGame.this)
                         .navigate(R.id.action_HostGame_to_Lobby);
