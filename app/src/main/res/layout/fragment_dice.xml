@@ -5,6 +5,7 @@
     android:id="@+id/DiceFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#80FFFFFF"
     tools:context=".ui.DiceFragment">
 
     <ImageView
@@ -17,7 +18,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageDice2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/imageDice2"
@@ -31,4 +33,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageDice1"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/continueButtonDiceFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="Continue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,8 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +35,9 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private static final float SHAKE_THRESHOLD = 50;
     private FragmentDiceBinding binding;
     private Dices dices;
+    private boolean hasBeenRolled;
+
+    private FragmentManager fragmentManager;
 
     public DiceFragment() {
         // Required empty public constructor
@@ -62,6 +67,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         this.sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         this.accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         this.dices = new Dices();
+        this.hasBeenRolled = false;
     }
 
     @Override
@@ -69,12 +75,20 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         this.binding = FragmentDiceBinding.inflate(getLayoutInflater());
+        this.fragmentManager = getParentFragmentManager();
+        this.binding.continueButtonDiceFragment.setOnClickListener(view -> {
+            if(hasBeenRolled) {
+                NavHostFragment.findNavController(this).navigate(R.id.action_DiceFragment_to_GameBoardUI);
+            }
+        });
         return this.binding.getRoot();
     }
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if(sensorEvent.sensor.getType() != Sensor.TYPE_ACCELEROMETER) return;
+
+        if(this.hasBeenRolled) return;
 
         long currentTime = System.currentTimeMillis();
         if((currentTime-lastSensorUpdate) > 1000) {
@@ -93,6 +107,8 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 dices.rollDices();
                 setDiceImage(binding.imageDice1, dices.getDice1());
                 setDiceImage(binding.imageDice2,dices.getDice2());
+
+                this.hasBeenRolled = true;
             }
 
             lastX = x;

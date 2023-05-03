@@ -87,6 +87,9 @@
         <action
             android:id="@+id/action_GameBoard_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_GameBoardUI_to_DiceFragment"
+            app:destination="@id/DiceFragment" />
 
     </fragment>
 
@@ -95,5 +98,9 @@
         android:name="com.example.monopoly.ui.DiceFragment"
         android:label="DiceFragment"
         tools:layout="@layout/fragment_dice"
-        />
+        >
+        <action
+            android:id="@+id/action_DiceFragment_to_GameBoardUI"
+            app:destination="@id/GameBoardUI" />
+    </fragment>
 </navigation>
