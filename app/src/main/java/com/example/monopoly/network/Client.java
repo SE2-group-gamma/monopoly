@@ -108,6 +108,7 @@ public class Client extends Thread {
                 synchronized (msgBuffer){
                     if(msgBuffer.size()!=0){
                         for(int i = msgBuffer.size()-1; i >= 0; i--){
+                            Log.d("msgBuffer",msgBuffer.get(i));
                             outToServer.writeBytes(msgBuffer.get(i)+System.lineSeparator());
                             outToServer.flush();
                             msgBuffer.remove(i);

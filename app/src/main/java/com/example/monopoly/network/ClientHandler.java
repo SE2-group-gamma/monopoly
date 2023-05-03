@@ -31,13 +31,15 @@ public class ClientHandler extends Thread{
             this.br = new BufferedReader(new InputStreamReader(client.getInputStream()));
             this.bw = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
 
-            bw.write("Lobby|changeText|Martin Jäger"+System.lineSeparator());
-            bw.flush();
+            //bw.write("Lobby|changeText|Martin Jäger"+System.lineSeparator());
+            //bw.flush();
 
             while(true){
                 if(br.ready()){
                     String msg = br.readLine();
-                    Log.d("msg",msg);
+                    Log.d("msg123",msg);
+                    bw.write(msg+System.lineSeparator());
+                    bw.flush();
                 }
             }
         } catch (IOException e){

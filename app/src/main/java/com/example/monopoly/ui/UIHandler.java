@@ -32,6 +32,8 @@ public class UIHandler extends Handler {
             case "playerName":
                 ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);        // TODO
                 break;
+            case "playerJoined":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
         }
 
 
