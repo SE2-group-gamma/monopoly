@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,10 @@ public class MonopolyServer extends Thread{
         this.isListening = false;
     }
 
+    public List<ClientHandler> getClients() {
+        return clients;
+    }
+
     // Constructor for testing
     public MonopolyServer(int maxNumberOfClients, ServerSocket serverSocket) throws IOException {
         this.serverSocket = serverSocket;
@@ -35,12 +40,20 @@ public class MonopolyServer extends Thread{
     @Override
     public void run() {
         this.isListening = true;
+        int count = 0;
         //Log.d("",""+this.maxNumberOfClients);
         while(isListening() && this.clients.size() < maxNumberOfClients){
             ClientHandler clientHandler = null;
             try {
                 // serverSocket.accept() waits for Clients to connect
-                clientHandler = new ClientHandler(serverSocket.accept());
+                Socket socket = serverSocket.accept();
+                clientHandler = new ClientHandler(socket);
+                count++;
+
+                String message = "#" + count + " from "
+                        + socket.getInetAddress() + ":"
+                        + socket.getPort() + "\n";
+                Log.d("SocketConn",message);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

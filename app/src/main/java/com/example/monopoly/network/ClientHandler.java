@@ -25,6 +25,10 @@ public class ClientHandler extends Thread{
         this.client = client;
     }
 
+    public Socket getClient() {
+        return client;
+    }
+
     @Override
     public void run() {
         try {

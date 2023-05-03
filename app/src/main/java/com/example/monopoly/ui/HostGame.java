@@ -131,6 +131,8 @@ public class HostGame extends Fragment {
                 //nsd.start(manager);
                 Player player = new Player(user, new Color(),500.00,true);
                 Client c = new Client(null,0,player);
+                //Client c = new Client(ms.getClients().get(0).getClient().getInetAddress(),ms.getClients().get(0).getClient().getPort(),player);
+
                 c.start();
 
 
