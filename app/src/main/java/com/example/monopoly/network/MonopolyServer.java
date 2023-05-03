@@ -2,6 +2,8 @@ package com.example.monopoly.network;
 
 import android.util.Log;
 
+import com.example.monopoly.gamelogic.Game;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,12 +18,29 @@ public class MonopolyServer extends Thread{
     private int maxNumberOfClients;
     private boolean isListening;
 
+    private Game game;
+    private String hostname;
+    private Client client;
+
     public MonopolyServer(int maxNumberOfClients) throws IOException {
         this.serverSocket = new ServerSocket(6969);
         this.localPort = serverSocket.getLocalPort();
         this.maxNumberOfClients = maxNumberOfClients;
         this.clients = new ArrayList<ClientHandler>();
         this.isListening = false;
+    }
+
+    public void setHostname(String hostname){
+        this.hostname=hostname;
+    }
+
+    public void setClient(Client client){
+        this.client=client;
+        synchronized (this.clients){
+            for (ClientHandler handler:this.clients) {
+                handler.setClient(client);
+            }
+        }
     }
 
     public List<ClientHandler> getClients() {
@@ -41,13 +60,14 @@ public class MonopolyServer extends Thread{
     public void run() {
         this.isListening = true;
         int count = 0;
+        game = new Game();
         //Log.d("",""+this.maxNumberOfClients);
         while(isListening() && this.clients.size() < maxNumberOfClients){
             ClientHandler clientHandler = null;
             try {
                 // serverSocket.accept() waits for Clients to connect
                 Socket socket = serverSocket.accept();
-                clientHandler = new ClientHandler(socket);
+                clientHandler = new ClientHandler(socket,hostname,client);
                 count++;
 
                 String message = "#" + count + " from "
@@ -58,7 +78,9 @@ public class MonopolyServer extends Thread{
                 throw new RuntimeException(e);
             }
             clientHandler.start();
-            this.clients.add(clientHandler);
+            synchronized (this.clients){
+                this.clients.add(clientHandler);
+            }
         }
         try {
             stopListening();

@@ -23,7 +23,7 @@ byte IPAddress[] = { 127, 0, 0, 1 };
     @Test
     public void testConnectionRefused() throws IOException {
         InetAddress address = InetAddress.getByAddress(IPAddress);
-        client = new Client(address,0,null);
+        client = new Client(address,0,null,false);
 
         assertThrows(RuntimeException.class, () -> {
             client.run();
@@ -34,7 +34,7 @@ byte IPAddress[] = { 127, 0, 0, 1 };
     @Test
     public void testClientGettersSetters() throws UnknownHostException {
         InetAddress address = InetAddress.getByAddress(IPAddress);
-        client = new Client(address,0, null);
+        client = new Client(address,0, null,false);
         client.setResponse(response);
         client.setRequest(request);
         assertEquals(client.getResponse(),response);

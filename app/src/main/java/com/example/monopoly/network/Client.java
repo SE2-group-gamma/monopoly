@@ -34,6 +34,8 @@ public class Client extends Thread {
         handlers = new HashMap<>();
     }
 
+    private boolean isHost;
+
     public InetAddress getHost() {
         return host;
     }
@@ -57,13 +59,14 @@ public class Client extends Thread {
         handlers.put(type,new UIHandler(frag));
     }
 
-    public Client(InetAddress host, int port, Player user) {
+    public Client(InetAddress host, int port, Player user, boolean isHost) {
         this.host = host;
         this.port = port;
         this.user = user;
         this.msgBuffer = new ArrayList<>();
+        this.isHost=isHost;
     }
-    public Client(InetAddress host, int port) {
+    public Client(InetAddress host, int port, boolean isHost) {
         this.host = host;
         this.port = port;
         this.msgBuffer = new ArrayList<>();
@@ -109,15 +112,8 @@ public class Client extends Thread {
 
                     Thread.sleep(100);
 
-                    if (handlers.containsKey(responseSplit[0])) {
-                        android.os.Message handleMessage = new Message();
-                        Bundle b = new Bundle();
-                        b.putString("ActionType", responseSplit[1]);
-                        b.putString("Data", responseSplit[2]);
-                        handleMessage.setData(b);
-                        handlers.get(responseSplit[0]).sendMessage(handleMessage);
-                    }
-                }
+                    handleMessage(responseSplit);
+            }
                 synchronized (msgBuffer){
                     if(msgBuffer.size()!=0){
                         for(int i = msgBuffer.size()-1; i >= 0; i--){
@@ -135,6 +131,22 @@ public class Client extends Thread {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void handleMessage(String[] responseSplit){
+        if (handlers.containsKey(responseSplit[0])) {
+            android.os.Message handleMessage = new Message();
+            Bundle b = new Bundle();
+            b.putString("ActionType", responseSplit[1]);
+            b.putString("Data", responseSplit[2]);
+            handleMessage.setData(b);
+            handlers.get(responseSplit[0]).sendMessage(handleMessage);
+        }
+
+        if(isHost){
+            // TODO: call game logic
+            // e.g. responseSplit[1] to throw dice
         }
     }
 }

@@ -14,6 +14,7 @@ import com.example.monopoly.R;
 
 public class UIHandler extends Handler {
     private Fragment frag;
+    private int counter=1;
 
     public UIHandler(Fragment app) {
         this.frag = app;
@@ -29,11 +30,29 @@ public class UIHandler extends Handler {
             case "changeText":
                 ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
                 break;
-            case "playerName":
-                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);        // TODO
+            case "userJoined":
+                switch (counter){
+                    case 1:
+                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
+                        break;
+                    case 2:
+                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setText(data);
+                        break;
+                    case 3:
+                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setText(data);
+                        break;
+                    case 4:
+                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setText(data);
+                        break;
+                    case 5:
+                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setText(data);
+                        break;
+                }
+                counter++;
                 break;
-            case "playerJoined":
-                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
+            case "hostJoined":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewHost)).setText(data);
+
         }
 
 

@@ -25,14 +25,23 @@ public class NSD_Client {
     private String request;
     private Client client;
     private int count = 0;
+    private Object readyToken="";
+    private boolean isReady = false;
+    private boolean isHost = false;
 
+    public boolean isReady() {
+        synchronized (readyToken){
+            return isReady;
+        }
+    }
+
+    public void setIsHost(boolean host){
+        this.isHost=host;
+    }
 
 
     public void start(NsdManager manager){
         this.manager = manager;
-
-        //Client client = new Client(host, port,null);
-        //client.start();
 
         initializeDiscoveryListener();
         initializeResolveListener();
@@ -108,9 +117,11 @@ public class NSD_Client {
                 host = nsdServiceInfo.getHost();
 
                 Log.d("SocketConn","Searching ...");
-                client = new Client(host, port);
+                client = new Client(host, port, isHost);
                 client.start();
-
+                synchronized (readyToken){
+                    isReady=true;
+                }
             }
         };
     }

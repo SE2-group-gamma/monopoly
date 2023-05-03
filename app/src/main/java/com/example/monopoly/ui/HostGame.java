@@ -126,6 +126,7 @@ public class HostGame extends Fragment {
                 NSDServer nsdServer = new NSDServer((NsdManager) getActivity().getSystemService(Context.NSD_SERVICE));
                 try {
                     ms = new MonopolyServer(playerCount);
+                    ms.setHostname(user);
                     nsdServer.registerNSDService(ms.getLocalPort());
                 } catch (IOException e) {
                     Log.e("MonopolyServer", "Server creation failed");
@@ -143,6 +144,7 @@ public class HostGame extends Fragment {
 
                 NsdManager manager = (NsdManager) getActivity().getSystemService(Context.NSD_SERVICE);
                 NSD_Client nsd = new NSD_Client();
+                nsd.setIsHost(true);
                 nsd.start(manager);
 
                 Log.d("SocketConn","nsd");
@@ -152,23 +154,19 @@ public class HostGame extends Fragment {
                 //Client c = new Client(null,0,player);
                 //Client c = new Client(ms.getClients().get(0).getClient().getInetAddress(),ms.getClients().get(0).getClient().getPort(),player);
 
-                //c.start();
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                while(!nsd.isReady()){
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-
-                //Log.d("SocketConn","succ: "+nsd.getClient().getHost());
+                ms.setClient(nsd.getClient());
 
                 try {
-                    Thread.sleep(50);
                     nsd.getClient().setUser(player);
-                    nsd.getClient().writeToServer("HostGame|playerJoined|"+player.getUsername());
+                    nsd.getClient().writeToServer("Lobby|hostJoined|"+player.getUsername());
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
 

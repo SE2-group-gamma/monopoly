@@ -2,6 +2,7 @@ package com.example.monopoly.ui;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.nsd.NsdManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,10 +32,14 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.monopoly.databinding.ActivityMainBinding;
+import com.example.monopoly.gamelogic.Player;
+import com.example.monopoly.network.Client;
 
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+
+import java.io.IOException;
 
 public class JoinGame extends Fragment {
 
@@ -45,6 +50,7 @@ public class JoinGame extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+        Client.subscribe(this,"JoinGame");
         binding = JoinGameBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
@@ -69,6 +75,26 @@ public class JoinGame extends Fragment {
             }else if(key.isEmpty()){
                 binding.keyInput.setError("No Input");
             }else{
+
+                NsdManager manager = (NsdManager) getActivity().getSystemService(Context.NSD_SERVICE);
+                NSD_Client nsd = new NSD_Client();
+                nsd.setIsHost(false);
+                nsd.start(manager);
+                Player player = new Player(user, new Color(),500.00,true);
+
+                while(!nsd.isReady()){
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                try {
+                    nsd.getClient().setUser(player);
+                    nsd.getClient().writeToServer("Lobby|userJoined|"+player.getUsername());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
 
                 NavHostFragment.findNavController(JoinGame.this)
                         .navigate(R.id.action_JoinGame_to_Lobby);
