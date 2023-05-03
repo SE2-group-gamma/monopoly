@@ -10,14 +10,15 @@
         android:label="@string/app_name_uppercase"
         android:supportsRtl="true"
         android:theme="@style/Theme.Monopoly"
+        android:largeHeap="true"
+        android:hardwareAccelerated="false"
         tools:targetApi="31">
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name_uppercase"
-            android:theme="@style/Theme.Monopoly.NoActionBar"
             android:screenOrientation="landscape"
-            >
+            android:theme="@style/Theme.Monopoly.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

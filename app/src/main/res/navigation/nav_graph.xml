@@ -73,6 +73,21 @@
         <action
             android:id="@+id/action_Lobby_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_JoinGame_to_GameBoard"
+            app:destination="@id/GameBoardUI" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/GameBoardUI"
+        android:name="com.example.monopoly.ui.GameBoardUI"
+        android:label="GameBoardUI"
+        tools:layout="@layout/game_board">
+
+        <action
+            android:id="@+id/action_GameBoard_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+
     </fragment>
 
     <fragment

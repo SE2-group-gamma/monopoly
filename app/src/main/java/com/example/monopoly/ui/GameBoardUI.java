@@ -1,6 +1,7 @@
 package com.example.monopoly.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,28 +12,25 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
-import com.example.monopoly.databinding.LobbyBinding;
+import com.example.monopoly.databinding.GameBoardBinding;
 
-public class Lobby extends Fragment {
+public class GameBoardUI extends Fragment {
 
-    private LobbyBinding binding;
-
-    private int key;
-    private String lobbyname;
+    private GameBoardBinding binding;
 
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        binding = LobbyBinding.inflate(inflater, container, false);
+        binding = GameBoardBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        //Log.d("Test",binding.button.getText().toString());
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -41,15 +39,8 @@ public class Lobby extends Fragment {
             }
         });
 
-        binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(Lobby.this)
-                .navigate(R.id.action_Lobby_to_FirstFragment));
-
-        binding.startButton.setOnClickListener(view12 -> {
-            // TODO: join into game
-
-            NavHostFragment.findNavController(Lobby.this)
-                    .navigate(R.id.action_JoinGame_to_GameBoard);
-        });
+        binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
+                .navigate(R.id.action_GameBoard_to_FirstFragment));
     }
 
     @Override
