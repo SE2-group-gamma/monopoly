@@ -38,9 +38,13 @@ public class Client extends Thread {
         synchronized (msgBuffer) {
             msgBuffer.add(msg);
         }
-
     }
 
+    /***
+     * Subscribe Fragment to handler
+     * @param frag
+     * @param type
+     */
     public static void subscribe(Fragment frag, String type){
         handlers.put(type,new UIHandler(frag));
     }
@@ -72,6 +76,7 @@ public class Client extends Thread {
         try {
 
             //Network Protocol: [Fragment Name]|[Action]|[Data]
+            //Could also use OP-Codes
 
             if(host != null && port != 0)
                 clientSocket = new Socket(host, port);
@@ -92,7 +97,6 @@ public class Client extends Thread {
                     Thread.sleep(100);
 
                     if (handlers.containsKey(responseSplit[0])) {
-                        //handlers.get(responseSplit[0]);
                         android.os.Message handleMessage = new Message();
                         Bundle b = new Bundle();
                         b.putString("ActionType", responseSplit[1]);
@@ -100,8 +104,6 @@ public class Client extends Thread {
                         handleMessage.setData(b);
                         handlers.get(responseSplit[0]).sendMessage(handleMessage);
                     }
-
-                    Log.d("", "  aasdsadasdada   " + response);
                 }
                 synchronized (msgBuffer){
                     if(msgBuffer.size()!=0){
@@ -112,8 +114,6 @@ public class Client extends Thread {
                         }
                     }
                 }
-
-
             }
             //clientSocket.close();
 
