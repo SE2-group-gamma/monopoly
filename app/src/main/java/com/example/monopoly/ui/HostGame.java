@@ -29,6 +29,14 @@ import com.example.monopoly.utils.LobbyKey;
 import java.io.IOException;
 import java.text.DecimalFormatSymbols;
 
+import android.content.Context;
+import android.net.nsd.NsdManager;
+import android.net.nsd.NsdServiceInfo;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 public class HostGame extends Fragment {
 
     private HostGameBinding binding;
@@ -126,20 +134,38 @@ public class HostGame extends Fragment {
                 // TODO: create Lobby with key here (Server Side)
                 ms.start();
 
-                //NsdManager manager = (NsdManager) getSystemService(Context.NSD_SERVICE);
-                //NSD_Client nsd = new NSD_Client();
-                //nsd.start(manager);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+                NsdManager manager = (NsdManager) getActivity().getSystemService(Context.NSD_SERVICE);
+                NSD_Client nsd = new NSD_Client();
+                nsd.start(manager);
+
+                Log.d("SocketConn","nsd");
+
+
                 Player player = new Player(user, new Color(),500.00,true);
-                Client c = new Client(null,0,player);
+                //Client c = new Client(null,0,player);
                 //Client c = new Client(ms.getClients().get(0).getClient().getInetAddress(),ms.getClients().get(0).getClient().getPort(),player);
 
-                c.start();
+                //c.start();
 
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
 
+                //Log.d("SocketConn","succ: "+nsd.getClient().getHost());
 
                 try {
                     Thread.sleep(50);
-                    c.writeToServer("HostGame|playerJoined|"+player.getUsername());
+                    nsd.getClient().setUser(player);
+                    nsd.getClient().writeToServer("HostGame|playerJoined|"+player.getUsername());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 } catch (InterruptedException e) {

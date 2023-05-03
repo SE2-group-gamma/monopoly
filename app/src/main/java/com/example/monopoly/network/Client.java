@@ -34,6 +34,14 @@ public class Client extends Thread {
         handlers = new HashMap<>();
     }
 
+    public InetAddress getHost() {
+        return host;
+    }
+
+    public void setUser(Player user) {
+        this.user = user;
+    }
+
     public void writeToServer(String msg) throws IOException {
         synchronized (msgBuffer) {
             msgBuffer.add(msg);
@@ -53,6 +61,11 @@ public class Client extends Thread {
         this.host = host;
         this.port = port;
         this.user = user;
+        this.msgBuffer = new ArrayList<>();
+    }
+    public Client(InetAddress host, int port) {
+        this.host = host;
+        this.port = port;
         this.msgBuffer = new ArrayList<>();
     }
 
