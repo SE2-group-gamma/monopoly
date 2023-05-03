@@ -2,6 +2,8 @@ package com.example.monopoly.network;
 
 import android.util.Log;
 
+import com.example.monopoly.gamelogic.Game;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,6 +17,7 @@ public class MonopolyServer extends Thread{
     private int localPort;
     private int maxNumberOfClients;
     private boolean isListening;
+    private Game gameInstance;
 
     public MonopolyServer(int maxNumberOfClients) throws IOException {
         this.serverSocket = new ServerSocket(6969);
@@ -22,6 +25,14 @@ public class MonopolyServer extends Thread{
         this.maxNumberOfClients = maxNumberOfClients;
         this.clients = new ArrayList<ClientHandler>();
         this.isListening = false;
+    }
+
+    public void instantiateGame(){
+        gameInstance = new Game();
+    }
+
+    public Game getGameInstance() {
+        return gameInstance;
     }
 
     public List<ClientHandler> getClients() {
