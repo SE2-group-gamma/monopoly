@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ClientHandler extends Thread{
@@ -24,13 +25,22 @@ public class ClientHandler extends Thread{
 
     private String hostname;
     Client client;
+    private ArrayList<String> msgBuffer;
+
+    private MonopolyServer server;
+
+    public void setServer(MonopolyServer server) {
+        this.server = server;
+    }
+
+    private Object clientToken="";
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
     }
 
     public void setClient(Client client) {
-        synchronized (this.client){
+        synchronized (clientToken){
             this.client = client;
         }
     }
@@ -39,10 +49,15 @@ public class ClientHandler extends Thread{
         this.hostname = hostname;
         this.socket=socket;
         this.client=client;
+        this.msgBuffer=new ArrayList<>();
     }
 
     public Socket getClient() {
         return socket;
+    }
+
+    public Client getClientClient() {
+        return client;
     }
 
     @Override
@@ -53,24 +68,52 @@ public class ClientHandler extends Thread{
 
             //bw.write("Lobby|changeText|Martin Jäger"+System.lineSeparator());
             //bw.flush();
-            bw.write("Lobby|hostJoined|"+hostname+System.lineSeparator());
-            bw.flush();
+
+
 
 
             while(true){
                 if(br.ready()){
                     String msg = br.readLine();
                     String[] strings = msg.split("\\|");
-                    synchronized (client){
-                        client.handleMessage(strings);
+                    synchronized (clientToken){
+                        String[] response = client.handleMessage(strings);
+                        if(response!=null){
+                            for (String str: response) {
+
+
+                                bw.write(str.replaceAll("REPLACER",hostname));
+                                bw.flush();
+
+
+                            }
+                        }
+
                     }
                     Log.d("msg123",msg);
-                    bw.write(msg+System.lineSeparator());
-                    bw.flush();
+
+                }
+                synchronized (msgBuffer) {
+                    if (msgBuffer.size() != 0) {
+                        for (int i = msgBuffer.size() - 1; i >= 0; i--) {
+                            Log.d("msgBuffer", msgBuffer.get(i));
+                            bw.write(msgBuffer.get(i) + System.lineSeparator());
+                            bw.flush();
+                            msgBuffer.remove(i);
+                        }
+                    }
                 }
             }
         } catch (IOException e){
             e.printStackTrace();
         }
     }
+
+    public void writeToClient(String msg) {
+        synchronized (msgBuffer) {
+            msgBuffer.add(msg);
+        }
+    }
+
+
 }

@@ -42,6 +42,8 @@ public class HostGame extends Fragment {
     private HostGameBinding binding;
     private static MonopolyServer ms;
 
+    public static int key = 0;
+
 
     @Override
     public View onCreateView(
@@ -120,9 +122,9 @@ public class HostGame extends Fragment {
                 binding.lobbyInput.setError("No Input");
             } else {
                 LobbyKey lobbyKey = new LobbyKey();
-                int key = lobbyKey.generateKey();
+                key = lobbyKey.generateKey();
 
-                MonopolyServer ms = null;
+                ms = null;
                 NSDServer nsdServer = new NSDServer((NsdManager) getActivity().getSystemService(Context.NSD_SERVICE));
                 try {
                     ms = new MonopolyServer(playerCount);
@@ -161,10 +163,13 @@ public class HostGame extends Fragment {
                         throw new RuntimeException(e);
                     }
                 }
+                nsd.getClient().setHost(true);
                 ms.setClient(nsd.getClient());
 
                 try {
                     nsd.getClient().setUser(player);
+                    nsd.getClient().setKey(key);
+                    nsd.getClient().setMonopolyServer(ms);
                     nsd.getClient().writeToServer("Lobby|hostJoined|"+player.getUsername());
                 } catch (IOException e) {
                     throw new RuntimeException(e);

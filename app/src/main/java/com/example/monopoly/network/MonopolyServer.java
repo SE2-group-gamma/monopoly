@@ -3,11 +3,13 @@ package com.example.monopoly.network;
 import android.util.Log;
 
 import com.example.monopoly.gamelogic.Game;
+import com.example.monopoly.utils.LobbyKey;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MonopolyServer extends Thread{
@@ -21,6 +23,9 @@ public class MonopolyServer extends Thread{
     private Game game;
     private String hostname;
     private Client client;
+    private int counter=1;
+
+    private HashMap<Integer, ClientHandler> keyedHandlers;
 
     public MonopolyServer(int maxNumberOfClients) throws IOException {
         this.serverSocket = new ServerSocket(6969);
@@ -28,6 +33,7 @@ public class MonopolyServer extends Thread{
         this.maxNumberOfClients = maxNumberOfClients;
         this.clients = new ArrayList<ClientHandler>();
         this.isListening = false;
+        this.keyedHandlers=new HashMap<>();
     }
 
     public void setHostname(String hostname){
@@ -35,8 +41,9 @@ public class MonopolyServer extends Thread{
     }
 
     public void setClient(Client client){
-        this.client=client;
         synchronized (this.clients){
+            Log.i("",client.isHost()+"");
+            this.client=client;
             for (ClientHandler handler:this.clients) {
                 handler.setClient(client);
             }
@@ -60,6 +67,9 @@ public class MonopolyServer extends Thread{
     public void run() {
         this.isListening = true;
         int count = 0;
+
+
+
         game = new Game();
         //Log.d("",""+this.maxNumberOfClients);
         while(isListening() && this.clients.size() < maxNumberOfClients){
@@ -68,6 +78,7 @@ public class MonopolyServer extends Thread{
                 // serverSocket.accept() waits for Clients to connect
                 Socket socket = serverSocket.accept();
                 clientHandler = new ClientHandler(socket,hostname,client);
+                clientHandler.setServer(this);
                 count++;
 
                 String message = "#" + count + " from "
@@ -80,6 +91,7 @@ public class MonopolyServer extends Thread{
             clientHandler.start();
             synchronized (this.clients){
                 this.clients.add(clientHandler);
+                keyedHandlers.put(counter++,clientHandler);
             }
         }
         try {

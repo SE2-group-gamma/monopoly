@@ -14,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.LobbyBinding;
 import com.example.monopoly.network.Client;
+import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.network.MonopolyServer;
 
 public class Lobby extends Fragment {
@@ -34,6 +35,7 @@ public class Lobby extends Fragment {
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
 
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -43,8 +45,9 @@ public class Lobby extends Fragment {
                 //Log.d("",""+x.getNumberOfClients());
                 //Log.d("",""+x.getNumberOfClients());
                 // TODO: Set textView with key from Lobby
-                //binding.textViewKey.setText("Game-Key: "+key);
+
             }
+
         });
 
         binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(Lobby.this)
@@ -52,9 +55,10 @@ public class Lobby extends Fragment {
 
         binding.startButton.setOnClickListener(view12 -> {
             // TODO: join into game
-
-            NavHostFragment.findNavController(Lobby.this)
-                    .navigate(R.id.action_JoinGame_to_GameBoard);
+            for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
+                handler.writeToClient("Lobby|gameStart| ");
+            }
+            //HostGame.getMonopolyServer().getClients().get(0).getClientClient().handleMessage("Lobby|gameStart| ".split("\\|"));
         });
     }
 

@@ -28,13 +28,23 @@ public class Client extends Thread {
     private Player user;
     private DataOutputStream outToServer;
     private ArrayList<String> msgBuffer;
+    private MonopolyServer monopolyServer;
+
+
+
+    private int key;
 
     private static HashMap<String, UIHandler> handlers;
-    static{
+
+    static {
         handlers = new HashMap<>();
     }
 
     private boolean isHost;
+
+    public void setMonopolyServer(MonopolyServer monopolyServer) {
+        this.monopolyServer = monopolyServer;
+    }
 
     public InetAddress getHost() {
         return host;
@@ -55,8 +65,8 @@ public class Client extends Thread {
      * @param frag
      * @param type
      */
-    public static void subscribe(Fragment frag, String type){
-        handlers.put(type,new UIHandler(frag));
+    public static void subscribe(Fragment frag, String type) {
+        handlers.put(type, new UIHandler(frag));
     }
 
     public Client(InetAddress host, int port, Player user, boolean isHost) {
@@ -64,8 +74,9 @@ public class Client extends Thread {
         this.port = port;
         this.user = user;
         this.msgBuffer = new ArrayList<>();
-        this.isHost=isHost;
+        this.isHost = isHost;
     }
+
     public Client(InetAddress host, int port, boolean isHost) {
         this.host = host;
         this.port = port;
@@ -88,24 +99,44 @@ public class Client extends Thread {
         return response;
     }
 
+    public boolean isHost() {
+        return isHost;
+    }
+
+    public void setHost(boolean host) {
+        isHost = host;
+    }
+
+    public void setKey(int key) {
+        this.key = key;
+    }
+
     public void run() {
         try {
 
             //Network Protocol: [Fragment Name]|[Action]|[Data]
             //Could also use OP-Codes
 
-            if(host != null && port != 0)
+            if (host != null && port != 0)
                 clientSocket = new Socket(host, port);
             else
-                clientSocket = new Socket("localhost",6969);
+                clientSocket = new Socket("localhost", 6969);
 
             outToServer = new DataOutputStream(clientSocket.getOutputStream());
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            while(true) {
+            Thread.sleep(100);
+            if(!isHost){
+                writeToServer("CLIENTMESSAGE|key|" + key);
+            }else{
+                handleMessage("Lobby|displayKey| ".split("\\|"));
+            }
+
+
+            while (true) {
 
                 //outToServer.writeBytes(request + 'n');
-                if(inFromServer.ready()) {
+                if (inFromServer.ready()) {
                     response = inFromServer.readLine();
 
                     String[] responseSplit = response.split("\\|");
@@ -113,12 +144,12 @@ public class Client extends Thread {
                     Thread.sleep(100);
 
                     handleMessage(responseSplit);
-            }
-                synchronized (msgBuffer){
-                    if(msgBuffer.size()!=0){
-                        for(int i = msgBuffer.size()-1; i >= 0; i--){
-                            Log.d("msgBuffer",msgBuffer.get(i));
-                            outToServer.writeBytes(msgBuffer.get(i)+System.lineSeparator());
+                }
+                synchronized (msgBuffer) {
+                    if (msgBuffer.size() != 0) {
+                        for (int i = msgBuffer.size() - 1; i >= 0; i--) {
+                            Log.d("msgBuffer", msgBuffer.get(i));
+                            outToServer.writeBytes(msgBuffer.get(i) + System.lineSeparator());
                             outToServer.flush();
                             msgBuffer.remove(i);
                         }
@@ -134,7 +165,8 @@ public class Client extends Thread {
         }
     }
 
-    public void handleMessage(String[] responseSplit){
+
+    public String[] handleMessage(String[] responseSplit) {
         if (handlers.containsKey(responseSplit[0])) {
             android.os.Message handleMessage = new Message();
             Bundle b = new Bundle();
@@ -144,9 +176,48 @@ public class Client extends Thread {
             handlers.get(responseSplit[0]).sendMessage(handleMessage);
         }
 
-        if(isHost){
+        if (isHost) {
             // TODO: call game logic
             // e.g. responseSplit[1] to throw dice
+            if (responseSplit[0].equals("CLIENTMESSAGE") && responseSplit[1].equals("key")) {
+                Log.d("",monopolyServer.getClients().size()+"");
+                int keyReceived = Integer.parseInt(responseSplit[2]);
+                if (key == keyReceived) {
+
+                    //monopolyServer.getClients().get(0).writeToClient("JoinLobby|keyFromLobby|1");      // TODO make this with IDs instead (properly)
+                    return new String[]{"JoinGame|keyFromLobby|1"+System.lineSeparator(),"Lobby|hostJoined|"+"REPLACER"+System.lineSeparator()};
+
+                } else {
+
+                    //monopolyServer.getClients().get(0).writeToClient("JoinLobby|keyFromLobby|0");
+                    return new String[]{"JoinGame|keyFromLobby|0"+System.lineSeparator(),"Lobby|hostJoined|"+"REPLACER"+System.lineSeparator()};
+
+                }
+            }
+            if(responseSplit[1].equals("JOINED")){
+                synchronized (monopolyServer.getClients()){
+                    for (ClientHandler handler: monopolyServer.getClients()) {
+
+                        handler.writeToClient("Lobby|userJoined|"+responseSplit[2]);
+
+                    }
+                }
+            }
+        } else {
+            for (String str: responseSplit) {
+                Log.d("test ",str);
+            }
+            if (responseSplit[1].equals("keyFromLobby") && responseSplit[2].equals("1")) {
+                try {
+                    writeToServer("Lobby|JOINED|" + user.getUsername());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if(responseSplit[1].equals("hostJoined")){
+                //writeToServer();
+            }
         }
+        return null;
     }
 }

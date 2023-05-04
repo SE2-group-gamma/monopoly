@@ -89,15 +89,9 @@ public class JoinGame extends Fragment {
                         throw new RuntimeException(e);
                     }
                 }
-                try {
-                    nsd.getClient().setUser(player);
-                    nsd.getClient().writeToServer("Lobby|userJoined|"+player.getUsername());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
 
-                NavHostFragment.findNavController(JoinGame.this)
-                        .navigate(R.id.action_JoinGame_to_Lobby);
+                nsd.getClient().setUser(player);
+                nsd.getClient().setKey(Integer.parseInt(key));
 
             }
         });

@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 
@@ -52,7 +53,25 @@ public class UIHandler extends Handler {
                 break;
             case "hostJoined":
                 ((TextView) this.frag.getActivity().findViewById(R.id.textViewHost)).setText(data);
-
+                break;
+            case "keyFromLobby":
+                if(data.equals("1")){
+                    NavHostFragment.findNavController(frag).navigate(R.id.action_JoinGame_to_Lobby);
+                }else{
+                    Log.d("","gib toast");
+                    Toast.makeText(this.frag.getActivity(), "Key rejected", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case "gameStart":
+                Log.d("------------","gameStart");
+                NavHostFragment.findNavController(frag)
+                        .navigate(R.id.action_JoinGame_to_GameBoard);
+                break;
+            case "displayKey":
+                Log.d("tuaaaaaaa","displayKey");
+                if(HostGame.key!=0) {
+                    ((TextView) this.frag.getActivity().findViewById(R.id.textViewKey)).setText("Game-Key: " + HostGame.key);
+                }
         }
 
 
