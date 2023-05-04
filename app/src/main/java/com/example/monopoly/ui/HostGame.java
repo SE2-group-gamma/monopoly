@@ -43,6 +43,7 @@ public class HostGame extends Fragment {
     private static MonopolyServer ms;
 
     public static int key = 0;
+    public static String lobbyname = " ";
 
 
     @Override
@@ -123,6 +124,7 @@ public class HostGame extends Fragment {
             } else {
                 LobbyKey lobbyKey = new LobbyKey();
                 key = lobbyKey.generateKey();
+                lobbyname = lobby;
 
                 ms = null;
                 NSDServer nsdServer = new NSDServer((NsdManager) getActivity().getSystemService(Context.NSD_SERVICE));

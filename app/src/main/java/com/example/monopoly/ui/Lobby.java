@@ -50,8 +50,11 @@ public class Lobby extends Fragment {
 
         });
 
-        binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(Lobby.this)
-                .navigate(R.id.action_Lobby_to_FirstFragment));
+        binding.backButton.setOnClickListener(view1 -> {
+
+            NavHostFragment.findNavController(Lobby.this)
+                    .navigate(R.id.action_Lobby_to_FirstFragment);
+        });
 
         binding.startButton.setOnClickListener(view12 -> {
             // TODO: join into game

@@ -3,6 +3,7 @@ package com.example.monopoly.ui;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,24 +35,37 @@ public class UIHandler extends Handler {
             case "userJoined":
                 switch (counter){
                     case 1:
+                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setVisibility(View.VISIBLE);
+                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1Name)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
                         break;
                     case 2:
+                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setVisibility(View.VISIBLE);
+                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2Name)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setText(data);
                         break;
                     case 3:
+                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setVisibility(View.VISIBLE);
+                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3Name)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setText(data);
                         break;
                     case 4:
+                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setVisibility(View.VISIBLE);
+                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4Name)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setText(data);
                         break;
                     case 5:
+                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setVisibility(View.VISIBLE);
+                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5Name)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setText(data);
                         break;
                 }
                 counter++;
                 break;
             case "hostJoined":
+                if(!HostGame.lobbyname.equals(" ")){
+                    ((TextView) this.frag.getActivity().findViewById(R.id.textViewLobby)).setText("Lobby: "+HostGame.lobbyname);
+                }
                 ((TextView) this.frag.getActivity().findViewById(R.id.textViewHost)).setText(data);
                 break;
             case "keyFromLobby":

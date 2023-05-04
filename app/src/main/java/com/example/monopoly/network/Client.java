@@ -31,7 +31,6 @@ public class Client extends Thread {
     private MonopolyServer monopolyServer;
 
 
-
     private int key;
 
     private static HashMap<String, UIHandler> handlers;
