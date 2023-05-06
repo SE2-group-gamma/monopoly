@@ -14,4 +14,5 @@ public class CommunityChestCardTest {
         Assertions.assertEquals(0,card.getId());
         Assertions.assertEquals("test",card.getFunction());
     }
+
 }
