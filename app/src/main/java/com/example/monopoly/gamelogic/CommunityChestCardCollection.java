@@ -1,6 +1,7 @@
 package com.example.monopoly.gamelogic;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class CommunityChestCardCollection {
     private ArrayList<CommunityChestCard> allCommunityChestCards = new ArrayList<CommunityChestCard>();
@@ -121,5 +122,13 @@ public class CommunityChestCardCollection {
         setCommunityChestCardDeck((ArrayList<CommunityChestCard>) allCommunityChestCards.clone());
     }
 
+    public int generateRandom() {
+        Random r = new Random();
+        if (communityChestCardDeck.size() == 0){
+            return -1;
+        }
+        int random = r.nextInt(communityChestCardDeck.size());
+        return random;
+    }
 
 }

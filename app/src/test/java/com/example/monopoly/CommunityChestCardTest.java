@@ -45,4 +45,15 @@ public class CommunityChestCardTest {
         }
     }
 
+    @Test
+    public void testGenerateRandom() {
+        int random;
+        for (int i = 0; i < 20; i++) {
+            random = collection.generateRandom();
+            System.out.println(random);
+            Assertions.assertTrue(random <= collection.getCommunityChestCardDeck().size());
+        }
+
+    }
+
 }
