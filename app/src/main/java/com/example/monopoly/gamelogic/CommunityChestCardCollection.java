@@ -9,7 +9,7 @@ public class CommunityChestCardCollection {
     private ArrayList<CommunityChestCard> communityChestCardDeck = new ArrayList<CommunityChestCard>();
 
     public CommunityChestCardCollection() {
-    createCards();
+        createCards();
     }
 
     public void setCommunityChestCardDeck(ArrayList communityChestCardDeck) {
@@ -118,17 +118,30 @@ public class CommunityChestCardCollection {
         allCommunityChestCards.add(card);
     }
 
-    public void addCardsToDeck(){
+    public void addCardsToDeck() {
         setCommunityChestCardDeck((ArrayList<CommunityChestCard>) allCommunityChestCards.clone());
     }
 
     public int generateRandom() {
         Random r = new Random();
-        if (communityChestCardDeck.size() == 0){
+        if (communityChestCardDeck.size() == 0) {
             return -1;
         }
         int random = r.nextInt(communityChestCardDeck.size());
         return random;
+    }
+
+    public CommunityChestCard drawFromDeck() {
+        int random = generateRandom();
+        if (random >= 0) {
+            CommunityChestCard card = communityChestCardDeck.get(random);
+            removeCardFromDeck(random);
+            return card;
+        } else return null;
+    }
+
+    public void removeCardFromDeck(int index) {
+        communityChestCardDeck.remove(index);
     }
 
 }
