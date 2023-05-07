@@ -202,7 +202,8 @@ public class Client extends Thread {
                 int keyReceived = Integer.parseInt(responseSplit[2]);
                 if (key == keyReceived) {
 
-                    //monopolyServer.getClients().get(0).writeToClient("JoinLobby|keyFromLobby|1");      // TODO make this with IDs instead (properly)
+                    //monopolyServer.getClients().get(0).writeToClient("JoinLobby|keyFromLobby|1");
+                    // TODO make this with IDs instead (properly)
                     return new String[]{"JoinGame|keyFromLobby|1"+System.lineSeparator(),"Lobby|hostJoined|"+"REPLACER"+System.lineSeparator()};
 
                 } else {
