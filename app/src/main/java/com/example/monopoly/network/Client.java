@@ -18,6 +18,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Client extends Thread {
     private InetAddress host;
@@ -29,6 +30,8 @@ public class Client extends Thread {
     public DataOutputStream outToServer;
     public ArrayList<String> msgBuffer;
     private MonopolyServer monopolyServer;
+    private List<String> receivedMessages;
+    private boolean running;
 
 
     private int key;
@@ -37,6 +40,10 @@ public class Client extends Thread {
 
     static {
         handlers = new HashMap<>();
+    }
+
+    public MonopolyServer getMonopolyServer() {
+        return monopolyServer;
     }
 
     private boolean isHost;
@@ -52,6 +59,7 @@ public class Client extends Thread {
     public void setUser(Player user) {
         this.user = user;
     }
+
 
     public void writeToServer(String msg) throws IOException {
         synchronized (msgBuffer) {
@@ -74,6 +82,12 @@ public class Client extends Thread {
         this.user = user;
         this.msgBuffer = new ArrayList<>();
         this.isHost = isHost;
+        this.receivedMessages = new ArrayList<>();
+        this.running = true;
+    }
+
+    public synchronized List<String> getReceivedMessages() {
+        return new ArrayList<>(receivedMessages);
     }
 
     public Client(InetAddress host, int port, boolean isHost) {
@@ -106,6 +120,14 @@ public class Client extends Thread {
         isHost = host;
     }
 
+    public DataOutputStream getOutToServer() {
+        return outToServer;
+    }
+
+    public void setOutToServer(DataOutputStream outToServer) {
+        this.outToServer = outToServer;
+    }
+
     public void setKey(int key) {
         this.key = key;
     }
@@ -118,16 +140,24 @@ public class Client extends Thread {
         return key;
     }
 
+    public synchronized void stopThread() {
+        this.running = false;
+    }
+
+    public void checkHostAndPort() throws IOException {
+        if (host != null && port != 0)
+            clientSocket = new Socket(host, port);
+        else
+            clientSocket = new Socket("localhost", 6969);
+    }
+
     public void run() {
         try {
 
             //Network Protocol: [Fragment Name]|[Action]|[Data]
             //Could also use OP-Codes
 
-            if (host != null && port != 0)
-                clientSocket = new Socket(host, port);
-            else
-                clientSocket = new Socket("localhost", 6969);
+            checkHostAndPort();
 
             outToServer = new DataOutputStream(clientSocket.getOutputStream());
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -140,7 +170,7 @@ public class Client extends Thread {
             }
 
 
-            while (true) {
+            while (running) {
 
                 //outToServer.writeBytes(request + 'n');
                 if (inFromServer.ready()) {
@@ -171,6 +201,7 @@ public class Client extends Thread {
             throw new RuntimeException(e);
         }
     }
+
 
 
     public String[] handleMessage(String[] responseSplit) {
