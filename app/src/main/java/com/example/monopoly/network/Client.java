@@ -26,14 +26,14 @@ public class Client extends Thread {
     private String response;
     private String request;
     private Player user;
-    private DataOutputStream outToServer;
-    private ArrayList<String> msgBuffer;
+    public DataOutputStream outToServer;
+    public ArrayList<String> msgBuffer;
     private MonopolyServer monopolyServer;
 
 
     private int key;
 
-    private static HashMap<String, UIHandler> handlers;
+    public static HashMap<String, UIHandler> handlers;
 
     static {
         handlers = new HashMap<>();
@@ -108,6 +108,14 @@ public class Client extends Thread {
 
     public void setKey(int key) {
         this.key = key;
+    }
+
+    public Player getUser() {
+        return user;
+    }
+
+    public int getKey() {
+        return key;
     }
 
     public void run() {

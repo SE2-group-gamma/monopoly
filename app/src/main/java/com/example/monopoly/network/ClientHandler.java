@@ -20,6 +20,9 @@ import java.util.HashMap;
 public class ClientHandler extends Thread{
 
     private Socket socket;
+
+
+
     private BufferedReader br;
     private BufferedWriter bw;
 
@@ -27,7 +30,11 @@ public class ClientHandler extends Thread{
     Client client;
     private ArrayList<String> msgBuffer;
 
-    private MonopolyServer server;
+    public MonopolyServer server;
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
 
     public void setServer(MonopolyServer server) {
         this.server = server;
@@ -68,10 +75,6 @@ public class ClientHandler extends Thread{
 
             //bw.write("Lobby|changeText|Martin Jäger"+System.lineSeparator());
             //bw.flush();
-
-
-
-
             while(true){
                 if(br.ready()){
                     String msg = br.readLine();
@@ -91,7 +94,6 @@ public class ClientHandler extends Thread{
 
                     }
                     Log.d("msg123",msg);
-
                 }
                 synchronized (msgBuffer) {
                     if (msgBuffer.size() != 0) {
