@@ -18,6 +18,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Client extends Thread {
     private InetAddress host;
@@ -39,6 +40,10 @@ public class Client extends Thread {
         handlers = new HashMap<>();
     }
 
+    public MonopolyServer getMonopolyServer() {
+        return monopolyServer;
+    }
+
     private boolean isHost;
 
     public void setMonopolyServer(MonopolyServer monopolyServer) {
@@ -52,6 +57,7 @@ public class Client extends Thread {
     public void setUser(Player user) {
         this.user = user;
     }
+
 
     public void writeToServer(String msg) throws IOException {
         synchronized (msgBuffer) {
@@ -118,12 +124,14 @@ public class Client extends Thread {
         return key;
     }
 
+
     public void run() {
         try {
 
             //Network Protocol: [Fragment Name]|[Action]|[Data]
             //Could also use OP-Codes
 
+            //checkHostAndPort();
             if (host != null && port != 0)
                 clientSocket = new Socket(host, port);
             else
@@ -171,6 +179,7 @@ public class Client extends Thread {
             throw new RuntimeException(e);
         }
     }
+
 
 
     public String[] handleMessage(String[] responseSplit) {
