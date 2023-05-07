@@ -11,7 +11,7 @@ import java.net.InetAddress;
 public class NSD_Client {
 
     private String nsdTag = "monopoly";
-    private String serviceType = "_monopoly._tcp";
+    private String serviceType = "_monopoly._tcp.";         //added . because the service added a . to the end?
 
     /*
     serviceType needs to be changed to "_monopoly" after service is registered, otherwise App will not start
@@ -23,7 +23,21 @@ public class NSD_Client {
     private int port;
     private InetAddress host;
     private String request;
+    private Client client;
+    private int count = 0;
+    private Object readyToken="";
+    private boolean isReady = false;
+    private boolean isHost = false;
 
+    public boolean isReady() {
+        synchronized (readyToken){
+            return isReady;
+        }
+    }
+
+    public void setIsHost(boolean host){
+        this.isHost=host;
+    }
 
 
     public void start(NsdManager manager){
@@ -65,11 +79,14 @@ public class NSD_Client {
             @Override
             public void onServiceFound(NsdServiceInfo nsdServiceInfo) {
                 if (!nsdServiceInfo.getServiceType().equals(serviceType)){
-                    Log.i(nsdTag, "onServiceFound unknown service: " + nsdServiceInfo.getServiceType());
+                    Log.i(nsdTag, "onServiceFound unknown service: " + nsdServiceInfo.getServiceType()+" mytype:"+serviceType);
                 }
                 else{
-                    Log.i(nsdTag, "onServiceFound known service: " + nsdServiceInfo.getServiceType());
-                    manager.resolveService(nsdServiceInfo, resolveListener);
+                    if(count == 0) {            // because it gets called 2 times?
+                        Log.i(nsdTag, "onServiceFound known service: " + nsdServiceInfo.getServiceType());
+                        manager.resolveService(nsdServiceInfo, resolveListener);
+                        count++;
+                    }
                 }
 
             }
@@ -79,6 +96,10 @@ public class NSD_Client {
                 Log.e(nsdTag,"onServiceLost");
             }
         };
+    }
+
+    public Client getClient() {
+        return client;
     }
 
     public void initializeResolveListener() {
@@ -95,9 +116,12 @@ public class NSD_Client {
                 port = nsdServiceInfo.getPort();
                 host = nsdServiceInfo.getHost();
 
-                Client client = new Client(host, port);
+                Log.d("SocketConn","Searching ...");
+                client = new Client(host, port, isHost);
                 client.start();
-
+                synchronized (readyToken){
+                    isReady=true;
+                }
             }
         };
     }
