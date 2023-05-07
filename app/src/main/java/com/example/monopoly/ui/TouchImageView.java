@@ -135,7 +135,7 @@ public class TouchImageView extends ImageView {
             }
 
             if (origWidth * saveScale <= viewWidth || origHeight * saveScale <= viewHeight)
-                matrix.postScale(mScaleFactor, mScaleFactor, viewWidth / 2, viewHeight / 2);
+                matrix.postScale(mScaleFactor, mScaleFactor, (float) (viewWidth / 2.0), (float) (viewHeight / 2.0));
             else
                 matrix.postScale(mScaleFactor, mScaleFactor, detector.getFocusX(), detector.getFocusY());
 
