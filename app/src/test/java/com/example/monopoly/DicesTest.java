@@ -21,6 +21,7 @@ import java.util.Random;
 public class DicesTest {
 
     static Random random;
+    static final int RANDOM_TEST_SIZE = 50;
 
     @BeforeAll
     public static void initRandom(){
@@ -37,10 +38,14 @@ public class DicesTest {
     public void testDiceRollFlawed(){
         Dices dices = new Dices();
 
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < RANDOM_TEST_SIZE; i++){
             int sum = random.nextInt(11)+2;
             dices.rollDicesFlawed(sum);
             assertEquals(sum, dices.getDice1()+ dices.getDice2());
+            if(sum % 2 == 0) {
+                assertEquals(dices.getDice1(), dices.getDice2());
+                assertEquals(dices.getDice1(), sum / 2);
+            }
         }
     }
 
@@ -72,9 +77,9 @@ public class DicesTest {
     public void testSum(){
         Dices dices = new Dices();
 
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < RANDOM_TEST_SIZE; i++){
             dices.rollDices();
-            assertEquals(dices.getDice1()+ dices.getDice2(), dices.getSum());
+            assertEquals(dices.getDice1() + dices.getDice2(), dices.getSum());
         }
     }
 }
