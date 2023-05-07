@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.FragmentDiceBinding;
@@ -36,6 +37,8 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private FragmentDiceBinding binding;
     private Dices dices;
     private boolean hasBeenRolled;
+    private boolean userSetValue;
+    private int flawedValue;
 
     private FragmentManager fragmentManager;
 
@@ -68,6 +71,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         this.accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         this.dices = new Dices();
         this.hasBeenRolled = false;
+        this.userSetValue = false;
     }
 
     @Override
@@ -75,10 +79,29 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         this.binding = FragmentDiceBinding.inflate(getLayoutInflater());
+        this.binding.sliderTooltip.setText(""+this.binding.numberSlider.getProgress()+2);
         this.fragmentManager = getParentFragmentManager();
         this.binding.continueButtonDiceFragment.setOnClickListener(view -> {
             if(hasBeenRolled) {
                 NavHostFragment.findNavController(this).navigate(R.id.action_DiceFragment_to_GameBoardUI);
+            }
+        });
+        this.binding.numberSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                userSetValue = true;
+                flawedValue = i+2;
+                binding.sliderTooltip.setText(""+flawedValue);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
         return this.binding.getRoot();
@@ -104,7 +127,11 @@ public class DiceFragment extends Fragment implements SensorEventListener {
 
             if(speed > SHAKE_THRESHOLD){
                 Log.i("SHAKE_DETECTION", "Shake detected!");
-                dices.rollDices();
+                if(userSetValue){
+                    dices.rollDicesFlawed(flawedValue);
+                } else {
+                    dices.rollDices();
+                }
                 setDiceImage(binding.imageDice1, dices.getDice1());
                 setDiceImage(binding.imageDice2,dices.getDice2());
 

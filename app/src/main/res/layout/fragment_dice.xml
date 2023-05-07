@@ -43,4 +43,30 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <SeekBar
+        android:id="@+id/numberSlider"
+        android:layout_width="195dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="14dp"
+        android:indeterminate="false"
+        android:max="10"
+        android:progress="1"
+        app:layout_constraintBottom_toBottomOf="@+id/continueButtonDiceFragment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.452"
+        app:layout_constraintStart_toEndOf="@+id/continueButtonDiceFragment"
+        app:layout_constraintTop_toTopOf="@+id/continueButtonDiceFragment" />
+
+    <TextView
+        android:id="@+id/sliderTooltip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/numberSlider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/numberSlider"
+        app:layout_constraintTop_toTopOf="@+id/numberSlider" />
 </androidx.constraintlayout.widget.ConstraintLayout>
