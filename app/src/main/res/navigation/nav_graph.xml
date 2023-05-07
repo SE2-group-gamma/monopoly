@@ -58,6 +58,10 @@
         <action
             android:id="@+id/action_Settings_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_Settings_to_DiceFragment"
+            app:destination="@id/DiceFragment"
+            />
     </fragment>
 
     <fragment
@@ -69,5 +73,34 @@
         <action
             android:id="@+id/action_Lobby_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_JoinGame_to_GameBoard"
+            app:destination="@id/GameBoardUI" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/GameBoardUI"
+        android:name="com.example.monopoly.ui.GameBoardUI"
+        android:label="GameBoardUI"
+        tools:layout="@layout/game_board">
+
+        <action
+            android:id="@+id/action_GameBoard_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_GameBoardUI_to_DiceFragment"
+            app:destination="@id/DiceFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/DiceFragment"
+        android:name="com.example.monopoly.ui.DiceFragment"
+        android:label="DiceFragment"
+        tools:layout="@layout/fragment_dice"
+        >
+        <action
+            android:id="@+id/action_DiceFragment_to_GameBoardUI"
+            app:destination="@id/GameBoardUI" />
     </fragment>
 </navigation>

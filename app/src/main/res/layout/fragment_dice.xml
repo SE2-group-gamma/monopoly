@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/DiceFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80FFFFFF"
+    tools:context=".ui.DiceFragment">
+
+    <ImageView
+        android:id="@+id/imageDice1"
+        android:layout_width="209dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="95dp"
+        android:layout_marginBottom="96dp"
+        android:src="@drawable/dice_1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageDice2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageDice2"
+        android:layout_width="209dp"
+        android:layout_height="220dp"
+        android:layout_marginStart="122dp"
+        android:layout_marginTop="95dp"
+        android:layout_marginBottom="96dp"
+        android:src="@drawable/dice_1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageDice1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/continueButtonDiceFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="Continue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <SeekBar
+        android:id="@+id/numberSlider"
+        android:layout_width="195dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="14dp"
+        android:indeterminate="false"
+        android:max="10"
+        android:progress="1"
+        app:layout_constraintBottom_toBottomOf="@+id/continueButtonDiceFragment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.452"
+        app:layout_constraintStart_toEndOf="@+id/continueButtonDiceFragment"
+        app:layout_constraintTop_toTopOf="@+id/continueButtonDiceFragment" />
+
+    <TextView
+        android:id="@+id/sliderTooltip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/numberSlider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/numberSlider"
+        app:layout_constraintTop_toTopOf="@+id/numberSlider" />
+</androidx.constraintlayout.widget.ConstraintLayout>

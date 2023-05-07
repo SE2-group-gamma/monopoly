@@ -19,13 +19,14 @@ import static org.mockito.Mockito.verify;
 import com.example.monopoly.gamelogic.Player;
 
 class PlayerTest {
-    static Player player;
+    static Player player,player_two;
     static Color col;
 
     @BeforeEach
     void setup(){
         col = mock(Color.class);
         player = new Player("Hans",col,100.00,true);
+        player_two = new Player("Fritz",col,100.00,true);
     }
 
     @Test
@@ -57,6 +58,15 @@ class PlayerTest {
     @Test
     void getCol() {
         assertEquals(player.getCol(),col);
+    }
+
+    @Test
+    public void transferMoneyPlayerToPlayer(){
+        player.transferMoneyPlayerToPlayer(player,player_two,20);
+        //player_two increased by 200
+        assertEquals(120, player_two.getCapital(), 0.0);
+        //player decreased by $200
+        assertEquals(80, player.getCapital(), 0.0);
     }
 
 }
