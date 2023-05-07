@@ -19,6 +19,8 @@ import com.example.monopoly.R;
 import com.example.monopoly.databinding.GameBoardBinding;
 import com.example.monopoly.gamelogic.Dices;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
+import com.example.monopoly.network.Client;
+import com.example.monopoly.network.ClientHandler;
 
 public class GameBoardUI extends Fragment {
 
@@ -45,6 +47,9 @@ public class GameBoardUI extends Fragment {
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+
+        Client.subscribe(this,"GameBoardUI");
+
         super.onViewCreated(view, savedInstanceState);
         //Log.d("Test",binding.button.getText().toString());
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

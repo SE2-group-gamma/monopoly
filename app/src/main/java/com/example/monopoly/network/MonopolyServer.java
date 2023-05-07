@@ -2,9 +2,14 @@ package com.example.monopoly.network;
 
 import android.util.Log;
 
+import com.example.monopoly.gamelogic.Game;
+import com.example.monopoly.utils.LobbyKey;
+
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MonopolyServer extends Thread{
@@ -15,12 +20,38 @@ public class MonopolyServer extends Thread{
     private int maxNumberOfClients;
     private boolean isListening;
 
+    private Game game;
+    private String hostname;
+    private Client client;
+    private int counter=1;
+
+    private HashMap<Integer, ClientHandler> keyedHandlers;
+
     public MonopolyServer(int maxNumberOfClients) throws IOException {
-        this.serverSocket = new ServerSocket(0);
+        this.serverSocket = new ServerSocket(6969);
         this.localPort = serverSocket.getLocalPort();
         this.maxNumberOfClients = maxNumberOfClients;
         this.clients = new ArrayList<ClientHandler>();
         this.isListening = false;
+        this.keyedHandlers=new HashMap<>();
+    }
+
+    public void setHostname(String hostname){
+        this.hostname=hostname;
+    }
+
+    public void setClient(Client client){
+        synchronized (this.clients){
+            //Log.i("",client.isHost()+"");
+            this.client=client;
+            for (ClientHandler handler:this.clients) {
+                handler.setClient(client);
+            }
+        }
+    }
+
+    public List<ClientHandler> getClients() {
+        return clients;
     }
 
     // Constructor for testing
@@ -30,21 +61,40 @@ public class MonopolyServer extends Thread{
         this.maxNumberOfClients = maxNumberOfClients;
         this.clients = new ArrayList<ClientHandler>();
         this.isListening = false;
+        this.keyedHandlers=new HashMap<>();
+
     }
 
     @Override
     public void run() {
         this.isListening = true;
+        int count = 0;
+
+
+
+        game = new Game();
+        //Log.d("",""+this.maxNumberOfClients);
         while(isListening() && this.clients.size() < maxNumberOfClients){
             ClientHandler clientHandler = null;
             try {
                 // serverSocket.accept() waits for Clients to connect
-                clientHandler = new ClientHandler(serverSocket.accept());
+                Socket socket = serverSocket.accept();
+                clientHandler = new ClientHandler(socket,hostname,client);
+                clientHandler.setServer(this);
+                count++;
+
+                String message = "#" + count + " from "
+                        + socket.getInetAddress() + ":"
+                        + socket.getPort() + "\n";
+                //Log.d("SocketConn",message);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
             clientHandler.start();
-            this.clients.add(clientHandler);
+            synchronized (this.clients){
+                this.clients.add(clientHandler);
+                keyedHandlers.put(counter++,clientHandler);
+            }
         }
         try {
             stopListening();

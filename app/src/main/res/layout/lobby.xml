@@ -45,7 +45,7 @@
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/textView25"
+                    android:id="@+id/textViewLobby"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -127,7 +127,8 @@
                     android:visibility="invisible" />
 
                 <TextView
-                    android:id="@+id/textView73"
+                    android:id="@+id/textViewUser1Name"
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -137,6 +138,7 @@
 
                 <TextView
                     android:id="@+id/textViewUser1"
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -157,7 +159,8 @@
                     android:visibility="invisible" />
 
                 <TextView
-                    android:id="@+id/textView74"
+                    android:id="@+id/textViewUser2Name"
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -167,6 +170,7 @@
 
                 <TextView
                     android:id="@+id/textViewUser2"
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -189,7 +193,8 @@
                     android:visibility="invisible" />
 
                 <TextView
-                    android:id="@+id/textView75"
+                    android:id="@+id/textViewUser3Name"
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -199,6 +204,7 @@
 
                 <TextView
                     android:id="@+id/textViewUser3"
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -220,7 +226,8 @@
                     android:visibility="invisible" />
 
                 <TextView
-                    android:id="@+id/textView76"
+                    android:id="@+id/textViewUser4Name"
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -230,6 +237,7 @@
 
                 <TextView
                     android:id="@+id/textViewUser4"
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -250,7 +258,8 @@
                     android:visibility="invisible" />
 
                 <TextView
-                    android:id="@+id/textView77"
+                    android:id="@+id/textViewUser5Name"
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -260,6 +269,7 @@
 
                 <TextView
                     android:id="@+id/textViewUser5"
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
