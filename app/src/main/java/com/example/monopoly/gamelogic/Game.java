@@ -23,4 +23,7 @@ public class Game {
         return true;
     }
 
+    public HashMap<Integer, Player> getPlayers() {
+        return players;
+    }
 }
