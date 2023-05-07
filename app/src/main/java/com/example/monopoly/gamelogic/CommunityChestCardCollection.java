@@ -104,11 +104,11 @@ public class CommunityChestCardCollection {
         addToAllCommunityChestCards(card17);
 
         CommunityChestCard card18 = new CommunityChestCard(18);
-        card18.setFunction("You receive a 7% dividend on Preferred Stock: $25.");
+        card18.setFunction("You receive a 7% dividend on preferred stock: $25.");
         addToAllCommunityChestCards(card18);
 
         CommunityChestCard card19 = new CommunityChestCard(19);
-        card19.setFunction("Receive $100 Compensation for Pain and Suffering from the next Player.");
+        card19.setFunction("Receive $100 compensation for pain and suffering from the next player.");
         addToAllCommunityChestCards(card19);
 
         addCardsToDeck();
