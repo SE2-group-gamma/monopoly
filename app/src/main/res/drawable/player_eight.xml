@@ -4,5 +4,5 @@
     android:id="@+id/player_eight"
     android:layout_width="50dp"
     android:layout_height="50dp"
-    android:src="@drawable/Schuh"
+    android:src="@drawable/schuh"
     />

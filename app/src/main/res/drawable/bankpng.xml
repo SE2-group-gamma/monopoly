@@ -4,5 +4,5 @@
     android:id="@+id/bank"
     android:layout_width="50dp"
     android:layout_height="50dp"
-    android:src="@drawable/Bank"
+    android:src="@drawable/bankpng"
     />
