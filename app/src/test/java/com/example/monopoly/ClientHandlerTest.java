@@ -58,28 +58,33 @@ class ClientHandlerTest {
     }
 
     @Test
-    void setSocket() {
-
-
+    public void testWriteToClient() {
+        clientHandler.writeToClient("Test Message");
+        assertEquals("Test Message", clientHandler.msgBuffer.get(0));
     }
 
     @Test
-    void setClient() {
+    public void testGetClient() {
+        assertEquals(socket, clientHandler.getClient());
     }
 
     @Test
-    void getClient() {
+    public void testGetClientClient() {
+        clientHandler.setClient(client);
+        assertEquals(client, clientHandler.getClientClient());
     }
 
     @Test
-    void getClientClient() {
+    public void testSetClient() {
+        clientHandler.setClient(client);
+        assertEquals(client, clientHandler.getClientClient());
     }
 
     @Test
-    void run() {
+    public void testSetSocket() {
+        ClientHandler clientHandler = new ClientHandler(null);
+        clientHandler.setSocket(socket);
+        assertEquals(socket, clientHandler.getClient());
     }
 
-    @Test
-    void writeToClient() {
-    }
 }

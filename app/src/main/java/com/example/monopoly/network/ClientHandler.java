@@ -28,7 +28,7 @@ public class ClientHandler extends Thread{
 
     private String hostname;
     Client client;
-    private ArrayList<String> msgBuffer;
+    public ArrayList<String> msgBuffer;
 
     public MonopolyServer server;
 
