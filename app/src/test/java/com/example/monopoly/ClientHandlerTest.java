@@ -1,7 +1,11 @@
 package com.example.monopoly;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import android.graphics.Color;
 
@@ -12,19 +16,36 @@ import com.example.monopoly.network.MonopolyServer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.ArrayList;
 
 class ClientHandlerTest {
-
-
     ClientHandler clientHandler;
     Socket socket;
     Client client;
     InetAddress inetAddress;
     Player player;
+
+    Socket socket2;
+    Client client2;
+    BufferedReader br;
+    BufferedWriter bw;
+    StringWriter stringWriter;
+    ArrayList<String> msgBuffer;
+    ClientHandler clientHandler2;
+    ClientHandler clientHandler3;
+
 
     @BeforeEach
     public void setUp(){
@@ -34,6 +55,14 @@ class ClientHandlerTest {
         player = new Player("user1", color,277.92,true);
         client = new Client(inetAddress,6347,player,false);
         clientHandler = new ClientHandler(socket,"host",client);
+
+        br = mock(BufferedReader.class);
+        bw = mock(BufferedWriter.class);
+        stringWriter = new StringWriter();
+        msgBuffer = new ArrayList<>();
+        clientHandler.br = br;
+        clientHandler.bw = bw;
+        clientHandler.msgBuffer = msgBuffer;
     }
 
 
@@ -86,5 +115,52 @@ class ClientHandlerTest {
         clientHandler.setSocket(socket);
         assertEquals(socket, clientHandler.getClient());
     }
+
+    @Test
+    public void testMsgBuffer() throws IOException {
+        msgBuffer.add("Test|testMessage1");
+        msgBuffer.add("Test|testMessage2");
+        msgBuffer.add("Test|testMessage3");
+
+        clientHandler.msgBuffer();
+        verify(bw).write("Test|testMessage3" + System.lineSeparator());
+        verify(bw).write("Test|testMessage2" + System.lineSeparator());
+        verify(bw).write("Test|testMessage1" + System.lineSeparator());
+        verify(bw, times(3)).flush();
+
+        assertEquals(0, msgBuffer.size());
+    }
+
+    @Test
+    public void testReplacer() throws IOException {
+        String message = "Test|message|REPLACER";
+        BufferedReader reader = new BufferedReader(new StringReader(message));
+        clientHandler.br = reader;
+        // TODO
+        clientHandler.replacer();
+    }
+
+    @Test
+    public void testRun() throws SocketException {
+        socket = mock(Socket.class);
+        String message = "Test|message|REPLACER";
+        BufferedReader reader = new BufferedReader(new StringReader(message));
+        clientHandler.br = reader;
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+        clientHandler.bw = writer;
+
+        clientHandler.run();
+
+        /*String expectedOutput = "Test|message|localhost";
+        String result = outputStream.toString().trim();
+        assertNotEquals(expectedOutput, result);*/
+    }
+
+
+
+
+
 
 }

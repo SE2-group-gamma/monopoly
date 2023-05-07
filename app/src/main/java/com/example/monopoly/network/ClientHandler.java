@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,8 +24,8 @@ public class ClientHandler extends Thread{
 
 
 
-    private BufferedReader br;
-    private BufferedWriter bw;
+    public BufferedReader br;
+    public BufferedWriter bw;
 
     private String hostname;
     Client client;
@@ -68,7 +69,7 @@ public class ClientHandler extends Thread{
     }
 
     @Override
-    public void run() {
+    public void run(){
         try {
             this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -76,35 +77,9 @@ public class ClientHandler extends Thread{
             //bw.write("Lobby|changeText|Martin Jäger"+System.lineSeparator());
             //bw.flush();
             while(true){
-                if(br.ready()){
-                    String msg = br.readLine();
-                    String[] strings = msg.split("\\|");
-                    synchronized (clientToken){
-                        String[] response = client.handleMessage(strings);
-                        if(response!=null){
-                            for (String str: response) {
+                replacer();
+                msgBuffer();
 
-
-                                bw.write(str.replaceAll("REPLACER",hostname));
-                                bw.flush();
-
-
-                            }
-                        }
-
-                    }
-                    Log.d("msg123",msg);
-                }
-                synchronized (msgBuffer) {
-                    if (msgBuffer.size() != 0) {
-                        for (int i = msgBuffer.size() - 1; i >= 0; i--) {
-                            Log.d("msgBuffer", msgBuffer.get(i));
-                            bw.write(msgBuffer.get(i) + System.lineSeparator());
-                            bw.flush();
-                            msgBuffer.remove(i);
-                        }
-                    }
-                }
             }
         } catch (IOException e){
             e.printStackTrace();
@@ -115,6 +90,44 @@ public class ClientHandler extends Thread{
         synchronized (msgBuffer) {
             msgBuffer.add(msg);
         }
+    }
+
+    public void replacer(){
+        try {
+            if(br.ready()){
+                String msg = br.readLine();
+                String[] strings = msg.split("\\|");
+                synchronized (clientToken){
+                    String[] response = client.handleMessage(strings);
+                    if(response!=null){
+                        for (String str: response) {
+                            bw.write(str.replaceAll("REPLACER",hostname));
+                            bw.flush();
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void msgBuffer(){
+        synchronized (msgBuffer) {
+            if (msgBuffer.size() != 0) {
+                for (int i = msgBuffer.size() - 1; i >= 0; i--) {
+                    //Log.d("msgBuffer", msgBuffer.get(i));
+                    try {
+                        bw.write(msgBuffer.get(i) + System.lineSeparator());
+                        bw.flush();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    msgBuffer.remove(i);
+                }
+            }
+        }
+
     }
 
 

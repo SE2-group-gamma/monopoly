@@ -42,7 +42,7 @@ public class MonopolyServer extends Thread{
 
     public void setClient(Client client){
         synchronized (this.clients){
-            Log.i("",client.isHost()+"");
+            //Log.i("",client.isHost()+"");
             this.client=client;
             for (ClientHandler handler:this.clients) {
                 handler.setClient(client);
@@ -84,7 +84,7 @@ public class MonopolyServer extends Thread{
                 String message = "#" + count + " from "
                         + socket.getInetAddress() + ":"
                         + socket.getPort() + "\n";
-                Log.d("SocketConn",message);
+                //Log.d("SocketConn",message);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

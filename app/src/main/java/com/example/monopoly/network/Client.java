@@ -212,7 +212,7 @@ public class Client extends Thread {
             }
         } else {
             for (String str: responseSplit) {
-                Log.d("test ",str);
+               // Log.d("test ",str);
             }
             if (responseSplit[1].equals("keyFromLobby") && responseSplit[2].equals("1")) {
                 try {
