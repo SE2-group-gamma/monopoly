@@ -22,6 +22,9 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -140,17 +143,16 @@ class ClientHandlerTest {
         clientHandler.replacer();
     }
 
-    @Test
-    public void testRun() throws SocketException {
+
+    public void testRun() throws IOException {
         socket = mock(Socket.class);
-        String message = "Test|message|REPLACER";
-        BufferedReader reader = new BufferedReader(new StringReader(message));
-        clientHandler.br = reader;
-
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
-        clientHandler.bw = writer;
+        String message = "Test|message|REPLACER";
 
+        when(socket.getInputStream()).thenReturn(mock(InputStream.class));
+        when(socket.getOutputStream()).thenReturn(outputStream);
+
+        clientHandler.setSocket(socket);
         clientHandler.run();
 
         /*String expectedOutput = "Test|message|localhost";
