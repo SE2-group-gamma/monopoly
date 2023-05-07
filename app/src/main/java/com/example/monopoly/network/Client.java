@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.ui.UIHandler;
 
+import com.example.monopoly.gamelogic.ChanceCard;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
