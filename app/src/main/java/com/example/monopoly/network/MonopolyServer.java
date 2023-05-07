@@ -61,6 +61,8 @@ public class MonopolyServer extends Thread{
         this.maxNumberOfClients = maxNumberOfClients;
         this.clients = new ArrayList<ClientHandler>();
         this.isListening = false;
+        this.keyedHandlers=new HashMap<>();
+
     }
 
     @Override
