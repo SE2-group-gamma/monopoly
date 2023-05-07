@@ -5,7 +5,7 @@ public class Bank {
      private double cash= 500000.00;
     // search for money & player (here also objects) icons -> add in drawable UI but no object
      public Bank(){
-         this.cash=cash;
+         super();
      }
 
      public double getCash(){
