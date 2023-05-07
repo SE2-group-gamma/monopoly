@@ -142,6 +142,7 @@ public class HostGame extends Fragment {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     throw new RuntimeException(e);
                 }
 
@@ -162,6 +163,7 @@ public class HostGame extends Fragment {
                     try {
                         Thread.sleep(10);
                     } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                         throw new RuntimeException(e);
                     }
                 }
