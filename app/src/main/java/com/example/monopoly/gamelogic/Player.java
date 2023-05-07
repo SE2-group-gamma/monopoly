@@ -48,4 +48,12 @@ public class Player {
     public boolean isInPrison() {
         return inPrison;
     }
+
+    public void transferMoneyPlayerToPlayer(Player sender, Player receiver, double amount){
+        double senderMoney = sender.getCapital();
+        sender.setCapital(senderMoney-amount);
+
+        double receiverMoney = receiver.getCapital();
+        receiver.setCapital(receiverMoney+amount);
+    }
 }
