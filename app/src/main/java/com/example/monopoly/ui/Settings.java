@@ -41,6 +41,10 @@ public class Settings extends Fragment {
                     .navigate(R.id.action_Settings_to_FirstFragment);
         });
 
+        binding.sensorTestBtn.setOnClickListener((viewx) -> {
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_Settings_to_DiceFragment);
+        });
 
     }
 
