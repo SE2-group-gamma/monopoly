@@ -1,5 +1,10 @@
 package com.example.monopoly.gamelogic;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.util.Random;
 
 public class Dices {
@@ -58,4 +63,11 @@ public class Dices {
     public void setRandom(Random random) {
         this.random = random;
     }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format("dice1=%d, dice2=%d, sum=%d, isflawed=%b", dice1, dice2, getSum(), isLastRollFlawed);
+    }
+
 }

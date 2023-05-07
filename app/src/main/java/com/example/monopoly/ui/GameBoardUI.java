@@ -8,24 +8,37 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.GameBoardBinding;
+import com.example.monopoly.gamelogic.Dices;
+import com.example.monopoly.ui.viewmodels.DiceViewModel;
 
 public class GameBoardUI extends Fragment {
 
     private GameBoardBinding binding;
-    private FragmentManager fragmentManager;
+    private DiceViewModel diceViewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        diceViewModel = new ViewModelProvider(requireActivity()).get(DiceViewModel.class);
+        diceViewModel.getDicesData().observe(this, dices -> {
+            Log.i("Dices", dices.toString());
+        });
+    }
 
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        fragmentManager = getParentFragmentManager();
         binding = GameBoardBinding.inflate(inflater, container, false);
         return binding.getRoot();
 

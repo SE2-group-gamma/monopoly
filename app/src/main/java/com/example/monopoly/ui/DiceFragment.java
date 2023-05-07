@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
@@ -21,6 +22,7 @@ import android.widget.SeekBar;
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.FragmentDiceBinding;
 import com.example.monopoly.gamelogic.Dices;
+import com.example.monopoly.ui.viewmodels.DiceViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,8 +41,8 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private boolean hasBeenRolled;
     private boolean userSetValue;
     private int flawedValue;
+    private DiceViewModel diceViewModel;
 
-    private FragmentManager fragmentManager;
 
     public DiceFragment() {
         // Required empty public constructor
@@ -72,6 +74,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         this.dices = new Dices();
         this.hasBeenRolled = false;
         this.userSetValue = false;
+        this.diceViewModel = new ViewModelProvider(requireActivity()).get(DiceViewModel.class);
     }
 
     @Override
@@ -80,9 +83,9 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         // Inflate the layout for this fragment
         this.binding = FragmentDiceBinding.inflate(getLayoutInflater());
         this.binding.sliderTooltip.setText(""+this.binding.numberSlider.getProgress()+2);
-        this.fragmentManager = getParentFragmentManager();
         this.binding.continueButtonDiceFragment.setOnClickListener(view -> {
             if(hasBeenRolled) {
+                this.diceViewModel.setDices(dices);
                 NavHostFragment.findNavController(this).navigate(R.id.action_DiceFragment_to_GameBoardUI);
             }
         });
@@ -151,6 +154,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
                 break;
             case 2:
                 diceImage.setImageResource(R.drawable.dice_2);
+                break;
             case 3:
                 diceImage.setImageResource(R.drawable.dice_3);
                 break;
