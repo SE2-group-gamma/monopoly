@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class TurnManager {
     private int currentIndex;
@@ -14,21 +15,35 @@ public class TurnManager {
     private boolean isServerTurn;
 
     private Client client;
-
+    public CountDownLatch latch;
 
     public TurnManager(List<ClientHandler> clientHandlers) {
         this.clientHandlers = clientHandlers;
         this.currentIndex = 0;
         this.isServerTurn = true;
+        latch = new CountDownLatch(1);
+    }
 
+    // Add the giveTurnToNextClient method
+    protected void giveTurnToNextClient() {
+        currentIndex = (currentIndex + 1) % clientHandlers.size();
+        clientHandlers.get(currentIndex).giveTurn();
+        isServerTurn = true;
+    }
+
+    // Add the isServerTurn method
+    protected boolean isServerTurn() {
+        return isServerTurn;
     }
 
     public void handleClientHandlerTurn(ClientHandler clientHandler, BufferedReader in, BufferedWriter out) throws IOException {
         synchronized (this) {
             try {
+                latch.await();
 
                 while (!clientHandler.isTurn() || isServerTurn) {
-                    wait();
+                    latch = new CountDownLatch(1);
+                    latch.await();
                 }
 
                 String inputLine;
@@ -47,6 +62,7 @@ public class TurnManager {
                     isServerTurn = true;
                     break;
                 }
+                latch.countDown();
             } catch (InterruptedException e) {
                 System.out.println("Error: " + e.getMessage());
             } finally {
@@ -60,6 +76,7 @@ public class TurnManager {
     public void handleClientTurn(Client client, BufferedReader in, DataOutputStream out) throws IOException {
         synchronized (this) {
             try {
+                latch.await();
                 while (true) {
                     if (isServerTurn) {
                         out.writeUTF("It is currently the server's turn.\n");
@@ -80,6 +97,8 @@ public class TurnManager {
                             break;
                         }
                     }
+                    latch.countDown();
+
                 }
             } catch (InterruptedException e) {
                 System.out.println("Error: " + e.getMessage());
