@@ -1,7 +1,5 @@
 package com.example.monopoly.network;
 
-import android.util.Log;
-
 import com.example.monopoly.gamelogic.ServerLoop;
 
 import java.io.IOException;
@@ -16,8 +14,16 @@ public class MonopolyServer extends Thread{
     private int localPort;
     private int maxNumberOfClients;
     private boolean isListening;
-
+    private ServerLoop serverLoop;
     private TurnManager turnManager;
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    public void setServerSocket(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
+    }
 
     public MonopolyServer(int maxNumberOfClients) throws IOException {
         this.serverSocket = new ServerSocket(0);
@@ -25,6 +31,8 @@ public class MonopolyServer extends Thread{
         this.maxNumberOfClients = maxNumberOfClients;
         this.clients = new ArrayList<ClientHandler>();
         this.isListening = false;
+        this.serverLoop = new ServerLoop();
+        this.turnManager = new TurnManager(this, clients, serverLoop);
     }
 
     // Constructor for testing
@@ -34,13 +42,14 @@ public class MonopolyServer extends Thread{
         this.maxNumberOfClients = maxNumberOfClients;
         this.clients = new ArrayList<ClientHandler>();
         this.isListening = false;
+        this.serverLoop = new ServerLoop();
+        this.turnManager = new TurnManager(this, clients, serverLoop);
     }
 
     @Override
     public void run() {
         this.isListening = true;
-        this.turnManager = new TurnManager(this.clients);
-        ServerLoop serverLoop = new ServerLoop(this.turnManager);
+
         while(isListening() && this.clients.size() < maxNumberOfClients){
             ClientHandler clientHandler = null;
             try {
@@ -53,9 +62,6 @@ public class MonopolyServer extends Thread{
             this.clients.add(clientHandler);
         }
 
-
-        this.turnManager.start();
-        serverLoop.start();
         try {
             stopListening();
         } catch (IOException e) {
@@ -80,4 +86,19 @@ public class MonopolyServer extends Thread{
         return localPort;
     }
 
+    public void startServerLoop() {
+        this.serverLoop.start();
+    }
+
+    public void stopServerLoop() {
+        this.serverLoop.stopLoop();
+    }
+
+    public ServerLoop getServerLoop() {
+        return serverLoop;
+    }
+
+    public TurnManager getTurnManager() {
+        return turnManager;
+    }
 }

@@ -13,42 +13,51 @@ public class ClientHandler extends Thread{
     private Socket client;
     private BufferedReader br;
     private BufferedWriter bw;
-
-    private volatile boolean turn;
-
     private TurnManager turnManager;
+
+    public Socket getClient() {
+        return client;
+    }
+
+    public void setClient(Socket client) {
+        this.client = client;
+    }
 
     public ClientHandler(Socket client, TurnManager turnManager) {
         this.client = client;
         this.turnManager = turnManager;
-        this.turn = false;
-    }
-
-    public void giveTurn() {
-        turn = true;
-    }
-
-    public boolean isTurn() {
-        return turn;
-    }
-
-    public void setTurn(boolean turn) {
-        this.turn = turn;
     }
 
     public OutputStream getOutputStream() throws IOException {
         return client.getOutputStream();
     }
 
-
     @Override
     public void run() {
         try {
             this.br = new BufferedReader(new InputStreamReader(client.getInputStream()));
             this.bw = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
-            turnManager.handleClientHandlerTurn(this, this.br, this.bw);
+
+            this.turnManager.addClient(this);
+            while (true) {
+                String message = br.readLine();
+                if (message == null) {
+                    break;
+                }
+                turnManager.handleMessage(this, message);
+            }
+
         } catch (IOException e){
             e.printStackTrace();
+        } finally {
+            try {
+                this.turnManager.removeClient(this);
+                client.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
+
+
