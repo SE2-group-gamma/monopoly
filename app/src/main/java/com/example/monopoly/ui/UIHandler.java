@@ -86,6 +86,10 @@ public class UIHandler extends Handler {
                 if(HostGame.key!=0) {
                     ((TextView) this.frag.getActivity().findViewById(R.id.textViewKey)).setText("Game-Key: " + HostGame.key);
                 }
+                break;
+            case "move":
+                Log.d("move",data); //Data for move distance and player name
+                break;
         }
 
 

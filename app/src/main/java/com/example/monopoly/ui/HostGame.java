@@ -20,6 +20,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.HostGameBinding;
+import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.ClientHandler;
@@ -45,6 +46,7 @@ public class HostGame extends Fragment {
     public static int key = 0;
     public static String lobbyname = " ";
 
+    private static Game game;
 
     @Override
     public View onCreateView(
@@ -58,6 +60,10 @@ public class HostGame extends Fragment {
 
     public static MonopolyServer getMonopolyServer() {
         return ms;
+    }
+
+    public static Game getGame() {
+        return game;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -156,6 +162,9 @@ public class HostGame extends Fragment {
 
 
                 Player player = new Player(user, new Color(),500.00,true);
+
+                game = new Game();
+                game.start();
                 //Client c = new Client(null,0,player);
                 //Client c = new Client(ms.getClients().get(0).getClient().getInetAddress(),ms.getClients().get(0).getClient().getPort(),player);
 
@@ -175,6 +184,7 @@ public class HostGame extends Fragment {
                     nsd.getClient().setKey(key);
                     nsd.getClient().setMonopolyServer(ms);
                     nsd.getClient().writeToServer("Lobby|hostJoined|"+player.getUsername());
+                    game.addPlayer(player);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.ui.UIHandler;
 
 import java.io.BufferedReader;
@@ -22,7 +23,7 @@ public class ClientHandler extends Thread{
 
     private Socket socket;
 
-
+    private Game game;
 
     public BufferedReader br;
     public BufferedWriter bw;
@@ -74,6 +75,8 @@ public class ClientHandler extends Thread{
             this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
+            //game = new Game();
+
             //bw.write("Lobby|changeText|Martin Jäger"+System.lineSeparator());
             //bw.flush();
             while(true){
@@ -96,8 +99,10 @@ public class ClientHandler extends Thread{
         try {
             if(br.ready()){
                 String msg = br.readLine();
+                //Log.d("testOut",msg);
                 String[] strings = msg.split("\\|");
                 synchronized (clientToken){
+                    //Log.d("testOut","AAAAAAAAAAAAAAAAAAA");
                     String[] response = client.handleMessage(strings);
                     if(response!=null){
                         for (String str: response) {
@@ -117,8 +122,9 @@ public class ClientHandler extends Thread{
             if (msgBuffer.size() != 0) {
                 for (int i = msgBuffer.size() - 1; i >= 0; i--) {
                     //Log.d("msgBuffer", msgBuffer.get(i));
+                    Log.d("testOut",""+msgBuffer.get(i)+":"+hostname);
                     try {
-                        bw.write(msgBuffer.get(i) + System.lineSeparator());
+                        bw.write(msgBuffer.get(i)+":"+hostname + System.lineSeparator());
                         bw.flush();
                     } catch (IOException e) {
                         throw new RuntimeException(e);

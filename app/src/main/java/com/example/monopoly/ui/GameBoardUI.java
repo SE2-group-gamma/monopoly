@@ -22,6 +22,8 @@ import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.ClientHandler;
 
+import java.io.IOException;
+
 public class GameBoardUI extends Fragment {
 
     private GameBoardBinding binding;
@@ -33,6 +35,9 @@ public class GameBoardUI extends Fragment {
         diceViewModel = new ViewModelProvider(requireActivity()).get(DiceViewModel.class);
         diceViewModel.getDicesData().observe(this, dices -> {
             Log.i("Dices", dices.toString());
+            //Msg an server mit augenzahl + welcher client
+            HostGame.getMonopolyServer().getClients().get(0).writeToClient("GameBoardUI|move|"+(dices.getDice1()+dices.getDice2()));
+
         });
     }
 
@@ -41,9 +46,10 @@ public class GameBoardUI extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+        Client.subscribe(this,"GameBoardUI");
+
         binding = GameBoardBinding.inflate(inflater, container, false);
         return binding.getRoot();
-
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -65,6 +71,9 @@ public class GameBoardUI extends Fragment {
 
         binding.throwdice.setOnClickListener(view1 -> {
             showDiceFragment();
+            /*for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
+                handler.writeToClient("GameBoardUI|gameStart| ");
+            }*/
         });
     }
 
