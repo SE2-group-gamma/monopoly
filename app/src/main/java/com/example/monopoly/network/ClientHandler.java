@@ -23,8 +23,6 @@ public class ClientHandler extends Thread{
 
     private Socket socket;
 
-    private Game game;
-
     public BufferedReader br;
     public BufferedWriter bw;
 
@@ -43,6 +41,7 @@ public class ClientHandler extends Thread{
     }
 
     private Object clientToken="";
+
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
@@ -106,8 +105,9 @@ public class ClientHandler extends Thread{
                     String[] response = client.handleMessage(strings);
                     if(response!=null){
                         for (String str: response) {
-                            bw.write(str.replaceAll("REPLACER",hostname));
-                            bw.flush();
+                            //bw.write(str.replaceAll("REPLACER",hostname));
+                            server.broadCast(str);
+                            //bw.flush();
                         }
                     }
                 }
@@ -124,7 +124,7 @@ public class ClientHandler extends Thread{
                     //Log.d("msgBuffer", msgBuffer.get(i));
                     Log.d("testOut",""+msgBuffer.get(i)+":"+hostname);
                     try {
-                        bw.write(msgBuffer.get(i)+":"+hostname + System.lineSeparator());
+                        bw.write(msgBuffer.get(i)/*+":"+hostname */+ System.lineSeparator());
                         bw.flush();
                     } catch (IOException e) {
                         throw new RuntimeException(e);

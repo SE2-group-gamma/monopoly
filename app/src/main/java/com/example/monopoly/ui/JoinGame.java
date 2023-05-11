@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.nsd.NsdManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.monopoly.databinding.ActivityMainBinding;
+import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.network.Client;
 
@@ -44,6 +46,7 @@ import java.io.IOException;
 public class JoinGame extends Fragment {
 
     private JoinGameBinding binding;
+    private Game game;
 
     @Override
     public View onCreateView(
@@ -93,8 +96,12 @@ public class JoinGame extends Fragment {
 
                 nsd.getClient().setUser(player);
                 nsd.getClient().setKey(Integer.parseInt(key));
-                HostGame.getGame().addPlayer(player);
-
+                //Game x = HostGame.getGame();
+                //Log.d("gameOut","Player: "+HostGame.getGame().getPlayers().get(1).getUsername());
+                //HostGame.getGame().addPlayer(player);
+                //HostGame.getGame().getPlayers();
+                game = Game.getInstance();
+                game.addPlayer(player);
             }
         });
     }

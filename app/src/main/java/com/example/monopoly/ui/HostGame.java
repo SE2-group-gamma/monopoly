@@ -163,8 +163,7 @@ public class HostGame extends Fragment {
 
                 Player player = new Player(user, new Color(),500.00,true);
 
-                game = new Game();
-                game.start();
+                game = Game.getInstance();
                 //Client c = new Client(null,0,player);
                 //Client c = new Client(ms.getClients().get(0).getClient().getInetAddress(),ms.getClients().get(0).getClient().getPort(),player);
 

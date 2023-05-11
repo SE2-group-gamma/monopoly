@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Client extends Thread {
+    // besser wenn getrennt in host und client über abstrakte klasse
     private InetAddress host;
     private int port;
     private Socket clientSocket;
@@ -32,8 +33,7 @@ public class Client extends Thread {
     public DataOutputStream outToServer;
     public ArrayList<String> msgBuffer;
     private MonopolyServer monopolyServer;
-
-
+    private boolean isHost;
     private int key;
 
     public static HashMap<String, UIHandler> handlers;
@@ -45,8 +45,6 @@ public class Client extends Thread {
     public MonopolyServer getMonopolyServer() {
         return monopolyServer;
     }
-
-    private boolean isHost;
 
     public void setMonopolyServer(MonopolyServer monopolyServer) {
         this.monopolyServer = monopolyServer;
@@ -205,12 +203,12 @@ public class Client extends Thread {
 
                     //monopolyServer.getClients().get(0).writeToClient("JoinLobby|keyFromLobby|1");
                     // TODO make this with IDs instead (properly)
-                    return new String[]{"JoinGame|keyFromLobby|1"+System.lineSeparator(),"Lobby|hostJoined|"+"REPLACER"+System.lineSeparator()};
+                    return new String[]{"JoinGame|keyFromLobby|1","Lobby|hostJoined|"+"REPLACER"};
 
                 } else {
 
                     //monopolyServer.getClients().get(0).writeToClient("JoinLobby|keyFromLobby|0");
-                    return new String[]{"JoinGame|keyFromLobby|0"+System.lineSeparator(),"Lobby|hostJoined|"+"REPLACER"+System.lineSeparator()};
+                    return new String[]{"JoinGame|keyFromLobby|0","Lobby|hostJoined|"+"REPLACER"};
 
                 }
             }
@@ -225,7 +223,7 @@ public class Client extends Thread {
             }
         } else {
             for (String str: responseSplit) {
-               // Log.d("test ",str);
+                Log.d("poggies123 ",str);
             }
             if (responseSplit[1].equals("keyFromLobby") && responseSplit[2].equals("1")) {
                 try {

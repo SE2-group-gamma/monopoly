@@ -28,6 +28,7 @@ public class GameBoardUI extends Fragment {
 
     private GameBoardBinding binding;
     private DiceViewModel diceViewModel;
+    private Client client;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class GameBoardUI extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
-        Client.subscribe(this,"GameBoardUI");
+        //Client.subscribe(this,"GameBoardUI");
 
         super.onViewCreated(view, savedInstanceState);
         //Log.d("Test",binding.button.getText().toString());
