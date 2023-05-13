@@ -70,7 +70,7 @@ public class GameBoardUI extends Fragment {
 
         LayerDrawable layerDrawable = (LayerDrawable) imageView.getDrawable();
 
-        // 20.000 = max
+        // Set start position
         int player1X = 0;
         int player2X = 0;
         int player3X = 0;
@@ -78,12 +78,12 @@ public class GameBoardUI extends Fragment {
         int player5X = 900;
         int player6X = 900;
 
-        int player1Y = 100;
-        int player2Y = 1100;
-        int player3Y = 1900;
-        int player4Y = 100;
-        int player5Y = 1100;
-        int player6Y = 1900;
+        int player1Y = 0;
+        int player2Y = 1000;
+        int player3Y = 1800;
+        int player4Y = 0;
+        int player5Y = 1000;
+        int player6Y = 1800;
         layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.RIGHT);
         layerDrawable.setLayerGravity(player2, Gravity.BOTTOM | Gravity.RIGHT);
         layerDrawable.setLayerGravity(player3, Gravity.BOTTOM | Gravity.RIGHT);
@@ -108,7 +108,17 @@ public class GameBoardUI extends Fragment {
         layerDrawable.setLayerInset(player2, 0,0,player2X+2800+(1700*9),player2Y);
         layerDrawable.setLayerInset(player5, 0,0,player5X+4600,player5Y);
 
+        // if the player is on top of the gameboard(free parking): rearrange LayerGravity and the rest can stay the same
+        layerDrawable.setLayerGravity(player6, Gravity.TOP | Gravity.LEFT);
+        layerDrawable.setLayerInset(player6, player6X,player6Y,0,0);
+
+
         // TODO vertical view
+        // after the 11th field the players will need to be arranged vertically, because of the gameboard
+        layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.LEFT);
+        layerDrawable.setLayerInset(player1, player1X,0,0,player1Y+2800);
+
+
 
 
         // refresh ImageView to display changes
@@ -127,9 +137,6 @@ public class GameBoardUI extends Fragment {
         });
 
         binding.buy.setOnContextClickListener(view1 -> {
-
-            layerDrawable.setLayerInset(player1, 0,0,3000,100);
-            imageView.invalidate();
             return true;
         });
 
@@ -137,7 +144,10 @@ public class GameBoardUI extends Fragment {
                 .navigate(R.id.action_GameBoard_to_FirstFragment));
 
         binding.throwdice.setOnClickListener(view1 -> {
-
+            Log.d("dd","----------------------------------here--------------------------------------");
+            layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.RIGHT);
+            layerDrawable.setLayerInset(player1, 0,0,6000,100);
+            imageView.invalidate();
             showDiceFragment();
         });
     }

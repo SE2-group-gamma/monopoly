@@ -4,5 +4,5 @@
     android:id="@+id/player_four"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/dog_yellow"
+    android:src="@drawable/dog_yellow_transparent"
     />
