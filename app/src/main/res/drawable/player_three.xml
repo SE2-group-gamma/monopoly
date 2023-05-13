@@ -4,5 +4,5 @@
     android:id="@+id/player_three"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/fingerhut"
+    android:src="@drawable/thimble_green"
     />

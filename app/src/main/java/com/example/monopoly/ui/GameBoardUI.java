@@ -32,6 +32,13 @@ public class GameBoardUI extends Fragment {
     private GameBoardBinding binding;
     private DiceViewModel diceViewModel;
 
+    int player1 = 1;
+    int player2 = 2;
+    int player3 = 3;
+    int player4 = 4;
+    int player5 = 5;
+    int player6 = 6;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,20 +64,54 @@ public class GameBoardUI extends Fragment {
 
         //binding.ivZoom.setImageResource(R.drawable.layerlist_for_gameboard);
 
+        // Initialize players
+
         ImageView imageView = binding.ivZoom;
 
-        // Layer-List-Drawable aus dem ImageView-Element holen
         LayerDrawable layerDrawable = (LayerDrawable) imageView.getDrawable();
 
-        // Index des Vordergrundbilds in der Layer-List-Drawable
-        int player1 = 1;
-
-        // Gravity- und Left-/Top-Attribute des Vordergrundbilds ändern
-        layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.RIGHT);
         // 20.000 = max
-        layerDrawable.setLayerInset(player1, 0,0,100,100);
+        int player1X = 0;
+        int player2X = 0;
+        int player3X = 0;
+        int player4X = 900;
+        int player5X = 900;
+        int player6X = 900;
 
-        // ImageView aktualisieren, um die Änderungen anzuzeigen
+        int player1Y = 100;
+        int player2Y = 1100;
+        int player3Y = 1900;
+        int player4Y = 100;
+        int player5Y = 1100;
+        int player6Y = 1900;
+        layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.RIGHT);
+        layerDrawable.setLayerGravity(player2, Gravity.BOTTOM | Gravity.RIGHT);
+        layerDrawable.setLayerGravity(player3, Gravity.BOTTOM | Gravity.RIGHT);
+        layerDrawable.setLayerGravity(player4, Gravity.BOTTOM | Gravity.RIGHT);
+        layerDrawable.setLayerGravity(player5, Gravity.BOTTOM | Gravity.RIGHT);
+        layerDrawable.setLayerGravity(player6, Gravity.BOTTOM | Gravity.RIGHT);
+
+        layerDrawable.setLayerInset(player1, 0,0,player1X,player1Y);
+        layerDrawable.setLayerInset(player2, 0,0,player2X,player2Y);
+        layerDrawable.setLayerInset(player3, 0,0,player3X,player3Y);
+        layerDrawable.setLayerInset(player4, 0,0,player4X,player4Y);
+        layerDrawable.setLayerInset(player5, 0,0,player5X,player5Y);
+        layerDrawable.setLayerInset(player6, 0,0,player6X,player6Y);
+
+        // To go from a big field in the corners to the next field: +/- 2800 (horizontally)
+
+        layerDrawable.setLayerInset(player1, 0,0,player1X+2800,player1Y);
+        layerDrawable.setLayerInset(player4, 0,0,player4X+2800,player4Y);
+
+        // To go from a smaller field to a smaller field: +/- 1700 (horizontally)
+
+        layerDrawable.setLayerInset(player2, 0,0,player2X+2800+(1700*9),player2Y);
+        layerDrawable.setLayerInset(player5, 0,0,player5X+4600,player5Y);
+
+        // TODO vertical view
+
+
+        // refresh ImageView to display changes
         imageView.invalidate();
 
 
@@ -85,10 +126,18 @@ public class GameBoardUI extends Fragment {
             }
         });
 
+        binding.buy.setOnContextClickListener(view1 -> {
+
+            layerDrawable.setLayerInset(player1, 0,0,3000,100);
+            imageView.invalidate();
+            return true;
+        });
+
         binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
                 .navigate(R.id.action_GameBoard_to_FirstFragment));
 
         binding.throwdice.setOnClickListener(view1 -> {
+
             showDiceFragment();
         });
     }
