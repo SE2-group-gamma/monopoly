@@ -1,11 +1,16 @@
 package com.example.monopoly.ui;
 
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.InsetDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,6 +54,26 @@ public class GameBoardUI extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
         Client.subscribe(this,"GameBoardUI");
+
+        //binding.ivZoom.setImageResource(R.drawable.layerlist_for_gameboard);
+
+        ImageView imageView = binding.ivZoom;
+
+        // Layer-List-Drawable aus dem ImageView-Element holen
+        LayerDrawable layerDrawable = (LayerDrawable) imageView.getDrawable();
+
+        // Index des Vordergrundbilds in der Layer-List-Drawable
+        int player1 = 1;
+
+        // Gravity- und Left-/Top-Attribute des Vordergrundbilds ändern
+        layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.RIGHT);
+        // 20.000 = max
+        layerDrawable.setLayerInset(player1, 0,0,100,100);
+
+        // ImageView aktualisieren, um die Änderungen anzuzeigen
+        imageView.invalidate();
+
+
 
         super.onViewCreated(view, savedInstanceState);
         //Log.d("Test",binding.button.getText().toString());

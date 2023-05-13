@@ -101,7 +101,7 @@ public class ClientHandler extends Thread{
                     String[] response = client.handleMessage(strings);
                     if(response!=null){
                         for (String str: response) {
-                            bw.write(str.replaceAll("REPLACER",hostname));
+                            bw.write(str.replaceAll("REPLACER",hostname));      // set hostname
                             bw.flush();
                         }
                     }
