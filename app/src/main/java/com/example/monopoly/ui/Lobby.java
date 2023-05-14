@@ -61,9 +61,11 @@ public class Lobby extends Fragment {
         binding.startButton.setOnClickListener(view12 -> {
 
             // TODO: join into game
-            for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
+            /*for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
                 handler.writeToClient("Lobby|gameStart| ");
-            }
+            }*/
+
+            HostGame.getMonopolyServer().broadCast("Lobby|gameStart| ");
             //HostGame.getMonopolyServer().broadCast();
             //HostGame.getMonopolyServer().getClients().get(0).getClientClient().handleMessage("Lobby|gameStart| ".split("\\|"));
         });

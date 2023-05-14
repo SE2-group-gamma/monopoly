@@ -27,7 +27,8 @@ public class ClientHandler extends Thread{
     public BufferedWriter bw;
 
     private String hostname;
-    Client client;
+    private Client client;
+    private String clientName;
     public ArrayList<String> msgBuffer;
 
     public MonopolyServer server;
@@ -57,7 +58,12 @@ public class ClientHandler extends Thread{
         this.hostname = hostname;
         this.socket=socket;
         this.client=client;
+        this.clientName=client.getName();
         this.msgBuffer=new ArrayList<>();
+    }
+
+    public String getClientName() {
+        return clientName;
     }
 
     public Socket getClient() {
@@ -124,7 +130,7 @@ public class ClientHandler extends Thread{
                     //Log.d("msgBuffer", msgBuffer.get(i));
                     Log.d("testOut",""+msgBuffer.get(i)+":"+hostname);
                     try {
-                        bw.write(msgBuffer.get(i)/*+":"+hostname */+ System.lineSeparator());
+                        bw.write(msgBuffer.get(i)+"|"+hostname + System.lineSeparator());
                         bw.flush();
                     } catch (IOException e) {
                         throw new RuntimeException(e);

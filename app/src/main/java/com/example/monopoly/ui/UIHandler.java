@@ -1,5 +1,6 @@
 package com.example.monopoly.ui;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -13,6 +14,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
+import com.example.monopoly.network.Client;
+
+import java.io.Serializable;
 
 public class UIHandler extends Handler {
     private Fragment frag;
@@ -27,6 +31,11 @@ public class UIHandler extends Handler {
         super.handleMessage(msg);
         String data = msg.getData().get("Data").toString();
         String type = msg.getData().get("ActionType").toString();
+        String client = "";
+        Client clientObject = null;
+        try {
+            client = msg.getData().get("Client").toString();
+        }catch (Exception e){}
 
         switch (type) {
             case "changeText":
@@ -78,8 +87,13 @@ public class UIHandler extends Handler {
                 break;
             case "gameStart":
                 Log.d("------------","gameStart");
+                /////as                                                                                                             asdadasdadasdasdasdasd
+                Bundle bundle = new Bundle();
+                bundle.putString("client",client);
+                //bundle.putSerializable("clientObject",);
+                Log.i("Dices","gameStart!!!!!");
                 NavHostFragment.findNavController(frag)
-                        .navigate(R.id.action_JoinGame_to_GameBoard);
+                        .navigate(R.id.action_JoinGame_to_GameBoard,bundle);
                 break;
             case "displayKey":
                 Log.d("tuaaaaaaa","displayKey");

@@ -75,7 +75,13 @@
             app:destination="@id/FirstFragment" />
         <action
             android:id="@+id/action_JoinGame_to_GameBoard"
-            app:destination="@id/GameBoardUI" />
+            app:destination="@id/GameBoardUI">
+            <argument
+                android:name="test"
+                app:argType="string"
+                android:defaultValue="iiiiiiiiii"
+            />
+        </action>
     </fragment>
 
     <fragment
