@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 
@@ -25,6 +26,7 @@ import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.network.MonopolyServer;
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.utils.LobbyKey;
 
 import java.io.IOException;
@@ -45,7 +47,7 @@ public class HostGame extends Fragment {
 
     public static int key = 0;
     public static String lobbyname = " ";
-
+    private ClientViewModel clientViewModel;
     private static Game game;
 
     @Override
@@ -177,6 +179,10 @@ public class HostGame extends Fragment {
                 }
                 nsd.getClient().setHost(true);
                 ms.setClient(nsd.getClient());
+
+                //Add client object to ClientViewModel
+                clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
+                clientViewModel.setClient(nsd.getClient());
 
                 try {
                     nsd.getClient().setUser(player);

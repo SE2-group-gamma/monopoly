@@ -21,6 +21,7 @@ import com.example.monopoly.R;
 import com.example.monopoly.databinding.GameBoardBinding;
 import com.example.monopoly.gamelogic.Dices;
 import com.example.monopoly.network.MonopolyServer;
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.ClientHandler;
@@ -31,7 +32,9 @@ public class GameBoardUI extends Fragment {
 
     private GameBoardBinding binding;
     private DiceViewModel diceViewModel;
+    private ClientViewModel clientViewModel;
     private String clientName;
+    private Client client;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,14 +46,22 @@ public class GameBoardUI extends Fragment {
         }
 
         diceViewModel = new ViewModelProvider(requireActivity()).get(DiceViewModel.class);
+        clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
         diceViewModel.getDicesData().observe(this, dices -> {
             Log.i("Dices", dices.toString());
 
+            this.client = clientViewModel.getClientData().getValue();
+
+            Log.i("Dices", client.getUser().getUsername());
+
+            /*
             MonopolyServer ms = HostGame.getMonopolyServer();
             ClientHandler user = null;
 
             Log.i("Dices", "TestUser:"+ms.getClients().get(0).getClientClient().getUser().getUsername());
             Log.i("Dices", "Nr of users:"+ms.getNumberOfClients());
+
+
 
             for(int i = 0; i < ms.getNumberOfClients();i++){                //Searching for the correct client
 
@@ -63,7 +74,7 @@ public class GameBoardUI extends Fragment {
            // Log.i("Dices", "Username: "+user.getClient().toString());
 
             user.writeToClient("GameBoardUI|move|"+dices.getSum());
-
+            */
             //Msg an server mit augenzahl + welcher client
             //HostGame.getMonopolyServer().getClients().get(0).writeToClient("GameBoardUI|move|"+(dices.getDice1()+dices.getDice2()));
             //HostGame.getMonopolyServer().broadCast("GameBoardUI|move|"+(dices.getDice1()+dices.getDice2()));

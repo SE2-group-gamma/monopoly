@@ -88,7 +88,7 @@ public class UIHandler extends Handler {
             case "gameStart":
                 Log.d("------------","gameStart");
                 /////as                                                                                                             asdadasdadasdasdasdasd
-                Bundle bundle = new Bundle();
+                Bundle bundle = new Bundle();           //Sollte ich als viewmodel übergeben
                 bundle.putString("client",client);
                 //bundle.putSerializable("clientObject",);
                 Log.i("Dices","gameStart!!!!!");

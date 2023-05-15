@@ -58,7 +58,7 @@ public class ClientHandler extends Thread{
         this.hostname = hostname;
         this.socket=socket;
         this.client=client;
-        this.clientName=client.getName();
+        //this.clientName=client.getName();
         this.msgBuffer=new ArrayList<>();
     }
 
