@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.nsd.NsdManager;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,25 +16,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.HostGameBinding;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.network.Client;
-import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.network.MonopolyServer;
 import com.example.monopoly.utils.LobbyKey;
 
 import java.io.IOException;
 import java.text.DecimalFormatSymbols;
-
-import android.content.Context;
-import android.net.nsd.NsdManager;
-import android.net.nsd.NsdServiceInfo;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 public class HostGame extends Fragment {
 
@@ -111,7 +100,12 @@ public class HostGame extends Fragment {
         binding.createButton.setOnClickListener(view12 -> {
             String user = binding.userInput.getText().toString();
             String lobby = binding.lobbyInput.getText().toString();
-            int playerCount = binding.seekBar.getProgress();
+            int playerCount;
+            if(binding.seekBar.getProgress()==0) {
+                playerCount = 2;
+            }else{
+                playerCount = binding.seekBar.getProgress()+2;
+            }
             int maxTimeMin = binding.seekBar2.getProgress();
             if(user.isEmpty() && lobby.isEmpty()){
                 binding.userInput.setError("No Input");

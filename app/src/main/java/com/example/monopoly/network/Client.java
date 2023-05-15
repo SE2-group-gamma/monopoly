@@ -4,13 +4,10 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.ui.UIHandler;
-
-import com.example.monopoly.gamelogic.ChanceCard;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -20,7 +17,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Client extends Thread {
     private InetAddress host;
@@ -165,7 +161,7 @@ public class Client extends Thread {
                 synchronized (msgBuffer) {
                     if (msgBuffer.size() != 0) {
                         for (int i = msgBuffer.size() - 1; i >= 0; i--) {
-                            Log.d("msgBuffer", msgBuffer.get(i));
+                            Log.d("msgBufferClient", msgBuffer.get(i));
                             outToServer.writeBytes(msgBuffer.get(i) + System.lineSeparator());
                             outToServer.flush();
                             msgBuffer.remove(i);
@@ -196,6 +192,7 @@ public class Client extends Thread {
         }
 
         if (isHost) {
+            //System.out.println("hallo ich bins der host");
             // TODO: call game logic
             // e.g. responseSplit[1] to throw dice
             if (responseSplit[0].equals("CLIENTMESSAGE") && responseSplit[1].equals("key")) {
@@ -216,7 +213,11 @@ public class Client extends Thread {
             }
             if(responseSplit[1].equals("JOINED")){
                 synchronized (monopolyServer.getClients()){
+                    Log.d("Client Count", String.valueOf(monopolyServer.getClients().size()));
+
                     for (ClientHandler handler: monopolyServer.getClients()) {
+
+                        System.out.println(handler.getClientClient().getUser());
 
                         handler.writeToClient("Lobby|userJoined|"+responseSplit[2]);
 
