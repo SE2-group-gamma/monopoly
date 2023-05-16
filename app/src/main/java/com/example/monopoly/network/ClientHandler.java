@@ -112,7 +112,8 @@ public class ClientHandler extends Thread{
                     if(response!=null){
                         for (String str: response) {
                             //bw.write(str.replaceAll("REPLACER",hostname));
-                            server.broadCast(str);
+                            server.broadCast(str.replaceAll("REPLACER",hostname));
+                            //server.broadCastExceptSelf(str.replaceAll("REPLACER",hostname),this);
                             //bw.flush();
                         }
                     }
@@ -130,7 +131,7 @@ public class ClientHandler extends Thread{
                     //Log.d("msgBuffer", msgBuffer.get(i));
                     Log.d("testOut",""+msgBuffer.get(i)+":"+hostname);
                     try {
-                        bw.write(msgBuffer.get(i)+"|"+hostname + System.lineSeparator());
+                        bw.write(msgBuffer.get(i)/*+"|"+hostname */+ System.lineSeparator());
                         bw.flush();
                     } catch (IOException e) {
                         throw new RuntimeException(e);

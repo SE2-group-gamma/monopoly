@@ -100,16 +100,12 @@ public class JoinGame extends Fragment {
                 nsd.getClient().setUser(player);
                 nsd.getClient().setKey(Integer.parseInt(key));
 
+                player.setMyClient(nsd.getClient());
+
                 //Add client object to ClientViewModel
                 clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
                 clientViewModel.setClient(nsd.getClient());
 
-                //Game x = HostGame.getGame();
-                //Log.d("gameOut","Player: "+HostGame.getGame().getPlayers().get(1).getUsername());
-                //HostGame.getGame().addPlayer(player);
-                //HostGame.getGame().getPlayers();
-                game = Game.getInstance();
-                game.addPlayer(player);
             }
         });
     }

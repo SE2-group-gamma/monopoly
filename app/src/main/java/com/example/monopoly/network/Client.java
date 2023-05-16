@@ -1,5 +1,6 @@
 package com.example.monopoly.network;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.ui.UIHandler;
 
@@ -25,6 +27,7 @@ import java.util.List;
 public class Client extends Thread {
     // besser wenn getrennt in host und client über abstrakte klasse
     private InetAddress host;
+    private int id;     //Useless I think
     private int port;
     private Socket clientSocket;
     private String response;
@@ -35,6 +38,8 @@ public class Client extends Thread {
     private MonopolyServer monopolyServer;
     private boolean isHost;
     private int key;
+
+    private Game game;
 
     public static HashMap<String, UIHandler> handlers;
 
@@ -87,6 +92,14 @@ public class Client extends Thread {
         this.host = host;
         this.port = port;
         this.msgBuffer = new ArrayList<>();
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getIdClient() {
+        return id;
     }
 
     public void setRequest(String request) {
@@ -197,7 +210,7 @@ public class Client extends Thread {
             }catch (Exception e){}
             //b.putSerializable("clientObject",this);
             handleMessage.setData(b);
-            handlers.get(responseSplit[0]).sendMessage(handleMessage);
+            handlers.get(responseSplit[0]).sendMessage(handleMessage);      // UI Handler do ur thing
         }
 
         if (isHost) {
@@ -219,14 +232,33 @@ public class Client extends Thread {
 
                 }
             }
+            try {
+                Log.d("Dices", "Message to host: " + responseSplit[0] + "; " + responseSplit[1] + "; " + responseSplit[2] + "; " + responseSplit[3]);
+            }catch (Exception e){}
+            game = Game.getInstance();
+            //Host should only join once
+            if(responseSplit[1].equals("hostJoined") && game.getPlayers().isEmpty()){       //Host should only join once
+                Player tempPlayer = new Player(responseSplit[2],new Color(),500.00,true);
+                Log.i("Dices","Host gonna join: ");
+                game.addPlayer(tempPlayer);
+            }
             if(responseSplit[1].equals("JOINED")){
                 synchronized (monopolyServer.getClients()){
-                    for (ClientHandler handler: monopolyServer.getClients()) {
+                    /*for (ClientHandler handler: monopolyServer.getClients()) {
 
                         handler.writeToClient("Lobby|userJoined|"+responseSplit[2]);
 
-                    }
+                    }*/
+                    monopolyServer.broadCast("Lobby|userJoined|"+responseSplit[2]);
+                    Player tempPlayer = new Player(responseSplit[2],new Color(),500.00,true);
+                    Log.i("Dices","Client Gonna join: ");
+                    //game = Game.getInstance();
+                    game.addPlayer(tempPlayer);
                 }
+            }
+            if(responseSplit[1].equals("move")){
+                int tempID = game.getPlayerIDByName(responseSplit[3]);
+                game.incrementPlayerPosition(tempID, Integer.parseInt(responseSplit[2]));
             }
         } else {
             for (String str: responseSplit) {
@@ -241,6 +273,11 @@ public class Client extends Thread {
             }
             if(responseSplit[1].equals("hostJoined")){
                 //writeToServer();
+                try {
+                    writeToServer("Lobby|hostJoined|"+"REPLACER");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
         return null;

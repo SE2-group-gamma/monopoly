@@ -165,7 +165,7 @@ public class HostGame extends Fragment {
 
                 Player player = new Player(user, new Color(),500.00,true);
 
-                game = Game.getInstance();
+
                 //Client c = new Client(null,0,player);
                 //Client c = new Client(ms.getClients().get(0).getClient().getInetAddress(),ms.getClients().get(0).getClient().getPort(),player);
 
@@ -184,12 +184,13 @@ public class HostGame extends Fragment {
                 clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
                 clientViewModel.setClient(nsd.getClient());
 
+                player.setMyClient(nsd.getClient());
+                nsd.getClient().setUser(player);
+                nsd.getClient().setKey(key);
+                nsd.getClient().setMonopolyServer(ms);
+
                 try {
-                    nsd.getClient().setUser(player);
-                    nsd.getClient().setKey(key);
-                    nsd.getClient().setMonopolyServer(ms);
                     nsd.getClient().writeToServer("Lobby|hostJoined|"+player.getUsername());
-                    game.addPlayer(player);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

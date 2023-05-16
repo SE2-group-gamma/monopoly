@@ -40,10 +40,11 @@ public class GameBoardUI extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
+        //Bundle implementation
+        /*if (getArguments() != null) {
             Log.i("Dices", "Client over bundle: "+getArguments().getString("client"));
             clientName = getArguments().getString("client");            //getting the client name using argument bundle
-        }
+        }*/
 
         diceViewModel = new ViewModelProvider(requireActivity()).get(DiceViewModel.class);
         clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
@@ -52,7 +53,17 @@ public class GameBoardUI extends Fragment {
 
             this.client = clientViewModel.getClientData().getValue();
 
-            Log.i("Dices", client.getUser().getUsername());
+            //Log.i("Dices", "Name:"+client.getUser().getUsername()+"; ID Player:"+client.getUser().getId());
+
+            //HostGame.getMonopolyServer().broadCast("GameBoardUI|move|"+dices.getSum()+"|"+this.client.getUser().getUsername());
+
+            try {
+                this.client.writeToServer("GameBoardUI|move|"+dices.getSum()+"|"+this.client.getUser().getUsername());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            //this.client.writeToServer();
 
             /*
             MonopolyServer ms = HostGame.getMonopolyServer();
