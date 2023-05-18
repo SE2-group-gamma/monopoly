@@ -1,5 +1,16 @@
 package com.example.monopoly.gamelogic;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import androidx.core.content.ContextCompat;
+
+import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
+
+import androidx.core.content.ContextCompat;
+
+import com.example.monopoly.R;
+
 import java.util.ArrayList;
 import java.util.Random;
 
