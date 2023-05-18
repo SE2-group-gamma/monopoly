@@ -33,7 +33,7 @@ public class ChanceCardTest {
 
     @Test
     public void testConstructor() {
-        Assertions.assertTrue(collection.getAllChanceCards().size()>0);
+        Assertions.assertTrue(collection.getAllChanceCards().size() > 0);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class ChanceCardTest {
             System.out.println(card.getId() + ", " + card.getFunction());
         }
 
-        Assertions.assertEquals(collection.getAllChanceCards().size()-3, collection.getChanceCardDeck().size());
+        Assertions.assertEquals(collection.getAllChanceCards().size() - 3, collection.getChanceCardDeck().size());
 
     }
 
@@ -95,20 +95,49 @@ public class ChanceCardTest {
     }
 
     @Test
-    public void testGettersSettersChanceCard(){
+    public void testGettersSettersChanceCard() {
         ChanceCard card = collection.getAllChanceCards().get(0);
         card.setId(17);
         card.setFunction("test");
-        Assertions.assertEquals(17,card.getId());
+        Assertions.assertEquals(17, card.getId());
         Assertions.assertEquals("test", card.getFunction());
     }
 
     @Test
-    public void testGettersSettersChanceCardCollection(){
+    public void testGettersSettersChanceCardCollection() {
         ArrayList<ChanceCard> list = new ArrayList<ChanceCard>();
         collection.setAllChanceCards(list);
         collection.setChanceCardDeck(list);
-        Assertions.assertEquals(0,collection.getAllChanceCards().size());
-        Assertions.assertEquals(0,collection.getChanceCardDeck().size());
+        Assertions.assertEquals(0, collection.getAllChanceCards().size());
+        Assertions.assertEquals(0, collection.getChanceCardDeck().size());
+    }
+
+    @Test
+    public void testGettersSettersImage() {
+        Drawable image = new Drawable() {
+            @Override
+            public void draw(@NonNull Canvas canvas) {
+
+            }
+
+            @Override
+            public void setAlpha(int i) {
+                i = 1;
+            }
+
+            @Override
+            public void setColorFilter(@Nullable ColorFilter colorFilter) {
+
+            }
+
+            @Override
+            public int getOpacity() {
+                return 0;
+            }
+        };
+
+        ChanceCard card = new ChanceCard(1);
+        card.setImage(image);
+        Assertions.assertNotEquals(card.getImage(), null);
     }
 }

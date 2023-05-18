@@ -8,6 +8,8 @@ public class ChanceCard {
     private int id;
     private String function;
 
+    private Drawable image;
+
    public ChanceCard(int id) {
        this.id = id;
    }
@@ -28,5 +30,12 @@ public class ChanceCard {
         this.function = function;
    }
 
+    public Drawable getImage(){
+        return image;
+    }
+
+    public void setImage(Drawable image){
+        this.image = image;
+    }
 
 }
