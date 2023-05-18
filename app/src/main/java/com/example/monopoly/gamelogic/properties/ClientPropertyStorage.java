@@ -1,19 +1,17 @@
 package com.example.monopoly.gamelogic.properties;
 
-import com.example.monopoly.gamelogic.Player;
-
 import java.util.HashMap;
 
-public class PropertyStorage {
+public class ClientPropertyStorage {
     public HashMap<String, Field> properties;
-    private static PropertyStorage instance;
+    private static ClientPropertyStorage instance;
 
-    public static PropertyStorage getInstance(){
-        if(instance == null) instance = new PropertyStorage();
+    public static ClientPropertyStorage getInstance(){
+        if(instance == null) instance = new ClientPropertyStorage();
         return instance;
     }
 
-    private PropertyStorage() {
+    private ClientPropertyStorage() {
         this.properties = new HashMap<>();
 
         this.properties.put("strandbad", new PropertyField("strandbad", 60, PropertyFieldColors.PURPLE, new RentConfiguration(2, 4, 10, 30, 90, 160, 250, 50)));
@@ -53,13 +51,5 @@ public class PropertyStorage {
 
         this.properties.put("kelag", new UtilityField("kelag"));
         this.properties.put("water_works", new UtilityField("water_works"));
-    }
-
-    public int getRent(String propertyId) {
-        return 0;
-    }
-
-    public void buyProperty(String propertyId, Player owner) {
-        this.properties.get(propertyId).owner = owner;
     }
 }
