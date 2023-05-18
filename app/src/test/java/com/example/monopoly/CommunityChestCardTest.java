@@ -99,32 +99,4 @@ public class CommunityChestCardTest {
         collection.setAllCommunityChestCards(list);
         Assertions.assertEquals(0,collection.getAllCommunityChestCards().size());
     }
-
-    @Test
-    public void testDrawableSettersGetters(){
-        Drawable image = new Drawable() {
-            @Override
-            public void draw(@NonNull Canvas canvas) {
-
-            }
-
-            @Override
-            public void setAlpha(int i) {
-                i=0;
-            }
-
-            @Override
-            public void setColorFilter(@Nullable ColorFilter colorFilter) {
-
-            }
-
-            @Override
-            public int getOpacity() {
-                return 0;
-            }
-        };
-        CommunityChestCard card = new CommunityChestCard(100);
-        card.setImage(image);
-        Assertions.assertNotEquals(card.getImage(),null);
-    }
 }

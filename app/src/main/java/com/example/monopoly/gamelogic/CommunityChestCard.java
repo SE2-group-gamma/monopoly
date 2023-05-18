@@ -6,8 +6,6 @@ public class CommunityChestCard {
     private int id;
     private String function;
 
-    private Drawable image;
-
     public CommunityChestCard(int id) {
         this.id = id;
     }
@@ -28,13 +26,4 @@ public class CommunityChestCard {
         this.function = function;
 
     }
-    public Drawable getImage(){
-        return image;
-    }
-
-    public void setImage(Drawable image){
-        this.image = image;
-    }
-
-
 }
