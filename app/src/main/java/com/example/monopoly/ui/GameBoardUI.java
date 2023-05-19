@@ -66,6 +66,13 @@ public class GameBoardUI extends Fragment {
         binding.throwdice.setOnClickListener(view1 -> {
             showDiceFragment();
         });
+
+        //**** TEST DRAW CARD ****
+
+        binding.card.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this).
+                navigate(R.id.action_GameBoardUI_to_DrawCard));
+
+        //************************
     }
 
     private void showDiceFragment(){

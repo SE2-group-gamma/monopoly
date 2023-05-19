@@ -151,7 +151,7 @@ public class ChanceCardCollection {
         if (chanceCardDeck.size() == 0){
             return -1;
         }
-        int random = r.nextInt(chanceCardDeck.size());
+        int random = r.nextInt(chanceCardDeck.size()-1);
         return random;
     }
 

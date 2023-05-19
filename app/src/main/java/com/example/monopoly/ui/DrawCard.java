@@ -1,8 +1,14 @@
 package com.example.monopoly.ui;
 
+import static androidx.databinding.DataBindingUtil.setContentView;
+
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.FragmentDrawcardBinding;
@@ -16,24 +22,41 @@ public class DrawCard extends Fragment {
 
     public DrawCard(){
         super(R.layout.fragment_drawcard);
+        createDecks();
+        setDrawables();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        binding = FragmentDrawcardBinding.inflate(getLayoutInflater());
+
     }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        returnChanceCard();
+        binding.buttonContinueDrawCard.setOnClickListener(view -> {
+            NavHostFragment.findNavController(this).navigate(R.id.action_DrawCard_to_GameBoardUI);
+        });
+
+        return this.binding.getRoot();
+    }
+
     public void returnChanceCard(){
         int index = chanceCards.drawFromDeck().getId();
-        binding.imageCard.setImageResource(chanceCards.getChanceCardDeck().get(index).getImageId());
+        binding.ImageCard.setImageResource(chanceCards.getChanceCardDeck().get(index).getImageId());
     }
 
     public void returnCommunityChestCard(){
         int index = communityCards.drawFromDeck().getId();
-        binding.imageCard.setImageResource(communityCards.getCommunityChestCardDeck().get(index).getImageId());
+        binding.ImageCard.setImageResource(communityCards.getCommunityChestCardDeck().get(index).getImageId());
     }
+
+    // * * * TEST * * *
     public void createDecks(){
-        chanceCards = new ChanceCardCollection();
-        communityCards = new CommunityChestCardCollection();
+        this.chanceCards = new ChanceCardCollection();
+        this.communityCards = new CommunityChestCardCollection();
     }
 
     public void setDrawables(){
