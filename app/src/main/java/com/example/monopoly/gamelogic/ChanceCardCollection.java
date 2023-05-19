@@ -1,16 +1,5 @@
 package com.example.monopoly.gamelogic;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import androidx.core.content.ContextCompat;
-
-import android.graphics.drawable.Drawable;
-import android.widget.ImageView;
-
-import androidx.core.content.ContextCompat;
-
-import com.example.monopoly.R;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -151,7 +140,8 @@ public class ChanceCardCollection {
         if (chanceCardDeck.size() == 0){
             return -1;
         }
-        int random = r.nextInt(chanceCardDeck.size()-1);
+        int random = r.nextInt(chanceCardDeck.size());
+        random --;
         return random;
     }
 

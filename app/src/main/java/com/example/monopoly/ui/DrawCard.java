@@ -22,6 +22,7 @@ public class DrawCard extends Fragment {
 
     public DrawCard(){
         super(R.layout.fragment_drawcard);
+        // * * * TEST * * *
         createDecks();
         setDrawables();
     }
@@ -30,11 +31,11 @@ public class DrawCard extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         binding = FragmentDrawcardBinding.inflate(getLayoutInflater());
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // * * * TEST * * *
         returnChanceCard();
         binding.buttonContinueDrawCard.setOnClickListener(view -> {
             NavHostFragment.findNavController(this).navigate(R.id.action_DrawCard_to_GameBoardUI);
@@ -43,23 +44,23 @@ public class DrawCard extends Fragment {
         return this.binding.getRoot();
     }
 
-    public void returnChanceCard(){
+    private void returnChanceCard(){
         int index = chanceCards.drawFromDeck().getId();
         binding.ImageCard.setImageResource(chanceCards.getChanceCardDeck().get(index).getImageId());
     }
 
-    public void returnCommunityChestCard(){
+    private void returnCommunityChestCard(){
         int index = communityCards.drawFromDeck().getId();
         binding.ImageCard.setImageResource(communityCards.getCommunityChestCardDeck().get(index).getImageId());
     }
 
     // * * * TEST * * *
-    public void createDecks(){
+    private void createDecks(){
         this.chanceCards = new ChanceCardCollection();
         this.communityCards = new CommunityChestCardCollection();
     }
 
-    public void setDrawables(){
+    private void setDrawables(){
         chanceCards.getChanceCardDeck().get(0).setImageId(R.drawable.chance0);
         chanceCards.getChanceCardDeck().get(1).setImageId(R.drawable.chance1);
         chanceCards.getChanceCardDeck().get(2).setImageId(R.drawable.chance2);
