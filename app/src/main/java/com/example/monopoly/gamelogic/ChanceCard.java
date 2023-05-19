@@ -1,14 +1,10 @@
 package com.example.monopoly.gamelogic;
 
-import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.widget.ImageView;
-
 public class ChanceCard {
     private int id;
     private String function;
 
-    private Drawable image;
+    private int imageID;
 
    public ChanceCard(int id) {
        this.id = id;
@@ -30,12 +26,12 @@ public class ChanceCard {
         this.function = function;
    }
 
-    public Drawable getImage(){
-        return image;
+    public int getImageId(){
+        return imageID;
     }
 
-    public void setImage(Drawable image){
-        this.image = image;
+    public void setImageId(int imageID){
+        this.imageID = imageID;
     }
 
 }

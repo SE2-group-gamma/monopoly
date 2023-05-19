@@ -6,19 +6,11 @@ import com.example.monopoly.gamelogic.ChanceCardCollection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import static org.mockito.Mockito.mock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
@@ -114,30 +106,8 @@ public class ChanceCardTest {
 
     @Test
     public void testGettersSettersImage() {
-        Drawable image = new Drawable() {
-            @Override
-            public void draw(@NonNull Canvas canvas) {
-
-            }
-
-            @Override
-            public void setAlpha(int i) {
-                i = 1;
-            }
-
-            @Override
-            public void setColorFilter(@Nullable ColorFilter colorFilter) {
-
-            }
-
-            @Override
-            public int getOpacity() {
-                return 0;
-            }
-        };
-
-        ChanceCard card = new ChanceCard(1);
-        card.setImage(image);
-        Assertions.assertNotEquals(card.getImage(), null);
+        ChanceCard card = new ChanceCard(100);
+        card.setImageId(R.drawable.chance1);
+        Assertions.assertNotEquals(0,card.getImageId());
     }
 }

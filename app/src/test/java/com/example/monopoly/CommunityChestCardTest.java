@@ -1,13 +1,5 @@
 package com.example.monopoly;
 
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.example.monopoly.gamelogic.ChanceCard;
 import com.example.monopoly.gamelogic.CommunityChestCard;
 import com.example.monopoly.gamelogic.CommunityChestCardCollection;
 
@@ -102,30 +94,8 @@ public class CommunityChestCardTest {
 
     @Test
     public void testGettersSettersImage() {
-        Drawable image = new Drawable() {
-            @Override
-            public void draw(@NonNull Canvas canvas) {
-
-            }
-
-            @Override
-            public void setAlpha(int i) {
-                i = 1;
-            }
-
-            @Override
-            public void setColorFilter(@Nullable ColorFilter colorFilter) {
-
-            }
-
-            @Override
-            public int getOpacity() {
-                return 0;
-            }
-        };
-
-        CommunityChestCard card = new CommunityChestCard(1);
-        card.setImage(image);
-        Assertions.assertNotEquals(card.getImage(), null);
+        CommunityChestCard card = new CommunityChestCard(100);
+        card.setImageId(R.drawable.community0);
+        Assertions.assertNotEquals(0,card.getImageId());
     }
 }
