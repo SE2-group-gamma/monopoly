@@ -33,7 +33,7 @@ public class BankTest {
 
     @Test
     public void testTransferMoneyToPlayer(){
-        bank.transferMoneyBankToPlayer(player, bank, 200);
+        bank.transferMoneyBankToPlayer(player, 200);
         // player increased by $200
         assertEquals(1200, player.getCapital(), 0.0);
         //bank decreased by $200

@@ -3,7 +3,7 @@ package com.example.monopoly.gamelogic;
 public class Bank {
     //starting amount for Bank
      private double cash= 500000.00;
-    // search for money & player (here also objects) icons -> add in drawable UI but no object
+
      public Bank(){
          super();
      }
@@ -16,9 +16,9 @@ public class Bank {
         this.cash=cash;
     }
     //used to pay out player e.g moving over "START"
-    public void transferMoneyBankToPlayer(Player receiver, Bank bank, double amount){
-        double senderMoney = bank.getCash();
-        bank.setCash(senderMoney-amount);
+    public void transferMoneyBankToPlayer(Player receiver, double amount){
+        double senderMoney = this.getCash();
+        this.setCash(senderMoney-amount);
 
         double receiverMoney = receiver.getCapital();
         receiver.setCapital(receiverMoney+amount);

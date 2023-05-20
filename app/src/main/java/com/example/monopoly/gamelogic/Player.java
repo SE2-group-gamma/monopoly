@@ -89,4 +89,5 @@ public class Player {
         double receiverMoney = receiver.getCapital();
         receiver.setCapital(receiverMoney+amount);
     }
+
 }
