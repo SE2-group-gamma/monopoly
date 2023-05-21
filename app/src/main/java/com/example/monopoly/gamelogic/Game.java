@@ -38,24 +38,24 @@ public class Game{
      * true on success, false otherwise
      */
     public boolean addPlayer(Player player){
+        /*
         if(players.containsValue(player))
             return false;
         int id = count.getAndIncrement();           // ID wont get incremented... why?
         //Log.i("Dices","Set ID: "+id+"; Player: "+player.getUsername());
         players.put(id,player);
         player.setId(id);
+
+         */
         //this.ids++;
         // TODO Are there any better implementations?
         //Log.d("gameOut",player.getUsername());
         //possible better implemenation?
-        /*
-        removes check as player is being added immediately afterward
-        you can use the players size(represents number of player added) as ID directly?
+        //removes check as player is being added immediately afterward
+        //you can use the players size(represents number of player added) as ID directly?
         int id = players.size();
         players.put(id, player);
         player.setId(id);
-
-         */
         return true;
     }
 

@@ -1,11 +1,16 @@
 package com.example.monopoly.gamelogic;
 
 public class Bank {
+    /**
+     * SINGLETON OBJECT
+     */
     //starting amount for Bank
      private double cash= 500000.00;
-
-     public Bank(){
-         super();
+     private static final Bank INSTANCE = new Bank();
+     private Bank(){
+     }
+     public static Bank getInstance(){
+         return INSTANCE;
      }
 
      public double getCash(){
@@ -24,17 +29,17 @@ public class Bank {
         receiver.setCapital(receiverMoney+amount);
     }
     // used to send money to the bank from given player e.g penalty
-    public void transferMoneyPlayerToBank(Player sender, Bank bank, double amount){
+    public void transferMoneyPlayerToBank(Player sender, double amount){
         double senderMoney = sender.getCapital();
         sender.setCapital(senderMoney-amount);
 
-        double receiverMoney = bank.getCash();
-        bank.setCash(receiverMoney+amount);
+        double receiverMoney = this.getCash();
+        this.setCash(receiverMoney+amount);
     }
 
     //if Bank goes bankrupt
     public void savingBank(Bank bank){
-         double savings=50000.00;
+         double savings=500000.00;
          bank.setCash(savings);
     }
 }

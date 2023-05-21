@@ -19,8 +19,8 @@ public class Board {
         currentPlayer.setPosition(newPlayerPosition);
 
         if (newPlayerPosition < currentPlayerPosition) {
-            Bank bank = new Bank();
-            bank.transferMoneyBankToPlayer(currentPlayer, Board.GELD_LOS);
+            Bank.getInstance().transferMoneyBankToPlayer(currentPlayer,Board.GELD_LOS);
+
         }
     }
 }
