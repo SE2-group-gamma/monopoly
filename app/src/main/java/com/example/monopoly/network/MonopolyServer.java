@@ -1,10 +1,5 @@
 package com.example.monopoly.network;
 
-import android.util.Log;
-
-import com.example.monopoly.gamelogic.Game;
-import com.example.monopoly.utils.LobbyKey;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -133,8 +128,7 @@ public class MonopolyServer extends Thread{
             clientHandler.start();
             synchronized (this.clients){
                 this.clients.add(clientHandler);
-                Log.d("clientcheck1324", "add Client Handler"+ clientHandler.getClientClient().getUser()
-                        .getUsername());
+                //Log.d("clientcheck1324", "add Client Handler"+ clientHandler.getClientClient().getName());
                 keyedHandlers.put(counter++,clientHandler);
             }
 

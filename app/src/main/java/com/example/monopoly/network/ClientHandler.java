@@ -1,13 +1,6 @@
 package com.example.monopoly.network;
 
-import android.os.Bundle;
-import android.os.Message;
 import android.util.Log;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.monopoly.gamelogic.Game;
-import com.example.monopoly.ui.UIHandler;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,10 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class ClientHandler extends Thread{
 
@@ -118,6 +108,7 @@ public class ClientHandler extends Thread{
                     if(response!=null){
                         for (String str: response) {
                             //bw.write(str.replaceAll("REPLACER",hostname));
+                            System.out.println("WHHHHHHHHHYYYY"+hostname);
                             server.broadCast(str.replaceAll("REPLACER",hostname));
                             //server.broadCastExceptSelf(str.replaceAll("REPLACER",hostname),this);
                             //bw.flush();

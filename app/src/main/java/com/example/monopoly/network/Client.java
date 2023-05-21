@@ -5,14 +5,11 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.ui.UIHandler;
-
-import com.example.monopoly.gamelogic.ChanceCard;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -22,7 +19,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Client extends Thread {
     // besser wenn getrennt in host und client über abstrakte klasse
@@ -281,6 +277,7 @@ public class Client extends Thread {
             }
             if (responseSplit[1].equals("keyFromLobby") && responseSplit[2].equals("1")) {
                 try {
+
                     writeToServer("Lobby|JOINED|" + user.getUsername());
                 } catch (IOException e) {
                     throw new RuntimeException(e);

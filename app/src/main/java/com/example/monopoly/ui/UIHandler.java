@@ -9,18 +9,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.network.Client;
 
-import java.io.Serializable;
-
 public class UIHandler extends Handler {
     private Fragment frag;
     private int counter=1;
+
+    private String hostname = "";
 
     public UIHandler(Fragment app) {
         this.frag = app;
@@ -75,6 +74,7 @@ public class UIHandler extends Handler {
                 if(!HostGame.lobbyname.equals(" ")){
                     ((TextView) this.frag.getActivity().findViewById(R.id.textViewLobby)).setText("Lobby: "+HostGame.lobbyname);
                 }
+                System.out.println(data);
                 ((TextView) this.frag.getActivity().findViewById(R.id.textViewHost)).setText(data);
                 break;
             case "keyFromLobby":
