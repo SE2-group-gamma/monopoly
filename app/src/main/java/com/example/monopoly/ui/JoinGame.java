@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.nsd.NsdManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.net.nsd.NsdManager;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
@@ -32,8 +34,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.monopoly.databinding.ActivityMainBinding;
+import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.network.Client;
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,6 +48,8 @@ import java.io.IOException;
 public class JoinGame extends Fragment {
 
     private JoinGameBinding binding;
+    private Game game;
+    private ClientViewModel clientViewModel;
 
     @Override
     public View onCreateView(
@@ -93,6 +99,12 @@ public class JoinGame extends Fragment {
 
                 nsd.getClient().setUser(player);
                 nsd.getClient().setKey(Integer.parseInt(key));
+
+                player.setMyClient(nsd.getClient());
+
+                //Add client object to ClientViewModel
+                clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
+                clientViewModel.setClient(nsd.getClient());
 
             }
         });
