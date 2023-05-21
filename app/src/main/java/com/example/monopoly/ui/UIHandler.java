@@ -1,9 +1,14 @@
 package com.example.monopoly.ui;
 
+import android.app.Activity;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Handler;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,6 +85,38 @@ public class UIHandler extends Handler {
                 Log.d("------------","gameStart");
                 NavHostFragment.findNavController(frag)
                         .navigate(R.id.action_JoinGame_to_GameBoard);
+                break;
+            case "goField":
+                Log.d("------------","goField");
+                ImageView imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
+                LayerDrawable layerDrawable = (LayerDrawable) imageView.getDrawable();
+
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                ((Activity) this.frag.getContext()).getWindowManager()
+                        .getDefaultDisplay()
+                        .getMetrics(displayMetrics);
+                int height = displayMetrics.heightPixels;
+                int width = displayMetrics.widthPixels;
+
+                Log.d("-----------",""+height);
+                Log.d("-----------",""+width);
+
+                double heightRatio = (double) height / 1440;
+                double widthRatio = (double) width / 3120;
+
+                double goOneBigFieldHorizontal = (double)2800*widthRatio;
+                double goOneSmallFieldHorizontal = (double)1700*widthRatio;
+
+                double player2X = 0;
+                double player2Y = (double)1000*widthRatio;
+
+                layerDrawable.setLayerGravity(GameBoardUI.player2, Gravity.BOTTOM | Gravity.RIGHT);
+                layerDrawable.setLayerInset(GameBoardUI.player2, 0,0,(int)player2X,(int)player2Y);
+                player2X = player2X + goOneBigFieldHorizontal + (goOneSmallFieldHorizontal*5);
+                layerDrawable.setLayerInset(GameBoardUI.player2, 0,0,(int)player2X,(int)player2Y);
+
+                imageView.postInvalidate(); // oder postInvalidate
+
                 break;
             case "displayKey":
                 Log.d("tuaaaaaaa","displayKey");

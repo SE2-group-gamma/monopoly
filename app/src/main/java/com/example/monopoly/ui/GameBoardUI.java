@@ -34,12 +34,12 @@ public class GameBoardUI extends Fragment {
     private GameBoardBinding binding;
     private DiceViewModel diceViewModel;
 
-    int player1 = 1;
-    int player2 = 2;
-    int player3 = 3;
-    int player4 = 4;
-    int player5 = 5;
-    int player6 = 6;
+    public static final int player1 = 1;
+    public static final int player2 = 2;
+    public static final int player3 = 3;
+    public static final int player4 = 4;
+    public static final int player5 = 5;
+    public static final int player6 = 6;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,28 +75,50 @@ public class GameBoardUI extends Fragment {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager()
                 .getDefaultDisplay()
-                .getMetrics(displayMetrics);
-        int width = displayMetrics.heightPixels;
-        int height = displayMetrics.widthPixels;
+                .getRealMetrics(displayMetrics);
+        //int height = displayMetrics.heightPixels/displayMetrics.density;
+        //int width = displayMetrics.widthPixels/displayMetrics.density;
+        double height = displayMetrics.heightPixels;
+        double width = displayMetrics.widthPixels;
 
-        Log.d("-----------",""+width);
-        Log.d("-----------",""+height);
+        Log.d("-----x------",""+height);
+        Log.d("------x-----",""+width);
+
+        Log.d("-----------Density",""+displayMetrics.density);
+
+        // Tried relative calculation with dp
+        // double heightRatio = (double) height / 411.4285583496094;
+        // double widthRatio = (double) width / 891.4285888671875;
+
+
+        double heightRatio = (double) height / 1440;
+        double widthRatio = (double) width / 3120;
+
+        if(widthRatio < 0.98){
+            widthRatio = widthRatio + 0.05;
+        }
+        if(heightRatio < 0.98){
+            heightRatio = heightRatio + 0.05;
+        }
+
+        Log.d("-----x------",""+heightRatio);
+        Log.d("------x-----",""+widthRatio);
 
         // Set start position (standard for it is 1440p)
         double player1X = 0;
         double player2X = 0;
         double player3X = 0;
-        double player4X = (double)900/3120*height;
-        double player5X = (double)900/3120*height;
-        double player6X = (double)900/3120*height;
+        double player4X = (double)900*heightRatio;
+        double player5X = (double)900*heightRatio;
+        double player6X = (double)900*heightRatio;
         Log.d("6X davor",""+player6X);
 
         double player1Y = 0;
-        double player2Y = (double)1000/1440*width;
-        double player3Y = (double)1800/1440*width;
+        double player2Y = (double)1000*heightRatio;
+        double player3Y = (double)1800*heightRatio;
         double player4Y = 0;
-        double player5Y = (double)1000/1440*width;
-        double player6Y = (double)1800/1440*width;
+        double player5Y = (double)1000*heightRatio;
+        double player6Y = (double)1800*heightRatio;
         Log.d("6Y davor",""+player6X);
 
 
@@ -116,8 +138,8 @@ public class GameBoardUI extends Fragment {
         layerDrawable.setLayerInset(player6, 0,0,(int)player6X,(int)player6Y);
 
         // To go from a big field in the corners to the next field: +/- 2800 (horizontally)
-        double goOneBigFieldHorizontalDouble = (double)2800/3120;
-        int goOneBigFieldHorizontal = (int)(goOneBigFieldHorizontalDouble*height);
+        double goOneBigFieldHorizontal = (double)2800*heightRatio;
+
         Log.d("1X davor",""+player1X);
         Log.d("4X davor",""+player4X);
         player1X = player1X + goOneBigFieldHorizontal;
@@ -127,10 +149,12 @@ public class GameBoardUI extends Fragment {
 
         layerDrawable.setLayerInset(player1, 0,0,(int)player1X,(int)player1Y);
         layerDrawable.setLayerInset(player4, 0,0,(int)player4X,(int)player4Y);
-/*
+
+
+
         // To go from a smaller field to a smaller field: +/- 1700 (horizontally)
-        double goOneSmallFieldHorizontalDouble = (double)1700/3120;
-        int goOneSmallFieldHorizontal = (int)(goOneSmallFieldHorizontalDouble*height);
+        double goOneSmallFieldHorizontal = (double)1700*heightRatio;
+
         player2X = player2X + goOneBigFieldHorizontal + (goOneSmallFieldHorizontal*5);
         player5X = player5X + goOneBigFieldHorizontal + (goOneSmallFieldHorizontal*5);
 
@@ -138,17 +162,16 @@ public class GameBoardUI extends Fragment {
         layerDrawable.setLayerInset(player5, 0,0,(int)player5X,(int)player5Y);
 
         // if the player is on top of the gameboard(free parking)
-        layerDrawable.setLayerInset(player6, 0,0,(int)(player6X+20000),(int)(player6Y+20000));
+       // layerDrawable.setLayerInset(player6, 0,0,(int)(player6X+20000),(int)(player6Y+20000));
 
-*/
         // TODO vertical view
-
-
-
-
 
         // refresh ImageView to display changes
         imageView.invalidate();
+
+        for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
+            handler.writeToClient("GameBoardUI|goField| ");
+        }
 
 
 
