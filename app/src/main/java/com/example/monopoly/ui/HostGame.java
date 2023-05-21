@@ -178,7 +178,9 @@ public class HostGame extends Fragment {
                     }
                 }
                 nsd.getClient().setHost(true);
+                ms.getClientsTurn().add(nsd.getClient());
                 ms.setClient(nsd.getClient());
+
 
                 //Add client object to ClientViewModel
                 clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);

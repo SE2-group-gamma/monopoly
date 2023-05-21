@@ -18,6 +18,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ClientHandler extends Thread{
 
@@ -28,6 +29,8 @@ public class ClientHandler extends Thread{
 
     private String hostname;
     private Client client;
+
+
     private String clientName;
     public ArrayList<String> msgBuffer;
 
@@ -60,6 +63,7 @@ public class ClientHandler extends Thread{
         this.client=client;
         //this.clientName=client.getName();
         this.msgBuffer=new ArrayList<>();
+
     }
 
     public String getClientName() {
@@ -73,6 +77,8 @@ public class ClientHandler extends Thread{
     public Client getClientClient() {
         return client;
     }
+
+
 
     @Override
     public void run(){
@@ -142,6 +148,8 @@ public class ClientHandler extends Thread{
         }
 
     }
+
+
 
 
 }

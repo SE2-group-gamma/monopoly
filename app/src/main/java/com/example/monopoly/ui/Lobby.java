@@ -17,6 +17,7 @@ import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.network.MonopolyServer;
+import com.example.monopoly.network.TurnManager;
 
 public class Lobby extends Fragment {
 
@@ -25,6 +26,8 @@ public class Lobby extends Fragment {
     private int key;
     private String lobbyname;
     private Game game;
+    private TurnManager turnManager;
+
 
     @Override
     public View onCreateView(
@@ -66,6 +69,13 @@ public class Lobby extends Fragment {
             }*/
 
             HostGame.getMonopolyServer().broadCast("Lobby|gameStart| ");
+
+            //start Turn manager
+            if (this.turnManager == null) {
+                this.turnManager = new TurnManager(HostGame.getMonopolyServer().getClients());
+                this.turnManager.startTurn();
+            }
+
             //HostGame.getMonopolyServer().broadCast();
             //HostGame.getMonopolyServer().getClients().get(0).getClientClient().handleMessage("Lobby|gameStart| ".split("\\|"));
         });

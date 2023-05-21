@@ -20,10 +20,16 @@ public class MonopolyServer extends Thread{
     private int maxNumberOfClients;
     private boolean isListening;
 
+    private List<Client> clientsTurn;
+
     //private Game game;
     private String hostname;
     private Client client;
     private int counter=1;
+    private int clientc=0;
+
+
+
 
     private HashMap<Integer, ClientHandler> keyedHandlers;
 
@@ -34,6 +40,8 @@ public class MonopolyServer extends Thread{
         this.clients = new ArrayList<ClientHandler>();
         this.isListening = false;
         this.keyedHandlers=new HashMap<>();
+        this.clientsTurn=new ArrayList<Client>();
+
     }
 
     public void setHostname(String hostname){
@@ -44,14 +52,26 @@ public class MonopolyServer extends Thread{
         synchronized (this.clients){
             //Log.i("",client.isHost()+"");
             this.client=client;
+
             for (ClientHandler handler:this.clients) {
-                handler.setClient(client);
+                handler.setClient(this.clientsTurn.get(this.clientc));
+
             }
         }
     }
 
+
+
     public List<ClientHandler> getClients() {
         return clients;
+    }
+
+    public int getClientc() {
+        return clientc;
+    }
+
+    public void setClientc(int clientc) {
+        this.clientc = clientc;
     }
 
     // Constructor for testing
@@ -62,6 +82,8 @@ public class MonopolyServer extends Thread{
         this.clients = new ArrayList<ClientHandler>();
         this.isListening = false;
         this.keyedHandlers=new HashMap<>();
+        this.clientsTurn=new ArrayList<Client>();
+
 
     }
 
@@ -69,6 +91,7 @@ public class MonopolyServer extends Thread{
         synchronized (this.clients) {
             for (ClientHandler clientHandler : clients) {
                 clientHandler.writeToClient(msg);
+
             }
         }
     }
@@ -110,11 +133,15 @@ public class MonopolyServer extends Thread{
             clientHandler.start();
             synchronized (this.clients){
                 this.clients.add(clientHandler);
+                Log.d("clientcheck1324", "add Client Handler"+ clientHandler.getClientClient().getUser()
+                        .getUsername());
                 keyedHandlers.put(counter++,clientHandler);
             }
+
         }
         try {
             stopListening();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -137,4 +164,12 @@ public class MonopolyServer extends Thread{
         return localPort;
     }
 
+
+    public List<Client> getClientsTurn() {
+        return clientsTurn;
+    }
+
+    public void setClientsTurn(List<Client> clientsTurn) {
+        this.clientsTurn = clientsTurn;
+    }
 }

@@ -39,6 +39,10 @@ public class Client extends Thread {
     private boolean isHost;
     private int key;
 
+    private boolean canSendRequests;
+
+
+
     private Game game;
 
     public static HashMap<String, UIHandler> handlers;
@@ -138,6 +142,13 @@ public class Client extends Thread {
         return key;
     }
 
+    public boolean isCanSendRequests() {
+        return canSendRequests;
+    }
+
+    public void setCanSendRequests(boolean canSendRequests) {
+        this.canSendRequests = canSendRequests;
+    }
 
     public void run() {
         try {
@@ -238,9 +249,11 @@ public class Client extends Thread {
             game = Game.getInstance();
             //Host should only join once
             if(responseSplit[1].equals("hostJoined") && game.getPlayers().isEmpty()){       //Host should only join once
+
                 Player tempPlayer = new Player(responseSplit[2],new Color(),500.00,true);
                 Log.i("Dices","Host gonna join: ");
                 game.addPlayer(tempPlayer);
+
             }
             if(responseSplit[1].equals("JOINED")){
                 synchronized (monopolyServer.getClients()){
@@ -254,8 +267,10 @@ public class Client extends Thread {
                     Log.i("Dices","Client Gonna join: ");
                     //game = Game.getInstance();
                     game.addPlayer(tempPlayer);
+
                 }
             }
+
             if(responseSplit[1].equals("move")){
                 int tempID = game.getPlayerIDByName(responseSplit[3]);
                 game.incrementPlayerPosition(tempID, Integer.parseInt(responseSplit[2]));

@@ -56,11 +56,14 @@ public class GameBoardUI extends Fragment {
             //Log.i("Dices", "Name:"+client.getUser().getUsername()+"; ID Player:"+client.getUser().getId());
 
             //HostGame.getMonopolyServer().broadCast("GameBoardUI|move|"+dices.getSum()+"|"+this.client.getUser().getUsername());
-
+            if(this.client.isCanSendRequests()==true){
             try {
+                System.out.println("YOU DIDIDIDIDI SOMTHN");
                 this.client.writeToServer("GameBoardUI|move|"+dices.getSum()+"|"+this.client.getUser().getUsername());
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            }}else{
+                System.out.println("NOT YOUR TURN");
             }
 
             //this.client.writeToServer();
