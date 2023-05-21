@@ -142,6 +142,9 @@ public class ChanceCardCollection {
         }
         int random = r.nextInt(chanceCardDeck.size());
         random --;
+        if (random <= 0){
+            return 0;
+        }
         return random;
     }
 

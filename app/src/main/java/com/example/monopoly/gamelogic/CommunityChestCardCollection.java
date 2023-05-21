@@ -129,6 +129,9 @@ public class CommunityChestCardCollection {
         }
         int random = r.nextInt(communityChestCardDeck.size());
         random--;
+        if (random <= 0){
+            return 0;
+        }
         return random;
     }
 

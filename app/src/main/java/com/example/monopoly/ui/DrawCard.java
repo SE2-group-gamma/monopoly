@@ -45,16 +45,31 @@ public class DrawCard extends Fragment {
     }
 
     private void returnChanceCard(){
+        //public void returnChanceCard(ChanceCard card){
+        //int id = card.getId();
+        //binding.ImageCard.setImageResource(chanceCards.getChanceCardDeck().get(id).getImageId());
+
+        // * * * TEST * * *
         int index = chanceCards.drawFromDeck().getId();
         binding.ImageCard.setImageResource(chanceCards.getChanceCardDeck().get(index).getImageId());
+
+
     }
 
     private void returnCommunityChestCard(){
+        //public void returnCommunityChestCard(ChanceCard card){
+        //int id = card.getId();
+        //binding.ImageCard.setImageResource(communityCards.getCommunityChestCardDeck().get(id).getImageId());
+
+        // * * * TEST * * *
         int index = communityCards.drawFromDeck().getId();
         binding.ImageCard.setImageResource(communityCards.getCommunityChestCardDeck().get(index).getImageId());
     }
 
     // * * * TEST * * *
+    // later, the decks must be initialized in either MainActivity or GameBoardUI,
+    // otherwise they will be initialized everytime the fragment is called -> cards will
+    // be displayed multiple times
     private void createDecks(){
         this.chanceCards = new ChanceCardCollection();
         this.communityCards = new CommunityChestCardCollection();
