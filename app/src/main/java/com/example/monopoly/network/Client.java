@@ -256,9 +256,13 @@ public class Client extends Thread {
                     game.addPlayer(tempPlayer);
                 }
             }
+            // TODO end turn button to end turn
             if(responseSplit[1].equals("move")){
                 int tempID = game.getPlayerIDByName(responseSplit[3]);
                 game.incrementPlayerPosition(tempID, Integer.parseInt(responseSplit[2]));
+            }
+            if(responseSplit[1].equals("endTurn")){
+                // TODO next player turn
             }
         } else {
             for (String str: responseSplit) {
