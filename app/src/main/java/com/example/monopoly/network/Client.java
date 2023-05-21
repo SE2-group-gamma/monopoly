@@ -266,7 +266,7 @@ public class Client extends Thread {
             }
         } else {
             for (String str: responseSplit) {
-                Log.d("poggies123 ",str);
+                //Log.d("poggies123 ",str);
             }
             if (responseSplit[1].equals("keyFromLobby") && responseSplit[2].equals("1")) {
                 try {

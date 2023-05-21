@@ -91,7 +91,7 @@ public class MonopolyServer extends Thread{
 
         //game = new Game();
         //Log.d("",""+this.maxNumberOfClients);
-        while(isListening() && this.clients.size() <= maxNumberOfClients){
+        while(isListening() && this.clients.size() < maxNumberOfClients){
             ClientHandler clientHandler = null;
             try {
                 // serverSocket.accept() waits for Clients to connect

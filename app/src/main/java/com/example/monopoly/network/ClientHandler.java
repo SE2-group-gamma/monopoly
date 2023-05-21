@@ -129,7 +129,7 @@ public class ClientHandler extends Thread{
             if (msgBuffer.size() != 0) {
                 for (int i = msgBuffer.size() - 1; i >= 0; i--) {
                     //Log.d("msgBuffer", msgBuffer.get(i));
-                    Log.d("testOut",""+msgBuffer.get(i)+":"+hostname);
+                    //Log.d("testOut",""+msgBuffer.get(i)+":"+hostname);
                     try {
                         bw.write(msgBuffer.get(i)/*+"|"+hostname */+ System.lineSeparator());
                         bw.flush();
