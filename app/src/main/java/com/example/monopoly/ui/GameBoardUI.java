@@ -1,9 +1,11 @@
 package com.example.monopoly.ui;
 
+import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -70,20 +72,34 @@ public class GameBoardUI extends Fragment {
 
         LayerDrawable layerDrawable = (LayerDrawable) imageView.getDrawable();
 
-        // Set start position
-        int player1X = 0;
-        int player2X = 0;
-        int player3X = 0;
-        int player4X = 900;
-        int player5X = 900;
-        int player6X = 900;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager()
+                .getDefaultDisplay()
+                .getMetrics(displayMetrics);
+        int width = displayMetrics.heightPixels;
+        int height = displayMetrics.widthPixels;
 
-        int player1Y = 0;
-        int player2Y = 1000;
-        int player3Y = 1800;
-        int player4Y = 0;
-        int player5Y = 1000;
-        int player6Y = 1800;
+        Log.d("-----------",""+width);
+        Log.d("-----------",""+height);
+
+        // Set start position (standard for it is 1440p)
+        double player1X = 0;
+        double player2X = 0;
+        double player3X = 0;
+        double player4X = (double)900/3120*height;
+        double player5X = (double)900/3120*height;
+        double player6X = (double)900/3120*height;
+        Log.d("6X davor",""+player6X);
+
+        double player1Y = 0;
+        double player2Y = (double)1000/1440*width;
+        double player3Y = (double)1800/1440*width;
+        double player4Y = 0;
+        double player5Y = (double)1000/1440*width;
+        double player6Y = (double)1800/1440*width;
+        Log.d("6Y davor",""+player6X);
+
+
         layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.RIGHT);
         layerDrawable.setLayerGravity(player2, Gravity.BOTTOM | Gravity.RIGHT);
         layerDrawable.setLayerGravity(player3, Gravity.BOTTOM | Gravity.RIGHT);
@@ -91,32 +107,42 @@ public class GameBoardUI extends Fragment {
         layerDrawable.setLayerGravity(player5, Gravity.BOTTOM | Gravity.RIGHT);
         layerDrawable.setLayerGravity(player6, Gravity.BOTTOM | Gravity.RIGHT);
 
-        layerDrawable.setLayerInset(player1, 0,0,player1X,player1Y);
-        layerDrawable.setLayerInset(player2, 0,0,player2X,player2Y);
-        layerDrawable.setLayerInset(player3, 0,0,player3X,player3Y);
-        layerDrawable.setLayerInset(player4, 0,0,player4X,player4Y);
-        layerDrawable.setLayerInset(player5, 0,0,player5X,player5Y);
-        layerDrawable.setLayerInset(player6, 0,0,player6X,player6Y);
+
+        layerDrawable.setLayerInset(player1, 0,0,(int)player1X,(int)player1Y);
+        layerDrawable.setLayerInset(player2, 0,0,(int)player2X,(int)player2Y);
+        layerDrawable.setLayerInset(player3, 0,0,(int)player3X,(int)player3Y);
+        layerDrawable.setLayerInset(player4, 0,0,(int)player4X,(int)player4Y);
+        layerDrawable.setLayerInset(player5, 0,0,(int)player5X,(int)player5Y);
+        layerDrawable.setLayerInset(player6, 0,0,(int)player6X,(int)player6Y);
 
         // To go from a big field in the corners to the next field: +/- 2800 (horizontally)
+        double goOneBigFieldHorizontalDouble = (double)2800/3120;
+        int goOneBigFieldHorizontal = (int)(goOneBigFieldHorizontalDouble*height);
+        Log.d("1X davor",""+player1X);
+        Log.d("4X davor",""+player4X);
+        player1X = player1X + goOneBigFieldHorizontal;
+        player4X = player4X + goOneBigFieldHorizontal;
+        Log.d("1X ",""+player1X);
+        Log.d("4X ",""+player4X);
 
-        layerDrawable.setLayerInset(player1, 0,0,player1X+2800,player1Y);
-        layerDrawable.setLayerInset(player4, 0,0,player4X+2800,player4Y);
-
+        layerDrawable.setLayerInset(player1, 0,0,(int)player1X,(int)player1Y);
+        layerDrawable.setLayerInset(player4, 0,0,(int)player4X,(int)player4Y);
+/*
         // To go from a smaller field to a smaller field: +/- 1700 (horizontally)
+        double goOneSmallFieldHorizontalDouble = (double)1700/3120;
+        int goOneSmallFieldHorizontal = (int)(goOneSmallFieldHorizontalDouble*height);
+        player2X = player2X + goOneBigFieldHorizontal + (goOneSmallFieldHorizontal*5);
+        player5X = player5X + goOneBigFieldHorizontal + (goOneSmallFieldHorizontal*5);
 
-        layerDrawable.setLayerInset(player2, 0,0,player2X+2800+(1700*9),player2Y);
-        layerDrawable.setLayerInset(player5, 0,0,player5X+4600,player5Y);
+        layerDrawable.setLayerInset(player2, 0,0,(int)player2X,(int)player2Y);
+        layerDrawable.setLayerInset(player5, 0,0,(int)player5X,(int)player5Y);
 
-        // if the player is on top of the gameboard(free parking): rearrange LayerGravity and the rest can stay the same
-        layerDrawable.setLayerGravity(player6, Gravity.TOP | Gravity.LEFT);
-        layerDrawable.setLayerInset(player6, player6X,player6Y,0,0);
+        // if the player is on top of the gameboard(free parking)
+        layerDrawable.setLayerInset(player6, 0,0,(int)(player6X+20000),(int)(player6Y+20000));
 
-
+*/
         // TODO vertical view
-        // after the 11th field the players will need to be arranged vertically, because of the gameboard
-        layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.LEFT);
-        layerDrawable.setLayerInset(player1, player1X,0,0,player1Y+2800);
+
 
 
 
@@ -161,4 +187,6 @@ public class GameBoardUI extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+
 }
