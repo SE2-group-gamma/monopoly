@@ -36,7 +36,7 @@ public class Game{
     public boolean addPlayer(Player player){
         if(players.containsValue(player))
             return false;
-        int id = count.getAndIncrement();           // ID wont get incremented... why?
+        int id = count.getAndIncrement();           
         //Log.i("Dices","Set ID: "+id+"; Player: "+player.getUsername());
         players.put(id,player);
         player.setId(id);

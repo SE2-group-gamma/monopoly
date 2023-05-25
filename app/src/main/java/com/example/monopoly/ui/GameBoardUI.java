@@ -35,10 +35,13 @@ public class GameBoardUI extends Fragment {
     private ClientViewModel clientViewModel;
     private String clientName;
     private Client client;
+    private boolean didCheat;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
         //Bundle implementation
         /*if (getArguments() != null) {
@@ -51,14 +54,14 @@ public class GameBoardUI extends Fragment {
         diceViewModel.getDicesData().observe(this, dices -> {
             Log.i("Dices", dices.toString());
 
-            this.client = clientViewModel.getClientData().getValue();
-
             //Log.i("Dices", "Name:"+client.getUser().getUsername()+"; ID Player:"+client.getUser().getId());
 
             //HostGame.getMonopolyServer().broadCast("GameBoardUI|move|"+dices.getSum()+"|"+this.client.getUser().getUsername());
 
+            String cheated = dices.isLastRollFlawed()==true?"t":"f";
+
             try {
-                this.client.writeToServer("GameBoardUI|move|"+dices.getSum()+"|"+this.client.getUser().getUsername());
+                this.client.writeToServer("GameBoardUI|move|"+dices.getSum()+":"+cheated+"|"+this.client.getUser().getUsername());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -110,6 +113,8 @@ public class GameBoardUI extends Fragment {
 
         //Client.subscribe(this,"GameBoardUI");
 
+        this.client = clientViewModel.getClientData().getValue();       // set client
+
         super.onViewCreated(view, savedInstanceState);
         //Log.d("Test",binding.button.getText().toString());
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -122,6 +127,14 @@ public class GameBoardUI extends Fragment {
 
         binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
                 .navigate(R.id.action_GameBoard_to_FirstFragment));
+
+        binding.uncover.setOnClickListener(view1 -> {
+            try {
+                this.client.writeToServer("GameBoardUI|uncover||"+this.client.getUser().getUsername());     // not data to transfer
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         binding.throwdice.setOnClickListener(view1 -> {
             showDiceFragment();

@@ -97,6 +97,8 @@ public class JoinGame extends Fragment {
                     }
                 }
 
+
+
                 nsd.getClient().setUser(player);
                 nsd.getClient().setKey(Integer.parseInt(key));
 
