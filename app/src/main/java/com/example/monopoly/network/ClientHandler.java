@@ -108,7 +108,7 @@ public class ClientHandler extends Thread{
                     if(response!=null){
                         for (String str: response) {
                             //bw.write(str.replaceAll("REPLACER",hostname));
-                            System.out.println("WHHHHHHHHHYYYY"+hostname);
+                            //System.out.println("WHHHHHHHHHYYYY"+hostname);
                             server.broadCast(str.replaceAll("REPLACER",hostname));
                             //server.broadCastExceptSelf(str.replaceAll("REPLACER",hostname),this);
                             //bw.flush();

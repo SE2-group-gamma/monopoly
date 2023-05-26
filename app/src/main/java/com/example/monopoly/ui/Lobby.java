@@ -1,7 +1,6 @@
 package com.example.monopoly.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import com.example.monopoly.R;
 import com.example.monopoly.databinding.LobbyBinding;
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.network.Client;
-import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.network.MonopolyServer;
 import com.example.monopoly.network.TurnManager;
 
@@ -71,10 +69,10 @@ public class Lobby extends Fragment {
             HostGame.getMonopolyServer().broadCast("Lobby|gameStart| ");
 
             //start Turn manager
-            if (this.turnManager == null) {
+           /* if (this.turnManager == null) {
                 this.turnManager = new TurnManager(HostGame.getMonopolyServer().getClients());
                 this.turnManager.startTurn();
-            }
+            }*/
 
             //HostGame.getMonopolyServer().broadCast();
             //HostGame.getMonopolyServer().getClients().get(0).getClientClient().handleMessage("Lobby|gameStart| ".split("\\|"));

@@ -1,30 +1,23 @@
 package com.example.monopoly.ui;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.GameBoardBinding;
-import com.example.monopoly.gamelogic.Dices;
-import com.example.monopoly.network.MonopolyServer;
+import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
-import com.example.monopoly.network.Client;
-import com.example.monopoly.network.ClientHandler;
 
 import java.io.IOException;
 
@@ -56,14 +49,12 @@ public class GameBoardUI extends Fragment {
             //Log.i("Dices", "Name:"+client.getUser().getUsername()+"; ID Player:"+client.getUser().getId());
 
             //HostGame.getMonopolyServer().broadCast("GameBoardUI|move|"+dices.getSum()+"|"+this.client.getUser().getUsername());
-            if(this.client.isCanSendRequests()==true){
+
             try {
                 System.out.println("YOU DIDIDIDIDI SOMTHN");
                 this.client.writeToServer("GameBoardUI|move|"+dices.getSum()+"|"+this.client.getUser().getUsername());
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }}else{
-                System.out.println("NOT YOUR TURN");
             }
 
             //this.client.writeToServer();

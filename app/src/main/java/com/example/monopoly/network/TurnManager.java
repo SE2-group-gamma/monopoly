@@ -23,7 +23,7 @@ public class TurnManager {
            System.out.println(h.getClientClient().getUser().getUsername()+"WHHHHHHHHHHHHHHHHHHHHYYY");
 
         }
-            clients.get(currentTurnIndex).getClientClient().setCanSendRequests(true);
+           // clients.get(currentTurnIndex).getClientClient().setCanSendRequests(true);
        // }
 
 
@@ -41,7 +41,7 @@ public class TurnManager {
 
     public void endTurn() {
         // Set the flag on the current client to prevent them from sending requests.
-        clients.get(currentTurnIndex).getClientClient().setCanSendRequests(false);
+        //clients.get(currentTurnIndex).getClientClient().setCanSendRequests(false);
 
         // Move to the next client in the list (wrapping around if necessary).
         currentTurnIndex = (currentTurnIndex + 1) % clients.size();

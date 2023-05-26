@@ -35,7 +35,7 @@ public class Client extends Thread {
     private boolean isHost;
     private int key;
 
-    private boolean canSendRequests;
+    //private boolean canSendRequests;
 
 
 
@@ -138,13 +138,7 @@ public class Client extends Thread {
         return key;
     }
 
-    public boolean isCanSendRequests() {
-        return canSendRequests;
-    }
 
-    public void setCanSendRequests(boolean canSendRequests) {
-        this.canSendRequests = canSendRequests;
-    }
 
     public void run() {
         try {
@@ -184,7 +178,7 @@ public class Client extends Thread {
                 synchronized (msgBuffer) {
                     if (msgBuffer.size() != 0) {
                         for (int i = msgBuffer.size() - 1; i >= 0; i--) {
-                            Log.d("msgBuffer", msgBuffer.get(i));
+                            //Log.d("msgBuffer", msgBuffer.get(i));
                             outToServer.writeBytes(msgBuffer.get(i) + System.lineSeparator());
                             outToServer.flush();
                             msgBuffer.remove(i);
@@ -224,7 +218,7 @@ public class Client extends Thread {
             // TODO: call game logic
             // e.g. responseSplit[1] to throw dice
             if (responseSplit[0].equals("CLIENTMESSAGE") && responseSplit[1].equals("key")) {
-                Log.d("",monopolyServer.getClients().size()+"");
+                //Log.d("",monopolyServer.getClients().size()+"");
                 int keyReceived = Integer.parseInt(responseSplit[2]);
                 if (key == keyReceived) {
 
@@ -247,7 +241,7 @@ public class Client extends Thread {
             if(responseSplit[1].equals("hostJoined") && game.getPlayers().isEmpty()){       //Host should only join once
 
                 Player tempPlayer = new Player(responseSplit[2],new Color(),500.00,true);
-                Log.i("Dices","Host gonna join: ");
+                //Log.i("Dices","Host gonna join: ");
                 game.addPlayer(tempPlayer);
 
             }
@@ -259,8 +253,9 @@ public class Client extends Thread {
 
                     }*/
                     monopolyServer.broadCast("Lobby|userJoined|"+responseSplit[2]);
+                    monopolyServer.broadCast("Lobby|hostJoined|"+monopolyServer.getClientsTurn().get(0).getUser().getUsername());
                     Player tempPlayer = new Player(responseSplit[2],new Color(),500.00,true);
-                    Log.i("Dices","Client Gonna join: ");
+                    //Log.i("Dices","Client Gonna join: ");
                     //game = Game.getInstance();
                     game.addPlayer(tempPlayer);
 
@@ -273,7 +268,7 @@ public class Client extends Thread {
             }
         } else {
             for (String str: responseSplit) {
-                Log.d("poggies123 ",str);
+                //Log.d("poggies123 ",str);
             }
             if (responseSplit[1].equals("keyFromLobby") && responseSplit[2].equals("1")) {
                 try {
