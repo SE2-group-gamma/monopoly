@@ -45,7 +45,6 @@ public class Game{
         //Log.i("Dices","Set ID: "+id+"; Player: "+player.getUsername());
         players.put(id,player);
         player.setId(id);
-
          */
         //this.ids++;
         // TODO Are there any better implementations?
@@ -93,7 +92,7 @@ public class Game{
         // Set the currentPlayerIndex to the found index
         this.currentPlayerIndex = currentPlayerIndex;
     }
-
+    /*
     public void performPlayerTurn() {
         try{
             // Roll the dice
@@ -117,12 +116,12 @@ public class Game{
 
     }
 
-    /*
+
     public void updateGameState(){
         //add win/los conditions
     }
 
-     */
+
 
     public void proceedToNextPlayer(){
         Player currentPlayer = getCurrentPlayer();
@@ -148,7 +147,7 @@ public class Game{
         // Start the next player's turn
         performPlayerTurn();
 
-    }
+    }*/
 
     /*@Override
     public void run() {

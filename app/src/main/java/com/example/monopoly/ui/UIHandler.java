@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
+import com.example.monopoly.gamelogic.Game;
+import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.network.Client;
 
 import java.io.Serializable;
@@ -21,6 +23,9 @@ import java.io.Serializable;
 public class UIHandler extends Handler {
     private Fragment frag;
     private int counter=1;
+    private int currentPlayerindex=1;
+    private Game game = Game.getInstance();
+    private Player currentPlayer;
 
     public UIHandler(Fragment app) {
         this.frag = app;
@@ -68,8 +73,17 @@ public class UIHandler extends Handler {
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5Name)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setText(data);
                         break;
+
                 }
+                currentPlayerindex++;
+                if (counter != currentPlayerindex) {
+                    disableTextFieldsForPlayer(counter);
+                } else{
+                    currentPlayer = game.getPlayers().get(currentPlayerindex);
+                }
+
                 counter++;
+
                 break;
             case "hostJoined":
                 if(!HostGame.lobbyname.equals(" ")){
@@ -103,10 +117,65 @@ public class UIHandler extends Handler {
                 break;
             case "move":
                 Log.d("move",data); //Data for move distance and player name
+                data="turnEnded";
+                msg.getData().putString("Data",data);
+                currentPlayer = game.getCurrentPlayer();
+                if ( data=="turnEnded" && currentPlayer!=null) {
+                    Log.i("move","inside if");
+                    int nextPlayerIndex = currentPlayerindex + 1;
+                    if (nextPlayerIndex >= game.getPlayers().size()) {
+                        nextPlayerIndex = 0; // Wrap around to the first player if reached the end
+                    }
+
+                    currentPlayer = game.getPlayers().get(nextPlayerIndex);
+                    Log.i("move",currentPlayer.toString());
+                    currentPlayerindex = nextPlayerIndex;
+                    // Enable text fields for the next player
+                    disableTextFieldsForPlayer(currentPlayerindex);
+                }
                 break;
         }
 
 
         //Toast.makeText(this.frag.getActivity(), msg1, Toast.LENGTH_LONG).show();
+    }
+
+    private void disableTextFieldsForPlayer(int playerNumber) {
+        AppCompatActivity activity = (AppCompatActivity) frag.getActivity();
+        TextView textViewName = null;
+        TextView textViewUser = null;
+
+        switch (playerNumber) {
+            case 1:
+                textViewName = activity.findViewById(R.id.textViewUser1Name);
+                textViewUser = activity.findViewById(R.id.textViewUser1);
+                break;
+            case 2:
+                textViewName = activity.findViewById(R.id.textViewUser2Name);
+                textViewUser = activity.findViewById(R.id.textViewUser2);
+                break;
+            case 3:
+                textViewName = activity.findViewById(R.id.textViewUser3Name);
+                textViewUser = activity.findViewById(R.id.textViewUser3);
+                break;
+            case 4:
+                textViewName = activity.findViewById(R.id.textViewUser4Name);
+                textViewUser = activity.findViewById(R.id.textViewUser4);
+                break;
+            case 5:
+                textViewName = activity.findViewById(R.id.textViewUser5Name);
+                textViewUser = activity.findViewById(R.id.textViewUser5);
+                break;
+        }
+
+        if (textViewName != null && textViewUser != null) {
+            if (playerNumber == currentPlayerindex) {
+                textViewName.setEnabled(true);
+                textViewUser.setEnabled(true);
+            } else {
+                textViewName.setEnabled(false);
+                textViewUser.setEnabled(false);
+            }
+        }
     }
 }

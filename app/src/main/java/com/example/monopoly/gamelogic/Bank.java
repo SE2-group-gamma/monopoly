@@ -36,6 +36,7 @@ public class Bank {
         double receiverMoney = this.getCash();
         this.setCash(receiverMoney+amount);
     }
+    
 
     //if Bank goes bankrupt
     public void savingBank(Bank bank){
