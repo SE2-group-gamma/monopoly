@@ -318,6 +318,7 @@ public class Client extends Thread {
     public void turnPocess(){
         turnEnd = false;
         game.setCurrentPlayersTurn(game.getPlayers().get(serverTurnCounter).getUsername());
+        monopolyServer.broadCast("GameBoardUI|playersTurn|"+game.getPlayers().get(serverTurnCounter).getUsername());
         Log.d("gameTurnCheck", "Yo hey"+game.getCurrentPlayersTurn());
         serverTurnCounter++;
         new java.util.Timer().schedule(

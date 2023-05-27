@@ -104,6 +104,11 @@ public class UIHandler extends Handler {
             case "move":
                 Log.d("move",data); //Data for move distance and player name
                 break;
+
+
+            case "playersTurn":
+                ((TextView) this.frag.getActivity().findViewById(R.id.turn)).setText(data);
+                break;
         }
 
 
