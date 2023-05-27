@@ -196,7 +196,6 @@ public class Client extends Thread {
             // TODO: call game logic
             // e.g. responseSplit[1] to throw dice
             if (responseSplit[0].equals("CLIENTMESSAGE") && responseSplit[1].equals("key")) {
-                Log.d("",monopolyServer.getClients().size()+"");
                 int keyReceived = Integer.parseInt(responseSplit[2]);
                 if (key == keyReceived) {
 
@@ -213,11 +212,8 @@ public class Client extends Thread {
             }
             if(responseSplit[1].equals("JOINED")){
                 synchronized (monopolyServer.getClients()){
-                    Log.d("Client Count", String.valueOf(monopolyServer.getClients().size()));
 
                     for (ClientHandler handler: monopolyServer.getClients()) {
-
-                        System.out.println(handler.getClientClient().getUser());
 
                         handler.writeToClient("Lobby|userJoined|"+responseSplit[2]);
 

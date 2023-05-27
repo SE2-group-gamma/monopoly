@@ -100,12 +100,7 @@ public class HostGame extends Fragment {
         binding.createButton.setOnClickListener(view12 -> {
             String user = binding.userInput.getText().toString();
             String lobby = binding.lobbyInput.getText().toString();
-            int playerCount;
-            if(binding.seekBar.getProgress()==0) {
-                playerCount = 2;
-            }else{
-                playerCount = binding.seekBar.getProgress()+2;
-            }
+            int playerCount = binding.seekBar.getProgress()+2;
             int maxTimeMin = binding.seekBar2.getProgress();
             if(user.isEmpty() && lobby.isEmpty()){
                 binding.userInput.setError("No Input");
