@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
+import com.example.monopoly.ui.HostGame;
 import com.example.monopoly.ui.UIHandler;
 
 import java.io.BufferedReader;
@@ -34,6 +35,10 @@ public class Client extends Thread {
     private MonopolyServer monopolyServer;
     private boolean isHost;
     private int key;
+
+    private int serverTurnCounter = 0;
+
+    private boolean turnEnd =false;
 
     //private boolean canSendRequests;
 
@@ -185,6 +190,10 @@ public class Client extends Thread {
                         }
                     }
                 }
+
+                if(turnEnd==true){
+                    turnPocess();
+                }
             }
             //clientSocket.close();
 
@@ -262,9 +271,24 @@ public class Client extends Thread {
                 }
             }
 
+
+
+
+            //if(game.getCurrentPlayersTurn()== user.getUsername()){
             if(responseSplit[1].equals("move")){
                 int tempID = game.getPlayerIDByName(responseSplit[3]);
-                game.incrementPlayerPosition(tempID, Integer.parseInt(responseSplit[2]));
+                if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
+                    game.incrementPlayerPosition(tempID, Integer.parseInt(responseSplit[2]));
+                    Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
+                    Log.d("gameturnCurr", "currUser" + responseSplit[3]);
+                }
+            }//}
+
+            if(responseSplit[1].equals("gameStart")){
+                Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(0).getUsername());
+                Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(1).getUsername());
+                turnPocess();
+
             }
         } else {
             for (String str: responseSplit) {
@@ -288,5 +312,26 @@ public class Client extends Thread {
             }
         }
         return null;
+    }
+
+
+    public void turnPocess(){
+        turnEnd = false;
+        game.setCurrentPlayersTurn(game.getPlayers().get(serverTurnCounter).getUsername());
+        Log.d("gameTurnCheck", "Yo hey"+game.getCurrentPlayersTurn());
+        serverTurnCounter++;
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+
+                        turnEnd = true;
+                    }
+                },
+                60000
+        );
+        if(serverTurnCounter== HostGame.getMonopolyServer().getNumberOfClients()){
+            serverTurnCounter=0;
+        }
     }
 }

@@ -14,6 +14,8 @@ public class Player {
     private int id;
     private int position;
 
+
+
     public Player(String username, Color col, double capital, boolean alive) {
         this.username = username;
         this.col = col;
@@ -57,6 +59,7 @@ public class Player {
     public void setPosition(int position) {
         this.position = position;
     }
+
 
     public void setInPrison(boolean inPrison) {
         this.inPrison = inPrison;

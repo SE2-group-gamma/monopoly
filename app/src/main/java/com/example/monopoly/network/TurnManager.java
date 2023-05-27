@@ -17,12 +17,8 @@ public class TurnManager {
 
     public void startTurn() {
         // Set the flag on the current client to allow them to send requests.
-       // if (clients.get(currentTurnIndex).getClientClient() != null) {
+        //if (clients.get(currentTurnIndex).getClientClient() != null) {
 
-        for(ClientHandler h : this.clients){
-           System.out.println(h.getClientClient().getUser().getUsername()+"WHHHHHHHHHHHHHHHHHHHHYYY");
-
-        }
            // clients.get(currentTurnIndex).getClientClient().setCanSendRequests(true);
        // }
 
