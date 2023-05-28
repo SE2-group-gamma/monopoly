@@ -1,5 +1,7 @@
 package com.example.monopoly.gamelogic;
 
+import com.example.monopoly.R;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -112,7 +114,31 @@ public class CommunityChestCardCollection {
         addToAllCommunityChestCards(card19);
 
         addCardsToDeck();
+        setDrawables();
     }
+
+    public void setDrawables(){
+    getCommunityChestCardDeck().get(0).setImageId(R.drawable.community0);
+    getCommunityChestCardDeck().get(1).setImageId(R.drawable.community1);
+    getCommunityChestCardDeck().get(2).setImageId(R.drawable.community2);
+    getCommunityChestCardDeck().get(3).setImageId(R.drawable.community3);
+    getCommunityChestCardDeck().get(4).setImageId(R.drawable.community4);
+    getCommunityChestCardDeck().get(5).setImageId(R.drawable.community5);
+    getCommunityChestCardDeck().get(6).setImageId(R.drawable.community6);
+    getCommunityChestCardDeck().get(7).setImageId(R.drawable.community7);
+    getCommunityChestCardDeck().get(8).setImageId(R.drawable.community8);
+    getCommunityChestCardDeck().get(9).setImageId(R.drawable.community9);
+    getCommunityChestCardDeck().get(10).setImageId(R.drawable.community10);
+    getCommunityChestCardDeck().get(11).setImageId(R.drawable.community11);
+    getCommunityChestCardDeck().get(12).setImageId(R.drawable.community12);
+    getCommunityChestCardDeck().get(13).setImageId(R.drawable.community13);
+    getCommunityChestCardDeck().get(14).setImageId(R.drawable.community14);
+    getCommunityChestCardDeck().get(15).setImageId(R.drawable.community15);
+    getCommunityChestCardDeck().get(16).setImageId(R.drawable.community16);
+    getCommunityChestCardDeck().get(17).setImageId(R.drawable.community17);
+    getCommunityChestCardDeck().get(18).setImageId(R.drawable.community18);
+    getCommunityChestCardDeck().get(19).setImageId(R.drawable.community19);
+}
 
     public void addToAllCommunityChestCards(CommunityChestCard card) {
         allCommunityChestCards.add(card);

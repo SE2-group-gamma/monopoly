@@ -1,5 +1,7 @@
 package com.example.monopoly.gamelogic;
 
+import com.example.monopoly.R;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -116,6 +118,30 @@ public class ChanceCardCollection {
         addToAllChanceCards(card19);
 
         addCardsToDeck();
+        setDrawables();
+    }
+
+    private void setDrawables() {
+       getChanceCardDeck().get(0).setImageId(R.drawable.chance0);
+       getChanceCardDeck().get(1).setImageId(R.drawable.chance1);
+       getChanceCardDeck().get(2).setImageId(R.drawable.chance2);
+       getChanceCardDeck().get(3).setImageId(R.drawable.chance3);
+       getChanceCardDeck().get(4).setImageId(R.drawable.chance4);
+       getChanceCardDeck().get(5).setImageId(R.drawable.chance5);
+       getChanceCardDeck().get(6).setImageId(R.drawable.chance6);
+       getChanceCardDeck().get(7).setImageId(R.drawable.chance7);
+       getChanceCardDeck().get(8).setImageId(R.drawable.chance8);
+       getChanceCardDeck().get(9).setImageId(R.drawable.chance9);
+       getChanceCardDeck().get(10).setImageId(R.drawable.chance10);
+       getChanceCardDeck().get(11).setImageId(R.drawable.chance11);
+       getChanceCardDeck().get(12).setImageId(R.drawable.chance12);
+       getChanceCardDeck().get(13).setImageId(R.drawable.chance13);
+       getChanceCardDeck().get(14).setImageId(R.drawable.chance14);
+       getChanceCardDeck().get(15).setImageId(R.drawable.chance15);
+       getChanceCardDeck().get(16).setImageId(R.drawable.chance16);
+       getChanceCardDeck().get(17).setImageId(R.drawable.chance17);
+       getChanceCardDeck().get(18).setImageId(R.drawable.chance18);
+       getChanceCardDeck().get(19).setImageId(R.drawable.chance19);
     }
 
     public void addCardsToDeck() {
