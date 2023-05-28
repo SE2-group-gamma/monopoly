@@ -15,9 +15,6 @@ public class RentConfiguration {
         this.priceHouseOrHotel = priceHouseOrHotel;
     }
 
-    public int getRent() {
-        return rent;
-    }
 
     public int getRentAllColors() {
         return rentAllColors;

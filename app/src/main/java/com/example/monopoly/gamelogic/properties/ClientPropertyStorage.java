@@ -1,9 +1,11 @@
 package com.example.monopoly.gamelogic.properties;
 
+import com.example.monopoly.gamelogic.Player;
+
 import java.util.HashMap;
 
 public class ClientPropertyStorage {
-    public HashMap<String, Field> properties;
+    private HashMap<String, Field> properties;
     private static ClientPropertyStorage instance;
 
     public static ClientPropertyStorage getInstance(){
@@ -51,5 +53,9 @@ public class ClientPropertyStorage {
 
         this.properties.put("kelag", new UtilityField("kelag"));
         this.properties.put("water_works", new UtilityField("water_works"));
+    }
+
+    public void updateOwner(String id, Player newOwner){
+        this.properties.get(id).setOwner(newOwner);
     }
 }

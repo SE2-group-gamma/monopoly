@@ -5,7 +5,7 @@ import com.example.monopoly.gamelogic.Player;
 import java.util.HashMap;
 
 public class PropertyStorage {
-    public HashMap<String, Field> properties;
+    private HashMap<String, Field> properties;
     private static PropertyStorage instance;
 
     public static PropertyStorage getInstance(){
@@ -60,6 +60,6 @@ public class PropertyStorage {
     }
 
     public void buyProperty(String propertyId, Player owner) {
-        this.properties.get(propertyId).owner = owner;
+        this.properties.get(propertyId).setOwner(owner);
     }
 }

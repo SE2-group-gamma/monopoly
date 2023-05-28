@@ -9,13 +9,13 @@ public class PropertyField extends Field{
     private boolean hasHotel;
 
     public PropertyField(String id, int price, PropertyFieldColors color, RentConfiguration rents) {
-        this.id = id;
-        this.price = price;
+        this.setId(id);
+        this.setPrice(price);
         this.color = color;
         this.numOfHouses = 0;
         this.hasHotel = false;
         this.rents = rents;
-        this.owner = null;
+        this.setOwner(null);
     }
 
     public void addHouse() {
@@ -27,11 +27,6 @@ public class PropertyField extends Field{
         if(numOfHouses < 4 || hasHotel) throw new IllegalStateException("Can not buy hotel");
         this.hasHotel = true;
     }
-
-    public Player getOwner(){
-        return this.owner;
-    }
-
     public boolean hasHotel(){
         return this.hasHotel;
     }
