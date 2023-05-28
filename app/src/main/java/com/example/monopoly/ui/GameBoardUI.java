@@ -17,6 +17,8 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.GameBoardBinding;
+import com.example.monopoly.gamelogic.ChanceCardCollection;
+import com.example.monopoly.gamelogic.CommunityChestCardCollection;
 import com.example.monopoly.gamelogic.Dices;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.network.Client;
@@ -27,6 +29,7 @@ public class GameBoardUI extends Fragment {
     private GameBoardBinding binding;
     private DiceViewModel diceViewModel;
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +37,7 @@ public class GameBoardUI extends Fragment {
         diceViewModel.getDicesData().observe(this, dices -> {
             Log.i("Dices", dices.toString());
         });
+
     }
 
     @Override
@@ -67,12 +71,6 @@ public class GameBoardUI extends Fragment {
             showDiceFragment();
         });
 
-        //**** TEST DRAW CARD ****
-
-        binding.card.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this).
-                navigate(R.id.action_GameBoardUI_to_DrawCard));
-
-        //************************
     }
 
     private void showDiceFragment(){

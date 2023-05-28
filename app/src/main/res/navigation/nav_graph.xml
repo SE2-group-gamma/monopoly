@@ -88,8 +88,8 @@
             android:id="@+id/action_GameBoardUI_to_DiceFragment"
             app:destination="@id/DiceFragment" />
         <action
-            android:id="@+id/action_GameBoardUI_to_DrawCard"
-            app:destination="@id/DrawCard" />
+            android:id="@+id/action_GameBoardUI_to_DrawCardFragment"
+            app:destination="@id/DrawCardFragment" />
 
     </fragment>
 
@@ -106,13 +106,13 @@
 
 
     <fragment
-        android:id="@+id/DrawCard"
-        android:name="com.example.monopoly.ui.DrawCard"
-        android:label="DrawCard"
+        android:id="@+id/DrawCardFragment"
+        android:name="com.example.monopoly.ui.DrawCardFragment"
+        android:label="DrawCardFragment"
         tools:layout="@layout/fragment_drawcard"
         >
         <action
-            android:id="@+id/action_DrawCard_to_GameBoardUI"
+            android:id="@+id/action_DrawCardFragment_to_GameBoardUI"
             app:destination="@id/GameBoardUI" />
     </fragment>
 

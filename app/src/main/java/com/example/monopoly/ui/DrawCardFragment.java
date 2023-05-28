@@ -1,8 +1,8 @@
 package com.example.monopoly.ui;
 
-import static androidx.databinding.DataBindingUtil.setContentView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +15,17 @@ import com.example.monopoly.databinding.FragmentDrawcardBinding;
 import com.example.monopoly.gamelogic.ChanceCardCollection;
 import com.example.monopoly.gamelogic.CommunityChestCardCollection;
 
-public class DrawCard extends Fragment {
+public class DrawCardFragment extends Fragment {
     private ChanceCardCollection chanceCards;
     private CommunityChestCardCollection communityCards;
     private FragmentDrawcardBinding binding;
+    private boolean isChanceField = false;
+    private boolean isCommunityField = false;
 
-    public DrawCard(){
+    public DrawCardFragment(ChanceCardCollection chanceCards, CommunityChestCardCollection communityCards ){
         super(R.layout.fragment_drawcard);
-        // * * * TEST * * *
-        createDecks();
+        this.chanceCards = chanceCards;
+        this.communityCards = communityCards;
         setDrawables();
     }
 
@@ -31,25 +33,36 @@ public class DrawCard extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         binding = FragmentDrawcardBinding.inflate(getLayoutInflater());
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // * * * TEST * * *
-        returnChanceCard();
         binding.buttonContinueDrawCard.setOnClickListener(view -> {
-            NavHostFragment.findNavController(this).navigate(R.id.action_DrawCard_to_GameBoardUI);
+            NavHostFragment.findNavController(this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
         });
+
+        checkField();
 
         return this.binding.getRoot();
     }
 
-    private void returnChanceCard(){
-        //public void returnChanceCard(ChanceCard card){
-        //int id = card.getId();
-        //binding.ImageCard.setImageResource(chanceCards.getChanceCardDeck().get(id).getImageId());
+    private void checkField(){
+        if (getIsChanceField()){
+            returnChanceCard();
+            setIsChanceField(false);
 
-        // * * * TEST * * *
+        }
+        else if (getIsCommunityField()){
+            returnCommunityChestCard();
+            setIsCommunityField(false);
+        }
+        else{
+            Log.i("Cards", "The Player is neither on a Chance-Field nor on a Community-Chest-Field");
+        }
+
+    }
+    private void returnChanceCard(){
         int index = chanceCards.drawFromDeck().getId();
         binding.ImageCard.setImageResource(chanceCards.getChanceCardDeck().get(index).getImageId());
 
@@ -57,23 +70,10 @@ public class DrawCard extends Fragment {
     }
 
     private void returnCommunityChestCard(){
-        //public void returnCommunityChestCard(ChanceCard card){
-        //int id = card.getId();
-        //binding.ImageCard.setImageResource(communityCards.getCommunityChestCardDeck().get(id).getImageId());
-
-        // * * * TEST * * *
         int index = communityCards.drawFromDeck().getId();
         binding.ImageCard.setImageResource(communityCards.getCommunityChestCardDeck().get(index).getImageId());
     }
 
-    // * * * TEST * * *
-    // later, the decks must be initialized in either MainActivity or GameBoardUI,
-    // otherwise they will be initialized everytime the fragment is called -> cards will
-    // be displayed multiple times
-    private void createDecks(){
-        this.chanceCards = new ChanceCardCollection();
-        this.communityCards = new CommunityChestCardCollection();
-    }
 
     private void setDrawables(){
         chanceCards.getChanceCardDeck().get(0).setImageId(R.drawable.chance0);
@@ -119,4 +119,19 @@ public class DrawCard extends Fragment {
         communityCards.getCommunityChestCardDeck().get(19).setImageId(R.drawable.community19);
     }
 
+    public void setIsChanceField(boolean isChanceField){
+        this.isChanceField = isChanceField;
+    }
+
+    public boolean getIsChanceField(){
+        return isChanceField;
+    }
+
+    public void setIsCommunityField(boolean isCommunityField){
+        this.isCommunityField = isCommunityField;
+    }
+
+    public boolean getIsCommunityField(){
+        return isCommunityField;
+    }
 }
