@@ -3,12 +3,14 @@ package com.example.monopoly.ui;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.monopoly.R;
+import com.example.monopoly.databinding.FragmentPropertyCardBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +18,8 @@ import com.example.monopoly.R;
  * create an instance of this fragment.
  */
 public class PropertyCardFragment extends Fragment {
+
+    private FragmentPropertyCardBinding binding;
 
     public PropertyCardFragment() {
         // Required empty public constructor
