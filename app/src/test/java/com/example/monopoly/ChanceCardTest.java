@@ -30,6 +30,7 @@ public class ChanceCardTest {
 
     @Test
     public void printAllChanceCards() {
+        Assertions.assertEquals(20, collection.getAllChanceCards().size());
         for (int i = 0; i < collection.getAllChanceCards().size(); i++) {
             ChanceCard card = (ChanceCard) collection.getAllChanceCards().get(i);
             System.out.println(card.getId() + ", " + card.getFunction());
@@ -38,6 +39,7 @@ public class ChanceCardTest {
 
     @Test
     public void printDeck() {
+        Assertions.assertEquals(20, collection.getChanceCardDeck().size());
         ChanceCard newCard = new ChanceCard(collection.getChanceCardDeck().size());
         newCard.setFunction("test");
         collection.getChanceCardDeck().add(newCard);
@@ -83,7 +85,9 @@ public class ChanceCardTest {
 
         }
         System.out.println("\nAll: " + collection.getAllChanceCards().size());
+        Assertions.assertEquals(20, collection.getAllChanceCards().size());
         System.out.println("Deck: " + collection.getChanceCardDeck().size());
+        Assertions.assertEquals(0, collection.getChanceCardDeck().size());
     }
 
     @Test

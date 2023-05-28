@@ -20,7 +20,7 @@ public class MonopolyServer extends Thread{
     private int maxNumberOfClients;
     private boolean isListening;
 
-    private Game game;
+    //private Game game;
     private String hostname;
     private Client client;
     private int counter=1;
@@ -65,6 +65,23 @@ public class MonopolyServer extends Thread{
 
     }
 
+    public void broadCast(String msg){
+        synchronized (this.clients) {
+            for (ClientHandler clientHandler : clients) {
+                clientHandler.writeToClient(msg);
+            }
+        }
+    }
+
+    public void broadCastExceptSelf(String msg, ClientHandler hostHandler){
+        synchronized (this.clients) {
+            for (ClientHandler clientHandler : clients) {
+                if(hostHandler != clientHandler)
+                    clientHandler.writeToClient(msg);
+            }
+        }
+    }
+
     @Override
     public void run() {
         this.isListening = true;
@@ -72,7 +89,7 @@ public class MonopolyServer extends Thread{
 
 
 
-        game = new Game();
+        //game = new Game();
         //Log.d("",""+this.maxNumberOfClients);
         while(isListening() && this.clients.size() < maxNumberOfClients){
             ClientHandler clientHandler = null;
