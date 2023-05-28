@@ -38,12 +38,11 @@ public class DrawCardFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        checkField();
         binding.buttonContinueDrawCard.setOnClickListener(view -> {
             NavHostFragment.findNavController(this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
         });
-
-        checkField();
-
+        
         return this.binding.getRoot();
     }
 
