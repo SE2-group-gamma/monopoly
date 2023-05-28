@@ -64,6 +64,12 @@ public class Client extends Thread {
         return host;
     }
 
+    public Game getGame() {
+        return game;
+    }
+
+
+
     public void setUser(Player user) {
         this.user = user;
     }
@@ -139,9 +145,13 @@ public class Client extends Thread {
         return user;
     }
 
+
+
     public int getKey() {
         return key;
     }
+
+
 
 
 
@@ -286,7 +296,7 @@ public class Client extends Thread {
 
             if(responseSplit[1].equals("gameStart")){
                 Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(0).getUsername());
-                Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(1).getUsername());
+                //Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(1).getUsername());
                 turnPocess();
 
             }

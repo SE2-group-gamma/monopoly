@@ -10,10 +10,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.network.Client;
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
 
 public class UIHandler extends Handler {
     private Fragment frag;
@@ -21,12 +23,21 @@ public class UIHandler extends Handler {
 
     private String hostname = "";
 
+    private Client client;
+    private ClientViewModel clientViewModel;
+
+
+
     public UIHandler(Fragment app) {
         this.frag = app;
     }
 
+
+
     @Override
     public void handleMessage(@NonNull Message msg) {
+        clientViewModel = new ViewModelProvider(frag.requireActivity()).get(ClientViewModel.class);
+        this.client = clientViewModel.getClientData().getValue();
         super.handleMessage(msg);
         String data = msg.getData().get("Data").toString();
         String type = msg.getData().get("ActionType").toString();
@@ -108,6 +119,15 @@ public class UIHandler extends Handler {
 
             case "playersTurn":
                 ((TextView) this.frag.getActivity().findViewById(R.id.turn)).setText(data);
+                Log.d("ButtonGreyCheck", "Here is Button"+this.client.getUser().getUsername());
+                if(data.equals(this.client.getUser().getUsername())){
+                    Log.d("ButtonGreyCheck2", "VERY NICE INDEED");
+
+                }else{
+                    this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);
+                    this.frag.getActivity().findViewById(R.id.throwdice).isEnabled();
+                }
+
                 break;
         }
 
