@@ -3,12 +3,14 @@ package com.example.monopoly.gamelogic.properties;
 import com.example.monopoly.gamelogic.Player;
 
 public abstract class Field {
-    private String id;
+    private String name;
     private int price;
     private Player owner;
 
-    public String getId() {
-        return id;
+    private int imageId;
+
+    public String getName() {
+        return name;
     }
 
     public int getPrice() {
@@ -19,8 +21,8 @@ public abstract class Field {
         return owner;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setPrice(int price) {
@@ -29,5 +31,13 @@ public abstract class Field {
 
     public void setOwner(Player owner) {
         this.owner = owner;
+    }
+
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
     }
 }

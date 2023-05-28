@@ -1,15 +1,14 @@
 package com.example.monopoly.gamelogic.properties;
 
-import com.example.monopoly.gamelogic.Player;
-
 public class PropertyField extends Field{
     private PropertyFieldColors color;
     private RentConfiguration rents;
     private int numOfHouses;
     private boolean hasHotel;
 
-    public PropertyField(String id, int price, PropertyFieldColors color, RentConfiguration rents) {
-        this.setId(id);
+    public PropertyField(int imageId, String name, int price, PropertyFieldColors color, RentConfiguration rents) {
+        this.setImageId(imageId);
+        this.setName(name);
         this.setPrice(price);
         this.color = color;
         this.numOfHouses = 0;
