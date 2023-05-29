@@ -26,7 +26,6 @@ public class GameBoardUI extends Fragment {
 
     private GameBoardBinding binding;
     private DiceViewModel diceViewModel;
-    
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
