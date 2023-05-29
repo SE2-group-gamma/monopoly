@@ -60,8 +60,6 @@ public class JoinGame extends Fragment {
 
                 NsdManager manager = (NsdManager) getActivity().getSystemService(Context.NSD_SERVICE);
                 NSD_Client nsd = new NSD_Client();
-
-                System.out.println(HostGame.getMonopolyServer());
                 nsd.setIsHost(false);
                 nsd.start(manager);
                 Player player = new Player(user, new Color(),500.00,true);
@@ -74,19 +72,6 @@ public class JoinGame extends Fragment {
                         throw new RuntimeException(e);
                     }
                 }
-
-
-
-               /*if(HostGame.getMonopolyServer()!=null) {
-                    System.out.println("noWWWWWWW");
-                   Log.d("FALSE123", "add Client Handler"+ HostGame.getMonopolyServer().getName());
-                    HostGame.getMonopolyServer().getClientsTurn().add(nsd.getClient());
-                    HostGame.getMonopolyServer().setClientc(HostGame.getMonopolyServer().getClientc() + 1);
-                    HostGame.getMonopolyServer().setClient(nsd.getClient());
-                }else{
-                   Log.d("PROOF123", "WHY");
-                   System.out.println("nnull CALLLL");
-               }*/
 
                 nsd.getClient().setUser(player);
                 nsd.getClient().setKey(Integer.parseInt(key));

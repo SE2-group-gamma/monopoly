@@ -63,7 +63,6 @@ dependencies {
     implementation 'org.mockito:mockito-core:5.2.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation 'junit:junit:4.12'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     implementation 'org.jmonkeyengine:jme3-android-native:3.6.0-stable'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

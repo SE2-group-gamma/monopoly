@@ -51,7 +51,6 @@ public class GameBoardUI extends Fragment {
             //HostGame.getMonopolyServer().broadCast("GameBoardUI|move|"+dices.getSum()+"|"+this.client.getUser().getUsername());
 
             try {
-                System.out.println("YOU DIDIDIDIDI SOMTHN");
                 this.client.writeToServer("GameBoardUI|move|"+dices.getSum()+"|"+this.client.getUser().getUsername());
             } catch (IOException e) {
                 throw new RuntimeException(e);

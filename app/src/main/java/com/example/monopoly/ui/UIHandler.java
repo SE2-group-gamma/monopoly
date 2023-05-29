@@ -85,7 +85,6 @@ public class UIHandler extends Handler {
                 if(!HostGame.lobbyname.equals(" ")){
                     ((TextView) this.frag.getActivity().findViewById(R.id.textViewLobby)).setText("Lobby: "+HostGame.lobbyname);
                 }
-                System.out.println(data);
                 ((TextView) this.frag.getActivity().findViewById(R.id.textViewHost)).setText(data);
                 break;
             case "keyFromLobby":

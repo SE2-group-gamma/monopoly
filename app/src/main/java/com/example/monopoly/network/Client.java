@@ -20,6 +20,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Client extends Thread {
     // besser wenn getrennt in host und client über abstrakte klasse
@@ -321,11 +323,10 @@ public class Client extends Thread {
         monopolyServer.broadCast("GameBoardUI|playersTurn|"+game.getPlayers().get(serverTurnCounter).getUsername());
         Log.d("gameTurnCheck", "Yo hey"+game.getCurrentPlayersTurn());
         serverTurnCounter++;
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
+        new Timer().schedule(
+                new TimerTask() {
                     @Override
                     public void run() {
-
                         turnEnd = true;
                     }
                 },
