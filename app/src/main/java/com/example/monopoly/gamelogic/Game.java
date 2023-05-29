@@ -17,6 +17,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Game{
     private static final Game OBJ = new Game();
     private HashMap<Integer,Player> players;        //ID,Player ... ID will be set server-side
+
+    private String currentPlayersTurn;
     private static final AtomicInteger count = new AtomicInteger(0);
 
     private Game() {
@@ -60,4 +62,11 @@ public class Game{
         return 0;
     }
 
+    public String getCurrentPlayersTurn() {
+        return currentPlayersTurn;
+    }
+
+    public void setCurrentPlayersTurn(String currentPlayersTurn) {
+        this.currentPlayersTurn = currentPlayersTurn;
+    }
 }

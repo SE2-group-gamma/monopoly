@@ -39,6 +39,8 @@ public class HostGame extends Fragment {
     private ClientViewModel clientViewModel;
     private static Game game;
 
+
+
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -106,10 +108,12 @@ public class HostGame extends Fragment {
                 .navigate(R.id.action_HostGame_to_FirstFragment));
 
         binding.createButton.setOnClickListener(view12 -> {
+
             String user = binding.userInput.getText().toString();
             String lobby = binding.lobbyInput.getText().toString();
             int playerCount = binding.seekBar.getProgress()+2;
             int maxTimeMin = binding.seekBar2.getProgress();
+            Log.d("MaxTimeCheck", "Look here !!"+maxTimeMin);
             if(user.isEmpty() && lobby.isEmpty()){
                 binding.userInput.setError("No Input");
                 binding.lobbyInput.setError("No Input");
@@ -169,6 +173,7 @@ public class HostGame extends Fragment {
                 nsd.getClient().setHost(true);
                 ms.setClient(nsd.getClient());
 
+
                 //Add client object to ClientViewModel
                 clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
                 clientViewModel.setClient(nsd.getClient());
@@ -177,6 +182,7 @@ public class HostGame extends Fragment {
                 nsd.getClient().setUser(player);
                 nsd.getClient().setKey(key);
                 nsd.getClient().setMonopolyServer(ms);
+
 
                 try {
                     nsd.getClient().writeToServer("Lobby|hostJoined|"+player.getUsername());
@@ -232,4 +238,7 @@ public class HostGame extends Fragment {
         }
         textView.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2.0f);
     }
+
+
+
 }

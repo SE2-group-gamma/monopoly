@@ -22,8 +22,10 @@ import java.util.HashMap;
 public class ClientHandler extends Thread{
 
     private Socket socket;
+
     public BufferedReader br;
     public BufferedWriter bw;
+
     private String hostname;
     private Client client;
     private String clientName;
