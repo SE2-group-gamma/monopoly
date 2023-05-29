@@ -17,21 +17,17 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.GameBoardBinding;
-
-import com.example.monopoly.gamelogic.ChanceCardCollection;
-import com.example.monopoly.gamelogic.CommunityChestCardCollection;
 import com.example.monopoly.gamelogic.Dices;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.ClientHandler;
-import com.example.monopoly.ui.viewmodels.DrawCardViewModel;
+
 
 public class GameBoardUI extends Fragment {
 
     private GameBoardBinding binding;
     private DiceViewModel diceViewModel;
-
-
+    
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +67,6 @@ public class GameBoardUI extends Fragment {
         binding.throwdice.setOnClickListener(view1 -> {
             showDiceFragment();
         });
-
     }
 
     private void showDiceFragment(){
