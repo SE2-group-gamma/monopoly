@@ -22,12 +22,12 @@ import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.ClientHandler;
 
-
 public class GameBoardUI extends Fragment {
 
     private GameBoardBinding binding;
     private DiceViewModel diceViewModel;
     
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
