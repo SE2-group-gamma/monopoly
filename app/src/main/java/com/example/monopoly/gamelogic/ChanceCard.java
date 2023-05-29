@@ -4,6 +4,8 @@ public class ChanceCard {
     private int id;
     private String function;
 
+    private int imageID;
+
    public ChanceCard(int id) {
        this.id = id;
    }
@@ -24,5 +26,12 @@ public class ChanceCard {
         this.function = function;
    }
 
+    public int getImageId(){
+        return imageID;
+    }
+
+    public void setImageId(int imageID){
+        this.imageID = imageID;
+    }
 
 }

@@ -1,6 +1,5 @@
 package com.example.monopoly;
 
-import com.example.monopoly.gamelogic.ChanceCard;
 import com.example.monopoly.gamelogic.CommunityChestCard;
 import com.example.monopoly.gamelogic.CommunityChestCardCollection;
 
@@ -62,8 +61,11 @@ public class CommunityChestCardTest {
 
     @Test
     public void testRemove() {
+        CommunityChestCard card1 = collection.getCommunityChestCardDeck().get(2);
         collection.removeCardFromDeck(2);
+        CommunityChestCard card2 = collection.getCommunityChestCardDeck().get(7);
         collection.removeCardFromDeck(7);
+        CommunityChestCard card3 = collection.getCommunityChestCardDeck().get(5);
         collection.removeCardFromDeck(5);
         for (int i = 0; i < collection.getCommunityChestCardDeck().size(); i++) {
             CommunityChestCard card = collection.getCommunityChestCardDeck().get(i);
@@ -71,7 +73,9 @@ public class CommunityChestCardTest {
         }
 
         Assertions.assertEquals(collection.getAllCommunityChestCards().size()-3, collection.getCommunityChestCardDeck().size());
-
+        Assertions.assertFalse(collection.getCommunityChestCardDeck().contains(card1));
+        Assertions.assertFalse(collection.getCommunityChestCardDeck().contains(card2));
+        Assertions.assertFalse(collection.getCommunityChestCardDeck().contains(card3));
     }
 
     @Test
@@ -96,4 +100,19 @@ public class CommunityChestCardTest {
         collection.setAllCommunityChestCards(list);
         Assertions.assertEquals(0,collection.getAllCommunityChestCards().size());
     }
+
+    @Test
+    public void testGettersSettersImage() {
+        CommunityChestCard card = new CommunityChestCard(100);
+        card.setImageId(R.drawable.community0);
+        Assertions.assertNotEquals(0,card.getImageId());
+    }
+
+    @Test
+    public void testDrawables() {
+        for(int i =0; i<collection.getCommunityChestCardDeck().size(); i++){
+            Assertions.assertTrue(collection.getCommunityChestCardDeck().get(i).getImageId() > 2131165300);
+        }
+    }
+
 }
