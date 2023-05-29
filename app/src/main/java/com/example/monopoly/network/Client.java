@@ -40,10 +40,6 @@ public class Client extends Thread {
 
     private boolean turnEnd =false;
 
-    //private boolean canSendRequests;
-
-
-
     private Game game;
 
     public static HashMap<String, UIHandler> handlers;
@@ -145,15 +141,9 @@ public class Client extends Thread {
         return user;
     }
 
-
-
     public int getKey() {
         return key;
     }
-
-
-
-
 
     public void run() {
         try {
@@ -202,7 +192,7 @@ public class Client extends Thread {
                 }
 
                 if(turnEnd==true){
-                    turnPocess();
+                    turnProcess();
                 }
             }
             //clientSocket.close();
@@ -272,7 +262,7 @@ public class Client extends Thread {
 
                     }*/
                     monopolyServer.broadCast("Lobby|userJoined|"+responseSplit[2]);
-                    monopolyServer.broadCast("Lobby|hostJoined|"+monopolyServer.getClientsTurn().get(0).getUser().getUsername());
+                    monopolyServer.broadCast("Lobby|hostJoined|"+monopolyServer.getClient().getUser().getUsername());
                     Player tempPlayer = new Player(responseSplit[2],new Color(),500.00,true);
                     //Log.i("Dices","Client Gonna join: ");
                     //game = Game.getInstance();
@@ -297,7 +287,7 @@ public class Client extends Thread {
             if(responseSplit[1].equals("gameStart")){
                 Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(0).getUsername());
                 //Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(1).getUsername());
-                turnPocess();
+                turnProcess();
 
             }
         } else {
@@ -325,7 +315,7 @@ public class Client extends Thread {
     }
 
 
-    public void turnPocess(){
+    public void turnProcess(){
         turnEnd = false;
         game.setCurrentPlayersTurn(game.getPlayers().get(serverTurnCounter).getUsername());
         monopolyServer.broadCast("GameBoardUI|playersTurn|"+game.getPlayers().get(serverTurnCounter).getUsername());
@@ -344,5 +334,9 @@ public class Client extends Thread {
         if(serverTurnCounter== HostGame.getMonopolyServer().getNumberOfClients()){
             serverTurnCounter=0;
         }
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

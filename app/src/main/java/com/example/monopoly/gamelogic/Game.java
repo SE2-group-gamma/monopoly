@@ -46,6 +46,7 @@ public class Game{
     public HashMap<Integer, Player> getPlayers() {
         return players;
     }
+
     public void incrementPlayerPosition(int id,int incr){
         //Player user = this.players.get
         Log.i("Dices","Player:"+this.players.get(id).getUsername()+"; Pos to increment:"+incr+"; Current Pos:"+this.players.get(id).getPosition());

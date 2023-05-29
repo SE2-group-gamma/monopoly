@@ -15,13 +15,10 @@ public class MonopolyServer extends Thread{
     private int maxNumberOfClients;
     private boolean isListening;
 
-    private List<Client> clientsTurn;
-
     //private Game game;
     private String hostname;
     private Client client;
     private int counter=1;
-    private int clientc=0;
 
 
 
@@ -35,7 +32,6 @@ public class MonopolyServer extends Thread{
         this.clients = new ArrayList<ClientHandler>();
         this.isListening = false;
         this.keyedHandlers=new HashMap<>();
-        this.clientsTurn=new ArrayList<Client>();
 
     }
 
@@ -49,25 +45,20 @@ public class MonopolyServer extends Thread{
             this.client=client;
 
             for (ClientHandler handler:this.clients) {
-                handler.setClient(this.clientsTurn.get(this.clientc));
-
+                handler.setClient(this.client);
             }
         }
     }
 
-
+    public Client getClient() {
+        return client;
+    }
 
     public List<ClientHandler> getClients() {
         return clients;
     }
 
-    public int getClientc() {
-        return clientc;
-    }
 
-    public void setClientc(int clientc) {
-        this.clientc = clientc;
-    }
 
     // Constructor for testing
     public MonopolyServer(int maxNumberOfClients, ServerSocket serverSocket) throws IOException {
@@ -77,8 +68,6 @@ public class MonopolyServer extends Thread{
         this.clients = new ArrayList<ClientHandler>();
         this.isListening = false;
         this.keyedHandlers=new HashMap<>();
-        this.clientsTurn=new ArrayList<Client>();
-
 
     }
 
@@ -158,12 +147,4 @@ public class MonopolyServer extends Thread{
         return localPort;
     }
 
-
-    public List<Client> getClientsTurn() {
-        return clientsTurn;
-    }
-
-    public void setClientsTurn(List<Client> clientsTurn) {
-        this.clientsTurn = clientsTurn;
-    }
 }

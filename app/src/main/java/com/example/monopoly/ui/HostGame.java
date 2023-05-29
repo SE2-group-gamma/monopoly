@@ -171,7 +171,6 @@ public class HostGame extends Fragment {
                     }
                 }
                 nsd.getClient().setHost(true);
-                ms.getClientsTurn().add(nsd.getClient());
                 ms.setClient(nsd.getClient());
 
 
