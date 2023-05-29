@@ -48,7 +48,6 @@ import java.io.IOException;
 public class JoinGame extends Fragment {
 
     private JoinGameBinding binding;
-    private Game game;
     private ClientViewModel clientViewModel;
 
     @Override
@@ -96,8 +95,6 @@ public class JoinGame extends Fragment {
                         throw new RuntimeException(e);
                     }
                 }
-
-
 
                 nsd.getClient().setUser(player);
                 nsd.getClient().setKey(Integer.parseInt(key));

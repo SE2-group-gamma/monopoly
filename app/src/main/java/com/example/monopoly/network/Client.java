@@ -146,8 +146,6 @@ public class Client extends Thread {
             //Network Protocol: [Fragment Name]|[Action]|[Data]
             //Could also use OP-Codes
             //New Protocoll: Fragment|action|data:additionalData|sender
-
-            //checkHostAndPort();
             if (host != null && port != 0)
                 clientSocket = new Socket(host, port);
             else
@@ -163,10 +161,7 @@ public class Client extends Thread {
                 handleMessage("Lobby|displayKey| ".split("\\|"));
             }
 
-
             while (true) {
-
-                //outToServer.writeBytes(request + 'n');
                 if (inFromServer.ready()) {
                     response = inFromServer.readLine();
 
@@ -187,7 +182,6 @@ public class Client extends Thread {
                     }
                 }
             }
-            //clientSocket.close();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -225,16 +219,10 @@ public class Client extends Thread {
                 int keyReceived = Integer.parseInt(dataResponseSplit[0]);
                 Log.d("Dices","key:"+keyReceived);
                 if (key == keyReceived) {
-
-                    //monopolyServer.getClients().get(0).writeToClient("JoinLobby|keyFromLobby|1");
                     // TODO make this with IDs instead (properly)
                     return new String[]{"JoinGame|keyFromLobby|1","Lobby|hostJoined|"+"REPLACER"};
-
                 } else {
-
-                    //monopolyServer.getClients().get(0).writeToClient("JoinLobby|keyFromLobby|0");
                     return new String[]{"JoinGame|keyFromLobby|0","Lobby|hostJoined|"+"REPLACER"};
-
                 }
             }
             try {
@@ -249,15 +237,9 @@ public class Client extends Thread {
             }
             if(responseSplit[1].equals("JOINED")){
                 synchronized (monopolyServer.getClients()){
-                    /*for (ClientHandler handler: monopolyServer.getClients()) {
-
-                        handler.writeToClient("Lobby|userJoined|"+responseSplit[2]);
-
-                    }*/
                     monopolyServer.broadCast("Lobby|userJoined|"+responseSplit[2]);
                     Player tempPlayer = new Player(responseSplit[2],new Color(),500.00,true);
                     Log.i("Dices","Client Gonna join: ");
-                    //game = Game.getInstance();
                     game.addPlayer(tempPlayer);
                 }
             }
@@ -284,7 +266,6 @@ public class Client extends Thread {
             }
         } else {
             for (String str: responseSplit) {
-                //Log.d("poggies123 ",str);
             }
             if (responseSplit[1].equals("keyFromLobby") && responseSplit[2].equals("1")) {
                 try {
@@ -294,7 +275,6 @@ public class Client extends Thread {
                 }
             }
             if(responseSplit[1].equals("hostJoined")){
-                //writeToServer();
                 try {
                     writeToServer("Lobby|hostJoined|"+"REPLACER");
                 } catch (IOException e) {
