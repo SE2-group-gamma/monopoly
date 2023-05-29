@@ -263,7 +263,7 @@ public class Client extends Thread {
             }
             // TODO end turn button to end turn
             if(responseSplit[1].equals("move")){
-                // data: 8|t    ... t=cheated; f=notcheated
+                // data: 8:t    ... t=cheated; f=notcheated
                 cheated = dataResponseSplit[1];
                 int tempID = game.getPlayerIDByName(responseSplit[3]);
                 game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
