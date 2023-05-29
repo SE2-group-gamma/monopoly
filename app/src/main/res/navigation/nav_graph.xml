@@ -90,8 +90,21 @@
         <action
             android:id="@+id/action_GameBoardUI_to_DiceFragment"
             app:destination="@id/DiceFragment" />
+        <action
+            android:id="@+id/action_GameBoardUI_to_ProperyCardFragment"
+            app:destination="@id/PropertyCardFragment"
+        />
 
     </fragment>
+
+    <fragment
+        android:id="@+id/PropertyCardFragment"
+        android:name="com.example.monopoly.ui.PropertyCardFragment"
+        android:label="PropertyCardFragment"
+        tools:layout="@layout/fragment_property_card"
+        >
+    </fragment>
+
 
     <fragment
         android:id="@+id/DiceFragment"

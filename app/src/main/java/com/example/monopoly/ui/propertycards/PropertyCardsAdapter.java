@@ -28,7 +28,7 @@ public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+        holder.propertyCard.setImageResource(cps.getPropertyList().get(position).getImageId());
     }
 
     @Override
@@ -40,7 +40,7 @@ public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdap
         private final ImageView propertyCard;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            propertyCard = (ImageView) itemView.findViewById(R.id.propertyCardImageView);
+            propertyCard = itemView.findViewById(R.id.propertyCardImageView);
         }
         public ImageView getPropertyCard() {
             return propertyCard;
