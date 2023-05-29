@@ -60,8 +60,11 @@ public class ChanceCardTest {
 
     @Test
     public void testRemove() {
+        ChanceCard card1 = collection.getChanceCardDeck().get(2);
         collection.removeCardFromDeck(2);
+        ChanceCard card2 = collection.getChanceCardDeck().get(7);
         collection.removeCardFromDeck(7);
+        ChanceCard card3 = collection.getChanceCardDeck().get(5);
         collection.removeCardFromDeck(5);
         for (int i = 0; i < collection.getChanceCardDeck().size(); i++) {
             ChanceCard card = collection.getChanceCardDeck().get(i);
@@ -69,6 +72,10 @@ public class ChanceCardTest {
         }
 
         Assertions.assertEquals(collection.getAllChanceCards().size() - 3, collection.getChanceCardDeck().size());
+        Assertions.assertFalse(collection.getChanceCardDeck().contains(card1));
+        Assertions.assertFalse(collection.getChanceCardDeck().contains(card2));
+        Assertions.assertFalse(collection.getChanceCardDeck().contains(card3));
+
 
     }
 
@@ -110,4 +117,13 @@ public class ChanceCardTest {
         card.setImageId(R.drawable.chance1);
         Assertions.assertNotEquals(0,card.getImageId());
     }
+
+    @Test
+    public void testDrawables() {
+        for (int i =0; i<collection.getChanceCardDeck().size(); i++){
+            Assertions.assertTrue(collection.getChanceCardDeck().get(i).getImageId()>2131165300);
+        }
+    }
+
+
 }
