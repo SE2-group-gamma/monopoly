@@ -111,7 +111,7 @@ public class HostGame extends Fragment {
 
             String user = binding.userInput.getText().toString();
             String lobby = binding.lobbyInput.getText().toString();
-            int playerCount = binding.seekBar.getProgress();
+            int playerCount = binding.seekBar.getProgress()+2;
             int maxTimeMin = binding.seekBar2.getProgress();
             Log.d("MaxTimeCheck", "Look here !!"+maxTimeMin);
             if(user.isEmpty() && lobby.isEmpty()){

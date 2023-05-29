@@ -26,7 +26,7 @@ public class GameTest {
     public void testAddPlayer(){
         assertEquals(0,g.getPlayers().size());
         assertEquals(true,g.addPlayer(p));
-        assertEquals(p,g.getPlayers().get(1));
+        assertEquals(p,g.getPlayers().get(0));
         assertEquals(1,g.getPlayers().size());
         assertEquals(false,g.addPlayer(p));
         assertEquals(1,g.getPlayers().size());

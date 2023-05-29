@@ -28,6 +28,7 @@ public class GameBoardUI extends Fragment {
     private ClientViewModel clientViewModel;
     private String clientName;
     private Client client;
+    private boolean didCheat;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,45 +44,13 @@ public class GameBoardUI extends Fragment {
         clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
         diceViewModel.getDicesData().observe(this, dices -> {
             Log.i("Dices", dices.toString());
-
-            this.client = clientViewModel.getClientData().getValue();
-
-            //Log.i("Dices", "Name:"+client.getUser().getUsername()+"; ID Player:"+client.getUser().getId());
-
-            //HostGame.getMonopolyServer().broadCast("GameBoardUI|move|"+dices.getSum()+"|"+this.client.getUser().getUsername());
+            String cheated = dices.isLastRollFlawed()==true?"t":"f";
 
             try {
-                this.client.writeToServer("GameBoardUI|move|"+dices.getSum()+"|"+this.client.getUser().getUsername());
+                this.client.writeToServer("GameBoardUI|move|"+dices.getSum()+":"+cheated+"|"+this.client.getUser().getUsername());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
-            //this.client.writeToServer();
-
-            /*
-            MonopolyServer ms = HostGame.getMonopolyServer();
-            ClientHandler user = null;
-
-            Log.i("Dices", "TestUser:"+ms.getClients().get(0).getClientClient().getUser().getUsername());
-            Log.i("Dices", "Nr of users:"+ms.getNumberOfClients());
-
-
-
-            for(int i = 0; i < ms.getNumberOfClients();i++){                //Searching for the correct client
-
-                if(ms.getClients().get(i).getClientClient().getUser().getUsername().equals(this.clientName)){
-                    user = ms.getClients().get(i);
-                    Log.i("Dices", "In if:"+ms.getClients().get(i).getClientClient().getUser().getUsername());
-                }
-            }
-           // Log.i("Dices", "TestUser:"+ms.getClients().get(0).getClientClient().getUser().getUsername());
-           // Log.i("Dices", "Username: "+user.getClient().toString());
-
-            user.writeToClient("GameBoardUI|move|"+dices.getSum());
-            */
-            //Msg an server mit augenzahl + welcher client
-            //HostGame.getMonopolyServer().getClients().get(0).writeToClient("GameBoardUI|move|"+(dices.getDice1()+dices.getDice2()));
-            //HostGame.getMonopolyServer().broadCast("GameBoardUI|move|"+(dices.getDice1()+dices.getDice2()));
 
         });
     }
@@ -93,18 +62,15 @@ public class GameBoardUI extends Fragment {
     ) {
         Client.subscribe(this,"GameBoardUI");
 
-        //client =
-
         binding = GameBoardBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
-        //Client.subscribe(this,"GameBoardUI");
+        this.client = clientViewModel.getClientData().getValue();       // set client
 
         super.onViewCreated(view, savedInstanceState);
-        //Log.d("Test",binding.button.getText().toString());
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -115,6 +81,14 @@ public class GameBoardUI extends Fragment {
 
         binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
                 .navigate(R.id.action_GameBoard_to_FirstFragment));
+
+        binding.uncover.setOnClickListener(view1 -> {
+            try {
+                this.client.writeToServer("GameBoardUI|uncover||"+this.client.getUser().getUsername());     // not data to transfer
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         binding.throwdice.setOnClickListener(view1 -> {
             showDiceFragment();

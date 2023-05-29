@@ -24,7 +24,6 @@ import com.example.monopoly.ui.viewmodels.ClientViewModel;
 public class JoinGame extends Fragment {
 
     private JoinGameBinding binding;
-    private Game game;
     private ClientViewModel clientViewModel;
 
     @Override

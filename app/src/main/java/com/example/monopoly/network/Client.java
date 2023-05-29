@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.ui.HostGame;
 import com.example.monopoly.ui.UIHandler;
+
+import com.example.monopoly.gamelogic.ChanceCard;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -43,6 +46,7 @@ public class Client extends Thread {
     private boolean turnEnd =false;
 
     private Game game;
+    private String cheated;
 
     public static HashMap<String, UIHandler> handlers;
 
@@ -147,13 +151,13 @@ public class Client extends Thread {
         return key;
     }
 
+
     public void run() {
         try {
-
+            this.cheated = "f";
             //Network Protocol: [Fragment Name]|[Action]|[Data]
             //Could also use OP-Codes
-
-            //checkHostAndPort();
+            //New Protocoll: Fragment|action|data:additionalData|sender
             if (host != null && port != 0)
                 clientSocket = new Socket(host, port);
             else
@@ -171,8 +175,6 @@ public class Client extends Thread {
 
 
             while (true) {
-
-                //outToServer.writeBytes(request + 'n');
                 if (inFromServer.ready()) {
                     response = inFromServer.readLine();
 
@@ -197,7 +199,6 @@ public class Client extends Thread {
                     turnProcess();
                 }
             }
-            //clientSocket.close();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -226,11 +227,14 @@ public class Client extends Thread {
         }
 
         if (isHost) {
+            String[] dataResponseSplit = responseSplit[2].split(":");
             // TODO: call game logic
             // e.g. responseSplit[1] to throw dice
             if (responseSplit[0].equals("CLIENTMESSAGE") && responseSplit[1].equals("key")) {
-                //Log.d("",monopolyServer.getClients().size()+"");
-                int keyReceived = Integer.parseInt(responseSplit[2]);
+                Log.d("",monopolyServer.getClients().size()+"");
+                Log.d("Dices","A");
+                int keyReceived = Integer.parseInt(dataResponseSplit[0]);
+                Log.d("Dices","key:"+keyReceived);
                 if (key == keyReceived) {
 
                     //monopolyServer.getClients().get(0).writeToClient("JoinLobby|keyFromLobby|1");
@@ -250,34 +254,23 @@ public class Client extends Thread {
             game = Game.getInstance();
             //Host should only join once
             if(responseSplit[1].equals("hostJoined") && game.getPlayers().isEmpty()){       //Host should only join once
-
-                Player tempPlayer = new Player(responseSplit[2],new Color(),500.00,true);
-                //Log.i("Dices","Host gonna join: ");
+                Player tempPlayer = new Player(dataResponseSplit[0],new Color(),500.00,true);
+                Log.i("Dices","Host gonna join: ");
                 game.addPlayer(tempPlayer);
-
             }
             if(responseSplit[1].equals("JOINED")){
                 synchronized (monopolyServer.getClients()){
-                    /*for (ClientHandler handler: monopolyServer.getClients()) {
-
-                        handler.writeToClient("Lobby|userJoined|"+responseSplit[2]);
-
-                    }*/
                     monopolyServer.broadCast("Lobby|userJoined|"+responseSplit[2]);
                     monopolyServer.broadCast("Lobby|hostJoined|"+monopolyServer.getClient().getUser().getUsername());
                     Player tempPlayer = new Player(responseSplit[2],new Color(),500.00,true);
-                    //Log.i("Dices","Client Gonna join: ");
-                    //game = Game.getInstance();
+                    Log.i("Dices","Client Gonna join: ");
                     game.addPlayer(tempPlayer);
 
                 }
             }
-
-
-
-
-            //if(game.getCurrentPlayersTurn()== user.getUsername()){
             if(responseSplit[1].equals("move")){
+                // data: 8:t    ... t=cheated; f=notcheated
+                cheated = dataResponseSplit[1];
                 int tempID = game.getPlayerIDByName(responseSplit[3]);
                 if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
                     game.incrementPlayerPosition(tempID, Integer.parseInt(responseSplit[2]));
@@ -290,22 +283,32 @@ public class Client extends Thread {
                 Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(0).getUsername());
                 //Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(1).getUsername());
                 turnProcess();
+            }
+            if(responseSplit[1].equals("uncover")){         // Only 1 player should be able to uncover, else others will just chime in
+                try{
+                    if(this.cheated.equals("t")){       // TODO if cheated punish current player (Reference should be saved in Host)
+                        Log.d("Dices","Gschummelt->"+cheated);
+                    } else {                                    // TODO if not punish sender
+                        Log.d("Dices","Ois OK->"+cheated);
+                    }
+                }catch (Exception e){
 
+                }
+            }
+            if(responseSplit[1].equals("endTurn")){
+                // TODO next player turn
             }
         } else {
             for (String str: responseSplit) {
-                //Log.d("poggies123 ",str);
             }
             if (responseSplit[1].equals("keyFromLobby") && responseSplit[2].equals("1")) {
                 try {
-
                     writeToServer("Lobby|JOINED|" + user.getUsername());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
             if(responseSplit[1].equals("hostJoined")){
-                //writeToServer();
                 try {
                     writeToServer("Lobby|hostJoined|"+"REPLACER");
                 } catch (IOException e) {
