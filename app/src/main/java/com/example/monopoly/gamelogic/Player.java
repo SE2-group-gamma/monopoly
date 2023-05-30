@@ -13,7 +13,7 @@ public class Player {
     private Client myClient;        //Reference to the players client
     private int id;
     private int position;
-
+    private int cardID;
 
 
     public Player(String username, Color col, double capital, boolean alive) {
@@ -25,6 +25,13 @@ public class Player {
         this.position = 0;
     }
 
+    public int getCardID(){
+        return cardID;
+    }
+
+    public void setCardID(int cardID){
+        this.cardID = cardID;
+    }
     public int getId() {
         return id;
     }

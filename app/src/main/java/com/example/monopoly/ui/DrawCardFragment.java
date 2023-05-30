@@ -14,7 +14,10 @@ import com.example.monopoly.R;
 import com.example.monopoly.databinding.FragmentDrawcardBinding;
 import com.example.monopoly.gamelogic.ChanceCardCollection;
 import com.example.monopoly.gamelogic.CommunityChestCardCollection;
+import com.example.monopoly.network.Client;
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DrawCardViewModel;
+
 
 public class DrawCardFragment extends Fragment {
     private ChanceCardCollection chanceCards;
@@ -23,6 +26,8 @@ public class DrawCardFragment extends Fragment {
     private DrawCardViewModel drawCardViewModel;
     private boolean isChanceField = true;
     private boolean isCommunityField = false;
+    private ClientViewModel clientViewModel;
+    private Client client;
 
 
     public DrawCardFragment() {
@@ -35,6 +40,7 @@ public class DrawCardFragment extends Fragment {
         binding = FragmentDrawcardBinding.inflate(getLayoutInflater());
 
         drawCardViewModel = new ViewModelProvider(requireActivity()).get(DrawCardViewModel.class);
+        clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
         this.chanceCards = drawCardViewModel.getChanceCards().getValue();
         this.communityCards = drawCardViewModel.getCommunityCards().getValue();
 
@@ -42,6 +48,7 @@ public class DrawCardFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        this.client = clientViewModel.getClientData().getValue();
         checkField();
 
         binding.buttonContinueDrawCard.setOnClickListener(view -> {
@@ -74,10 +81,12 @@ public class DrawCardFragment extends Fragment {
     private void returnChanceCard() {
         int index = chanceCards.drawFromDeck().getId();
         binding.ImageCard.setImageResource(chanceCards.getChanceCardDeck().get(index).getImageId());
+        client.getUser().setCardID(chanceCards.getChanceCardDeck().get(index).getImageId());
     }
 
     private void returnCommunityChestCard() {
         int index = communityCards.drawFromDeck().getId();
         binding.ImageCard.setImageResource(communityCards.getCommunityChestCardDeck().get(index).getImageId());
+        client.getUser().setCardID(communityCards.getCommunityChestCardDeck().get(index).getImageId());
     }
 }
