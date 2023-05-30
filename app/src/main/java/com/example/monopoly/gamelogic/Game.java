@@ -44,7 +44,6 @@ public class Game{
         return true;
     }
 
-
     public HashMap<Integer, Player> getPlayers() {
         return players;
     }
@@ -68,5 +67,86 @@ public class Game{
 
     public void setCurrentPlayersTurn(String currentPlayersTurn) {
         this.currentPlayersTurn = currentPlayersTurn;
+    }
+
+    public void doAction(int playerID) throws IOException {
+
+        //chance0: Advance to "Go".
+        if (players.get(playerID).getCardID() == 2131165320) {
+            //TODO: calculate int increment, so player is moved to GO
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|REPLACER" + players.get(playerID).getUsername());
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn");
+        }
+
+        //chance1: Advance to Strandbad. If you pass Go, collect $200.
+        if (players.get(playerID).getCardID() == 2131165321) {
+            //TODO: calculate int increment, so player is moved to Strandbad; calculate if player passes Go
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|REPLACER" + players.get(playerID).getUsername());
+            //if (fields.get("Strandbad").getId() < players.get(playerID).getPosition() ){
+            players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
+            //}
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn");
+        }
+
+        //chance2: Advance to Lindwurm. If you pass Go, collect $200.
+        if (players.get(playerID).getCardID() == 2131165332) {
+            //TODO: calculate int increment, so player is moved to Lindwurm; calculate if player passes Go
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|REPLACER" + players.get(playerID).getUsername());
+            //if (fields.get("Lindwurm").getId() < players.get(playerID).getPosition() ){
+            players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
+            //}
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn");
+        }
+
+        //chance3, Your building loan matures. Receive $150.
+        if (players.get(playerID).getCardID() == 2131165333) {
+            players.get(playerID).setCapital(players.get(playerID).getCapital() + 150);
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn");
+        }
+
+        //chance4: Advance to the nearest Railroad. If unowned, you may buy it from the Bank.
+        // If owned, pay owner twice the rental to which they are otherwise entitled.
+        if (players.get(playerID).getCardID() == 2131165334) {
+            //TODO: everything
+        }
+
+        //chance5: Bank pays you dividend of $50.
+        if (players.get(playerID).getCardID() == 2131165335) {
+            players.get(playerID).setCapital(players.get(playerID).getCapital() + 50);
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn");
+        }
+
+        //chance6: Get out of Jail Free.
+        if (players.get(playerID).getCardID() == 2131165336) {
+            //TODO: add attribute boolean outOfJailFree to player?
+        }
+
+        //chance7: Go back 3 spaces.
+        if (players.get(playerID).getCardID() == 2131165337) {
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|-3" + players.get(playerID).getUsername());
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn");
+        }
+
+        //chance8: Make general repairs on all your property: For each house pay $25, for each hotel pay $100.
+        if (players.get(playerID).getCardID() == 2131165338) {
+            //TODO: everything
+        }
+
+        //chance9: Take a trip to S-Bahn Wien.
+        if (players.get(playerID).getCardID() == 2131165339) {
+            //TODO: calculate increment to S-Bahn Wien
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|REPLACER");
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn");
+        }
+
+        //chance10, You have been elected Chairman of the Board. Pay each player $50.
+        if (players.get(playerID).getCardID() == 2131165322) {
+            for(int i =0; i< players.size(); i++){
+                if (i != playerID){
+                    //TODO: implement moneyTransfer in Client
+                    players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferMoney|50");
+                }
+            }
+        }
     }
 }

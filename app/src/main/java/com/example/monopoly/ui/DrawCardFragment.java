@@ -64,7 +64,7 @@ public class DrawCardFragment extends Fragment {
 
     private void checkField() {
 
-        // TO-DO: the if-condition has to check the actual position of the player
+        // TODO: the if-condition has to check the actual position of the player
         if (isChanceField) {
             returnChanceCard();
             isChanceField = false;
