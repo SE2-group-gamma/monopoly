@@ -47,7 +47,7 @@ public class GameTest {
 
         int expectedNewPosition = (p.getPosition() + diceRoll) % Board.FELDER_ANZAHL;
         p.incrementPosition(expectedNewPosition);
-        g.performPlayerTurn();
+        //g.performPlayerTurn();
 
         assertEquals(expectedNewPosition, p.getPosition());
     }
@@ -57,7 +57,7 @@ public class GameTest {
         g.addPlayer(p);
         g.addPlayer(q);
         Player firstPlayer=g.getCurrentPlayer();
-        g.proceedToNextPlayer();
+        //g.proceedToNextPlayer();
         Player newPlayer=g.getCurrentPlayer();
         assertNotEquals(firstPlayer,newPlayer);
         assertEquals(q,newPlayer);

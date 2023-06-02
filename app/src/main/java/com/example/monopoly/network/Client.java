@@ -175,23 +175,26 @@ public class Client extends Thread {
                     handleMessage(responseSplit);
                 }
                 synchronized (msgBuffer) {
-                    if (msgBuffer.size() != 0) {
-                        for (int i = msgBuffer.size() - 1; i >= 0; i--) {
-                            Log.d("msgBuffer", msgBuffer.get(i));
-                            outToServer.writeBytes(msgBuffer.get(i) + System.lineSeparator());
-                            outToServer.flush();
-                            msgBuffer.remove(i);
-                        }
+                    for (int i = msgBuffer.size() - 1; i >= 0; i--) {
+                        Log.d("msgBuffer", msgBuffer.get(i));
+                        outToServer.writeBytes(msgBuffer.get(i) + System.lineSeparator());
+                        outToServer.flush();
+                        msgBuffer.remove(i);
                     }
                 }
             }
-            //clientSocket.close();
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException(e);
+        } catch (IOException  | InterruptedException e) {
+            e.printStackTrace();
+        } finally{
+            try{
+                if(clientSocket != null ){
+                    clientSocket.close();
+                    monopolyServer.shutdownServer();
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }
         }
     }
 

@@ -137,4 +137,17 @@ public class MonopolyServer extends Thread{
         return localPort;
     }
 
+    public synchronized void shutdownServer() throws IOException{
+        stopListening();
+        synchronized (clients){
+            for(ClientHandler clientHandler : clients){
+                clientHandler.getClient().close();
+                Log.i("MonopolyServer","Conn is closed client "+ clientHandler.getClient());
+            }
+        }
+        serverSocket.close();
+        Log.i("MonopolyServer","Server socket gone");
+
+    }
+
 }
