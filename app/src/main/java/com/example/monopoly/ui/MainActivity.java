@@ -73,27 +73,10 @@ public class MainActivity extends AppCompatActivity {
         NsdManager manager = (NsdManager) getSystemService(Context.NSD_SERVICE);
         NSD_Client nsd = new NSD_Client();
         nsd.start(manager);
-        try {
-            monopoly = new MonopolyServer(6);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        gameBoardLayout();
+
 
     }
 
-    private void gameBoardLayout(){
-        //android:onClick="@{() -> activity.closeServerConnection()}"
-        //setContentView(R.layout.fragment_first);
-        View v = LayoutInflater.from(this).inflate(R.layout.game_board,binding.getRoot());
-        leaveButton = (Button)v.findViewById(R.id.backButton);
-        leaveButton.setOnClickListener(view -> {
-            closeServerConnection();
-            closeClientConnection();
-            setContentView(R.layout.fragment_first);
-        });
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
