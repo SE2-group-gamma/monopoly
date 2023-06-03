@@ -75,12 +75,6 @@ public class UIHandler extends Handler {
                         break;
 
                 }
-                currentPlayerindex++;
-                if (counter != currentPlayerindex) {
-                    disableTextFieldsForPlayer(counter);
-                } else{
-                    currentPlayer = game.getPlayers().get(currentPlayerindex);
-                }
 
                 counter++;
 
@@ -115,24 +109,10 @@ public class UIHandler extends Handler {
                     ((TextView) this.frag.getActivity().findViewById(R.id.textViewKey)).setText("Game-Key: " + HostGame.key);
                 }
                 break;
+
             case "move":
                 Log.d("move",data); //Data for move distance and player name
-                data="turnEnded";
-                msg.getData().putString("Data",data);
-                currentPlayer = game.getCurrentPlayer();
-                if ( data=="turnEnded" && currentPlayer!=null) {
-                    Log.i("move","inside if");
-                    int nextPlayerIndex = currentPlayerindex + 1;
-                    if (nextPlayerIndex >= game.getPlayers().size()) {
-                        nextPlayerIndex = 0; // Wrap around to the first player if reached the end
-                    }
 
-                    currentPlayer = game.getPlayers().get(nextPlayerIndex);
-                    Log.i("move",currentPlayer.toString());
-                    currentPlayerindex = nextPlayerIndex;
-                    // Enable text fields for the next player
-                    disableTextFieldsForPlayer(currentPlayerindex);
-                }
                 break;
         }
 
@@ -140,42 +120,5 @@ public class UIHandler extends Handler {
         //Toast.makeText(this.frag.getActivity(), msg1, Toast.LENGTH_LONG).show();
     }
 
-    private void disableTextFieldsForPlayer(int playerNumber) {
-        AppCompatActivity activity = (AppCompatActivity) frag.getActivity();
-        TextView textViewName = null;
-        TextView textViewUser = null;
 
-        switch (playerNumber) {
-            case 1:
-                textViewName = activity.findViewById(R.id.textViewUser1Name);
-                textViewUser = activity.findViewById(R.id.textViewUser1);
-                break;
-            case 2:
-                textViewName = activity.findViewById(R.id.textViewUser2Name);
-                textViewUser = activity.findViewById(R.id.textViewUser2);
-                break;
-            case 3:
-                textViewName = activity.findViewById(R.id.textViewUser3Name);
-                textViewUser = activity.findViewById(R.id.textViewUser3);
-                break;
-            case 4:
-                textViewName = activity.findViewById(R.id.textViewUser4Name);
-                textViewUser = activity.findViewById(R.id.textViewUser4);
-                break;
-            case 5:
-                textViewName = activity.findViewById(R.id.textViewUser5Name);
-                textViewUser = activity.findViewById(R.id.textViewUser5);
-                break;
-        }
-
-        if (textViewName != null && textViewUser != null) {
-            if (playerNumber == currentPlayerindex) {
-                textViewName.setEnabled(true);
-                textViewUser.setEnabled(true);
-            } else {
-                textViewName.setEnabled(false);
-                textViewUser.setEnabled(false);
-            }
-        }
-    }
 }
