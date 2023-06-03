@@ -20,10 +20,7 @@ public class Game{
     private HashMap<Integer,Player> players;        //ID,Player ... ID will be set server-side
     private static final AtomicInteger count = new AtomicInteger(0);
     //private volatile int ids = 0;
-    private Board board;
     private int currentPlayerIndex;
-    private Dices dices;
-    private Bank bank;
     private Game() {
         players = new HashMap<>();
     }

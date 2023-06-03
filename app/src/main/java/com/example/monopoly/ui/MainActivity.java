@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import java.io.IOException;
+import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private NSDServer nsdServ;
     private ClientHandler clientHandler;
     private NsdManager nsdManager;
+    private Socket socket;
 
     private Button leaveButton;
 
@@ -68,14 +70,30 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
         //Inizialize NSDManager for client-sided Network Service Discovery
-        /*NsdManager manager = (NsdManager) getSystemService(Context.NSD_SERVICE);
+        NsdManager manager = (NsdManager) getSystemService(Context.NSD_SERVICE);
         NSD_Client nsd = new NSD_Client();
-        nsd.start(manager);*/
-
+        nsd.start(manager);
+        try {
+            monopoly = new MonopolyServer(6);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        gameBoardLayout();
 
     }
 
+    private void gameBoardLayout(){
+        //android:onClick="@{() -> activity.closeServerConnection()}"
+        //setContentView(R.layout.fragment_first);
+        View v = LayoutInflater.from(this).inflate(R.layout.game_board,binding.getRoot());
+        leaveButton = (Button)v.findViewById(R.id.backButton);
+        leaveButton.setOnClickListener(view -> {
+            closeServerConnection();
+            closeClientConnection();
+            setContentView(R.layout.fragment_first);
+        });
 
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -108,33 +126,31 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void closeServerConnection(){
-        if (nsdServ != null && monopoly != null){
-            try{
-                monopoly.shutdownServer();
-                nsdServ.stopNSD();
-                Log.i("ServerActivity", "Server done main");
-            }catch ( IOException e){
+    private void closeServerConnection() {
+        try{
+            NSD_Client nsd = new NSD_Client();
+            monopoly.shutdownServer();
+            nsd.stopDiscovery();
+            //nsdServ.stopNSD();
+            Log.i("ServerActivity", "Server done main");
+       }catch ( IOException e){
                 e.printStackTrace();
-            }
-
         }
 
     }
 
     private void closeClientConnection() {
-        if(clientHandler != null && clientHandler.getClient() != null){
-            try{
-                clientHandler.getClient().close();
-                //clientHandler.endConn();
-            }catch (IOException e){
-                e.printStackTrace();
-            }
+        try{
+            socket = new Socket();
+            clientHandler = new ClientHandler(socket);
+            clientHandler.getClient().close();
+            //clientHandler.endConn();
+            Log.i("ClientActivity", "Client closed 1");
+        }catch (IOException e){
+            e.printStackTrace();
         }
-        if (nsdClient != null){
-            nsdClient.stopDiscovery();
-
-        }
+        nsdClient = new NSD_Client();
+        nsdClient.stopDiscovery();
         Log.i("ClientActivity","Client closed 3");
     }
 
@@ -142,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy(){
         super.onDestroy();
 
-        nsdClient.stopDiscovery();
+        /*nsdClient.stopDiscovery();
         try {
             monopoly.shutdownServer();
             clientHandler.getClient().close();
@@ -151,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         }
         nsdServ.stopNSD();
 
-        Log.i("MainActivity", "Conections done");
+        Log.i("MainActivity", "Conections done");*/
 
 
     }
