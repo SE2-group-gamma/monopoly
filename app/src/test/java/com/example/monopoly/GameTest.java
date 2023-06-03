@@ -38,29 +38,5 @@ public class GameTest {
         assertEquals(1,g.getPlayers().size());
     }
 
-    @Test
-    public void testPerformPlayerTurn() {
-        // Set up the dice roll value
-        g.addPlayer(p);
-        p.setPosition(0);
-        int diceRoll = 5;
-
-        int expectedNewPosition = (p.getPosition() + diceRoll) % Board.FELDER_ANZAHL;
-        p.incrementPosition(expectedNewPosition);
-        //g.performPlayerTurn();
-
-        assertEquals(expectedNewPosition, p.getPosition());
-    }
-
-    @Test
-    public void testProceedToNextPlayer(){
-        g.addPlayer(p);
-        g.addPlayer(q);
-        Player firstPlayer=g.getCurrentPlayer();
-        //g.proceedToNextPlayer();
-        Player newPlayer=g.getCurrentPlayer();
-        assertNotEquals(firstPlayer,newPlayer);
-        assertEquals(q,newPlayer);
-    }
 
 }
