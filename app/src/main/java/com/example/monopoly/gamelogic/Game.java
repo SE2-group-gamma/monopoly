@@ -92,62 +92,6 @@ public class Game{
         // Set the currentPlayerIndex to the found index
         this.currentPlayerIndex = currentPlayerIndex;
     }
-    /*
-    public void performPlayerTurn() {
-        try{
-            // Roll the dice
-            dices.rollDices();
-            int diceRoll = dices.getSum();
-
-            Player currentPlayer = getCurrentPlayer();
-            int currentPosition = currentPlayer.getPosition();
-            int newPosition = (currentPosition + diceRoll) % Board.FELDER_ANZAHL;
-            incrementPlayerPosition(currentPlayer.getId(),newPosition);
-
-            int currentField= newPosition;
-            Board.movePlayer(currentPlayer,diceRoll);
-            // add something like drawing cards, buying,paying rent etc after sunday
-
-            //updateGameState();
-            proceedToNextPlayer();
-        }catch (NullPointerException e) {
-            System.out.println("Initialize objects");
-        }
-
-    }
-
-
-    public void updateGameState(){
-        //add win/los conditions
-    }
-
-
-
-    public void proceedToNextPlayer(){
-        Player currentPlayer = getCurrentPlayer();
-
-        int currentPlayerIndex = -1;
-        for (int index : players.keySet()) {
-            if (players.get(index) == currentPlayer) {
-                currentPlayerIndex = index;
-                break;
-            }
-        }
-
-        // Calculate the index of the next player
-        int nextPlayerIndex = (currentPlayerIndex + 1) % players.size();
-
-        // Set the next player as the current player for the next turn
-        Player nextPlayer = players.get(nextPlayerIndex);
-        setCurrentPlayer(nextPlayer);
-
-        // Perform any additional actions or updates related to transitioning to the next player's turn
-        // For example, resetting player-specific variables or updating UI elements
-
-        // Start the next player's turn
-        performPlayerTurn();
-
-    }*/
 
     /*@Override
     public void run() {
