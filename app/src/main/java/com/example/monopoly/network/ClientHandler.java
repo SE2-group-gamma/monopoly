@@ -22,10 +22,8 @@ import java.util.HashMap;
 public class ClientHandler extends Thread{
 
     private Socket socket;
-
     public BufferedReader br;
     public BufferedWriter bw;
-
     private String hostname;
     private Client client;
     private String clientName;
@@ -79,11 +77,6 @@ public class ClientHandler extends Thread{
         try {
             this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-
-            //game = new Game();
-
-            //bw.write("Lobby|changeText|Martin Jäger"+System.lineSeparator());
-            //bw.flush();
             while(true){
                 replacer();
                 msgBuffer();
@@ -104,17 +97,13 @@ public class ClientHandler extends Thread{
         try {
             if(br.ready()){
                 String msg = br.readLine();
-                //Log.d("testOut",msg);
                 String[] strings = msg.split("\\|");
                 synchronized (clientToken){
-                    //Log.d("testOut","AAAAAAAAAAAAAAAAAAA");
                     String[] response = client.handleMessage(strings);
                     if(response!=null){
                         for (String str: response) {
-                            //bw.write(str.replaceAll("REPLACER",hostname));
                             server.broadCast(str.replaceAll("REPLACER",hostname));
                             //server.broadCastExceptSelf(str.replaceAll("REPLACER",hostname),this);
-                            //bw.flush();
                         }
                     }
                 }
@@ -128,10 +117,8 @@ public class ClientHandler extends Thread{
         synchronized (msgBuffer) {
             if (msgBuffer.size() != 0) {
                 for (int i = msgBuffer.size() - 1; i >= 0; i--) {
-                    //Log.d("msgBuffer", msgBuffer.get(i));
-                    Log.d("testOut",""+msgBuffer.get(i)+":"+hostname);
                     try {
-                        bw.write(msgBuffer.get(i)/*+"|"+hostname */+ System.lineSeparator());
+                        bw.write(msgBuffer.get(i)+ System.lineSeparator());
                         bw.flush();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -140,7 +127,6 @@ public class ClientHandler extends Thread{
                 }
             }
         }
-
     }
 
     /*public void endConn() throws IOException {

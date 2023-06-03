@@ -34,6 +34,7 @@ public class CommunityChestCardTest {
 
     @Test
     public void printAllCards() {
+        Assertions.assertEquals(20, collection.getAllCommunityChestCards().size());
         for (int i = 0; i < collection.getAllCommunityChestCards().size(); i++) {
             CommunityChestCard card = (CommunityChestCard) collection.getAllCommunityChestCards().get(i);
             System.out.println(card.getId() + ", " + card.getFunction());
@@ -42,6 +43,7 @@ public class CommunityChestCardTest {
 
     @Test
     public void printDeck() {
+        Assertions.assertEquals(20, collection.getCommunityChestCardDeck().size());
         for (int i = 0; i < collection.getCommunityChestCardDeck().size(); i++) {
             CommunityChestCard card = (CommunityChestCard) collection.getCommunityChestCardDeck().get(i);
             System.out.println(card.getId() + ", " + card.getFunction());
@@ -83,7 +85,9 @@ public class CommunityChestCardTest {
 
         }
         System.out.println("\nAll: " + collection.getAllCommunityChestCards().size());
+        Assertions.assertEquals(20, collection.getAllCommunityChestCards().size());
         System.out.println("Deck: " + collection.getCommunityChestCardDeck().size());
+        Assertions.assertEquals(0, collection.getCommunityChestCardDeck().size());
     }
 
     @Test

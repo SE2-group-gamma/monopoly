@@ -48,7 +48,6 @@ import java.io.IOException;
 public class JoinGame extends Fragment {
 
     private JoinGameBinding binding;
-    private Game game;
     private ClientViewModel clientViewModel;
 
     @Override
