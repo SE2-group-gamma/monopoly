@@ -58,7 +58,7 @@ public class PropertyStorage {
 
     public int getRentOnPropertyField(String propertyId, Player player) {
         Field property = properties.get(propertyId);
-        if(property.getOwner().equals(player)) return 0;
+        if(property.getOwner() == null || property.getOwner().equals(player)) return 0;
         if(property instanceof PropertyField){
             RentConfiguration rents = ((PropertyField) property).getRent();
             switch (((PropertyField) property).getNumOfHouses()) {
@@ -71,9 +71,22 @@ public class PropertyStorage {
                 case 4:
                     return rents.getRent4Houses();
                 case 0:
-                    return hasAllColours(player, ((PropertyField) property).getColor()) ? rents.getRentAllColors() : rents.getRent();
+                    return hasAllColours(property.getOwner(), ((PropertyField) property).getColor()) ? rents.getRentAllColors() : rents.getRent();
                 default:
                     throw new IllegalFieldException("Field has too many houses");
+            }
+        } else if(property instanceof TrainStation) {
+            switch ((int) numOfTrainStations(property.getOwner())){
+                case 1:
+                    return 25;
+                case 2:
+                    return 50;
+                case 3:
+                    return 100;
+                case 4:
+                    return 200;
+                default:
+                    return 0;
             }
         }
         throw new IllegalFieldException("Field is not a colored property");
@@ -83,7 +96,11 @@ public class PropertyStorage {
         this.properties.get(propertyId).setOwner(owner);
     }
 
-    private boolean hasAllColours(Player player, PropertyFieldColors color) {
-        return properties.values().stream().filter(x -> x instanceof PropertyField && ((PropertyField) x).getColor() == color).allMatch(x -> x.getOwner().equals(player));
+    private boolean hasAllColours(Player owner, PropertyFieldColors color) {
+        return properties.values().stream().filter(x -> x instanceof PropertyField && ((PropertyField) x).getColor() == color).allMatch(x -> x.getOwner().equals(owner));
+    }
+
+    private long numOfTrainStations(Player owner) {
+        return properties.values().stream().filter(x -> x instanceof TrainStation && x.getOwner().equals(owner)).count();
     }
 }
