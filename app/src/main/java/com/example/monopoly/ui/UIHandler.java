@@ -117,7 +117,9 @@ public class UIHandler extends Handler {
                 NavHostFragment.findNavController(frag)
                         .navigate(R.id.action_JoinGame_to_GameBoard);
                 break;
-            case "initializePlayers":
+            case "initializePlayerBottomRight":
+                Log.d("------------","initializePlayerBottomRight");
+
                 imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
                 layerDrawable = (LayerDrawable) imageView.getDrawable();
 
@@ -154,10 +156,155 @@ public class UIHandler extends Handler {
                 layerDrawable.setLayerInset(player5, 0,0,(int)player5X,(int)player5Y);
                 layerDrawable.setLayerInset(player6, 0,0,(int)player6X,(int)player6Y);
 
-                imageView.setImageDrawable(this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard));
+                Log.d("------------","initializePlayerBottomRightFinished");
+
+                //imageView.setImageDrawable(this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard));
+
+                break;
+            case "goFieldBottom":
+                // MAX FIELDS = 10 -> then initializePlayerBottomLeft
+                Log.d("------------","goFieldBottom");
+
+                imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
+                layerDrawable = (LayerDrawable) imageView.getDrawable();
+
+                heightRatio = layerDrawable.getMinimumHeight()/(double)21000;
+                widthRatio = layerDrawable.getMinimumWidth()/(double)21000;
+
+                goOneSmallField = (double)1700*widthRatio;
+
+                layerDrawable.setLayerGravity(player3, Gravity.BOTTOM | Gravity.RIGHT);
+                player3X = player3X + (goOneSmallField*10);
+                layerDrawable.setLayerInset(player3, 0,0,(int)player3X,(int)player3Y);
+                layerDrawable.setLayerGravity(player2, Gravity.BOTTOM | Gravity.RIGHT);
+                player2X = player2X + (goOneSmallField*10);
+                layerDrawable.setLayerInset(player2, 0,0,(int)player2X,(int)player2Y);
+
+                layerDrawable.setLayerGravity(player5, Gravity.BOTTOM | Gravity.RIGHT);
+                player5X = player5X + (goOneSmallField*10);
+                layerDrawable.setLayerInset(player5, 0,0,(int)player5X,(int)player5Y);
+                layerDrawable.setLayerGravity(player6, Gravity.BOTTOM | Gravity.RIGHT);
+                player6X = player6X + (goOneSmallField*10);
+                layerDrawable.setLayerInset(player6, 0,0,(int)player6X,(int)player6Y);
+
+                layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.RIGHT);
+                player1X = player1X + (goOneSmallField*10);
+                layerDrawable.setLayerInset(player1, 0,0,(int)player1X,(int)player1Y);
+                layerDrawable.setLayerGravity(player4, Gravity.BOTTOM | Gravity.RIGHT);
+                player4X = player4X + (goOneSmallField*10);
+                layerDrawable.setLayerInset(player4, 0,0,(int)player4X,(int)player4Y);
+
+                Log.d("------------","goFieldBottomFinished");
+
+                //refresh Image
+                //imageView.setImageDrawable(this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard));
+
+                break;
+            case "initializePlayerBottomLeft":
+                Log.d("------------","initializePlayerBottomLeft");
+
+                imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
+                layerDrawable = (LayerDrawable) imageView.getDrawable();
+
+                // The Ratio is relative to a 1440/3120 phone with density of 3.5
+                // Always multiply by this Ratio
+                heightRatio = layerDrawable.getMinimumHeight()/(double)21000;
+                widthRatio = layerDrawable.getMinimumWidth()/(double)21000;
+
+                double initializeLeftY = (double)1800*widthRatio;
+                double initializeLeftX = (double)1200*widthRatio;
+
+                // if(player2 || player3)
+                // player2Y = player2Y + 1800;
+                // player2X = player2X + 1200;
+                layerDrawable.setLayerGravity(player3, Gravity.BOTTOM | Gravity.RIGHT);
+                player3X = player3X + initializeLeftX;
+                player3Y = player3Y + initializeLeftY;
+                layerDrawable.setLayerInset(player3, 0,0,(int)player3X,(int)player3Y);
+
+                layerDrawable.setLayerGravity(player2, Gravity.BOTTOM | Gravity.RIGHT);
+                player2X = player2X + initializeLeftX;
+                player2Y = player2Y + initializeLeftY;
+                layerDrawable.setLayerInset(player2, 0,0,(int)player2X,(int)player2Y);
+
+                // if(player5 || player6)
+                // player2Y = player2Y + 1800;
+                // player2X = player2X + 1200;
+                layerDrawable.setLayerGravity(player5, Gravity.BOTTOM | Gravity.RIGHT);
+                player5X = player5X + initializeLeftX;
+                player5Y = player5Y + initializeLeftY;
+                layerDrawable.setLayerInset(player5, 0,0,(int)player5X,(int)player5Y);
+
+                layerDrawable.setLayerGravity(player6, Gravity.BOTTOM | Gravity.RIGHT);
+                player6X = player6X + initializeLeftX;
+                player6Y = player6Y + initializeLeftY;
+                layerDrawable.setLayerInset(player6, 0,0,(int)player6X,(int)player6Y);
+
+                // if(player1)
+                // player1Y = player1Y + 2800;
+                double initializeLeft14Y = (double)2800*widthRatio;
+                layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.RIGHT);
+                player1Y = player1Y + initializeLeft14Y;
+                layerDrawable.setLayerInset(player1, 0,0,(int)player1X,(int)player1Y);
+
+                // if(player4)
+                // player4Y = player4Y + 3700;
+                // player4X = player4X + 900;
+                double initializeLeft4X = (double)900*widthRatio;
+                double initializeLeft4Y = (double)3700*widthRatio;
+                layerDrawable.setLayerGravity(player4, Gravity.BOTTOM | Gravity.RIGHT);
+                player4X = player4X - initializeLeft4X;
+                player4Y = player4Y + initializeLeft4Y;
+                layerDrawable.setLayerInset(player4, 0,0,(int)player4X,(int)player4Y);
+
+                Log.d("------------","initializePlayerBottomLeftFinished");
+
+                //refresh Image
+                //imageView.setImageDrawable(this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard));
+
+                break;
+            case "goFieldLeft":
+                // MAX FIELDS = 9 -> then initializePlayerTopLeft
+                Log.d("------------","goFieldLeft");
+
+                imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
+                layerDrawable = (LayerDrawable) imageView.getDrawable();
+
+                heightRatio = layerDrawable.getMinimumHeight()/(double)21000;
+                widthRatio = layerDrawable.getMinimumWidth()/(double)21000;
+
+                goOneSmallField = (double)1500*widthRatio;
+
+                layerDrawable.setLayerGravity(player3, Gravity.BOTTOM | Gravity.RIGHT);
+                player3Y = player3Y + (goOneSmallField*9);
+                layerDrawable.setLayerInset(player3, 0,0,(int)player3X,(int)player3Y);
+                layerDrawable.setLayerGravity(player2, Gravity.BOTTOM | Gravity.RIGHT);
+                player2Y = player2Y + (goOneSmallField*9);
+                layerDrawable.setLayerInset(player2, 0,0,(int)player2X,(int)player2Y);
+
+                layerDrawable.setLayerGravity(player5, Gravity.BOTTOM | Gravity.RIGHT);
+                player5Y = player5Y + (goOneSmallField*9);
+                layerDrawable.setLayerInset(player5, 0,0,(int)player5X,(int)player5Y);
+                layerDrawable.setLayerGravity(player6, Gravity.BOTTOM | Gravity.RIGHT);
+                player6Y = player6Y + (goOneSmallField*9);
+                layerDrawable.setLayerInset(player6, 0,0,(int)player6X,(int)player6Y);
+
+                layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.RIGHT);
+                player1Y = player1Y + (goOneSmallField*9);
+                layerDrawable.setLayerInset(player1, 0,0,(int)player1X,(int)player1Y);
+                layerDrawable.setLayerGravity(player4, Gravity.BOTTOM | Gravity.RIGHT);
+                player4Y = player4Y + (goOneSmallField*9);
+                layerDrawable.setLayerInset(player4, 0,0,(int)player4X,(int)player4Y);
+
+                Log.d("------------","goFieldLeftFinished");
+
+                //refresh Image
+                //imageView.setImageDrawable(this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard));
 
                 break;
             case "initializePlayerTopLeft":
+                Log.d("------------","initializePlayerTopLeft");
+
                 imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
                 layerDrawable = (LayerDrawable) imageView.getDrawable();
 
@@ -194,11 +341,14 @@ public class UIHandler extends Handler {
                 layerDrawable.setLayerInset(player5, (int)player5X,(int)player5Y,0,0);
                 layerDrawable.setLayerInset(player6, (int)player6X,(int)player6Y,0,0);
 
+                Log.d("------------","initializePlayerTopLeftFinished");
+
                 //imageView.setImageDrawable(this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard));
 
                 break;
-            case "goFieldSmallFieldTop":
-                Log.d("------------","goSmallField");
+            case "goFieldTop":
+                // MAX FIELDS = 10 -> then initializePlayerTopRight
+                Log.d("------------","goFieldTop");
 
                 imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
                 layerDrawable = (LayerDrawable) imageView.getDrawable();
@@ -229,15 +379,14 @@ public class UIHandler extends Handler {
                 player4X = player4X + (goOneSmallField*10);
                 layerDrawable.setLayerInset(player4, (int)player4X,(int)player4Y,0,0);
 
-                Log.d("----",""+player2X);
-                Log.d("----",""+player2Y);
+                Log.d("------------","goFieldTopFinished");
 
                 //refresh Image
                 //imageView.setImageDrawable(this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard));
 
                 break;
             case "initializePlayerTopRight":
-                Log.d("------------","initializePlayerBottomLeft");
+                Log.d("------------","initializePlayerTopRight");
 
                 imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
                 layerDrawable = (LayerDrawable) imageView.getDrawable();
@@ -253,8 +402,6 @@ public class UIHandler extends Handler {
                 // if(player2 || player3)
                 // player2Y = player2Y + 1800;
                 // player2X = player2X + 1200;
-                Log.d("----",""+player2X);
-                Log.d("----",""+player2Y);
                 layerDrawable.setLayerGravity(player3, Gravity.TOP | Gravity.LEFT);
                 player3X = player3X + initializeRightX;
                 player3Y = player3Y + initializeRightY;
@@ -295,12 +442,15 @@ public class UIHandler extends Handler {
                 player4Y = player4Y + initializeRight4Y;
                 layerDrawable.setLayerInset(player4, (int)player4X,(int)player4Y,0,0);
 
+                Log.d("------------","initializePlayerTopRightFinished");
+
                 //refresh Image
                 //imageView.setImageDrawable(this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard));
 
                 break;
-            case "goFieldSmallFieldRight":
-                Log.d("------------","goSmallField");
+            case "goFieldRight":
+                // MAX FIELDS = 9 -> then initializePlayerBottomRight
+                Log.d("------------","goFieldRight");
 
                 imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
                 layerDrawable = (LayerDrawable) imageView.getDrawable();
@@ -331,104 +481,7 @@ public class UIHandler extends Handler {
                 player4Y = player4Y + (goOneSmallField*9);
                 layerDrawable.setLayerInset(player4, (int)player4X,(int)player4Y,0,0);
 
-                //refresh Image
-                imageView.setImageDrawable(this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard));
-
-                break;
-            case "goFieldSmallFieldBottom":
-                Log.d("------------","goSmallField");
-
-                imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
-                layerDrawable = (LayerDrawable) imageView.getDrawable();
-
-                heightRatio = layerDrawable.getMinimumHeight()/(double)21000;
-                widthRatio = layerDrawable.getMinimumWidth()/(double)21000;
-
-                goOneSmallField = (double)1700*widthRatio;
-
-                layerDrawable.setLayerGravity(player3, Gravity.BOTTOM | Gravity.RIGHT);
-                player3X = player3X + (goOneSmallField*10);
-                layerDrawable.setLayerInset(player3, 0,0,(int)player3X,(int)player3Y);
-                layerDrawable.setLayerGravity(player2, Gravity.BOTTOM | Gravity.RIGHT);
-                player2X = player2X + (goOneSmallField*10);
-                layerDrawable.setLayerInset(player2, 0,0,(int)player2X,(int)player2Y);
-
-                layerDrawable.setLayerGravity(player5, Gravity.BOTTOM | Gravity.RIGHT);
-                player5X = player5X + (goOneSmallField*10);
-                layerDrawable.setLayerInset(player5, 0,0,(int)player5X,(int)player5Y);
-                layerDrawable.setLayerGravity(player6, Gravity.BOTTOM | Gravity.RIGHT);
-                player6X = player6X + (goOneSmallField*10);
-                layerDrawable.setLayerInset(player6, 0,0,(int)player6X,(int)player6Y);
-
-                layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.RIGHT);
-                player1X = player1X + (goOneSmallField*10);
-                layerDrawable.setLayerInset(player1, 0,0,(int)player1X,(int)player1Y);
-                layerDrawable.setLayerGravity(player4, Gravity.BOTTOM | Gravity.RIGHT);
-                player4X = player4X + (goOneSmallField*10);
-                layerDrawable.setLayerInset(player4, 0,0,(int)player4X,(int)player4Y);
-
-                //refresh Image
-                //imageView.setImageDrawable(this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard));
-
-                break;
-            case "initializePlayerBottomLeft":
-                Log.d("------------","initializePlayerBottomLeft");
-
-                imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
-                layerDrawable = (LayerDrawable) imageView.getDrawable();
-
-                // The Ratio is relative to a 1440/3120 phone with density of 3.5
-                // Always multiply by this Ratio
-                heightRatio = layerDrawable.getMinimumHeight()/(double)21000;
-                widthRatio = layerDrawable.getMinimumWidth()/(double)21000;
-
-                double initializeLeftY = (double)1800*widthRatio;
-                double initializeLeftX = (double)1200*widthRatio;
-
-                // if(player2 || player3)
-                // player2Y = player2Y + 1800;
-                // player2X = player2X + 1200;
-                Log.d("----",""+player2X);
-                Log.d("----",""+player2Y);
-                layerDrawable.setLayerGravity(player3, Gravity.BOTTOM | Gravity.RIGHT);
-                player3X = player3X + initializeLeftX;
-                player3Y = player3Y + initializeLeftY;
-                layerDrawable.setLayerInset(player3, 0,0,(int)player3X,(int)player3Y);
-
-                layerDrawable.setLayerGravity(player2, Gravity.BOTTOM | Gravity.RIGHT);
-                player2X = player2X + initializeLeftX;
-                player2Y = player2Y + initializeLeftY;
-                layerDrawable.setLayerInset(player2, 0,0,(int)player2X,(int)player2Y);
-
-                // if(player5 || player6)
-                // player2Y = player2Y + 1800;
-                // player2X = player2X + 1200;
-                layerDrawable.setLayerGravity(player5, Gravity.BOTTOM | Gravity.RIGHT);
-                player5X = player5X + initializeLeftX;
-                player5Y = player5Y + initializeLeftY;
-                layerDrawable.setLayerInset(player5, 0,0,(int)player5X,(int)player5Y);
-
-                layerDrawable.setLayerGravity(player6, Gravity.BOTTOM | Gravity.RIGHT);
-                player6X = player6X + initializeLeftX;
-                player6Y = player6Y + initializeLeftY;
-                layerDrawable.setLayerInset(player6, 0,0,(int)player6X,(int)player6Y);
-
-                // if(player1)
-                // player1Y = player1Y + 2800;
-                double initializeLeft14Y = (double)2800*widthRatio;
-                layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.RIGHT);
-                player1Y = player1Y + initializeLeft14Y;
-                layerDrawable.setLayerInset(player1, 0,0,(int)player1X,(int)player1Y);
-
-                // if(player4)
-                // player4Y = player4Y + 3700;
-                // player4X = player4X + 900;
-                double initializeLeft4X = (double)900*widthRatio;
-                double initializeLeft4Y = (double)3700*widthRatio;
-                layerDrawable.setLayerGravity(player4, Gravity.BOTTOM | Gravity.RIGHT);
-                player4X = player4X - initializeLeft4X;
-                player4Y = player4Y + initializeLeft4Y;
-                layerDrawable.setLayerInset(player4, 0,0,(int)player4X,(int)player4Y);
+                Log.d("------------","goFieldRightFinished");
 
                 //refresh Image
                 imageView.setImageDrawable(this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard));

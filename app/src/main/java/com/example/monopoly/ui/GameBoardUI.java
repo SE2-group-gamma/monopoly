@@ -57,12 +57,6 @@ public class GameBoardUI extends Fragment {
 
         Client.subscribe(this,"GameBoardUI");
 
-        //binding.ivZoom.setImageResource(R.drawable.layerlist_for_gameboard);
-
-        // Initialize players
-
-        ImageView imageView = binding.ivZoom;
-        LayerDrawable layerDrawable = (LayerDrawable) imageView.getDrawable();
 
         // DisplayMetrics might still be useful, so keep them for now
 /*
@@ -70,15 +64,8 @@ public class GameBoardUI extends Fragment {
         ((Activity) getContext()).getWindowManager()
                 .getDefaultDisplay()
                 .getRealMetrics(displayMetrics);
-        //int height = displayMetrics.heightPixels/displayMetrics.density;
-        //int width = displayMetrics.widthPixels/displayMetrics.density;
         double height = displayMetrics.heightPixels;
         double width = displayMetrics.widthPixels;
-
-        Log.d("-----x------",""+height);
-        Log.d("------x-----",""+width);
-
-        Log.d("-----------Density",""+displayMetrics.density);
 
         // Tried relative calculation with dp
         //double heightRatio = (double) height / 411.4285583496094;
@@ -91,40 +78,28 @@ public class GameBoardUI extends Fragment {
 
         double heightRatio = layerDrawable.getMinimumHeight()/(double)21000;
         double widthRatio = layerDrawable.getMinimumWidth()/(double)21000;
-
-        Log.d("-----x------",""+heightRatio);
-        Log.d("------x-----",""+widthRatio);
-
-        // To go from a big field in the corners to the next field: +/- 2800 (horizontally)
-        double goOneBigFieldHorizontal = (double)2800*widthRatio;
-        player1X = player1X + goOneBigFieldHorizontal;
-        player4X = player4X + goOneBigFieldHorizontal;
-        layerDrawable.setLayerInset(player1, 0,0,(int)player1X,(int)player1Y);
-        layerDrawable.setLayerInset(player4, 0,0,(int)player4X,(int)player4Y);
-
-        // To go from a smaller field to a smaller field: +/- 1700 (horizontally)
-        double goOneSmallFieldHorizontal = (double)1700*widthRatio;
-        player2X = player2X + goOneBigFieldHorizontal + (goOneSmallFieldHorizontal*5);
-        player5X = player5X + goOneBigFieldHorizontal + (goOneSmallFieldHorizontal*5);
-        layerDrawable.setLayerInset(player2, 0,0,(int)player2X,(int)player2Y);
-        layerDrawable.setLayerInset(player5, 0,0,(int)player5X,(int)player5Y);
 */
-
-        // refresh ImageView to display changes
-        //imageView.invalidate();
 
         super.onViewCreated(view, savedInstanceState);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
-                    /*handler.writeToClient("GameBoardUI|initializePlayers| ");
-                    handler.writeToClient("GameBoardUI|goFieldSmallFieldBottom| ");
-                    handler.writeToClient("GameBoardUI|initializePlayerBottomLeft| ");*/
+                    handler.writeToClient("GameBoardUI|initializePlayerBottomRight| ");
+                    dosleep();
+                    handler.writeToClient("GameBoardUI|goFieldBottom| ");
+                    dosleep();
+                    handler.writeToClient("GameBoardUI|initializePlayerBottomLeft| ");
+                    dosleep();
+                    handler.writeToClient("GameBoardUI|goFieldLeft| ");
+                    dosleep();
                     handler.writeToClient("GameBoardUI|initializePlayerTopLeft| ");
-                    handler.writeToClient("GameBoardUI|goFieldSmallFieldTop| ");
+                    dosleep();
+                    handler.writeToClient("GameBoardUI|goFieldTop| ");
+                    dosleep();
                     handler.writeToClient("GameBoardUI|initializePlayerTopRight| ");
-                    handler.writeToClient("GameBoardUI|goFieldSmallFieldRight| ");
+                    dosleep();
+                    handler.writeToClient("GameBoardUI|goFieldRight| ");
                 }
             }
         });
@@ -152,5 +127,12 @@ public class GameBoardUI extends Fragment {
         binding = null;
     }
 
+    public void dosleep(){
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
