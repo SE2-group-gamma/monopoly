@@ -1,5 +1,6 @@
 package com.example.monopoly.gamelogic;
 
+import android.graphics.Color;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -89,6 +90,7 @@ public class Game{
                 }
             }
             if (players.get(playerID).getPosition() > fieldId) {
+                //TODO: add action "changeCapital" to Client?
                 players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
                 incr = fields.size() - players.get(playerID).getPosition() + fieldId;
             }else {
@@ -109,6 +111,7 @@ public class Game{
                 }
             }
             if (players.get(playerID).getPosition() > fieldId) {
+                //TODO: add action "changeCapital" to Client?
                 players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
                 incr = fields.size() - players.get(playerID).getPosition() + fieldId;
             }else {
@@ -121,20 +124,89 @@ public class Game{
 
         //chance3, Your building loan matures. Receive $150.
         if (players.get(playerID).getCardID() == 2131165333) {
+            //TODO: add action "changeCapital" to Client?
             players.get(playerID).setCapital(players.get(playerID).getCapital() + 150);
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn");
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
 
         //chance4: Advance to the nearest Railroad. If unowned, you may buy it from the Bank.
         // If owned, pay owner twice the rental to which they are otherwise entitled.
         if (players.get(playerID).getCardID() == 2131165334) {
-            //TODO: everything
+            int kaernten = 0;
+            int tirol = 0;
+            int steiermark = 0;
+            int wien = 0;
+            int incr;
+
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i).getName() == "S-Bahn Kärnten") {
+                    kaernten = fields.get(i).getId();
+                }
+                if (fields.get(i).getName() == "S-Bahn Tirol") {
+                    tirol = fields.get(i).getId();
+                }
+                if (fields.get(i).getName() == "S-Bahn Steiermark") {
+                    steiermark = fields.get(i).getId();
+                }
+                if (fields.get(i).getName() == "S-Bahn Wien") {
+                    wien = fields.get(i).getId();
+                }
+            }
+
+            int difKtn = kaernten - players.get(playerID).getPosition();
+            int difTrl = tirol - players.get(playerID).getPosition();
+            int difStm = steiermark - players.get(playerID).getPosition();
+            int difVie = wien - players.get(playerID).getPosition();
+
+            if (Math.abs(difKtn) < Math.abs(difTrl)) {
+                if (Math.abs(difKtn) < Math.abs(difStm)) {
+                    if (Math.abs(difKtn) < Math.abs(difVie)) {
+                        incr = difKtn;
+                    } else {
+                        incr = difVie;
+                    }
+                } else {
+                    if (Math.abs(difStm) < Math.abs(difVie)) {
+                        incr = difStm;
+                    } else {
+                        incr = difVie;
+                    }
+                }
+            } else {
+                if (Math.abs(difTrl) < Math.abs(difStm)) {
+                    if (Math.abs(difTrl) < Math.abs(difVie)) {
+                        incr = difTrl;
+                    } else {
+                        incr = difVie;
+                    }
+                } else {
+                    if (Math.abs(difTrl) < Math.abs(difVie)) {
+                        incr = difTrl;
+                    } else {
+                        incr = difVie;
+                    }
+                }
+            }
+
+            int amount;
+            Player owner;
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
+            if (fields.get(players.get(playerID).getPosition()).getOwner() != null) {
+                amount = fields.get(players.get(playerID).getPosition()).getCost() * 2;
+                owner = fields.get(players.get(playerID).getPosition()).getOwner();
+
+                //TODO: add action "transferMoney" to Client?
+                players.get(playerID).transferMoneyPlayerToPlayer(players.get(playerID), owner, amount);
+            }
+
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
 
         //chance5: Bank pays you dividend of $50.
         if (players.get(playerID).getCardID() == 2131165335) {
+            //TODO: add action "transferMoney" to Client?
             players.get(playerID).setCapital(players.get(playerID).getCapital() + 50);
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn");
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
 
         //chance6: Get out of Jail Free.
@@ -155,16 +227,21 @@ public class Game{
 
         //chance9: Take a trip to S-Bahn Wien.
         if (players.get(playerID).getCardID() == 2131165339) {
-            //TODO: calculate increment to S-Bahn Wien
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|REPLACER");
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn");
+            int incr;
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i).getName() == "S-Bahn Wien") {
+                    incr = players.get(playerID).getPosition() - fields.get(i).getId();
+                    players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
+                }
+            }
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
 
         //chance10, You have been elected Chairman of the Board. Pay each player $50.
         if (players.get(playerID).getCardID() == 2131165322) {
             for(int i =0; i< players.size(); i++){
                 if (i != playerID){
-                    //TODO: implement moneyTransfer in Client
+                    //TODO: implement "moneyTransfer" in Client
                     players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferMoney|50");
                 }
             }
