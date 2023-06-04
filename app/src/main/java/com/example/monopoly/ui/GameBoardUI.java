@@ -1,11 +1,18 @@
 package com.example.monopoly.ui;
 
+import android.app.Activity;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.InsetDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +25,8 @@ import com.example.monopoly.databinding.GameBoardBinding;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
+
+import java.io.IOException;
 
 import java.io.IOException;
 
@@ -46,11 +55,13 @@ public class GameBoardUI extends Fragment {
             Log.i("Dices", dices.toString());
             String cheated = dices.isLastRollFlawed()==true?"t":"f";
 
+
             try {
                 this.client.writeToServer("GameBoardUI|move|"+dices.getSum()+":"+cheated+"|"+this.client.getUser().getUsername());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
 
         });
     }
@@ -70,13 +81,56 @@ public class GameBoardUI extends Fragment {
 
         this.client = clientViewModel.getClientData().getValue();       // set client
 
+
+        // DisplayMetrics might still be useful, so keep them for now
+/*
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager()
+                .getDefaultDisplay()
+                .getRealMetrics(displayMetrics);
+        double height = displayMetrics.heightPixels;
+        double width = displayMetrics.widthPixels;
+
+        // Tried relative calculation with dp
+        //double heightRatio = (double) height / 411.4285583496094;
+        //double widthRatio = (double) width / 891.4285888671875;
+
+        //double heightRatio = (double) height / 1440;
+        //double widthRatio = (double) width / 3120;
+        //heightRatio = heightRatio * (3.5/displayMetrics.density);
+        //widthRatio = widthRatio * (3.5/displayMetrics.density);
+
+        double heightRatio = layerDrawable.getMinimumHeight()/(double)21000;
+        double widthRatio = layerDrawable.getMinimumWidth()/(double)21000;
+*/
+
         super.onViewCreated(view, savedInstanceState);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                // TODO: Set textView with key from Lobby
-                //binding.textViewKey.setText("Game-Key: "+key);
+                for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
+                    //New Protocol: Fragment|action|player:additionalData|sender
+                    handler.writeToClient("GameBoardUI|initializePlayerBottomRight|1,2,3,4,5,6:nothing|sender");
+                    dosleep();
+                    handler.writeToClient("GameBoardUI|goFieldBottom| ");
+                    dosleep();
+                    handler.writeToClient("GameBoardUI|initializePlayerBottomLeft| ");
+                    dosleep();
+                    handler.writeToClient("GameBoardUI|goFieldLeft| ");
+                    dosleep();
+                    handler.writeToClient("GameBoardUI|initializePlayerTopLeft| ");
+                    dosleep();
+                    handler.writeToClient("GameBoardUI|goFieldTop| ");
+                    dosleep();
+                    handler.writeToClient("GameBoardUI|initializePlayerTopRight| ");
+                    dosleep();
+                    handler.writeToClient("GameBoardUI|goFieldRight| ");
+                }
             }
+        });
+
+        binding.buy.setOnContextClickListener(view1 -> {
+            return true;
         });
 
         binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
@@ -91,6 +145,7 @@ public class GameBoardUI extends Fragment {
         });
 
         binding.throwdice.setOnClickListener(view1 -> {
+
             showDiceFragment();
             /*for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
                 handler.writeToClient("GameBoardUI|gameStart| ");
@@ -107,4 +162,13 @@ public class GameBoardUI extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+    public void dosleep(){
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

@@ -104,8 +104,10 @@ public class ClientHandler extends Thread{
                     String[] response = client.handleMessage(strings);
                     if(response!=null){
                         for (String str: response) {
+
                             server.broadCast(str.replaceAll("REPLACER",hostname));
                             //server.broadCastExceptSelf(str.replaceAll("REPLACER",hostname),this);
+
                         }
                     }
                 }
