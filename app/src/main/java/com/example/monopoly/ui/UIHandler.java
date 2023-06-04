@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
+import com.example.monopoly.network.Client;
 
 public class UIHandler extends Handler {
     private Fragment frag;
@@ -61,8 +62,12 @@ public class UIHandler extends Handler {
         super.handleMessage(msg);
         String data = msg.getData().get("Data").toString();
         String type = msg.getData().get("ActionType").toString();
-
-
+        String player = msg.getData().get("data").toString();
+        String client = "";
+        Client clientObject = null;
+        try {
+            client = msg.getData().get("Client").toString();
+        }catch (Exception e){}
 
         switch (type) {
             case "changeText":

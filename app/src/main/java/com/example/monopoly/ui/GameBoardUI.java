@@ -29,6 +29,8 @@ import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.ClientHandler;
 
+import java.io.IOException;
+
 public class GameBoardUI extends Fragment {
 
     private GameBoardBinding binding;
@@ -40,6 +42,9 @@ public class GameBoardUI extends Fragment {
         diceViewModel = new ViewModelProvider(requireActivity()).get(DiceViewModel.class);
         diceViewModel.getDicesData().observe(this, dices -> {
             Log.i("Dices", dices.toString());
+            String cheated = dices.isLastRollFlawed()==true?"t":"f";
+
+
         });
     }
 
@@ -85,7 +90,8 @@ public class GameBoardUI extends Fragment {
             @Override
             public void onGlobalLayout() {
                 for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
-                    handler.writeToClient("GameBoardUI|initializePlayerBottomRight| ");
+                    //New Protocol: Fragment|action|player:additionalData|sender
+                    handler.writeToClient("GameBoardUI|initializePlayerBottomRight|1,2,3,4,5,6:nothing|sender");
                     dosleep();
                     handler.writeToClient("GameBoardUI|goFieldBottom| ");
                     dosleep();

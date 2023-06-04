@@ -191,6 +191,11 @@ public class Client extends Thread {
             Bundle b = new Bundle();
             b.putString("ActionType", responseSplit[1]);
             b.putString("Data", responseSplit[2]);
+            try {
+                if (responseSplit[3] != null) {
+                    b.putString("Client", responseSplit[3]);
+                }
+            }catch (Exception e){}
             handleMessage.setData(b);
             handlers.get(responseSplit[0]).sendMessage(handleMessage);
         }
