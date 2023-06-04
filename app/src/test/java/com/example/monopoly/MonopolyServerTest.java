@@ -59,8 +59,10 @@ public class MonopolyServerTest {
     @Test
     public void createMonopolyServerTest(){
         MonopolyServer ms = null;
+        ServerSocket serverSocket1 = mock(ServerSocket.class);
+        when(serverSocket1.getLocalPort()).thenReturn(1234);        //has to be set to a different value because it could interfere with other tests
         try {
-            ms = new MonopolyServer(10);
+            ms = new MonopolyServer(10,serverSocket1);
         } catch (IOException e) {
             fail();
             e.printStackTrace();

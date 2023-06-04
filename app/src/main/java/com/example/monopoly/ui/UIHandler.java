@@ -1,8 +1,12 @@
 package com.example.monopoly.ui;
 
+
+import android.os.Bundle;
+
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
@@ -14,16 +18,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.network.Client;
 
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
+
+
 public class UIHandler extends Handler {
     private Fragment frag;
     private int counter=1;
+
+
+    private String hostname = "";
+
+    private Client client;
+    private ClientViewModel clientViewModel;
+
 
     public static final int player1 = 1;
     public static final int player2 = 2;
@@ -53,16 +67,20 @@ public class UIHandler extends Handler {
 
     double goOneSmallField;
 
+
     public UIHandler(Fragment app) {
         this.frag = app;
     }
 
+
+
     @Override
     public void handleMessage(@NonNull Message msg) {
+        clientViewModel = new ViewModelProvider(frag.requireActivity()).get(ClientViewModel.class);
+        this.client = clientViewModel.getClientData().getValue();
         super.handleMessage(msg);
         String data = msg.getData().get("Data").toString();
         String type = msg.getData().get("ActionType").toString();
-        String player = msg.getData().get("data").toString();
         String client = "";
         Client clientObject = null;
         try {
@@ -119,8 +137,13 @@ public class UIHandler extends Handler {
                 break;
             case "gameStart":
                 Log.d("------------","gameStart");
+                /////as                                                                                                             asdadasdadasdasdasdasd
+                Bundle bundle = new Bundle();           //Sollte ich als viewmodel übergeben
+                bundle.putString("client",client);
+                //bundle.putSerializable("clientObject",);
+                Log.i("Dices","gameStart!!!!!");
                 NavHostFragment.findNavController(frag)
-                        .navigate(R.id.action_JoinGame_to_GameBoard);
+                        .navigate(R.id.action_JoinGame_to_GameBoard,bundle);
                 break;
             case "initializePlayerBottomRight":
                 Log.d("------------","initializePlayerBottomRight");
@@ -497,6 +520,26 @@ public class UIHandler extends Handler {
                 if(HostGame.key!=0) {
                     ((TextView) this.frag.getActivity().findViewById(R.id.textViewKey)).setText("Game-Key: " + HostGame.key);
                 }
+                break;
+            case "move":
+                Log.d("move",data); //Data for move distance and player name
+                break;
+
+
+            case "playersTurn":
+                ((TextView) this.frag.getActivity().findViewById(R.id.turn)).setText(data);
+                Log.d("ButtonGreyCheck", "Here is Button"+this.client.getUser().getUsername());
+                if(data.equals(this.client.getUser().getUsername())){
+                    Log.d("ButtonGreyCheck2", "VERY NICE INDEED");
+                    this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(1.0f);
+                    this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(true);
+
+                }else{
+                    this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);
+                    this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(false);
+                }
+
+                break;
         }
         // Needed information: new position as an int, player as an int (1,2,3,4,5,6)
     }
