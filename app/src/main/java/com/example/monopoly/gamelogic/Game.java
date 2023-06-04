@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Game{
     private static final Game OBJ = new Game();
     private HashMap<Integer,Player> players;        //ID,Player ... ID will be set server-side
+    private HashMap<Integer,Field> fields;
 
     private String currentPlayersTurn;
     private static final AtomicInteger count = new AtomicInteger(0);
@@ -73,9 +74,9 @@ public class Game{
 
         //chance0: Advance to "Go".
         if (players.get(playerID).getCardID() == 2131165320) {
-            //TODO: calculate int increment, so player is moved to GO
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|REPLACER" + players.get(playerID).getUsername());
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn");
+            int incr = fields.size() - playerID;
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr +"|" + players.get(playerID).getUsername());
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
 
         //chance1: Advance to Strandbad. If you pass Go, collect $200.
