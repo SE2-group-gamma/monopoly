@@ -33,4 +33,12 @@ public class PropertyField extends Field{
     public RentConfiguration getRent(){
         return this.rents;
     }
+
+    public int getNumOfHouses() {
+        return numOfHouses;
+    }
+
+    public PropertyFieldColors getColor() {
+        return color;
+    }
 }

@@ -56,11 +56,34 @@ public class PropertyStorage {
         this.properties.put("water_works", new UtilityField(R.drawable.water_works,"water_works"));
     }
 
-    public int getRent(String propertyId) {
-        return 0;
+    public int getRentOnPropertyField(String propertyId, Player player) {
+        Field property = properties.get(propertyId);
+        if(property.getOwner().equals(player)) return 0;
+        if(property instanceof PropertyField){
+            RentConfiguration rents = ((PropertyField) property).getRent();
+            switch (((PropertyField) property).getNumOfHouses()) {
+                case 1:
+                    return rents.getRent1House();
+                case 2:
+                    return rents.getRent2Houses();
+                case 3:
+                    return rents.getRent3Houses();
+                case 4:
+                    return rents.getRent4Houses();
+                case 0:
+                    return hasAllColours(player, ((PropertyField) property).getColor()) ? rents.getRentAllColors() : rents.getRent();
+                default:
+                    throw new IllegalFieldException("Field has too many houses");
+            }
+        }
+        throw new IllegalFieldException("Field is not a colored property");
     }
 
     public void buyProperty(String propertyId, Player owner) {
         this.properties.get(propertyId).setOwner(owner);
+    }
+
+    private boolean hasAllColours(Player player, PropertyFieldColors color) {
+        return properties.values().stream().filter(x -> x instanceof PropertyField && ((PropertyField) x).getColor() == color).allMatch(x -> x.getOwner().equals(player));
     }
 }

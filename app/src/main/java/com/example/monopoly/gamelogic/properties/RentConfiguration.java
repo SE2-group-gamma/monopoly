@@ -43,4 +43,8 @@ public class RentConfiguration {
     public int getPriceHouseOrHotel() {
         return priceHouseOrHotel;
     }
+
+    public int getRent() {
+        return rent;
+    }
 }
