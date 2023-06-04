@@ -3,9 +3,11 @@ package com.example.monopoly.ui;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +58,9 @@ public class PropertyCardFragment extends Fragment {
         PropertyCardsAdapter pca = new PropertyCardsAdapter();
         RecyclerView recyclerView = rootView.findViewById(R.id.propertyCardsListView);
         recyclerView.setAdapter(pca);
+        rootView.findViewById(R.id.exitButton).setOnClickListener((view1) -> {
+            NavHostFragment.findNavController(this).navigate(R.id.action_PropertyCardFragment_to_GameboardUI);
+        });
         return rootView;
     }
 }

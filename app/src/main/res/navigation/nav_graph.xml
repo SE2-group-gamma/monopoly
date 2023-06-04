@@ -103,6 +103,9 @@
         android:label="PropertyCardFragment"
         tools:layout="@layout/fragment_property_card"
         >
+        <action
+            app:destination="@id/GameBoardUI"
+            android:id="@+id/action_PropertyCardFragment_to_GameboardUI"/>
     </fragment>
 
 
