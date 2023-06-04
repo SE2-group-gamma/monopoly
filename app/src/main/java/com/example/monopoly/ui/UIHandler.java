@@ -27,6 +27,8 @@ import com.example.monopoly.network.Client;
 
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 
+import java.util.HashMap;
+
 
 public class UIHandler extends Handler {
     private Fragment frag;
@@ -39,12 +41,12 @@ public class UIHandler extends Handler {
     private ClientViewModel clientViewModel;
 
 
-    public static final int player1 = 1;
-    public static final int player2 = 2;
-    public static final int player3 = 3;
-    public static final int player4 = 4;
-    public static final int player5 = 5;
-    public static final int player6 = 6;
+    public int player1 = 1;
+    public int player2 = 2;
+    public int player3 = 3;
+    public int player4 = 4;
+    public int player5 = 5;
+    public int player6 = 6;
 
     ImageView imageView;
     LayerDrawable layerDrawable;
@@ -67,12 +69,13 @@ public class UIHandler extends Handler {
 
     double goOneSmallField;
 
+    HashMap<Integer, String> playerObjects;
+
 
     public UIHandler(Fragment app) {
         this.frag = app;
+        playerObjects = new HashMap<>();
     }
-
-
 
     @Override
     public void handleMessage(@NonNull Message msg) {
@@ -97,26 +100,31 @@ public class UIHandler extends Handler {
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1Name)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
+                        playerObjects.put(player1,client);
                         break;
                     case 2:
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2Name)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setText(data);
+                        playerObjects.put(player2,client);
                         break;
                     case 3:
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3Name)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setText(data);
+                        playerObjects.put(player3,client);
                         break;
                     case 4:
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4Name)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setText(data);
+                        playerObjects.put(player4,client);
                         break;
                     case 5:
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5Name)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setText(data);
+                        playerObjects.put(player5,client);
                         break;
                 }
                 counter++;
@@ -147,6 +155,12 @@ public class UIHandler extends Handler {
                 break;
             case "initializePlayerBottomRight":
                 Log.d("------------","initializePlayerBottomRight");
+
+                String[] dataRes = data.split(":");
+                int fieldsMove = Integer.parseInt(dataRes[0]);
+
+                Log.d("fieldsToMove",""+fieldsMove);
+                Log.d("client",""+client);
 
                 imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
                 layerDrawable = (LayerDrawable) imageView.getDrawable();
@@ -523,9 +537,12 @@ public class UIHandler extends Handler {
                 break;
             case "move":
                 Log.d("move",data); //Data for move distance and player name
+                String[] dataResponse = data.split(":");
+                int fieldsToMove = Integer.parseInt(dataResponse[0]);
+
+                Log.d("fieldsToMove",""+fieldsToMove);
+                Log.d("client",""+client);
                 break;
-
-
             case "playersTurn":
                 ((TextView) this.frag.getActivity().findViewById(R.id.turn)).setText(data);
                 Log.d("ButtonGreyCheck", "Here is Button"+this.client.getUser().getUsername());

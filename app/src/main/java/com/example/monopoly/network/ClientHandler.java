@@ -1,23 +1,12 @@
 package com.example.monopoly.network;
 
-import android.os.Bundle;
-import android.os.Message;
-import android.util.Log;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.monopoly.gamelogic.Game;
-import com.example.monopoly.ui.UIHandler;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ClientHandler extends Thread{
 
@@ -66,11 +55,11 @@ public class ClientHandler extends Thread{
         return clientName;
     }
 
-    public Socket getClient() {
+    public Socket getSocket() {
         return socket;
     }
 
-    public Client getClientClient() {
+    public Client getClient() {
         return client;
     }
 

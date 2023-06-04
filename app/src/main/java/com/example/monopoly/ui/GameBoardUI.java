@@ -1,18 +1,11 @@
 package com.example.monopoly.ui;
 
-import android.app.Activity;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.InsetDrawable;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,10 +16,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.GameBoardBinding;
 import com.example.monopoly.network.Client;
+import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
-
-import java.io.IOException;
 
 import java.io.IOException;
 
@@ -103,29 +95,30 @@ public class GameBoardUI extends Fragment {
         double heightRatio = layerDrawable.getMinimumHeight()/(double)21000;
         double widthRatio = layerDrawable.getMinimumWidth()/(double)21000;
 */
+        for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
+            //New Protocol: Fragment|action|player:additionalData|sender
+            handler.writeToClient("GameBoardUI|initializePlayerBottomRight|1|"+this.client.getUser().getId());
+            dosleep();
+            handler.writeToClient("GameBoardUI|goFieldBottom|1|"+this.client.getUser().getUsername());
+            dosleep();
+            handler.writeToClient("GameBoardUI|initializePlayerBottomLeft|1|"+this.client.getUser().getUsername());
+            dosleep();
+            handler.writeToClient("GameBoardUI|goFieldLeft|1|"+this.client.getUser().getUsername());
+            dosleep();
+            handler.writeToClient("GameBoardUI|initializePlayerTopLeft|1|"+this.client.getUser().getUsername());
+            dosleep();
+            handler.writeToClient("GameBoardUI|goFieldTop|1|"+this.client.getUser().getUsername());
+            dosleep();
+            handler.writeToClient("GameBoardUI|initializePlayerTopRight|1|"+this.client.getUser().getUsername());
+            dosleep();
+            handler.writeToClient("GameBoardUI|goFieldRight|1|"+this.client.getUser().getUsername());
+        }
 
         super.onViewCreated(view, savedInstanceState);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
-                    //New Protocol: Fragment|action|player:additionalData|sender
-                    handler.writeToClient("GameBoardUI|initializePlayerBottomRight|1,2,3,4,5,6:nothing|sender");
-                    dosleep();
-                    handler.writeToClient("GameBoardUI|goFieldBottom| ");
-                    dosleep();
-                    handler.writeToClient("GameBoardUI|initializePlayerBottomLeft| ");
-                    dosleep();
-                    handler.writeToClient("GameBoardUI|goFieldLeft| ");
-                    dosleep();
-                    handler.writeToClient("GameBoardUI|initializePlayerTopLeft| ");
-                    dosleep();
-                    handler.writeToClient("GameBoardUI|goFieldTop| ");
-                    dosleep();
-                    handler.writeToClient("GameBoardUI|initializePlayerTopRight| ");
-                    dosleep();
-                    handler.writeToClient("GameBoardUI|goFieldRight| ");
-                }
+
             }
         });
 

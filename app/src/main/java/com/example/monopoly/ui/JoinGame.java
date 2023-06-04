@@ -32,7 +32,7 @@ public class JoinGame extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        Client.subscribe(this,"JoinGame");
+        Client.subscribe(this, "JoinGame");
         binding = JoinGameBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
@@ -49,52 +49,42 @@ public class JoinGame extends Fragment {
             String user = binding.userInput.getText().toString();
             String keyString = binding.keyInput.getText().toString();
 
-            try {
-                int key = Integer.parseInt(keyString);
+            int key = Integer.parseInt(keyString);
 
-                if(user.isEmpty() && key==0){
-                    binding.userInput.setError("No Input");
-                    binding.keyInput.setError("No Input");
-                }else if(user.isEmpty()){
-                    binding.userInput.setError("No Input");
-                }else if(key==0){
-                    binding.keyInput.setError("No Input");
-                }else if(key<1000 || key>9999) {
-                    binding.keyInput.setError("Not a valid Key");
-                }else{
-                    NsdManager manager = (NsdManager) getActivity().getSystemService(Context.NSD_SERVICE);
-                    NSD_Client nsd = new NSD_Client();
-                    nsd.setIsHost(false);
-                    nsd.start(manager);
-                    Player player = new Player(user, new Color(),500.00,true);
-
-                    while(!nsd.isReady()){
-                        try {
-                            Thread.sleep(10);
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                            throw new RuntimeException(e);
-                        }
-                    }
-
-                    nsd.getClient().setUser(player);
-                    nsd.getClient().setKey(key);
-                }
-            } catch (NumberFormatException e) {
+            if (user.isEmpty() && key == 0) {
+                binding.userInput.setError("No Input");
+                binding.keyInput.setError("No Input");
+            } else if (user.isEmpty()) {
+                binding.userInput.setError("No Input");
+            } else if (key == 0) {
+                binding.keyInput.setError("No Input");
+            } else if (key < 1000 || key > 9999) {
                 binding.keyInput.setError("Not a valid Key");
-            }
+            } else {
+                NsdManager manager = (NsdManager) getActivity().getSystemService(Context.NSD_SERVICE);
+                NSD_Client nsd = new NSD_Client();
+                nsd.setIsHost(false);
+                nsd.start(manager);
+                Player player = new Player(user, new Color(), 500.00, true);
 
+                while (!nsd.isReady()) {
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        throw new RuntimeException(e);
+                    }
+                }
 
+                nsd.getClient().setUser(player);
+                nsd.getClient().setKey(key);
 
                 player.setMyClient(nsd.getClient());
 
                 //Add client object to ClientViewModel
                 clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
                 clientViewModel.setClient(nsd.getClient());
-
-
             }
-
         });
     }
 
