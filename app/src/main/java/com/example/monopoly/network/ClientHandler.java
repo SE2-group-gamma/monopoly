@@ -22,8 +22,10 @@ import java.util.HashMap;
 public class ClientHandler extends Thread{
 
     private Socket socket;
+
     public BufferedReader br;
     public BufferedWriter bw;
+
     private String hostname;
     private Client client;
     private String clientName;
@@ -102,8 +104,10 @@ public class ClientHandler extends Thread{
                     String[] response = client.handleMessage(strings);
                     if(response!=null){
                         for (String str: response) {
+
                             server.broadCast(str.replaceAll("REPLACER",hostname));
                             //server.broadCastExceptSelf(str.replaceAll("REPLACER",hostname),this);
+
                         }
                     }
                 }
