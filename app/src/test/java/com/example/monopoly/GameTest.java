@@ -24,9 +24,7 @@ public class GameTest {
     @BeforeEach
     void setup(){
         g = Game.getInstance();
-        p = new Player("Test",new Color(),100.00,true);
-        q = new Player("HAns", new Color(),123.00,true);
-    }
+        p = new Player("Test",new Color(),100.00,true);}
 
     @Test
     public void testAddPlayer(){

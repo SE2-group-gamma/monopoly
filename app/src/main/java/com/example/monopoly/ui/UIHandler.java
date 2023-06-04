@@ -23,9 +23,6 @@ import java.io.Serializable;
 public class UIHandler extends Handler {
     private Fragment frag;
     private int counter=1;
-    private int currentPlayerindex=1;
-    private Game game = Game.getInstance();
-    private Player currentPlayer;
 
     public UIHandler(Fragment app) {
         this.frag = app;

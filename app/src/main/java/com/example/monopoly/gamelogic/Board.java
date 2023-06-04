@@ -13,14 +13,5 @@ public class Board {
         this.id = id;
         this.fields = fields;
     }
-    public static void movePlayer(Player currentPlayer, int steps) {
-        int currentPlayerPosition = currentPlayer.getPosition();
-        int newPlayerPosition = (currentPlayerPosition + steps) % Board.FELDER_ANZAHL;
-        currentPlayer.setPosition(newPlayerPosition);
 
-        if (newPlayerPosition < currentPlayerPosition) {
-            Bank.getInstance().transferMoneyBankToPlayer(currentPlayer,Board.GELD_LOS);
-
-        }
-    }
 }
