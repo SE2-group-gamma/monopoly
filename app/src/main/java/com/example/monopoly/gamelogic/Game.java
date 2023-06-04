@@ -74,29 +74,49 @@ public class Game{
 
         //chance0: Advance to "Go".
         if (players.get(playerID).getCardID() == 2131165320) {
-            int incr = fields.size() - playerID;
+            int incr = fields.size() - players.get(playerID).getPosition();
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr +"|" + players.get(playerID).getUsername());
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
 
         //chance1: Advance to Strandbad. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == 2131165321) {
-            //TODO: calculate int increment, so player is moved to Strandbad; calculate if player passes Go
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|REPLACER" + players.get(playerID).getUsername());
-            //if (fields.get("Strandbad").getId() < players.get(playerID).getPosition() ){
-            players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
-            //}
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn");
+            int fieldId = 0;
+            int incr;
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i).getName() == "Strandbad") {
+                    fieldId = fields.get(i).getId();
+                }
+            }
+            if (players.get(playerID).getPosition() > fieldId) {
+                players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
+                incr = fields.size() - players.get(playerID).getPosition() + fieldId;
+            }else {
+                incr = fieldId - players.get(playerID).getPosition();
+            }
+
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
 
         //chance2: Advance to Lindwurm. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == 2131165332) {
-            //TODO: calculate int increment, so player is moved to Lindwurm; calculate if player passes Go
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|REPLACER" + players.get(playerID).getUsername());
-            //if (fields.get("Lindwurm").getId() < players.get(playerID).getPosition() ){
-            players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
-            //}
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn");
+            int fieldId = 0;
+            int incr;
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i).getName() == "Lindwurm") {
+                    fieldId = fields.get(i).getId();
+                }
+            }
+            if (players.get(playerID).getPosition() > fieldId) {
+                players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
+                incr = fields.size() - players.get(playerID).getPosition() + fieldId;
+            }else {
+                incr = fieldId - players.get(playerID).getPosition();
+            }
+
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
 
         //chance3, Your building loan matures. Receive $150.
