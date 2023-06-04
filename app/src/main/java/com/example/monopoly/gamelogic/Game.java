@@ -216,7 +216,7 @@ public class Game{
 
         //chance7: Go back 3 spaces.
         if (players.get(playerID).getCardID() == 2131165337) {
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|-3" + players.get(playerID).getUsername());
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|-3|" + players.get(playerID).getUsername());
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn");
         }
 
@@ -241,10 +241,100 @@ public class Game{
         if (players.get(playerID).getCardID() == 2131165322) {
             for(int i =0; i< players.size(); i++){
                 if (i != playerID){
-                    //TODO: implement "moneyTransfer" in Client
+                    //TODO: implement "transferMoney" in Client
                     players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferMoney|50");
                 }
             }
         }
+
+        //chance11: Advance to City Arkaden. If you pass Go, collect $200.
+        if (players.get(playerID).getCardID() == 2131165323) {
+            int fieldId = 0;
+            int incr;
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i).getName() == "City Arkaden") {
+                    fieldId = fields.get(i).getId();
+                }
+            }
+            if (players.get(playerID).getPosition() > fieldId) {
+                //TODO: add action "changeCapital" to Client?
+                players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
+                incr = fields.size() - players.get(playerID).getPosition() + fieldId;
+            }else {
+                incr = fieldId - players.get(playerID).getPosition();
+            }
+
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+        }
+
+        //chance12: Get out of Jail Free.
+        if (players.get(playerID).getCardID() == 2131165324) {
+            //TODO: add attribute boolean outOfJailFree to player?
+        }
+
+        //chance13: Go to Jail directly.
+        if (players.get(playerID).getCardID() == 2131165325) {
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i).getName() == "Jail") {
+                    int incr = fields.get(i).getId() - players.get(playerID).getPosition();
+                    players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
+                }
+            }
+        }
+
+        //chance14, Parking Ticket! Pay $15.
+        if (players.get(playerID).getCardID() == 2131165326) {
+            //TODO: add action "changeCapital" to Client?
+            players.get(playerID).setCapital(players.get(playerID).getCapital() - 15);
+        }
+
+        //chance15: Advance two spaces.
+        if (players.get(playerID).getCardID() == 2131165327) {
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|+2|" + players.get(playerID).getUsername());
+        }
+
+        //chance16: Go to Jail directly.
+        if (players.get(playerID).getCardID() == 2131165328) {
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i).getName() == "Jail") {
+                    int incr = fields.get(i).getId() - players.get(playerID).getPosition();
+                    players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
+                }
+            }
+        }
+
+        //chance17: Happy Birthday! Receive $100.
+        if (players.get(playerID).getCardID() == 2131165329) {
+            //TODO: add action "changeCapital" to Client?
+            players.get(playerID).setCapital(players.get(playerID).getCapital() + 100);
+        }
+
+        //chance18: Go back one space.
+        if (players.get(playerID).getCardID() == 2131165330) {
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|-1|" + players.get(playerID).getUsername());
+        }
+
+        //chance19: Advance to Rathaus. If you pass Go, collect $200.
+        if (players.get(playerID).getCardID() == 2131165331) {
+            int fieldId = 0;
+            int incr;
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i).getName() == "Rathaus") {
+                    fieldId = fields.get(i).getId();
+                }
+            }
+            if (players.get(playerID).getPosition() > fieldId) {
+                //TODO: add action "changeCapital" to Client?
+                players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
+                incr = fields.size() - players.get(playerID).getPosition() + fieldId;
+            }else {
+                incr = fieldId - players.get(playerID).getPosition();
+            }
+
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+        }
+
     }
 }
