@@ -23,6 +23,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
+import com.example.monopoly.gamelogic.Game;
+import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.network.Client;
 
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
@@ -118,8 +120,11 @@ public class UIHandler extends Handler {
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5Name)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setText(data);
                         break;
+
                 }
+
                 counter++;
+
                 break;
             case "hostJoined":
                 if(!HostGame.lobbyname.equals(" ")){
@@ -521,8 +526,10 @@ public class UIHandler extends Handler {
                     ((TextView) this.frag.getActivity().findViewById(R.id.textViewKey)).setText("Game-Key: " + HostGame.key);
                 }
                 break;
+
             case "move":
                 Log.d("move",data); //Data for move distance and player name
+
                 break;
 
 
@@ -543,4 +550,6 @@ public class UIHandler extends Handler {
         }
         // Needed information: new position as an int, player as an int (1,2,3,4,5,6)
     }
+
+
 }

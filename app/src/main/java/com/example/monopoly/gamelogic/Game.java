@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -20,7 +21,6 @@ public class Game{
 
     private String currentPlayersTurn;
     private static final AtomicInteger count = new AtomicInteger(0);
-
     private Game() {
         players = new HashMap<>();
     }
@@ -40,7 +40,9 @@ public class Game{
         int id = count.getAndIncrement();
         players.put(id,player);
         player.setId(id);
+
         // TODO Are there any better implementations?
+
         return true;
     }
 
@@ -61,7 +63,6 @@ public class Game{
         }
         return 0;
     }
-
     public String getCurrentPlayersTurn() {
         return currentPlayersTurn;
     }

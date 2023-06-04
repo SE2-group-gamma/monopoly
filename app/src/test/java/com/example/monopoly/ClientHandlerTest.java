@@ -162,10 +162,4 @@ class ClientHandlerTest {
         String result = outputStream.toString().trim();
         assertNotEquals(expectedOutput, result);*/
     }
-
-
-
-
-
-
 }
