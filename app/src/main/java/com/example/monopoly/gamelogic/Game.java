@@ -1,14 +1,8 @@
 package com.example.monopoly.gamelogic;
 
-import android.graphics.Color;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -71,51 +65,30 @@ public class Game{
         this.currentPlayersTurn = currentPlayersTurn;
     }
 
-    public int advanceAndCollect(String location, int playerID){
-        int fieldId = 0;
-        int incr;
-        for (int i = 0; i < fields.size(); i++) {
-            if (fields.get(i).getName() == location) {
-                fieldId = fields.get(i).getId();
-            }
-        }
-        if (players.get(playerID).getPosition() > fieldId) {
-            incr = fields.size() - players.get(playerID).getPosition() + fieldId;
-        }else {
-            incr = fieldId - players.get(playerID).getPosition();
-        }
-        return incr;
-    }
 
     public void doAction(int playerID) throws IOException {
 
         //chance0, community0: Advance to "Go".
         if (players.get(playerID).getCardID() == 2131165320 || players.get(playerID).getCardID() == 2131165341) {
             int incr = fields.size() - players.get(playerID).getPosition();
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr +"|" + players.get(playerID).getUsername());
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
 
         //chance1: Advance to Strandbad. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == 2131165321) {
-            int incr = advanceAndCollect("Strandbad", playerID);
-
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+            advanceAndCollect(playerID, "Strandbad");
         }
 
         //chance2: Advance to Lindwurm. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == 2131165332) {
-            int incr = advanceAndCollect("Lindwurm", playerID);
-
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+            advanceAndCollect(playerID, "Lindwurm");
         }
 
         //chance3, Your building loan matures. Receive $150.
         if (players.get(playerID).getCardID() == 2131165333) {
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferMoney|150" + players.get(playerID).getUsername());
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+            transferToPlayerProtocol(playerID, 150);
+            endTurnProtocol(playerID);
         }
 
         //chance4: Advance to the nearest Railroad. If unowned, you may buy it from the Bank.
@@ -185,22 +158,20 @@ public class Game{
                 amount = fields.get(players.get(playerID).getPosition()).getCost() * 2;
                 owner = fields.get(players.get(playerID).getPosition()).getOwner();
 
-                //[Fragment]|transferPlayerToPlayer|[receiverID]:[amount]|[senderUserName]
-                players.get(playerID).getMyClient().
-                        writeToServer("GameBoardUI|transferPlayerToPlayer|" + owner.getId() + ":" + amount + "|" + players.get(playerID).getUsername());
+                transferPlayerToPlayerProtocol(playerID, owner.getId(), amount);
             }
 
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+            endTurnProtocol(playerID);
         }
 
         //chance5: Bank pays you dividend of $50.
         if (players.get(playerID).getCardID() == 2131165335) {
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferMoney|50" + players.get(playerID).getUsername());
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+            transferToPlayerProtocol(playerID, 50);
+            endTurnProtocol(playerID);
         }
 
         //chance6, chance12, community4: Get out of Jail Free.
-        if (players.get(playerID).getCardID() == 2131165336 || players.get(playerID).getCardID() == 2131165324 || players.get(playerID).getCardID() == 2131165355)  {
+        if (players.get(playerID).getCardID() == 2131165336 || players.get(playerID).getCardID() == 2131165324 || players.get(playerID).getCardID() == 2131165355) {
             //TODO: add attribute boolean outOfJailFree to player?
         }
 
@@ -221,29 +192,25 @@ public class Game{
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).getName() == "S-Bahn Wien") {
                     incr = players.get(playerID).getPosition() - fields.get(i).getId();
-                    players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
+                    moveProtocol(playerID, incr);
                 }
             }
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+            endTurnProtocol(playerID);
         }
 
         //chance10, You have been elected Chairman of the Board. Pay each player $50.
         if (players.get(playerID).getCardID() == 2131165322) {
-            for(int i =0; i< players.size(); i++){
-                if (i != playerID){
-                    players.get(playerID).getMyClient().
-                            writeToServer("GameBoardUI|transferPlayerToPlayer|" + players.get(playerID) + ":50|" + players.get(playerID).getUsername());
+            for (int i = 0; i < players.size(); i++) {
+                if (i != playerID) {
+                    transferPlayerToPlayerProtocol(playerID, i, 50);
                 }
-                players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+                endTurnProtocol(playerID);
             }
         }
 
         //chance11: Advance to City Arkaden. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == 2131165323) {
-            int incr = advanceAndCollect("City Arkaden", playerID);
-
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+            advanceAndCollect(playerID, "City Arkaden");
         }
 
         //chance13, chance16, community5: Go to Jail directly.
@@ -251,47 +218,179 @@ public class Game{
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).getName() == "Jail") {
                     int incr = fields.get(i).getId() - players.get(playerID).getPosition();
-                    players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
+                    moveProtocol(playerID, incr);
                 }
             }
         }
 
-        //chance14, Parking Ticket! Pay $15.
-        if (players.get(playerID).getCardID() == 2131165326) {
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferToBank|15|" + players.get(playerID).getUsername());
+        //chance14, community14: Parking Ticket! Pay $15.
+        if (players.get(playerID).getCardID() == 2131165326 || players.get(playerID).getCardID() == 2131165347) {
+            transferToBankProtocol(playerID, 15);
         }
 
         //chance15: Advance two spaces.
         if (players.get(playerID).getCardID() == 2131165327) {
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|+2|" + players.get(playerID).getUsername());
+            moveProtocol(playerID, 2);
         }
 
         //chance17: Happy Birthday! Receive $100.
         if (players.get(playerID).getCardID() == 2131165329) {
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferToPlayer|100|" + players.get(playerID).getUsername());
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+            transferToPlayerProtocol(playerID, 100);
+            endTurnProtocol(playerID);
         }
 
         //chance18: Go back one space.
         if (players.get(playerID).getCardID() == 2131165330) {
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|-1|" + players.get(playerID).getUsername());
+            moveProtocol(playerID, -1);
         }
 
         //chance19: Advance to Rathaus. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == 2131165331) {
-            int incr = advanceAndCollect("Rathaus", playerID);
-
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+            advanceAndCollect(playerID, "Rathaus");
         }
 
         //community1: Bank error in your favor. Collect $200.
         if (players.get(playerID).getCardID() == 2131165342) {
-            
+            transferToPlayerProtocol(playerID, 200);
+            endTurnProtocol(playerID);
         }
 
+        //community2: Doctor’s fee. Pay $50.
+        if (players.get(playerID).getCardID() == 2131165353) {
+            transferToBankProtocol(playerID, 50);
+            endTurnProtocol(playerID);
+        }
+
+        //community3: From sale of stock you receive $50.
+        if (players.get(playerID).getCardID() == 2131165354) {
+            transferToPlayerProtocol(playerID, 50);
+            endTurnProtocol(playerID);
+        }
+
+        //community6: Holiday fund matures. Receive $100.
+        if (players.get(playerID).getCardID() == 2131165357) {
+            transferToPlayerProtocol(playerID, 100);
+            endTurnProtocol(playerID);
+        }
+
+        //community7: Income tax refund. Collect $20.
+        if (players.get(playerID).getCardID() == 2131165358) {
+            transferToPlayerProtocol(playerID, 20);
+            endTurnProtocol(playerID);
+        }
+
+        //community8: It is your birthday. Collect $10 from every player.
+        if (players.get(playerID).getCardID() == 2131165359) {
+            for (int i = 0; i < players.size(); i++) {
+                if (i != playerID) {
+                    transferPlayerToPlayerProtocol(i, playerID, 10);
+                }
+            }
+            endTurnProtocol(playerID);
+        }
+
+        //community9: Life insurance matures. Collect $100.
+        if (players.get(playerID).getCardID() == 2131165360) {
+            transferToPlayerProtocol(playerID, 100);
+            endTurnProtocol(playerID);
+        }
+
+        //community10: Pay hospital fees of $100.
+        if (players.get(playerID).getCardID() == 2131165343) {
+            transferToBankProtocol(playerID, 100);
+            endTurnProtocol(playerID);
+        }
+
+        //community11: Pay school fees of $50.
+        if (players.get(playerID).getCardID() == 2131165344) {
+            transferToBankProtocol(playerID, 50);
+            endTurnProtocol(playerID);
+        }
+
+        //community12: Receive $25 consultancy fee.
+        if (players.get(playerID).getCardID() == 2131165345) {
+            transferToPlayerProtocol(playerID, 25);
+            endTurnProtocol(playerID);
+        }
+
+        //community13: You are assessed for street repair. $40 per house. $115 per hotel.
+        if (players.get(playerID).getCardID() == 2131165346) {
+            //TODO: everything
+        }
+
+        //community15: You have won second prize in a beauty contest. Collect $10.
+        if (players.get(playerID).getCardID() == 2131165348) {
+            transferToPlayerProtocol(playerID, 10);
+            endTurnProtocol(playerID);
+        }
+
+        //community16: You inherit $100.
+        if (players.get(playerID).getCardID() == 2131165349) {
+            transferToBankProtocol(playerID, 100);
+            endTurnProtocol(playerID);
+        }
+
+        //community17: You receive $50 from warehouse sales.
+        if (players.get(playerID).getCardID() == 2131165350) {
+            transferToPlayerProtocol(playerID, 50);
+            endTurnProtocol(playerID);
+        }
+
+        //community18: You receive a 7% dividend on preferred stock: $25.
+        if (players.get(playerID).getCardID() == 2131165351) {
+            transferToPlayerProtocol(playerID, 25);
+            endTurnProtocol(playerID);
+        }
+
+        //community19: Receive $100 compensation for pain and suffering from the next player.
+        if (players.get(playerID).getCardID() == 2131165352) {
+            transferPlayerToPlayerProtocol(playerID + 1, playerID, 100);
+            endTurnProtocol(playerID);
+        }
 
     }
 
+    public void advanceAndCollect(int playerID, String location) throws IOException {
+        int fieldId = 0;
+        int incr;
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i).getName() == location) {
+                fieldId = fields.get(i).getId();
+            }
+        }
+        if (players.get(playerID).getPosition() > fieldId) {
+            incr = fields.size() - players.get(playerID).getPosition() + fieldId;
+            transferToPlayerProtocol(playerID, 200);
+        } else {
+            incr = fieldId - players.get(playerID).getPosition();
+        }
+        moveProtocol(playerID, incr);
+        if (players.get(playerID).getPosition() == 0) {
+            endTurnProtocol(playerID);
+        }
+    }
 
+    public void transferToPlayerProtocol(int playerID, int amount) throws IOException {
+        players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferToPlayer|" + amount + "|" + players.get(playerID).getUsername());
+    }
+
+    public void transferToBankProtocol(int playerID, int amount) throws IOException {
+        players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferToBank|" + amount + "|" + players.get(playerID).getUsername());
+    }
+
+    public void transferPlayerToPlayerProtocol(int senderID, int receiverID, int amount) throws IOException {
+        players.get(senderID).getMyClient().
+                writeToServer("GameBoardUI|transferPlayerToPlayer|" + players.get(receiverID) + ":" + amount + "|" + players.get(senderID).getUsername());
+    }
+
+    public void moveProtocol(int playerID, int incr) throws IOException {
+        players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
+    }
+
+    public void endTurnProtocol(int playerID) throws IOException {
+        players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+    }
+
+
+    //TODO: change static IDs to R.drawable.chanceX
 }
