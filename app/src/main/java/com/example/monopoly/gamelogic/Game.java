@@ -258,8 +258,7 @@ public class Game{
 
         //chance14, Parking Ticket! Pay $15.
         if (players.get(playerID).getCardID() == 2131165326) {
-            //TODO: add action "transferToBank" to Client?
-            players.get(playerID).setCapital(players.get(playerID).getCapital() - 15);
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferToBank|15|" + players.get(playerID).getUsername());
         }
 
         //chance15: Advance two spaces.
@@ -270,6 +269,7 @@ public class Game{
         //chance17: Happy Birthday! Receive $100.
         if (players.get(playerID).getCardID() == 2131165329) {
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferToPlayer|100|" + players.get(playerID).getUsername());
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
 
         //chance18: Go back one space.
@@ -287,7 +287,7 @@ public class Game{
 
         //community1: Bank error in your favor. Collect $200.
         if (players.get(playerID).getCardID() == 2131165342) {
-
+            
         }
 
 

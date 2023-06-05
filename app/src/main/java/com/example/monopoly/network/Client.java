@@ -301,6 +301,15 @@ public class Client extends Thread {
                             + " -> " + game.getPlayers().get(receiverID).getUsername() + " : $" + amount);
                 }
             }
+            if (responseSplit[1].equals("transferToBank")) {
+                int senderID = game.getPlayerIDByName(responseSplit[3]);
+                int amount = Integer.parseInt(dataResponseSplit[0]);
+                if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
+                    bank.transferMoneyPlayerToBank(game.getPlayers().get(senderID), bank, amount);
+                    Log.i("MoneyTransfer", "Player: " + game.getPlayers().get(senderID).getUsername() + ", New Capital: " +
+                            game.getPlayers().get(senderID).getCapital());
+                }
+            }
 
             if(responseSplit[1].equals("gameStart")){
                 Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(0).getUsername());
