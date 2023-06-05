@@ -280,13 +280,25 @@ public class Client extends Thread {
                     Log.d("gameturnCurr", "currUser" + responseSplit[3]);
                 }
             }//}
-            if(responseSplit[1].equals("transferToPlayer")){
-                int tempID = game.getPlayerIDByName(responseSplit[3]);
+            if (responseSplit[1].equals("transferToPlayer")) {
+                int senderID = game.getPlayerIDByName(responseSplit[3]);
                 int amount = Integer.parseInt(dataResponseSplit[0]);
-                if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
-                    bank.transferMoneyBankToPlayer(game.getPlayers().get(tempID),bank,amount);
-                    Log.i("MoneyTransfer", "Player: " + game.getPlayers().get(tempID).getUsername() + ", New Capital: " +
-                            game.getPlayers().get(tempID).getCapital());
+                if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
+                    bank.transferMoneyBankToPlayer(game.getPlayers().get(senderID), bank, amount);
+                    Log.i("MoneyTransfer", "Player: " + game.getPlayers().get(senderID).getUsername() + ", New Capital: " +
+                            game.getPlayers().get(senderID).getCapital());
+                }
+            }
+            if (responseSplit[1].equals("transferPlayerToPlayer")) {
+                //[Fragment]|transferPlayerToPlayer|[receiverID]:[amount]|[senderUserName]
+                int senderID = game.getPlayerIDByName(responseSplit[3]);
+                int receiverID = Integer.parseInt(dataResponseSplit[0]);
+                int amount = Integer.parseInt(dataResponseSplit[1]);
+                if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
+                    game.getPlayers().get(senderID).
+                            transferMoneyPlayerToPlayer(game.getPlayers().get(senderID), game.getPlayers().get(receiverID), amount);
+                    Log.i("MoneyTransfer", game.getPlayers().get(senderID).getUsername()
+                            + " -> " + game.getPlayers().get(receiverID).getUsername() + " : $" + amount);
                 }
             }
 

@@ -185,8 +185,9 @@ public class Game{
                 amount = fields.get(players.get(playerID).getPosition()).getCost() * 2;
                 owner = fields.get(players.get(playerID).getPosition()).getOwner();
 
-                //TODO: add action "transferPlayerToPlayer" to Client?
-                players.get(playerID).transferMoneyPlayerToPlayer(players.get(playerID), owner, amount);
+                //[Fragment]|transferPlayerToPlayer|[receiverID]:[amount]|[senderUserName]
+                players.get(playerID).getMyClient().
+                        writeToServer("GameBoardUI|transferPlayerToPlayer|" + owner.getId() + ":" + amount + "|" + players.get(playerID).getUsername());
             }
 
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
@@ -230,8 +231,8 @@ public class Game{
         if (players.get(playerID).getCardID() == 2131165322) {
             for(int i =0; i< players.size(); i++){
                 if (i != playerID){
-                    //TODO: tranferPlayerToPlayer
-                    
+                    players.get(playerID).getMyClient().
+                            writeToServer("GameBoardUI|transferPlayerToPlayer|" + players.get(playerID) + ":50|" + players.get(playerID).getUsername());
                 }
                 players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
             }
