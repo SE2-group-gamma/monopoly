@@ -91,8 +91,8 @@ public class Game{
 
     public void doAction(int playerID) throws IOException {
 
-        //chance0: Advance to "Go".
-        if (players.get(playerID).getCardID() == 2131165320) {
+        //chance0, community0: Advance to "Go".
+        if (players.get(playerID).getCardID() == 2131165320 || players.get(playerID).getCardID() == 2131165341) {
             int incr = fields.size() - players.get(playerID).getPosition();
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr +"|" + players.get(playerID).getUsername());
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
@@ -201,8 +201,8 @@ public class Game{
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
 
-        //chance6: Get out of Jail Free.
-        if (players.get(playerID).getCardID() == 2131165336) {
+        //chance6, chance12, community4: Get out of Jail Free.
+        if (players.get(playerID).getCardID() == 2131165336 || players.get(playerID).getCardID() == 2131165324 || players.get(playerID).getCardID() == 2131165355)  {
             //TODO: add attribute boolean outOfJailFree to player?
         }
 
@@ -247,13 +247,8 @@ public class Game{
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
 
-        //chance12: Get out of Jail Free.
-        if (players.get(playerID).getCardID() == 2131165324) {
-            //TODO: add attribute boolean outOfJailFree to player?
-        }
-
-        //chance13: Go to Jail directly.
-        if (players.get(playerID).getCardID() == 2131165325) {
+        //chance13, chance16, community5: Go to Jail directly.
+        if (players.get(playerID).getCardID() == 2131165325 || players.get(playerID).getCardID() == 2131165328 || players.get(playerID).getCardID() == 2131165356) {
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).getName() == "Jail") {
                     int incr = fields.get(i).getId() - players.get(playerID).getPosition();
@@ -271,16 +266,6 @@ public class Game{
         //chance15: Advance two spaces.
         if (players.get(playerID).getCardID() == 2131165327) {
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|+2|" + players.get(playerID).getUsername());
-        }
-
-        //chance16: Go to Jail directly.
-        if (players.get(playerID).getCardID() == 2131165328) {
-            for (int i = 0; i < fields.size(); i++) {
-                if (fields.get(i).getName() == "Jail") {
-                    int incr = fields.get(i).getId() - players.get(playerID).getPosition();
-                    players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
-                }
-            }
         }
 
         //chance17: Happy Birthday! Receive $100.
@@ -301,6 +286,7 @@ public class Game{
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
+
 
     }
 
