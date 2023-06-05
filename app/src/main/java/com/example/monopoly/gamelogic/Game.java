@@ -80,8 +80,6 @@ public class Game{
             }
         }
         if (players.get(playerID).getPosition() > fieldId) {
-            //TODO: add action "transferToPlayer" to Client?
-            players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
             incr = fields.size() - players.get(playerID).getPosition() + fieldId;
         }else {
             incr = fieldId - players.get(playerID).getPosition();
@@ -116,8 +114,7 @@ public class Game{
 
         //chance3, Your building loan matures. Receive $150.
         if (players.get(playerID).getCardID() == 2131165333) {
-            //TODO: add action "transferToPlayer" to Client?
-            players.get(playerID).setCapital(players.get(playerID).getCapital() + 150);
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferMoney|150" + players.get(playerID).getUsername());
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
 
@@ -197,8 +194,7 @@ public class Game{
 
         //chance5: Bank pays you dividend of $50.
         if (players.get(playerID).getCardID() == 2131165335) {
-            //TODO: add action "transferToPlayer" to Client?
-            players.get(playerID).setCapital(players.get(playerID).getCapital() + 50);
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferMoney|50" + players.get(playerID).getUsername());
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
 
@@ -234,9 +230,10 @@ public class Game{
         if (players.get(playerID).getCardID() == 2131165322) {
             for(int i =0; i< players.size(); i++){
                 if (i != playerID){
-                    //TODO: implement "transferPlayerToPlayer" in Client
-                    players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferMoney|50");
+                    //TODO: tranferPlayerToPlayer
+                    
                 }
+                players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
             }
         }
 
@@ -271,8 +268,7 @@ public class Game{
 
         //chance17: Happy Birthday! Receive $100.
         if (players.get(playerID).getCardID() == 2131165329) {
-            //TODO: add action "transferToPlayer" to Client?
-            players.get(playerID).setCapital(players.get(playerID).getCapital() + 100);
+            players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferToPlayer|100|" + players.get(playerID).getUsername());
         }
 
         //chance18: Go back one space.
