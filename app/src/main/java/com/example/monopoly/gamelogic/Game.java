@@ -71,6 +71,24 @@ public class Game{
         this.currentPlayersTurn = currentPlayersTurn;
     }
 
+    public int advanceAndCollect(String location, int playerID){
+        int fieldId = 0;
+        int incr;
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i).getName() == location) {
+                fieldId = fields.get(i).getId();
+            }
+        }
+        if (players.get(playerID).getPosition() > fieldId) {
+            //TODO: add action "changeCapital" to Client?
+            players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
+            incr = fields.size() - players.get(playerID).getPosition() + fieldId;
+        }else {
+            incr = fieldId - players.get(playerID).getPosition();
+        }
+        return incr;
+    }
+
     public void doAction(int playerID) throws IOException {
 
         //chance0: Advance to "Go".
@@ -82,20 +100,7 @@ public class Game{
 
         //chance1: Advance to Strandbad. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == 2131165321) {
-            int fieldId = 0;
-            int incr;
-            for (int i = 0; i < fields.size(); i++) {
-                if (fields.get(i).getName() == "Strandbad") {
-                    fieldId = fields.get(i).getId();
-                }
-            }
-            if (players.get(playerID).getPosition() > fieldId) {
-                //TODO: add action "changeCapital" to Client?
-                players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
-                incr = fields.size() - players.get(playerID).getPosition() + fieldId;
-            }else {
-                incr = fieldId - players.get(playerID).getPosition();
-            }
+            int incr = advanceAndCollect("Strandbad", playerID);
 
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
@@ -103,20 +108,7 @@ public class Game{
 
         //chance2: Advance to Lindwurm. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == 2131165332) {
-            int fieldId = 0;
-            int incr;
-            for (int i = 0; i < fields.size(); i++) {
-                if (fields.get(i).getName() == "Lindwurm") {
-                    fieldId = fields.get(i).getId();
-                }
-            }
-            if (players.get(playerID).getPosition() > fieldId) {
-                //TODO: add action "changeCapital" to Client?
-                players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
-                incr = fields.size() - players.get(playerID).getPosition() + fieldId;
-            }else {
-                incr = fieldId - players.get(playerID).getPosition();
-            }
+            int incr = advanceAndCollect("Lindwurm", playerID);
 
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
@@ -249,20 +241,7 @@ public class Game{
 
         //chance11: Advance to City Arkaden. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == 2131165323) {
-            int fieldId = 0;
-            int incr;
-            for (int i = 0; i < fields.size(); i++) {
-                if (fields.get(i).getName() == "City Arkaden") {
-                    fieldId = fields.get(i).getId();
-                }
-            }
-            if (players.get(playerID).getPosition() > fieldId) {
-                //TODO: add action "changeCapital" to Client?
-                players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
-                incr = fields.size() - players.get(playerID).getPosition() + fieldId;
-            }else {
-                incr = fieldId - players.get(playerID).getPosition();
-            }
+            int incr = advanceAndCollect("City Arkaden", playerID);
 
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
@@ -317,24 +296,13 @@ public class Game{
 
         //chance19: Advance to Rathaus. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == 2131165331) {
-            int fieldId = 0;
-            int incr;
-            for (int i = 0; i < fields.size(); i++) {
-                if (fields.get(i).getName() == "Rathaus") {
-                    fieldId = fields.get(i).getId();
-                }
-            }
-            if (players.get(playerID).getPosition() > fieldId) {
-                //TODO: add action "changeCapital" to Client?
-                players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
-                incr = fields.size() - players.get(playerID).getPosition() + fieldId;
-            }else {
-                incr = fieldId - players.get(playerID).getPosition();
-            }
+            int incr = advanceAndCollect("Rathaus", playerID);
 
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
 
     }
+
+
 }
