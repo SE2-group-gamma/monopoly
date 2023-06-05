@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.monopoly.gamelogic.Bank;
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.ui.HostGame;
@@ -47,6 +48,7 @@ public class Client extends Thread {
 
     private Game game;
     private String cheated;
+    private Bank bank;
 
     public static HashMap<String, UIHandler> handlers;
 
@@ -278,6 +280,15 @@ public class Client extends Thread {
                     Log.d("gameturnCurr", "currUser" + responseSplit[3]);
                 }
             }//}
+            if(responseSplit[1].equals("transferToPlayer")){
+                int tempID = game.getPlayerIDByName(responseSplit[3]);
+                int amount = Integer.parseInt(dataResponseSplit[0]);
+                if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
+                    bank.transferMoneyBankToPlayer(game.getPlayers().get(tempID),bank,amount);
+                    Log.i("MoneyTransfer", "Player: " + game.getPlayers().get(tempID).getUsername() + ", New Capital: " +
+                            game.getPlayers().get(tempID).getCapital());
+                }
+            }
 
             if(responseSplit[1].equals("gameStart")){
                 Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(0).getUsername());

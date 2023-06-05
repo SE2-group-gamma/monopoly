@@ -80,7 +80,7 @@ public class Game{
             }
         }
         if (players.get(playerID).getPosition() > fieldId) {
-            //TODO: add action "changeCapital" to Client?
+            //TODO: add action "transferToPlayer" to Client?
             players.get(playerID).setCapital(players.get(playerID).getCapital() + 200);
             incr = fields.size() - players.get(playerID).getPosition() + fieldId;
         }else {
@@ -116,7 +116,7 @@ public class Game{
 
         //chance3, Your building loan matures. Receive $150.
         if (players.get(playerID).getCardID() == 2131165333) {
-            //TODO: add action "changeCapital" to Client?
+            //TODO: add action "transferToPlayer" to Client?
             players.get(playerID).setCapital(players.get(playerID).getCapital() + 150);
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
@@ -150,6 +150,7 @@ public class Game{
             int difStm = steiermark - players.get(playerID).getPosition();
             int difVie = wien - players.get(playerID).getPosition();
 
+            //TODO: check
             if (Math.abs(difKtn) < Math.abs(difTrl)) {
                 if (Math.abs(difKtn) < Math.abs(difStm)) {
                     if (Math.abs(difKtn) < Math.abs(difVie)) {
@@ -187,7 +188,7 @@ public class Game{
                 amount = fields.get(players.get(playerID).getPosition()).getCost() * 2;
                 owner = fields.get(players.get(playerID).getPosition()).getOwner();
 
-                //TODO: add action "transferMoney" to Client?
+                //TODO: add action "transferPlayerToPlayer" to Client?
                 players.get(playerID).transferMoneyPlayerToPlayer(players.get(playerID), owner, amount);
             }
 
@@ -196,7 +197,7 @@ public class Game{
 
         //chance5: Bank pays you dividend of $50.
         if (players.get(playerID).getCardID() == 2131165335) {
-            //TODO: add action "transferMoney" to Client?
+            //TODO: add action "transferToPlayer" to Client?
             players.get(playerID).setCapital(players.get(playerID).getCapital() + 50);
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
         }
@@ -233,7 +234,7 @@ public class Game{
         if (players.get(playerID).getCardID() == 2131165322) {
             for(int i =0; i< players.size(); i++){
                 if (i != playerID){
-                    //TODO: implement "transferMoney" in Client
+                    //TODO: implement "transferPlayerToPlayer" in Client
                     players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferMoney|50");
                 }
             }
@@ -259,7 +260,7 @@ public class Game{
 
         //chance14, Parking Ticket! Pay $15.
         if (players.get(playerID).getCardID() == 2131165326) {
-            //TODO: add action "changeCapital" to Client?
+            //TODO: add action "transferToBank" to Client?
             players.get(playerID).setCapital(players.get(playerID).getCapital() - 15);
         }
 
@@ -270,7 +271,7 @@ public class Game{
 
         //chance17: Happy Birthday! Receive $100.
         if (players.get(playerID).getCardID() == 2131165329) {
-            //TODO: add action "changeCapital" to Client?
+            //TODO: add action "transferToPlayer" to Client?
             players.get(playerID).setCapital(players.get(playerID).getCapital() + 100);
         }
 
@@ -285,6 +286,11 @@ public class Game{
 
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
             players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+        }
+
+        //community1: Bank error in your favor. Collect $200.
+        if (players.get(playerID).getCardID() == 2131165342) {
+
         }
 
 
