@@ -29,14 +29,9 @@ public class UIHandler extends Handler {
     private ClientViewModel clientViewModel;
     private GameBoardUIViewModel gameBoardUIViewModel;
     //private boolean uncoverEnabled;
-
-
-
     public UIHandler(Fragment app) {
         this.frag = app;
     }
-
-
 
     @Override
     public void handleMessage(@NonNull Message msg) {
@@ -128,7 +123,13 @@ public class UIHandler extends Handler {
 
 
             case "playersTurn":
-                ((TextView) this.frag.getActivity().findViewById(R.id.turn)).setText(data);
+                /*
+                try {
+                    NavHostFragment.findNavController(this.frag).navigate(R.id.action_DiceFragment_to_GameBoardUI);     // if the user is in the DiceFragment then navigate back
+                }catch (Exception e){}
+                */
+                ((TextView) this.frag.getActivity().findViewById(R.id.turn)).setText(data+"'s turn");
+                gameBoardUIViewModel.setCurrentPlayer(data+"'s turn");
                 Log.d("ButtonGreyCheck", "Here is Button"+this.client.getUser().getUsername());
                 if(data.equals(this.client.getUser().getUsername())){
                     Log.d("ButtonGreyCheck2", "VERY NICE INDEED");
@@ -144,7 +145,6 @@ public class UIHandler extends Handler {
                     this.frag.getActivity().findViewById(R.id.uncover).setEnabled(true);
                     gameBoardUIViewModel.setUncoverEnabled(true);
                 }
-
                 break;
         }
 

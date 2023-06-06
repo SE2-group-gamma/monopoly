@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -68,6 +69,7 @@ public class GameBoardUI extends Fragment {
 
         try {
             gameBoardUIViewModel = new ViewModelProvider(this.requireActivity()).get(GameBoardUIViewModel.class);   // restore GameBoardUI state
+            ((TextView)this.getActivity().findViewById(R.id.turn)).setText(gameBoardUIViewModel.getCurrentPlayer().getValue());     // set name for player turn
             if (gameBoardUIViewModel.getUncoverEnabled().getValue()) {
                 Log.d("gameTurnCheck","was enabled!");
                 this.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
