@@ -28,7 +28,6 @@ public class DrawCardFragment extends Fragment {
     private FragmentDrawcardBinding binding;
     private DrawCardViewModel drawCardViewModel;
     private ClientViewModel clientViewModel;
-    private Client client;
     private final Game game = Game.getInstance();
 
 
@@ -50,8 +49,11 @@ public class DrawCardFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        this.client = clientViewModel.getClientData().getValue();
-        checkField();
+        try {
+            checkField();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         binding.buttonContinueDrawCard.setOnClickListener(view -> {
             this.drawCardViewModel.setChanceCards(chanceCards);
@@ -68,12 +70,10 @@ public class DrawCardFragment extends Fragment {
     }
 
 
-    private void checkField() {
-
-        // TODO: the if-condition has to check the actual position of the player
+    private void checkField() throws IOException {
         if (game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 7 ||
                 game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 22 ||
-                game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 36){
+                game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 36) {
             returnChanceCard();
 
         } else if (game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 2 ||
@@ -86,15 +86,19 @@ public class DrawCardFragment extends Fragment {
 
     }
 
-    private void returnChanceCard() {
+    private void returnChanceCard() throws IOException {
         int index = chanceCards.drawFromDeck().getId();
-        binding.ImageCard.setImageResource(chanceCards.getChanceCardDeck().get(index).getImageId());
-        client.getUser().setCardID(chanceCards.getChanceCardDeck().get(index).getImageId());
+        int cardId = chanceCards.getChanceCardDeck().get(index).getImageId();
+        binding.ImageCard.setImageResource(cardId);
+        game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
+                "GameBoardUI|setCard|" + cardId + "|" + game.getCurrentPlayersTurn());
     }
 
-    private void returnCommunityChestCard() {
+    private void returnCommunityChestCard() throws IOException {
         int index = communityCards.drawFromDeck().getId();
-        binding.ImageCard.setImageResource(communityCards.getCommunityChestCardDeck().get(index).getImageId());
-        client.getUser().setCardID(communityCards.getCommunityChestCardDeck().get(index).getImageId());
+        int cardId = communityCards.getCommunityChestCardDeck().get(index).getImageId();
+        binding.ImageCard.setImageResource(cardId);
+        game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
+                "GameBoardUI|setCard|" + cardId + "|" + game.getCurrentPlayersTurn());
     }
 }

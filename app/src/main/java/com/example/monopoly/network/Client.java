@@ -309,7 +309,6 @@ public class Client extends Thread {
                     game.getPlayers().get(senderID).setOutOfJailFree(game.getPlayers().get(senderID).getOutOfJailFree()+amount);
                 }
             }
-
             if (responseSplit[1].equals("transferToBank")) {
                 int senderID = game.getPlayerIDByName(responseSplit[3]);
                 int amount = Integer.parseInt(dataResponseSplit[0]);
@@ -317,6 +316,14 @@ public class Client extends Thread {
                     bank.transferMoneyPlayerToBank(game.getPlayers().get(senderID), bank, amount);
                     Log.i("MoneyTransfer", "Player: " + game.getPlayers().get(senderID).getUsername() + ", New Capital: " +
                             game.getPlayers().get(senderID).getCapital());
+                }
+            }
+            if (responseSplit[1].equals("setCard")) {
+                //[Fragment]|setImage|[imageID]|[senderUserName]
+                int senderID = game.getPlayerIDByName(responseSplit[3]);
+                int imageID = Integer.parseInt(dataResponseSplit[0]);
+                if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
+                    game.getPlayers().get(senderID).setCardID(imageID);
                 }
             }
 
