@@ -103,4 +103,8 @@ public class PropertyStorage {
     private long numOfTrainStations(Player owner) {
         return properties.values().stream().filter(x -> x instanceof TrainStation && x.getOwner().equals(owner)).count();
     }
+
+    public boolean hasField(String name) {
+        return properties.containsKey(name);
+    }
 }
