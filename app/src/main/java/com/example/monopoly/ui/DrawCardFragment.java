@@ -14,9 +14,12 @@ import com.example.monopoly.R;
 import com.example.monopoly.databinding.FragmentDrawcardBinding;
 import com.example.monopoly.gamelogic.ChanceCardCollection;
 import com.example.monopoly.gamelogic.CommunityChestCardCollection;
+import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DrawCardViewModel;
+
+import java.io.IOException;
 
 
 public class DrawCardFragment extends Fragment {
@@ -28,6 +31,7 @@ public class DrawCardFragment extends Fragment {
     private boolean isCommunityField = false;
     private ClientViewModel clientViewModel;
     private Client client;
+    private final Game game = Game.getInstance();
 
 
     public DrawCardFragment() {
@@ -57,7 +61,11 @@ public class DrawCardFragment extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
         });
 
-
+        try {
+            game.doAction(game.getPlayerIDByName(game.getCurrentPlayersTurn()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return this.binding.getRoot();
     }
 
