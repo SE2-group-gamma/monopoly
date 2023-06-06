@@ -71,8 +71,8 @@ public class Game{
         //chance0, community0: Advance to "Go".
         if (players.get(playerID).getCardID() == 2131165320 || players.get(playerID).getCardID() == 2131165341) {
             int incr = fields.size() - players.get(playerID).getPosition();
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+            moveProtocol(playerID, incr);
+            endTurnProtocol(playerID);
         }
 
         //chance1: Advance to Strandbad. If you pass Go, collect $200.
@@ -98,7 +98,6 @@ public class Game{
             int tirol = 0;
             int steiermark = 0;
             int wien = 0;
-            int incr;
 
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).getName() == "S-Bahn Kärnten") {
@@ -120,47 +119,27 @@ public class Game{
             int difStm = steiermark - players.get(playerID).getPosition();
             int difVie = wien - players.get(playerID).getPosition();
 
-            //TODO: check
-            if (Math.abs(difKtn) < Math.abs(difTrl)) {
-                if (Math.abs(difKtn) < Math.abs(difStm)) {
-                    if (Math.abs(difKtn) < Math.abs(difVie)) {
-                        incr = difKtn;
-                    } else {
-                        incr = difVie;
-                    }
-                } else {
-                    if (Math.abs(difStm) < Math.abs(difVie)) {
-                        incr = difStm;
-                    } else {
-                        incr = difVie;
-                    }
-                }
-            } else {
-                if (Math.abs(difTrl) < Math.abs(difStm)) {
-                    if (Math.abs(difTrl) < Math.abs(difVie)) {
-                        incr = difTrl;
-                    } else {
-                        incr = difVie;
-                    }
-                } else {
-                    if (Math.abs(difTrl) < Math.abs(difVie)) {
-                        incr = difTrl;
-                    } else {
-                        incr = difVie;
-                    }
-                }
+            int incr = Math.abs(difKtn);
+
+            if (Math.abs(difTrl) < incr) {
+                incr = difTrl;
+            }
+            if (Math.abs(difStm) < incr) {
+                incr = difStm;
+            }
+            if (Math.abs(difVie) < incr) {
+                incr = difVie;
             }
 
             int amount;
             Player owner;
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
+            moveProtocol(playerID, incr);
             if (fields.get(players.get(playerID).getPosition()).getOwner() != null) {
                 amount = fields.get(players.get(playerID).getPosition()).getCost() * 2;
                 owner = fields.get(players.get(playerID).getPosition()).getOwner();
 
                 transferPlayerToPlayerProtocol(playerID, owner.getId(), amount);
             }
-
             endTurnProtocol(playerID);
         }
 
@@ -178,13 +157,12 @@ public class Game{
 
         //chance7: Go back 3 spaces.
         if (players.get(playerID).getCardID() == 2131165337) {
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|-3|" + players.get(playerID).getUsername());
-            players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn");
+            moveProtocol(playerID, -3);
         }
 
         //chance8: Make general repairs on all your property: For each house pay $25, for each hotel pay $100.
         if (players.get(playerID).getCardID() == 2131165338) {
-            //TODO: everything
+            //TODO
         }
 
         //chance9: Take a trip to S-Bahn Wien.
@@ -196,7 +174,6 @@ public class Game{
                     moveProtocol(playerID, incr);
                 }
             }
-            endTurnProtocol(playerID);
         }
 
         //chance10, You have been elected Chairman of the Board. Pay each player $50.
@@ -222,11 +199,13 @@ public class Game{
                     moveProtocol(playerID, incr);
                 }
             }
+            endTurnProtocol(playerID);
         }
 
         //chance14, community14: Parking Ticket! Pay $15.
         if (players.get(playerID).getCardID() == 2131165326 || players.get(playerID).getCardID() == 2131165347) {
             transferToBankProtocol(playerID, 15);
+            endTurnProtocol(playerID);
         }
 
         //chance15: Advance two spaces.
@@ -316,6 +295,14 @@ public class Game{
 
         //community13: You are assessed for street repair. $40 per house. $115 per hotel.
         if (players.get(playerID).getCardID() == 2131165346) {
+            /*int counterHotel = 0;
+            int counterHouse = 0;
+
+            for(int i = 0; i<fields.size(); i++){
+                if (fields.get(i).getOwner().getId() == playerID){
+                    counterHouse += fields.get(i).getHouses();
+                }
+            }*/
             //TODO: everything
         }
 
@@ -389,13 +376,11 @@ public class Game{
     }
 
     public void outOfJailProtocol(int playerID, int amount) throws IOException {
-        players.get(playerID).getMyClient().writeToServer("GameBoardUI|outofJail|" + amount + "|" + players.get(playerID).getUsername());
+        players.get(playerID).getMyClient().writeToServer("GameBoardUI|outOfJail|" + amount + "|" + players.get(playerID).getUsername());
     }
 
     public void endTurnProtocol(int playerID) throws IOException {
         players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
     }
 
-
-    //TODO: change static IDs to R.drawable.chanceX
 }
