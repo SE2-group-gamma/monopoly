@@ -128,10 +128,13 @@ public class UIHandler extends Handler {
                     Log.d("ButtonGreyCheck2", "VERY NICE INDEED");
                     this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(1.0f);
                     this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(true);
-
+                    this.frag.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
+                    this.frag.getActivity().findViewById(R.id.uncover).setEnabled(false);
                 }else{
                     this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);
                     this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(false);
+                    this.frag.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
+                    this.frag.getActivity().findViewById(R.id.uncover).setEnabled(true);
                 }
 
                 break;
