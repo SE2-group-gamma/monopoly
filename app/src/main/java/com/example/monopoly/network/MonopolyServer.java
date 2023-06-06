@@ -75,7 +75,6 @@ public class MonopolyServer extends Thread{
         synchronized (this.clients) {
             for (ClientHandler clientHandler : clients) {
                 clientHandler.writeToClient(msg);
-
             }
         }
     }

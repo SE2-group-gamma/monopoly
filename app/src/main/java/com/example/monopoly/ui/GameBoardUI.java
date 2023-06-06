@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import com.example.monopoly.databinding.GameBoardBinding;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
+import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
 
 import java.io.IOException;
 
@@ -26,28 +28,23 @@ public class GameBoardUI extends Fragment {
     private GameBoardBinding binding;
     private DiceViewModel diceViewModel;
     private ClientViewModel clientViewModel;
-    private String clientName;
     private Client client;
-    private boolean didCheat;
+    private GameBoardUIViewModel gameBoardUIViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Bundle implementation
-        /*if (getArguments() != null) {
-            Log.i("Dices", "Client over bundle: "+getArguments().getString("client"));
-            clientName = getArguments().getString("client");            //getting the client name using argument bundle
-        }*/
 
         diceViewModel = new ViewModelProvider(requireActivity()).get(DiceViewModel.class);
         clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
         diceViewModel.getDicesData().observe(this, dices -> {
             Log.i("Dices", dices.toString());
             String cheated = dices.isLastRollFlawed()==true?"t":"f";
+            String doublets = (dices.getDice1()==dices.getDice2())==true?"t":"f";       // 3 doubles in a row mean jail!!!
+            //String passedStartField = dices.isLastRollFlawed()==true?"t":"f";
 
             try {
-                this.client.writeToServer("GameBoardUI|move|"+dices.getSum()+":"+cheated+"|"+this.client.getUser().getUsername());
+                this.client.writeToServer("GameBoardUI|move|"+dices.getSum()+":"+cheated+":"+doublets+"|"+this.client.getUser().getUsername());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -69,6 +66,20 @@ public class GameBoardUI extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
         this.client = clientViewModel.getClientData().getValue();       // set client
+
+        try {
+            gameBoardUIViewModel = new ViewModelProvider(this.requireActivity()).get(GameBoardUIViewModel.class);   // restore GameBoardUI state
+            ((TextView)this.getActivity().findViewById(R.id.turn)).setText(gameBoardUIViewModel.getCurrentPlayer().getValue());     // set name for player turn
+            if (gameBoardUIViewModel.getUncoverEnabled().getValue()) {
+                Log.d("gameTurnCheck","was enabled!");
+                this.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
+                this.getActivity().findViewById(R.id.uncover).setEnabled(true);
+            } else {
+                Log.d("gameTurnCheck","was disabled!");
+                this.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
+                this.getActivity().findViewById(R.id.uncover).setEnabled(false);
+            }
+        }catch (Exception e){}
 
         super.onViewCreated(view, savedInstanceState);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -92,9 +103,6 @@ public class GameBoardUI extends Fragment {
 
         binding.throwdice.setOnClickListener(view1 -> {
             showDiceFragment();
-            /*for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
-                handler.writeToClient("GameBoardUI|gameStart| ");
-            }*/
         });
     }
 

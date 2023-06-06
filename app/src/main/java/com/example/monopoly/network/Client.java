@@ -47,7 +47,6 @@ public class Client extends Thread {
 
     private Game game;
     private String cheated;
-
     public static HashMap<String, UIHandler> handlers;
 
     static {
@@ -195,7 +194,7 @@ public class Client extends Thread {
                     }
                 }
 
-                if(turnEnd==true){
+                if(turnEnd){
                     turnProcess();
                 }
             }
@@ -269,13 +268,15 @@ public class Client extends Thread {
                 }
             }
             if(responseSplit[1].equals("move")){
-                // data: 8:t    ... t=cheated; f=notcheated
+                // TODO sent player to jail after 3 doubles
+                // data: 8:t:f  => increment:cheated:double
                 cheated = dataResponseSplit[1];
                 int tempID = game.getPlayerIDByName(responseSplit[3]);
                 if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
                     game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
                     Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
                     Log.d("gameturnCurr", "currUser" + responseSplit[3]);
+                    monopolyServer.broadCast("GameBoardUI|movePlayer|"+responseSplit[2]+"|"+responseSplit[3]);      // broadcast with different action to not interfere with game logic
                 }
             }//}
 
@@ -324,20 +325,22 @@ public class Client extends Thread {
         turnEnd = false;
         game.setCurrentPlayersTurn(game.getPlayers().get(serverTurnCounter).getUsername());
         monopolyServer.broadCast("GameBoardUI|playersTurn|"+game.getPlayers().get(serverTurnCounter).getUsername());
-        Log.d("gameTurnCheck", "Yo hey"+game.getCurrentPlayersTurn());
+        Log.d("gameTurnCheck", "Yo hey "+game.getCurrentPlayersTurn());
         serverTurnCounter++;
         new Timer().schedule(
                 new TimerTask() {
                     @Override
                     public void run() {
                         turnEnd = true;
+                        //monopolyServer.broadCast("DiceFragment|exitDiceFragment|:|");   // send exit signal
                     }
                 },
-                60000
+                30000
         );
         if(serverTurnCounter== HostGame.getMonopolyServer().getNumberOfClients()){
             serverTurnCounter=0;
         }
+
     }
 
     public void setGame(Game game) {

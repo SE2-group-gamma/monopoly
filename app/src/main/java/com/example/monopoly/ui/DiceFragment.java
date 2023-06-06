@@ -22,6 +22,8 @@ import android.widget.SeekBar;
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.FragmentDiceBinding;
 import com.example.monopoly.gamelogic.Dices;
+import com.example.monopoly.network.Client;
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
 
 /**
@@ -46,6 +48,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
 
     public DiceFragment() {
         // Required empty public constructor
+        Client.subscribe(this,"DiceFragment");
     }
 
     /**
