@@ -1,16 +1,22 @@
 package com.example.monopoly.ui.propertycards;
 
 import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.monopoly.R;
 import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
+import com.example.monopoly.gamelogic.properties.Field;
+import com.example.monopoly.gamelogic.properties.PropertyField;
+
+import org.w3c.dom.Text;
 
 
 public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdapter.ViewHolder> {
@@ -28,7 +34,18 @@ public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.propertyCard.setImageResource(cps.getPropertyList().get(position).getImageId());
+        Field field = cps.getPropertyList().get(position);
+        holder.propertyCard.setImageResource(field.getImageId());
+        if(field.getOwner() == null)
+            holder.ownerName.setText("Owner: none");
+        else
+            holder.ownerName.setText("Owner: "+ field.getOwner().getUsername());
+
+        if(field instanceof PropertyField) {
+            holder.propertyHouses.setText("Houses: " + ((PropertyField) field).getNumOfHouses());
+        } else {
+            holder.propertyHouses.setText("");
+        }
     }
 
     @Override
@@ -38,12 +55,14 @@ public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdap
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView propertyCard;
+        private final TextView ownerName;
+        private final TextView propertyHouses;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             propertyCard = itemView.findViewById(R.id.propertyCardImageView);
-        }
-        public ImageView getPropertyCard() {
-            return propertyCard;
+            ownerName = itemView.findViewById(R.id.ownerName);
+            propertyHouses = itemView.findViewById(R.id.propertyHouses);
         }
     }
 }
