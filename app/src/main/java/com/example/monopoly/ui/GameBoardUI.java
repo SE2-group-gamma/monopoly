@@ -18,6 +18,7 @@ import com.example.monopoly.databinding.GameBoardBinding;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
+import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
 
 import java.io.IOException;
 
@@ -29,10 +30,23 @@ public class GameBoardUI extends Fragment {
     private String clientName;
     private Client client;
     private boolean didCheat;
+    private GameBoardUIViewModel gameBoardUIViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // After changing to a different fragment the fragment status needs to be saved
+        /*if (savedInstanceState != null) {
+            Log.d("gameTurnCheck",savedInstanceState.getBoolean("IS_UNCOVER_ENABLED")+" .");
+            if(savedInstanceState.getBoolean("IS_UNCOVER_ENABLED")){
+                this.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
+                this.getActivity().findViewById(R.id.uncover).setEnabled(true);
+            }else{
+                this.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
+                this.getActivity().findViewById(R.id.uncover).setEnabled(false);
+            }
+        }*/
 
         //Bundle implementation
         /*if (getArguments() != null) {
@@ -72,6 +86,19 @@ public class GameBoardUI extends Fragment {
 
         this.client = clientViewModel.getClientData().getValue();       // set client
 
+        try {
+            gameBoardUIViewModel = new ViewModelProvider(this.requireActivity()).get(GameBoardUIViewModel.class);   // restore GameBoardUI state
+            if (gameBoardUIViewModel.getUncoverEnabled().getValue()) {
+                Log.d("gameTurnCheck","was enabled!");
+                this.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
+                this.getActivity().findViewById(R.id.uncover).setEnabled(true);
+            } else {
+                Log.d("gameTurnCheck","was disabled!");
+                this.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
+                this.getActivity().findViewById(R.id.uncover).setEnabled(false);
+            }
+        }catch (Exception e){}
+
         super.onViewCreated(view, savedInstanceState);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -94,9 +121,6 @@ public class GameBoardUI extends Fragment {
 
         binding.throwdice.setOnClickListener(view1 -> {
             showDiceFragment();
-            /*for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
-                handler.writeToClient("GameBoardUI|gameStart| ");
-            }*/
         });
     }
 

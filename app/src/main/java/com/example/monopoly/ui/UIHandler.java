@@ -16,6 +16,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.monopoly.R;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
+import com.example.monopoly.ui.viewmodels.DiceViewModel;
+import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
 
 public class UIHandler extends Handler {
     private Fragment frag;
@@ -25,6 +27,8 @@ public class UIHandler extends Handler {
 
     private Client client;
     private ClientViewModel clientViewModel;
+    private GameBoardUIViewModel gameBoardUIViewModel;
+    //private boolean uncoverEnabled;
 
 
 
@@ -37,6 +41,8 @@ public class UIHandler extends Handler {
     @Override
     public void handleMessage(@NonNull Message msg) {
         clientViewModel = new ViewModelProvider(frag.requireActivity()).get(ClientViewModel.class);
+        gameBoardUIViewModel = new ViewModelProvider(frag.requireActivity()).get(GameBoardUIViewModel.class);   // GameBoardUI state
+
         this.client = clientViewModel.getClientData().getValue();
         super.handleMessage(msg);
         String data = msg.getData().get("Data").toString();
@@ -126,15 +132,17 @@ public class UIHandler extends Handler {
                 Log.d("ButtonGreyCheck", "Here is Button"+this.client.getUser().getUsername());
                 if(data.equals(this.client.getUser().getUsername())){
                     Log.d("ButtonGreyCheck2", "VERY NICE INDEED");
-                    this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(1.0f);
+                    this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(1.0f  );
                     this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(true);
                     this.frag.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
                     this.frag.getActivity().findViewById(R.id.uncover).setEnabled(false);
+                    gameBoardUIViewModel.setUncoverEnabled(false);
                 }else{
                     this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);
                     this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(false);
                     this.frag.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
                     this.frag.getActivity().findViewById(R.id.uncover).setEnabled(true);
+                    gameBoardUIViewModel.setUncoverEnabled(true);
                 }
 
                 break;

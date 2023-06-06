@@ -194,7 +194,7 @@ public class Client extends Thread {
                     }
                 }
 
-                if(turnEnd==true){
+                if(turnEnd){
                     turnProcess();
                 }
             }
@@ -324,7 +324,7 @@ public class Client extends Thread {
         turnEnd = false;
         game.setCurrentPlayersTurn(game.getPlayers().get(serverTurnCounter).getUsername());
         monopolyServer.broadCast("GameBoardUI|playersTurn|"+game.getPlayers().get(serverTurnCounter).getUsername());
-        Log.d("gameTurnCheck", "Yo hey"+game.getCurrentPlayersTurn());
+        Log.d("gameTurnCheck", "Yo hey "+game.getCurrentPlayersTurn());
         serverTurnCounter++;
         new Timer().schedule(
                 new TimerTask() {
@@ -333,7 +333,7 @@ public class Client extends Thread {
                         turnEnd = true;
                     }
                 },
-                60000
+                20000
         );
         if(serverTurnCounter== HostGame.getMonopolyServer().getNumberOfClients()){
             serverTurnCounter=0;
