@@ -73,6 +73,11 @@ public class GameBoardUI extends Fragment {
 
         this.client = clientViewModel.getClientData().getValue();       // set client
 
+        try {
+            this.client.writeToServer("GameBoardUI|initializePlayerBottomRight| : |"+this.client.getUser().getId());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // DisplayMetrics might still be useful, so keep them for now
 /*
@@ -95,24 +100,7 @@ public class GameBoardUI extends Fragment {
         double heightRatio = layerDrawable.getMinimumHeight()/(double)21000;
         double widthRatio = layerDrawable.getMinimumWidth()/(double)21000;
 */
-        for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
-            //New Protocol: Fragment|action|player:additionalData|sender
-            handler.writeToClient("GameBoardUI|initializePlayerBottomRight|1|"+this.client.getUser().getId());
-            dosleep();
-            handler.writeToClient("GameBoardUI|goFieldBottom|1|"+this.client.getUser().getUsername());
-            dosleep();
-            handler.writeToClient("GameBoardUI|initializePlayerBottomLeft|1|"+this.client.getUser().getUsername());
-            dosleep();
-            handler.writeToClient("GameBoardUI|goFieldLeft|1|"+this.client.getUser().getUsername());
-            dosleep();
-            handler.writeToClient("GameBoardUI|initializePlayerTopLeft|1|"+this.client.getUser().getUsername());
-            dosleep();
-            handler.writeToClient("GameBoardUI|goFieldTop|1|"+this.client.getUser().getUsername());
-            dosleep();
-            handler.writeToClient("GameBoardUI|initializePlayerTopRight|1|"+this.client.getUser().getUsername());
-            dosleep();
-            handler.writeToClient("GameBoardUI|goFieldRight|1|"+this.client.getUser().getUsername());
-        }
+
 
         super.onViewCreated(view, savedInstanceState);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

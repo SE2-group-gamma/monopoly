@@ -272,7 +272,7 @@ public class Client extends Thread {
                 cheated = dataResponseSplit[1];
                 int tempID = game.getPlayerIDByName(responseSplit[3]);
                 if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
-                    game.incrementPlayerPosition(tempID, Integer.parseInt(responseSplit[2]));
+                    game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
                     Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
                     Log.d("gameturnCurr", "currUser" + responseSplit[3]);
                 }
