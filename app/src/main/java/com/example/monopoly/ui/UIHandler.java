@@ -113,6 +113,11 @@ public class UIHandler extends Handler {
                 break;
             case "move":
                 Log.d("move",data); //Data for move distance and player name
+                String[] dataResponseSplit = data.split(":");
+                if(dataResponseSplit[2].equals("f")) {
+                    this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);        // disable dice throwing after not throwing doubles
+                    this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(false);
+                }
                 break;
 
 

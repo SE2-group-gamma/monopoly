@@ -45,9 +45,11 @@ public class GameBoardUI extends Fragment {
         diceViewModel.getDicesData().observe(this, dices -> {
             Log.i("Dices", dices.toString());
             String cheated = dices.isLastRollFlawed()==true?"t":"f";
+            String doublets = (dices.getDice1()==dices.getDice2())==true?"t":"f";       // 3 doubles in a row mean jail!!!
+            //String passedStartField = dices.isLastRollFlawed()==true?"t":"f";
 
             try {
-                this.client.writeToServer("GameBoardUI|move|"+dices.getSum()+":"+cheated+"|"+this.client.getUser().getUsername());
+                this.client.writeToServer("GameBoardUI|move|"+dices.getSum()+":"+cheated+":"+doublets+"|"+this.client.getUser().getUsername());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

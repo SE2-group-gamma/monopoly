@@ -47,7 +47,6 @@ public class Client extends Thread {
 
     private Game game;
     private String cheated;
-
     public static HashMap<String, UIHandler> handlers;
 
     static {
@@ -269,7 +268,8 @@ public class Client extends Thread {
                 }
             }
             if(responseSplit[1].equals("move")){
-                // data: 8:t    ... t=cheated; f=notcheated
+                // TODO sent player to jail after 3 doubles
+                // data: 8:t:f  => increment:cheated:double
                 cheated = dataResponseSplit[1];
                 int tempID = game.getPlayerIDByName(responseSplit[3]);
                 if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
