@@ -14,6 +14,7 @@ public class Player {
     private int id;
     private int position;
     private int cardID;
+    private int outOfJailFree;
 
 
     public Player(String username, Color col, double capital, boolean alive) {
@@ -32,6 +33,15 @@ public class Player {
     public void setCardID(int cardID){
         this.cardID = cardID;
     }
+
+    public int getOutOfJailFree() {
+        return outOfJailFree;
+    }
+
+    public void setOutOfJailFree(int outOfJailFree){
+        this.outOfJailFree = outOfJailFree;
+    }
+
     public int getId() {
         return id;
     }

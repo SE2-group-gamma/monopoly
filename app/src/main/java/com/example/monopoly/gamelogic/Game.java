@@ -172,7 +172,7 @@ public class Game{
 
         //chance6, chance12, community4: Get out of Jail Free.
         if (players.get(playerID).getCardID() == 2131165336 || players.get(playerID).getCardID() == 2131165324 || players.get(playerID).getCardID() == 2131165355) {
-            //TODO: add attribute boolean outOfJailFree to player?
+            //TODO: add attribute int outOfJailFree to player?
         }
 
         //chance7: Go back 3 spaces.
