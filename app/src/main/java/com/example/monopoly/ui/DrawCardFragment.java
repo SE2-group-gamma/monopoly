@@ -27,7 +27,6 @@ public class DrawCardFragment extends Fragment {
     private CommunityChestCardCollection communityCards;
     private FragmentDrawcardBinding binding;
     private DrawCardViewModel drawCardViewModel;
-    private ClientViewModel clientViewModel;
     private final Game game = Game.getInstance();
 
 
@@ -41,7 +40,6 @@ public class DrawCardFragment extends Fragment {
         binding = FragmentDrawcardBinding.inflate(getLayoutInflater());
 
         drawCardViewModel = new ViewModelProvider(requireActivity()).get(DrawCardViewModel.class);
-        clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
         this.chanceCards = drawCardViewModel.getChanceCards().getValue();
         this.communityCards = drawCardViewModel.getCommunityCards().getValue();
 
@@ -56,8 +54,8 @@ public class DrawCardFragment extends Fragment {
         }
 
         binding.buttonContinueDrawCard.setOnClickListener(view -> {
-            this.drawCardViewModel.setChanceCards(chanceCards);
-            this.drawCardViewModel.setCommunityCards(communityCards);
+            this.drawCardViewModel.setChanceCards(this.chanceCards);
+            this.drawCardViewModel.setCommunityCards(this.communityCards);
             NavHostFragment.findNavController(this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
         });
 
