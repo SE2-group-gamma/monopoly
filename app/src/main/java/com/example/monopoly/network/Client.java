@@ -302,9 +302,11 @@ public class Client extends Thread {
                 }
             }
             if (responseSplit[1].equals("outOfJailFree")) {
+                //[Fragment]|outOfJailFree|[amount]|[senderUserName]
                 int senderID = game.getPlayerIDByName(responseSplit[3]);
+                int amount = Integer.parseInt(dataResponseSplit[0]);
                 if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
-                    game.getPlayers().get(senderID).setOutOfJailFree(game.getPlayers().get(senderID).getOutOfJailFree()+1);
+                    game.getPlayers().get(senderID).setOutOfJailFree(game.getPlayers().get(senderID).getOutOfJailFree()+amount);
                 }
             }
 
