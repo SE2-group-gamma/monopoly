@@ -27,8 +27,6 @@ public class DrawCardFragment extends Fragment {
     private CommunityChestCardCollection communityCards;
     private FragmentDrawcardBinding binding;
     private DrawCardViewModel drawCardViewModel;
-    private boolean isChanceField = true;
-    private boolean isCommunityField = false;
     private ClientViewModel clientViewModel;
     private Client client;
     private final Game game = Game.getInstance();
@@ -73,13 +71,15 @@ public class DrawCardFragment extends Fragment {
     private void checkField() {
 
         // TODO: the if-condition has to check the actual position of the player
-        if (isChanceField) {
+        if (game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 7 ||
+                game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 22 ||
+                game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 36){
             returnChanceCard();
-            isChanceField = false;
 
-        } else if (isCommunityField) {
+        } else if (game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 2 ||
+                game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 17 ||
+                game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 33) {
             returnCommunityChestCard();
-            isCommunityField = false;
         } else {
             Log.i("Cards", "The Player is neither on a Chance-Field nor on a Community-Chest-Field");
         }
