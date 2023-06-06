@@ -172,7 +172,8 @@ public class Game{
 
         //chance6, chance12, community4: Get out of Jail Free.
         if (players.get(playerID).getCardID() == 2131165336 || players.get(playerID).getCardID() == 2131165324 || players.get(playerID).getCardID() == 2131165355) {
-
+            outOfJailProtocol(playerID, 1);
+            endTurnProtocol(playerID);
         }
 
         //chance7: Go back 3 spaces.
@@ -385,6 +386,10 @@ public class Game{
 
     public void moveProtocol(int playerID, int incr) throws IOException {
         players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
+    }
+
+    public void outOfJailProtocol(int playerID, int amount) throws IOException {
+        players.get(playerID).getMyClient().writeToServer("GameBoardUI|outofJail|" + amount + "|" + players.get(playerID).getUsername());
     }
 
     public void endTurnProtocol(int playerID) throws IOException {
