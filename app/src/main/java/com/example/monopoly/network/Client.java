@@ -276,6 +276,7 @@ public class Client extends Thread {
                     game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
                     Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
                     Log.d("gameturnCurr", "currUser" + responseSplit[3]);
+                    monopolyServer.broadCast("GameBoardUI|movePlayer|"+responseSplit[2]+"|"+responseSplit[3]);      // broadcast with different action to not interfere with game logic
                 }
             }//}
 
@@ -331,6 +332,7 @@ public class Client extends Thread {
                     @Override
                     public void run() {
                         turnEnd = true;
+                        //monopolyServer.broadCast("DiceFragment|exitDiceFragment|:|");   // send exit signal
                     }
                 },
                 30000
@@ -338,6 +340,7 @@ public class Client extends Thread {
         if(serverTurnCounter== HostGame.getMonopolyServer().getNumberOfClients()){
             serverTurnCounter=0;
         }
+
     }
 
     public void setGame(Game game) {

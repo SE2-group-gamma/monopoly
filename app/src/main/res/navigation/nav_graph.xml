@@ -122,4 +122,8 @@
             app:destination="@id/GameBoardUI" />
     </fragment>
 
+    <action
+        android:id="@+id/move_to_GameBoardUI"
+        app:destination="@id/GameBoardUI" />
+
 </navigation>
