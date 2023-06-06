@@ -301,6 +301,13 @@ public class Client extends Thread {
                             + " -> " + game.getPlayers().get(receiverID).getUsername() + " : $" + amount);
                 }
             }
+            if (responseSplit[1].equals("outOfJailFree")) {
+                int senderID = game.getPlayerIDByName(responseSplit[3]);
+                if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
+                    game.getPlayers().get(senderID).setOutOfJailFree(game.getPlayers().get(senderID).getOutOfJailFree()+1);
+                }
+            }
+
             if (responseSplit[1].equals("transferToBank")) {
                 int senderID = game.getPlayerIDByName(responseSplit[3]);
                 int amount = Integer.parseInt(dataResponseSplit[0]);
