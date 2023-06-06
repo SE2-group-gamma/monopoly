@@ -96,6 +96,19 @@ public class PropertyStorage {
         this.properties.get(propertyId).setOwner(owner);
     }
 
+    public void addHouse(String propertyId){
+        Field field = this.properties.get(propertyId);
+        if(!(field instanceof PropertyField)) throw new IllegalFieldException("Field is not a PropertyField");
+        if(!hasAllColours(field.getOwner(), ((PropertyField) field).getColor())) throw new IllegalStateException("Owner does not have all colors");
+        ((PropertyField) field).addHouse();
+    }
+
+    public void addHotel(String propertyId){
+        Field field = this.properties.get(propertyId);
+        if(!(field instanceof PropertyField)) throw new IllegalFieldException("Field is not a PropertyField");
+        ((PropertyField) field).addHotel();
+    }
+
     private boolean hasAllColours(Player owner, PropertyFieldColors color) {
         return properties.values().stream().filter(x -> x instanceof PropertyField && ((PropertyField) x).getColor() == color).allMatch(x -> x.getOwner().equals(owner));
     }
