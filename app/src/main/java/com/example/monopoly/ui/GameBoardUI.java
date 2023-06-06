@@ -27,32 +27,12 @@ public class GameBoardUI extends Fragment {
     private GameBoardBinding binding;
     private DiceViewModel diceViewModel;
     private ClientViewModel clientViewModel;
-    private String clientName;
     private Client client;
-    private boolean didCheat;
     private GameBoardUIViewModel gameBoardUIViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // After changing to a different fragment the fragment status needs to be saved
-        /*if (savedInstanceState != null) {
-            Log.d("gameTurnCheck",savedInstanceState.getBoolean("IS_UNCOVER_ENABLED")+" .");
-            if(savedInstanceState.getBoolean("IS_UNCOVER_ENABLED")){
-                this.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
-                this.getActivity().findViewById(R.id.uncover).setEnabled(true);
-            }else{
-                this.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
-                this.getActivity().findViewById(R.id.uncover).setEnabled(false);
-            }
-        }*/
-
-        //Bundle implementation
-        /*if (getArguments() != null) {
-            Log.i("Dices", "Client over bundle: "+getArguments().getString("client"));
-            clientName = getArguments().getString("client");            //getting the client name using argument bundle
-        }*/
 
         diceViewModel = new ViewModelProvider(requireActivity()).get(DiceViewModel.class);
         clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);

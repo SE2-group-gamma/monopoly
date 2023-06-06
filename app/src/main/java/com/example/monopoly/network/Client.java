@@ -333,7 +333,7 @@ public class Client extends Thread {
                         turnEnd = true;
                     }
                 },
-                20000
+                30000
         );
         if(serverTurnCounter== HostGame.getMonopolyServer().getNumberOfClients()){
             serverTurnCounter=0;
