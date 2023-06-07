@@ -85,9 +85,7 @@ public class PropertyStorageTest {
 
     @Test
     void addHotelToPropertyField(){
-        buyAllPropertiesOfSameColor();
-        for(int i = 0; i < 4; i++)
-            propertyStorage.addHouse("strandbad");
+        buyAllHousesOnProperty();
 
         assertDoesNotThrow(() -> {propertyStorage.addHotel("strandbad");});
     }
@@ -119,9 +117,51 @@ public class PropertyStorageTest {
         assertEquals(0, propertyStorage.getRentOnPropertyField("strandbad", player2));
     }
 
+    @Test
+    void testRentOnOwnedField(){
+        propertyStorage.buyProperty("strandbad", player);
+        assertEquals(0, propertyStorage.getRentOnPropertyField("strandbad", player));
+        assertEquals(2, propertyStorage.getRentOnPropertyField("strandbad", player2));
+    }
+
+    @Test
+    void testRentOnAllColorsField(){
+        buyAllPropertiesOfSameColor();
+        assertEquals(4, propertyStorage.getRentOnPropertyField("strandbad", player2));
+    }
+
+    @Test
+    void testRentWithHouses(){
+        buyAllPropertiesOfSameColor();
+        propertyStorage.addHouse("strandbad");
+        assertEquals(10, propertyStorage.getRentOnPropertyField("strandbad", player2));
+        propertyStorage.addHouse("strandbad");
+        assertEquals(30, propertyStorage.getRentOnPropertyField("strandbad", player2));
+        propertyStorage.addHouse("strandbad");
+        assertEquals(90, propertyStorage.getRentOnPropertyField("strandbad", player2));
+        propertyStorage.addHouse("strandbad");
+        assertEquals(160, propertyStorage.getRentOnPropertyField("strandbad", player2));
+    }
+
+    @Test
+    void testRentWithHotel(){
+        buyHotelOnProperty();
+        assertEquals(250, propertyStorage.getRentOnPropertyField("strandbad", player2));
+    }
+
     private void buyAllPropertiesOfSameColor() {
-        // Nullpointer exception when no owner is set
         propertyStorage.buyProperty("strandbad", player);
         propertyStorage.buyProperty("city_arkaden", player);
+    }
+
+    private void buyHotelOnProperty(){
+        buyAllHousesOnProperty();
+        propertyStorage.addHotel("strandbad");
+    }
+
+    private void buyAllHousesOnProperty(){
+        buyAllPropertiesOfSameColor();
+        for(int i = 0; i < 4; i++)
+            propertyStorage.addHouse("strandbad");
     }
 }

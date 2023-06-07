@@ -62,6 +62,7 @@ public class PropertyStorage {
         if(property.getOwner() == null || property.getOwner().equals(player)) return 0;
         if(property instanceof PropertyField){
             RentConfiguration rents = ((PropertyField) property).getRent();
+            if(((PropertyField) property).hasHotel()) return rents.getRentHotel();
             switch (((PropertyField) property).getNumOfHouses()) {
                 case 1:
                     return rents.getRent1House();
@@ -115,11 +116,11 @@ public class PropertyStorage {
     }
 
     private boolean hasAllColours(Player owner, PropertyFieldColors color) {
-        return properties.values().stream().filter(x -> x instanceof PropertyField && ((PropertyField) x).getColor() == color).allMatch(x -> x.getOwner().equals(owner));
+        return properties.values().stream().filter(x -> x instanceof PropertyField && ((PropertyField) x).getColor() == color).allMatch(x -> x.getOwner() != null && x.getOwner().equals(owner));
     }
 
     private long numOfTrainStations(Player owner) {
-        return properties.values().stream().filter(x -> x instanceof TrainStation && x.getOwner().equals(owner)).count();
+        return properties.values().stream().filter(x -> x instanceof TrainStation && x.getOwner() != null && x.getOwner().equals(owner)).count();
     }
 
     public boolean hasField(String name) {
