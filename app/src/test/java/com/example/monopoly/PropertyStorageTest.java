@@ -2,7 +2,6 @@ package com.example.monopoly;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
@@ -13,13 +12,9 @@ import com.example.monopoly.gamelogic.properties.PropertyStorage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
 import java.lang.reflect.Field;
-import java.util.stream.Stream;
 
 public class PropertyStorageTest {
     static PropertyStorage propertyStorage;
@@ -84,14 +79,14 @@ public class PropertyStorageTest {
     }
 
     @Test
-    void addHotelToPropertyField(){
+    void addHotelToPropertyFieldTest(){
         buyAllHousesOnProperty();
 
         assertDoesNotThrow(() -> {propertyStorage.addHotel("strandbad");});
     }
 
     @Test
-    void addHotelOnIllegalField(){
+    void addHotelOnIllegalFieldTest(){
         assertThrows(IllegalStateException.class, () -> {propertyStorage.addHotel("strandbad");});
         propertyStorage.buyProperty("strandbad", player);
         assertThrows(IllegalStateException.class, () -> {propertyStorage.addHotel("strandbad");});
@@ -112,26 +107,26 @@ public class PropertyStorageTest {
     }
 
     @Test
-    void testRentOnUnownedField(){
+    void rentOnUnownedFieldTest(){
         assertEquals(0, propertyStorage.getRentOnPropertyField("strandbad", player));
         assertEquals(0, propertyStorage.getRentOnPropertyField("strandbad", player2));
     }
 
     @Test
-    void testRentOnOwnedField(){
+    void rentOnOwnedFieldTest(){
         propertyStorage.buyProperty("strandbad", player);
         assertEquals(0, propertyStorage.getRentOnPropertyField("strandbad", player));
         assertEquals(2, propertyStorage.getRentOnPropertyField("strandbad", player2));
     }
 
     @Test
-    void testRentOnAllColorsField(){
+    void rentOnAllColorsFieldTest(){
         buyAllPropertiesOfSameColor();
         assertEquals(4, propertyStorage.getRentOnPropertyField("strandbad", player2));
     }
 
     @Test
-    void testRentWithHouses(){
+    void rentWithHousesTest(){
         buyAllPropertiesOfSameColor();
         propertyStorage.addHouse("strandbad");
         assertEquals(10, propertyStorage.getRentOnPropertyField("strandbad", player2));
@@ -144,13 +139,13 @@ public class PropertyStorageTest {
     }
 
     @Test
-    void testRentWithHotel(){
+    void rentWithHotelTest(){
         buyHotelOnProperty();
         assertEquals(250, propertyStorage.getRentOnPropertyField("strandbad", player2));
     }
 
     @Test
-    void testRentOnTrainStation(){
+    void rentOnTrainStationTest(){
         assertEquals(0, propertyStorage.getRentOnPropertyField("s_bahn_tirol", player2));
         propertyStorage.buyProperty("s_bahn_tirol", player);
         assertEquals(25, propertyStorage.getRentOnPropertyField("s_bahn_tirol", player2));
@@ -163,7 +158,7 @@ public class PropertyStorageTest {
     }
 
     @Test
-    void testRentOnIllegalField(){
+    void rentOnIllegalFieldTest(){
         propertyStorage.buyProperty("kelag", player);
         assertThrows(IllegalFieldException.class, () -> {propertyStorage.getRentOnPropertyField("kelag", player2);});
         assertThrows(IllegalFieldException.class, () -> {propertyStorage.getRentOnPropertyField("dad", player2);});
