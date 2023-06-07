@@ -149,6 +149,26 @@ public class PropertyStorageTest {
         assertEquals(250, propertyStorage.getRentOnPropertyField("strandbad", player2));
     }
 
+    @Test
+    void testRentOnTrainStation(){
+        assertEquals(0, propertyStorage.getRentOnPropertyField("s_bahn_tirol", player2));
+        propertyStorage.buyProperty("s_bahn_tirol", player);
+        assertEquals(25, propertyStorage.getRentOnPropertyField("s_bahn_tirol", player2));
+        propertyStorage.buyProperty("s_bahn_wien", player);
+        assertEquals(50, propertyStorage.getRentOnPropertyField("s_bahn_tirol", player2));
+        propertyStorage.buyProperty("s_bahn_kaernten", player);
+        assertEquals(100, propertyStorage.getRentOnPropertyField("s_bahn_tirol", player2));
+        propertyStorage.buyProperty("s_bahn_steiermark", player);
+        assertEquals(200, propertyStorage.getRentOnPropertyField("s_bahn_tirol", player2));
+    }
+
+    @Test
+    void testRentOnIllegalField(){
+        propertyStorage.buyProperty("kelag", player);
+        assertThrows(IllegalFieldException.class, () -> {propertyStorage.getRentOnPropertyField("kelag", player2);});
+        assertThrows(IllegalFieldException.class, () -> {propertyStorage.getRentOnPropertyField("dad", player2);});
+    }
+
     private void buyAllPropertiesOfSameColor() {
         propertyStorage.buyProperty("strandbad", player);
         propertyStorage.buyProperty("city_arkaden", player);

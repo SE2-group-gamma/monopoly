@@ -91,7 +91,7 @@ public class PropertyStorage {
                     return 0;
             }
         }
-        throw new IllegalFieldException("Field is not a colored property");
+        throw new IllegalFieldException("Field is not a colored property or train station");
     }
 
     public void buyProperty(String propertyId, Player owner) {
