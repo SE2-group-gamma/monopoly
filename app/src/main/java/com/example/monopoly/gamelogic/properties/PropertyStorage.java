@@ -57,6 +57,7 @@ public class PropertyStorage {
     }
 
     public int getRentOnPropertyField(String propertyId, Player player) {
+        if(!hasField(propertyId)) throw new IllegalFieldException("Invalid field name: " + propertyId);
         Field property = properties.get(propertyId);
         if(property.getOwner() == null || property.getOwner().equals(player)) return 0;
         if(property instanceof PropertyField){
@@ -93,17 +94,21 @@ public class PropertyStorage {
     }
 
     public void buyProperty(String propertyId, Player owner) {
+        if(!hasField(propertyId)) throw new IllegalFieldException("Invalid field name: " + propertyId);
         this.properties.get(propertyId).setOwner(owner);
     }
 
-    public void addHouse(String propertyId){
+    public int addHouse(String propertyId){
+        if(!hasField(propertyId)) throw new IllegalFieldException("Invalid field name: " + propertyId);
         Field field = this.properties.get(propertyId);
         if(!(field instanceof PropertyField)) throw new IllegalFieldException("Field is not a PropertyField");
         if(!hasAllColours(field.getOwner(), ((PropertyField) field).getColor())) throw new IllegalStateException("Owner does not have all colors");
         ((PropertyField) field).addHouse();
+        return ((PropertyField) field).getNumOfHouses();
     }
 
     public void addHotel(String propertyId){
+        if(!hasField(propertyId)) throw new IllegalFieldException("Invalid field name: " + propertyId);
         Field field = this.properties.get(propertyId);
         if(!(field instanceof PropertyField)) throw new IllegalFieldException("Field is not a PropertyField");
         ((PropertyField) field).addHotel();
@@ -119,5 +124,9 @@ public class PropertyStorage {
 
     public boolean hasField(String name) {
         return properties.containsKey(name);
+    }
+
+    public Player getOwner(String propertyId){
+        return properties.get(propertyId).getOwner();
     }
 }
