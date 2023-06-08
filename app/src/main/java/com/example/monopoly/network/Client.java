@@ -333,7 +333,7 @@ public class Client extends Thread {
                         monopolyServer.broadCast("DiceFragment|exitDiceFragment|:|");   // send exit signal
                     }
                 },
-                30000 - 100
+                30000 - 10
         );
         timer.schedule(
                 new TimerTask() {
