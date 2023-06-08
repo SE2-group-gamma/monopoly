@@ -45,6 +45,7 @@ public class Client extends Thread {
     private Game game;
     private String cheated;
     public static HashMap<String, UIHandler> handlers;
+    private Timer timer;
 
     static {
         handlers = new HashMap<>();
@@ -222,6 +223,8 @@ public class Client extends Thread {
             handlers.get(responseSplit[0]).sendMessage(handleMessage);      // UI Handler do ur thing
         }
 
+
+
         if (isHost) {
             String[] dataResponseSplit = responseSplit[2].split(":");
             // TODO: call game logic
@@ -264,6 +267,10 @@ public class Client extends Thread {
 
                 }
             }
+            if(responseSplit[1].equals("turnEnd")){
+                Log.d("endTurn","end turn test");
+                endTurnPressed();
+            }
             if(responseSplit[1].equals("move")){
                 // TODO sent player to jail after 3 doubles
                 // data: 8:t:f  => increment:cheated:double
@@ -284,6 +291,7 @@ public class Client extends Thread {
             }
             if(responseSplit[1].equals("uncover")){         // Only 1 player should be able to uncover, else others will just chime in
                 try{
+                    Log.d("uncover","Who: "+responseSplit[3]);
                     if(this.cheated.equals("t")){       // TODO if cheated punish current player (Reference should be saved in Host)
                         Log.d("Dices","Gschummelt->"+cheated);
                     } else {                                    // TODO if not punish sender
@@ -292,9 +300,6 @@ public class Client extends Thread {
                 }catch (Exception e){
 
                 }
-            }
-            if(responseSplit[1].equals("endTurn")){
-                // TODO next player turn
             }
         } else {
             for (String str: responseSplit) {
@@ -324,16 +329,16 @@ public class Client extends Thread {
         monopolyServer.broadCast("GameBoardUI|playersTurn|"+game.getPlayers().get(serverTurnCounter).getUsername());
         Log.d("gameTurnCheck", "Yo hey "+game.getCurrentPlayersTurn());
         serverTurnCounter++;
-        Timer timer = new Timer();
+        timer = new Timer();
 
         timer.schedule(
                 new TimerTask() {
                     @Override
                     public void run() {
-                        monopolyServer.broadCast("DiceFragment|exitDiceFragment|:|");   // send exit signal
+                        monopolyServer.broadCast("GameBoardUI|exitDiceFragment|:|");   // send exit signal // crashes if any other fragment is open (only if the dice frag hasn't been opened before)
                     }
                 },
-                30000 - 10
+                15000 - 10
         );
         timer.schedule(
                 new TimerTask() {
@@ -342,12 +347,29 @@ public class Client extends Thread {
                         turnEnd = true;
                     }
                 },
-                30000
+                15000
         );
         if(serverTurnCounter== HostGame.getMonopolyServer().getNumberOfClients()){
             serverTurnCounter=0;
         }
+    }
 
+
+    public void endTurnPressed(){
+        monopolyServer.broadCast("GameBoardUI|exitDiceFragment|:|");             // if endTurn is pressed the game will crash if someone is in another fragment
+        //timer.cancel();
+        Timer fragChange = new Timer();
+        fragChange.schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        timer.cancel();
+                        turnProcess();
+                    }
+                },
+                10
+        );
+        //turnProcess();
     }
 
     public void setGame(Game game) {
