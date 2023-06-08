@@ -5,15 +5,12 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.ui.HostGame;
 import com.example.monopoly.ui.UIHandler;
-
-import com.example.monopoly.gamelogic.ChanceCard;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -327,12 +324,22 @@ public class Client extends Thread {
         monopolyServer.broadCast("GameBoardUI|playersTurn|"+game.getPlayers().get(serverTurnCounter).getUsername());
         Log.d("gameTurnCheck", "Yo hey "+game.getCurrentPlayersTurn());
         serverTurnCounter++;
-        new Timer().schedule(
+        Timer timer = new Timer();
+
+        timer.schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        monopolyServer.broadCast("DiceFragment|exitDiceFragment|:|");   // send exit signal
+                    }
+                },
+                30000 - 1000
+        );
+        timer.schedule(
                 new TimerTask() {
                     @Override
                     public void run() {
                         turnEnd = true;
-                        //monopolyServer.broadCast("DiceFragment|exitDiceFragment|:|");   // send exit signal
                     }
                 },
                 30000
