@@ -54,4 +54,9 @@ public class ClientPropertyStorageTest {
         properties.get(randomFieldIndex).setOwner(player);
         assertNotNull(clientPropertyStorage.getPropertyList().get(randomFieldIndex).getOwner());
     }
+
+    @Test
+    void getPropertyTest(){
+        assertEquals("strandbad", clientPropertyStorage.getProperty("strandbad").getName());
+    }
 }

@@ -66,4 +66,9 @@ public class ClientPropertyStorage {
     public List<Field> getPropertyList(){
         return List.copyOf(properties.values());
     }
+
+    public Field getProperty(String id){
+        if(!this.properties.containsKey(id)) throw new IllegalFieldException("Invalid field id");
+        return this.properties.get(id);
+    }
 }
