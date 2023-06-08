@@ -56,7 +56,7 @@ public class Board {
     public Board(int id, ArrayList<Field> fields) {
         this.id = id;
         this.fields = fields;
-
+    }
     public static String getFieldName(int id){
             return fieldNames.get(id);
     }

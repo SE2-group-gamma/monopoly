@@ -1,14 +1,17 @@
 package com.example.monopoly;
 
-<<<<<<< HEAD
 import android.graphics.Color;
 
 import com.example.monopoly.gamelogic.Board;
 import com.example.monopoly.gamelogic.Field;
 import com.example.monopoly.gamelogic.Player;
+import com.example.monopoly.gamelogic.properties.PropertyStorage;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
