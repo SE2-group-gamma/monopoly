@@ -27,7 +27,7 @@ public class UIHandler extends Handler {
     private int counter = 1;
 
     private String hostname = "";
-
+    private int counterMove = 0;
     private Client client;
     private ClientViewModel clientViewModel;
     private GameBoardUIViewModel gameBoardUIViewModel;
@@ -160,21 +160,20 @@ public class UIHandler extends Handler {
                 break;
 
             case "exitDiceFragment":
-                try {
-                    NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+
+                NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
+                    //Thread.sleep(1000);
+
                 break;
         }
 
         //Toast.makeText(this.frag.getActivity(), msg1, Toast.LENGTH_LONG).show();
     }
+
     private void movePlayer(String data){
         String[] dataResponseSplit = data.split(":");
         if (dataResponseSplit[2].equals("f")) {
-            Log.d("move", "Im in");
+            Log.d("move", "Im in: "+counterMove++);
             this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);        // disable dice throwing after not throwing doubles
             this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(false);
         }

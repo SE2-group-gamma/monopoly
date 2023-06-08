@@ -88,6 +88,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         this.binding.sliderTooltip.setText(""+this.binding.numberSlider.getProgress()+2);
         this.binding.continueButtonDiceFragment.setOnClickListener(view -> {
             if(hasBeenRolled) {
+                this.diceViewModel.setContinuePressed(true);
                 this.diceViewModel.setDices(dices);
                 NavHostFragment.findNavController(this).navigate(R.id.action_DiceFragment_to_GameBoardUI);
             }
