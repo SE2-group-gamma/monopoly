@@ -163,7 +163,9 @@ public class UIHandler extends Handler {
                 try {
                     NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
                     Thread.sleep(1000);
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
                 break;
         }
 
