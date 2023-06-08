@@ -42,7 +42,11 @@ public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdap
             holder.ownerName.setText("Owner: "+ field.getOwner().getUsername());
 
         if(field instanceof PropertyField) {
-            holder.propertyHouses.setText("Houses: " + ((PropertyField) field).getNumOfHouses());
+            if(((PropertyField) field).hasHotel()){
+                holder.propertyHouses.setText("Hotel: 1");
+            } else {
+                holder.propertyHouses.setText("Houses: " + ((PropertyField) field).getNumOfHouses());
+            }
         } else {
             holder.propertyHouses.setText("");
         }
