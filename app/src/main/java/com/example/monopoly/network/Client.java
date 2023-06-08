@@ -199,15 +199,6 @@ public class Client extends Thread {
 
         } catch (IOException  | InterruptedException e) {
             e.printStackTrace();
-        } finally{
-            try{
-                if(clientSocket != null ){
-                    clientSocket.close();
-                    monopolyServer.shutdownServer();
-                }
-            }catch (IOException e){
-                e.printStackTrace();
-            }
         }
     }
 

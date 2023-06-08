@@ -4,7 +4,6 @@ public class Bank {
     /**
      * SINGLETON OBJECT
      */
-    //starting amount for Bank
      private double cash= 500000.00;
      private static final Bank INSTANCE = new Bank();
      private Bank(){
@@ -20,7 +19,6 @@ public class Bank {
     public void setCash( double cash){
         this.cash=cash;
     }
-    //used to pay out player e.g moving over "START"
     public void transferMoneyBankToPlayer(Player receiver, double amount){
         double senderMoney = this.getCash();
         this.setCash(senderMoney-amount);
@@ -28,7 +26,6 @@ public class Bank {
         double receiverMoney = receiver.getCapital();
         receiver.setCapital(receiverMoney+amount);
     }
-    // used to send money to the bank from given player e.g penalty
     public void transferMoneyPlayerToBank(Player sender, double amount){
         double senderMoney = sender.getCapital();
         sender.setCapital(senderMoney-amount);
@@ -38,7 +35,6 @@ public class Bank {
     }
     
 
-    //if Bank goes bankrupt
     public void savingBank(Bank bank){
          double savings=500000.00;
          bank.setCash(savings);

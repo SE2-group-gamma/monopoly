@@ -65,6 +65,15 @@ public class Game{
         return 0;
     }
 
+    public String getCurrentPlayersTurn() {
+        return currentPlayersTurn;
+    }
+
+    public void setCurrentPlayersTurn(String currentPlayersTurn) {
+        this.currentPlayersTurn = currentPlayersTurn;
+    }
+
+
 
 
 }
