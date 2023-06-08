@@ -94,10 +94,26 @@
             android:id="@+id/action_GameBoardUI_to_DiceFragment"
             app:destination="@id/DiceFragment" />
         <action
+            android:id="@+id/action_GameBoardUI_to_ProperyCardFragment"
+            app:destination="@id/PropertyCardFragment"
+        />
+        <action
             android:id="@+id/action_GameBoardUI_to_DrawCardFragment"
             app:destination="@id/DrawCardFragment" />
 
     </fragment>
+
+    <fragment
+        android:id="@+id/PropertyCardFragment"
+        android:name="com.example.monopoly.ui.PropertyCardFragment"
+        android:label="PropertyCardFragment"
+        tools:layout="@layout/fragment_property_card"
+        >
+        <action
+            app:destination="@id/GameBoardUI"
+            android:id="@+id/action_PropertyCardFragment_to_GameboardUI"/>
+    </fragment>
+
 
     <fragment
         android:id="@+id/DiceFragment"
