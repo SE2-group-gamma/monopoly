@@ -335,7 +335,7 @@ public class Client extends Thread {
                 new TimerTask() {
                     @Override
                     public void run() {
-                        monopolyServer.broadCast("DiceFragment|exitDiceFragment|:|");   // send exit signal
+                        monopolyServer.broadCast("GameBoardUI|exitDiceFragment|:|");   // send exit signal // crashes if any other fragment is open (only if the dice frag hasn't been opened before)
                     }
                 },
                 15000 - 10
@@ -356,8 +356,20 @@ public class Client extends Thread {
 
 
     public void endTurnPressed(){
-        timer.cancel();
-        turnProcess();
+        monopolyServer.broadCast("GameBoardUI|exitDiceFragment|:|");             // if endTurn is pressed the game will crash if someone is in another fragment
+        //timer.cancel();
+        Timer fragChange = new Timer();
+        fragChange.schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        timer.cancel();
+                        turnProcess();
+                    }
+                },
+                10
+        );
+        //turnProcess();
     }
 
     public void setGame(Game game) {
