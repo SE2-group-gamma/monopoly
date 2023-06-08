@@ -71,4 +71,18 @@ public class ClientPropertyStorage {
         if(!this.properties.containsKey(id)) throw new IllegalFieldException("Invalid field id");
         return this.properties.get(id);
     }
+
+    public void addHouse(String id){
+        if(!this.properties.containsKey(id)) throw new IllegalFieldException("Invalid field id");
+        Field f = properties.get(id);
+        if(!(f instanceof PropertyField)) throw new IllegalFieldException("Field is not a property field");
+        ((PropertyField) f).addHouse();
+    }
+
+    public void addHotel(String id){
+        if(!this.properties.containsKey(id)) throw new IllegalFieldException("Invalid field id");
+        Field f = properties.get(id);
+        if(!(f instanceof PropertyField)) throw new IllegalFieldException("Field is not a property field");
+        ((PropertyField) f).addHotel();
+    }
 }
