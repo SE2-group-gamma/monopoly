@@ -2,6 +2,8 @@ package com.example.monopoly.gamelogic;
 
 import android.util.Log;
 
+import com.example.monopoly.R;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -68,32 +70,32 @@ public class Game{
 
     public void doAction(int playerID) throws IOException {
 
-        //chance0, community0: Advance to "Go".
-        if (players.get(playerID).getCardID() == 2131165320 || players.get(playerID).getCardID() == 2131165341) {
+        //Advance to "Go".
+        if (players.get(playerID).getCardID() == R.drawable.chance0 || players.get(playerID).getCardID() == R.drawable.community0) {
             int incr = fields.size() - players.get(playerID).getPosition();
             moveProtocol(playerID, incr);
             endTurnProtocol(playerID);
         }
 
-        //chance1: Advance to Strandbad. If you pass Go, collect $200.
-        if (players.get(playerID).getCardID() == 2131165321) {
+        //Advance to Strandbad. If you pass Go, collect $200.
+        if (players.get(playerID).getCardID() == R.drawable.chance1) {
             advanceAndCollect(playerID, "Strandbad");
         }
 
-        //chance2: Advance to Lindwurm. If you pass Go, collect $200.
-        if (players.get(playerID).getCardID() == 2131165332) {
+        //Advance to Lindwurm. If you pass Go, collect $200.
+        if (players.get(playerID).getCardID() == R.drawable.chance2) {
             advanceAndCollect(playerID, "Lindwurm");
         }
 
-        //chance3, Your building loan matures. Receive $150.
-        if (players.get(playerID).getCardID() == 2131165333) {
+        //Your building loan matures. Receive $150.
+        if (players.get(playerID).getCardID() == R.drawable.chance3) {
             transferToPlayerProtocol(playerID, 150);
             endTurnProtocol(playerID);
         }
 
-        //chance4: Advance to the nearest Railroad. If unowned, you may buy it from the Bank.
+        //Advance to the nearest Railroad. If unowned, you may buy it from the Bank.
         // If owned, pay owner twice the rental to which they are otherwise entitled.
-        if (players.get(playerID).getCardID() == 2131165334) {
+        if (players.get(playerID).getCardID() == R.drawable.chance4) {
             int kaernten = 0;
             int tirol = 0;
             int steiermark = 0;
@@ -143,30 +145,30 @@ public class Game{
             endTurnProtocol(playerID);
         }
 
-        //chance5: Bank pays you dividend of $50.
-        if (players.get(playerID).getCardID() == 2131165335) {
+        //Bank pays you dividend of $50.
+        if (players.get(playerID).getCardID() == R.drawable.chance5) {
             transferToPlayerProtocol(playerID, 50);
             endTurnProtocol(playerID);
         }
 
-        //chance6, chance12, community4: Get out of Jail Free.
-        if (players.get(playerID).getCardID() == 2131165336 || players.get(playerID).getCardID() == 2131165324 || players.get(playerID).getCardID() == 2131165355) {
+        //Get out of Jail Free.
+        if (players.get(playerID).getCardID() == R.drawable.chance6 || players.get(playerID).getCardID() == R.drawable.chance12 || players.get(playerID).getCardID() == R.drawable.community4) {
             outOfJailProtocol(playerID, 1);
             endTurnProtocol(playerID);
         }
 
-        //chance7: Go back 3 spaces.
-        if (players.get(playerID).getCardID() == 2131165337) {
+        //Go back 3 spaces.
+        if (players.get(playerID).getCardID() == R.drawable.chance7) {
             moveProtocol(playerID, -3);
         }
 
-        //chance8: Make general repairs on all your property: For each house pay $25, for each hotel pay $100.
-        if (players.get(playerID).getCardID() == 2131165338) {
+        //Make general repairs on all your property: For each house pay $25, for each hotel pay $100.
+        if (players.get(playerID).getCardID() == R.drawable.chance8) {
             //TODO
         }
 
-        //chance9: Take a trip to S-Bahn Wien.
-        if (players.get(playerID).getCardID() == 2131165339) {
+        //Take a trip to S-Bahn Wien.
+        if (players.get(playerID).getCardID() == R.drawable.chance9) {
             int incr;
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).getName() == "S-Bahn Wien") {
@@ -176,8 +178,8 @@ public class Game{
             }
         }
 
-        //chance10, You have been elected Chairman of the Board. Pay each player $50.
-        if (players.get(playerID).getCardID() == 2131165322) {
+        //You have been elected Chairman of the Board. Pay each player $50.
+        if (players.get(playerID).getCardID() == R.drawable.chance10) {
             for (int i = 0; i < players.size(); i++) {
                 if (i != playerID) {
                     transferPlayerToPlayerProtocol(playerID, i, 50);
@@ -186,13 +188,13 @@ public class Game{
             }
         }
 
-        //chance11: Advance to City Arkaden. If you pass Go, collect $200.
-        if (players.get(playerID).getCardID() == 2131165323) {
+        //Advance to City Arkaden. If you pass Go, collect $200.
+        if (players.get(playerID).getCardID() == R.drawable.chance11) {
             advanceAndCollect(playerID, "City Arkaden");
         }
 
-        //chance13, chance16, community5: Go to Jail directly.
-        if (players.get(playerID).getCardID() == 2131165325 || players.get(playerID).getCardID() == 2131165328 || players.get(playerID).getCardID() == 2131165356) {
+        //Go to Jail directly.
+        if (players.get(playerID).getCardID() == R.drawable.chance13 || players.get(playerID).getCardID() == R.drawable.chance16 || players.get(playerID).getCardID() == R.drawable.community5) {
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).getName() == "Jail") {
                     int incr = fields.get(i).getId() - players.get(playerID).getPosition();
@@ -202,65 +204,65 @@ public class Game{
             endTurnProtocol(playerID);
         }
 
-        //chance14, community14: Parking Ticket! Pay $15.
-        if (players.get(playerID).getCardID() == 2131165326 || players.get(playerID).getCardID() == 2131165347) {
+        //Parking Ticket! Pay $15.
+        if (players.get(playerID).getCardID() == R.drawable.chance14 || players.get(playerID).getCardID() == R.drawable.community14) {
             transferToBankProtocol(playerID, 15);
             endTurnProtocol(playerID);
         }
 
-        //chance15: Advance two spaces.
-        if (players.get(playerID).getCardID() == 2131165327) {
+        //Advance two spaces.
+        if (players.get(playerID).getCardID() == R.drawable.chance15) {
             moveProtocol(playerID, 2);
         }
 
-        //chance17: Happy Birthday! Receive $100.
-        if (players.get(playerID).getCardID() == 2131165329) {
+        //Happy Birthday! Receive $100.
+        if (players.get(playerID).getCardID() == R.drawable.chance17) {
             transferToPlayerProtocol(playerID, 100);
             endTurnProtocol(playerID);
         }
 
-        //chance18: Go back one space.
-        if (players.get(playerID).getCardID() == 2131165330) {
+        //Go back one space.
+        if (players.get(playerID).getCardID() == R.drawable.chance18) {
             moveProtocol(playerID, -1);
         }
 
-        //chance19: Advance to Rathaus. If you pass Go, collect $200.
-        if (players.get(playerID).getCardID() == 2131165331) {
+        //Advance to Rathaus. If you pass Go, collect $200.
+        if (players.get(playerID).getCardID() == R.drawable.chance19) {
             advanceAndCollect(playerID, "Rathaus");
         }
 
-        //community1: Bank error in your favor. Collect $200.
-        if (players.get(playerID).getCardID() == 2131165342) {
+        //Bank error in your favor. Collect $200.
+        if (players.get(playerID).getCardID() == R.drawable.community1) {
             transferToPlayerProtocol(playerID, 200);
             endTurnProtocol(playerID);
         }
 
-        //community2: Doctor’s fee. Pay $50.
-        if (players.get(playerID).getCardID() == 2131165353) {
+        //Doctor’s fee. Pay $50.
+        if (players.get(playerID).getCardID() == R.drawable.community2) {
             transferToBankProtocol(playerID, 50);
             endTurnProtocol(playerID);
         }
 
-        //community3: From sale of stock you receive $50.
-        if (players.get(playerID).getCardID() == 2131165354) {
+        //From sale of stock you receive $50.
+        if (players.get(playerID).getCardID() == R.drawable.community3) {
             transferToPlayerProtocol(playerID, 50);
             endTurnProtocol(playerID);
         }
 
         //community6: Holiday fund matures. Receive $100.
-        if (players.get(playerID).getCardID() == 2131165357) {
+        if (players.get(playerID).getCardID() == R.drawable.community6) {
             transferToPlayerProtocol(playerID, 100);
             endTurnProtocol(playerID);
         }
 
-        //community7: Income tax refund. Collect $20.
-        if (players.get(playerID).getCardID() == 2131165358) {
+        //Income tax refund. Collect $20.
+        if (players.get(playerID).getCardID() == R.drawable.community7) {
             transferToPlayerProtocol(playerID, 20);
             endTurnProtocol(playerID);
         }
 
-        //community8: It is your birthday. Collect $10 from every player.
-        if (players.get(playerID).getCardID() == 2131165359) {
+        //It is your birthday. Collect $10 from every player.
+        if (players.get(playerID).getCardID() == R.drawable.community8) {
             for (int i = 0; i < players.size(); i++) {
                 if (i != playerID) {
                     transferPlayerToPlayerProtocol(i, playerID, 10);
@@ -269,32 +271,32 @@ public class Game{
             endTurnProtocol(playerID);
         }
 
-        //community9: Life insurance matures. Collect $100.
-        if (players.get(playerID).getCardID() == 2131165360) {
+        //Life insurance matures. Collect $100.
+        if (players.get(playerID).getCardID() == R.drawable.community9) {
             transferToPlayerProtocol(playerID, 100);
             endTurnProtocol(playerID);
         }
 
-        //community10: Pay hospital fees of $100.
-        if (players.get(playerID).getCardID() == 2131165343) {
+        //Pay hospital fees of $100.
+        if (players.get(playerID).getCardID() == R.drawable.community10) {
             transferToBankProtocol(playerID, 100);
             endTurnProtocol(playerID);
         }
 
-        //community11: Pay school fees of $50.
-        if (players.get(playerID).getCardID() == 2131165344) {
+        //Pay school fees of $50.
+        if (players.get(playerID).getCardID() == R.drawable.community11) {
             transferToBankProtocol(playerID, 50);
             endTurnProtocol(playerID);
         }
 
-        //community12: Receive $25 consultancy fee.
-        if (players.get(playerID).getCardID() == 2131165345) {
+        //Receive $25 consultancy fee.
+        if (players.get(playerID).getCardID() == R.drawable.community12) {
             transferToPlayerProtocol(playerID, 25);
             endTurnProtocol(playerID);
         }
 
-        //community13: You are assessed for street repair. $40 per house. $115 per hotel.
-        if (players.get(playerID).getCardID() == 2131165346) {
+        //You are assessed for street repair. $40 per house. $115 per hotel.
+        if (players.get(playerID).getCardID() == R.drawable.community13) {
             /*int counterHotel = 0;
             int counterHouse = 0;
 
@@ -303,35 +305,35 @@ public class Game{
                     counterHouse += fields.get(i).getHouses();
                 }
             }*/
-            //TODO: everything
+            //TODO
         }
 
-        //community15: You have won second prize in a beauty contest. Collect $10.
-        if (players.get(playerID).getCardID() == 2131165348) {
+        //You have won second prize in a beauty contest. Collect $10.
+        if (players.get(playerID).getCardID() == R.drawable.community15) {
             transferToPlayerProtocol(playerID, 10);
             endTurnProtocol(playerID);
         }
 
-        //community16: You inherit $100.
-        if (players.get(playerID).getCardID() == 2131165349) {
+        //You inherit $100.
+        if (players.get(playerID).getCardID() == R.drawable.community16) {
             transferToBankProtocol(playerID, 100);
             endTurnProtocol(playerID);
         }
 
-        //community17: You receive $50 from warehouse sales.
-        if (players.get(playerID).getCardID() == 2131165350) {
+        //You receive $50 from warehouse sales.
+        if (players.get(playerID).getCardID() == R.drawable.community17) {
             transferToPlayerProtocol(playerID, 50);
             endTurnProtocol(playerID);
         }
 
-        //community18: You receive a 7% dividend on preferred stock: $25.
-        if (players.get(playerID).getCardID() == 2131165351) {
+        //You receive a 7% dividend on preferred stock: $25.
+        if (players.get(playerID).getCardID() == R.drawable.community18) {
             transferToPlayerProtocol(playerID, 25);
             endTurnProtocol(playerID);
         }
 
-        //community19: Receive $100 compensation for pain and suffering from the next player.
-        if (players.get(playerID).getCardID() == 2131165352) {
+        //Receive $100 compensation for pain and suffering from the next player.
+        if (players.get(playerID).getCardID() == R.drawable.community19) {
             transferPlayerToPlayerProtocol(playerID + 1, playerID, 100);
             endTurnProtocol(playerID);
         }
