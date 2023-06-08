@@ -1,5 +1,6 @@
 package com.example.monopoly;
 
+<<<<<<< HEAD
 import android.graphics.Color;
 
 import com.example.monopoly.gamelogic.Board;
@@ -11,38 +12,39 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+
 class BoardTest {
-    static Board board;
-    static Player player,player_two;
-    static Color col;
+
+    static PropertyStorage ps;
     @BeforeAll
-    static void setup(){
-        ArrayList<Field> arr = new ArrayList<>();
-        board = new Board(0,arr);
+    static void initPropertyStorage(){
+        ps = PropertyStorage.getInstance();
+    }
+    void testSpecialFields(){
+        assertEquals("go", Board.getFieldName(0));
+        assertEquals("jail", Board.getFieldName(10));
+        assertEquals("free_parking", Board.getFieldName(20));
+        assertEquals("goto_jail", Board.getFieldName(30));
+
+        assertEquals("community", Board.getFieldName(2));
+        assertEquals("income_tax", Board.getFieldName(4));
+        assertEquals("chance", Board.getFieldName(7));
+        assertEquals("community", Board.getFieldName(17));
+        assertEquals("chance", Board.getFieldName(22));
+        assertEquals("community", Board.getFieldName(33));
+        assertEquals("chance", Board.getFieldName(36));
+        assertEquals("luxury_tax", Board.getFieldName(38));
     }
 
     @Test
-    public void testMovePlayer() {
-        // Move the player with positive steps
-        player = new Player("Hans",col,100.00,true);
-        player_two = new Player("Fritz",col,100.00,true);
-        int steps = 3;
-        int expectedPosition = (player.getPosition() + steps) % Board.FELDER_ANZAHL;
-        Board.movePlayer(player, steps);
-        assertEquals(expectedPosition, player.getPosition());
+    void testPropertyFields(){
+        List<String> specialFields = List.of("go", "jail","free_parking","goto_jail","community","income_tax","chance","luxury_tax");
 
-        // Move the player with negative steps
-        steps = -2;
-        expectedPosition = (player.getPosition() + steps) % Board.FELDER_ANZAHL;
-        Board.movePlayer(player, steps);
-        assertEquals(expectedPosition, player.getPosition());
-
-        // Test money transfer if new position is less than the previous position
-        double initialPlayerMoney = player.getCapital();
-        Board.movePlayer(player, -4);
-        assertTrue(player.getCapital() > initialPlayerMoney);
+        for(int i = 0; i < 40; i++){
+            String name = Board.getFieldName(i);
+            if(!specialFields.contains(name)){
+                assertTrue(ps.hasField(name));
+            }
+        }
     }
-
-
-
 }

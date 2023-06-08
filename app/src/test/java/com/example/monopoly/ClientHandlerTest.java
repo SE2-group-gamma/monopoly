@@ -29,6 +29,7 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -72,8 +73,10 @@ class ClientHandlerTest {
     @Test
     public void testSetServer() {
         MonopolyServer server = null;
+        ServerSocket serverSocket1 = mock(ServerSocket.class);
+        when(serverSocket1.getLocalPort()).thenReturn(4312);        //has to be set to a different value because it could interfere with other tests
         try {
-            server = new MonopolyServer(5);
+            server = new MonopolyServer(5,serverSocket1);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

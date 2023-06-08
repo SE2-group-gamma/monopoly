@@ -9,30 +9,45 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.network.Client;
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
+import com.example.monopoly.ui.viewmodels.DiceViewModel;
+import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
 
-import java.io.Serializable;
+import java.util.Objects;
 
 public class UIHandler extends Handler {
     private Fragment frag;
     private int counter=1;
     private int currentPlayerindex=1;
     private Game game = Game.getInstance();
-    private Player currentPlayer;
 
+    private String hostname = "";
+    private int counterMove = 0;
+    private Client client;
+    private ClientViewModel clientViewModel;
+    private GameBoardUIViewModel gameBoardUIViewModel;
+
+    //private boolean uncoverEnabled;
     public UIHandler(Fragment app) {
         this.frag = app;
     }
 
     @Override
     public void handleMessage(@NonNull Message msg) {
+        clientViewModel = new ViewModelProvider(frag.requireActivity()).get(ClientViewModel.class);
+        gameBoardUIViewModel = new ViewModelProvider(frag.requireActivity()).get(GameBoardUIViewModel.class);   // GameBoardUI state
+
+
+        this.client = clientViewModel.getClientData().getValue();
         super.handleMessage(msg);
         String data = msg.getData().get("Data").toString();
         String type = msg.getData().get("ActionType").toString();
@@ -40,14 +55,15 @@ public class UIHandler extends Handler {
         Client clientObject = null;
         try {
             client = msg.getData().get("Client").toString();
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
 
         switch (type) {
             case "changeText":
                 ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
                 break;
             case "userJoined":
-                switch (counter){
+                switch (counter) {
                     case 1:
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1Name)).setVisibility(View.VISIBLE);
@@ -75,43 +91,37 @@ public class UIHandler extends Handler {
                         break;
 
                 }
-                currentPlayerindex++;
-                if (counter != currentPlayerindex) {
-                    disableTextFieldsForPlayer(counter);
-                } else{
-                    currentPlayer = game.getPlayers().get(currentPlayerindex);
-                }
 
                 counter++;
 
                 break;
             case "hostJoined":
-                if(!HostGame.lobbyname.equals(" ")){
-                    ((TextView) this.frag.getActivity().findViewById(R.id.textViewLobby)).setText("Lobby: "+HostGame.lobbyname);
+                if (!HostGame.lobbyname.equals(" ")) {
+                    ((TextView) this.frag.getActivity().findViewById(R.id.textViewLobby)).setText("Lobby: " + HostGame.lobbyname);
                 }
                 ((TextView) this.frag.getActivity().findViewById(R.id.textViewHost)).setText(data);
                 break;
             case "keyFromLobby":
-                if(data.equals("1")){
+                if (data.equals("1")) {
                     NavHostFragment.findNavController(frag).navigate(R.id.action_JoinGame_to_Lobby);
-                }else{
-                    Log.d("","gib toast");
+                } else {
+                    Log.d("", "gib toast");
                     Toast.makeText(this.frag.getActivity(), "Key rejected", Toast.LENGTH_LONG).show();
                 }
                 break;
             case "gameStart":
-                Log.d("------------","gameStart");
+                Log.d("------------", "gameStart");
                 /////as                                                                                                             asdadasdadasdasdasdasd
                 Bundle bundle = new Bundle();           //Sollte ich als viewmodel übergeben
-                bundle.putString("client",client);
+                bundle.putString("client", client);
                 //bundle.putSerializable("clientObject",);
-                Log.i("Dices","gameStart!!!!!");
+                Log.i("Dices", "gameStart!!!!!");
                 NavHostFragment.findNavController(frag)
-                        .navigate(R.id.action_JoinGame_to_GameBoard,bundle);
+                        .navigate(R.id.action_JoinGame_to_GameBoard, bundle);
                 break;
             case "displayKey":
-                Log.d("tuaaaaaaa","displayKey");
-                if(HostGame.key!=0) {
+                Log.d("tuaaaaaaa", "displayKey");
+                if (HostGame.key != 0) {
                     ((TextView) this.frag.getActivity().findViewById(R.id.textViewKey)).setText("Game-Key: " + HostGame.key);
                 }
                 break;
@@ -119,63 +129,72 @@ public class UIHandler extends Handler {
                 Log.d("move",data); //Data for move distance and player name
                 data="turnEnded";
                 msg.getData().putString("Data",data);
-                currentPlayer = game.getCurrentPlayer();
-                if ( data=="turnEnded" && currentPlayer!=null) {
-                    Log.i("move","inside if");
-                    int nextPlayerIndex = currentPlayerindex + 1;
-                    if (nextPlayerIndex >= game.getPlayers().size()) {
-                        nextPlayerIndex = 0; // Wrap around to the first player if reached the end
-                    }
 
-                    currentPlayer = game.getPlayers().get(nextPlayerIndex);
-                    Log.i("move",currentPlayer.toString());
-                    currentPlayerindex = nextPlayerIndex;
-                    // Enable text fields for the next player
-                    disableTextFieldsForPlayer(currentPlayerindex);
+                movePlayer(data);
+                Log.d("move", data); //Data for move distance and player name
+                break;
+
+            case "movePlayer":
+                movePlayer(data);
+                break;
+
+
+
+            case "playersTurn":
+                Log.d("gameTurnCheck","; "+NavHostFragment.findNavController(this.frag).getCurrentDestination().getLabel());
+
+                //NavHostFragment.findNavController(this.frag).getCurrentDestination().
+
+                if(!"GameBoardUI".equals(NavHostFragment.findNavController(this.frag).getCurrentDestination().getLabel())) {
+                    //NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
+                    //Navigation.findNavController(this.frag.getActivity().findViewById(NavHostFragment.findNavController(this.frag).getCurrentDestination().getId())).navigate(R.id.move_to_GameBoardUI);
+                    //NavHostFragment.findNavController(this.frag.getActivity().getFragmentManager().findFragmentById(NavHostFragment.findNavController(this.frag).getCurrentDestination().getId())).navigate(R.id.move_to_GameBoardUI);
+                    //Objects.requireNonNull(this.frag.getActivity()).getSupportFragmentManager().popBackStack();
+                }
+
+                ((TextView) this.frag.getActivity().findViewById(R.id.turn)).setText(data + "'s turn");
+                gameBoardUIViewModel.setCurrentPlayer(data + "'s turn");
+                Log.d("ButtonGreyCheck", "Here is Button" + this.client.getUser().getUsername());
+                if (data.equals(this.client.getUser().getUsername())) {     // your turn
+                    Log.d("ButtonGreyCheck2", "VERY NICE INDEED");
+                    this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(1.0f);
+                    this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(true);
+                    this.frag.getActivity().findViewById(R.id.endTurn).setAlpha(1.0f);
+                    this.frag.getActivity().findViewById(R.id.endTurn).setEnabled(true);
+                    this.frag.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
+                    this.frag.getActivity().findViewById(R.id.uncover).setEnabled(false);
+                    gameBoardUIViewModel.setUncoverEnabled(false);
+                    gameBoardUIViewModel.setEndTurnEnabled(true);
+                    gameBoardUIViewModel.setThrowDiceEnabled(true);
+                } else {                                                    // not your turn
+                    this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);
+                    this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(false);
+                    this.frag.getActivity().findViewById(R.id.endTurn).setAlpha(0.5f);
+                    this.frag.getActivity().findViewById(R.id.endTurn).setEnabled(false);
+                    this.frag.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
+                    this.frag.getActivity().findViewById(R.id.uncover).setEnabled(true);
+                    gameBoardUIViewModel.setUncoverEnabled(true);
+                    gameBoardUIViewModel.setEndTurnEnabled(false);
+                    gameBoardUIViewModel.setThrowDiceEnabled(false);
                 }
                 break;
-        }
 
+            case "exitDiceFragment":
+                NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
+                    //Thread.sleep(1000);
+                break;
+        }
 
         //Toast.makeText(this.frag.getActivity(), msg1, Toast.LENGTH_LONG).show();
     }
 
-    private void disableTextFieldsForPlayer(int playerNumber) {
-        AppCompatActivity activity = (AppCompatActivity) frag.getActivity();
-        TextView textViewName = null;
-        TextView textViewUser = null;
-
-        switch (playerNumber) {
-            case 1:
-                textViewName = activity.findViewById(R.id.textViewUser1Name);
-                textViewUser = activity.findViewById(R.id.textViewUser1);
-                break;
-            case 2:
-                textViewName = activity.findViewById(R.id.textViewUser2Name);
-                textViewUser = activity.findViewById(R.id.textViewUser2);
-                break;
-            case 3:
-                textViewName = activity.findViewById(R.id.textViewUser3Name);
-                textViewUser = activity.findViewById(R.id.textViewUser3);
-                break;
-            case 4:
-                textViewName = activity.findViewById(R.id.textViewUser4Name);
-                textViewUser = activity.findViewById(R.id.textViewUser4);
-                break;
-            case 5:
-                textViewName = activity.findViewById(R.id.textViewUser5Name);
-                textViewUser = activity.findViewById(R.id.textViewUser5);
-                break;
-        }
-
-        if (textViewName != null && textViewUser != null) {
-            if (playerNumber == currentPlayerindex) {
-                textViewName.setEnabled(true);
-                textViewUser.setEnabled(true);
-            } else {
-                textViewName.setEnabled(false);
-                textViewUser.setEnabled(false);
-            }
+    private void movePlayer(String data){
+        String[] dataResponseSplit = data.split(":");
+        if (dataResponseSplit[2].equals("f")) {
+            Log.d("move", "Im in: "+counterMove++);
+            this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);        // disable dice throwing after not throwing doubles
+            this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(false);
+            gameBoardUIViewModel.setThrowDiceEnabled(false);
         }
     }
 }

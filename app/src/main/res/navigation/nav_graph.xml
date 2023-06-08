@@ -58,10 +58,7 @@
         <action
             android:id="@+id/action_Settings_to_FirstFragment"
             app:destination="@id/FirstFragment" />
-        <action
-            android:id="@+id/action_Settings_to_DiceFragment"
-            app:destination="@id/DiceFragment"
-            />
+
     </fragment>
 
     <fragment
@@ -96,8 +93,27 @@
         <action
             android:id="@+id/action_GameBoardUI_to_DiceFragment"
             app:destination="@id/DiceFragment" />
+        <action
+            android:id="@+id/action_GameBoardUI_to_ProperyCardFragment"
+            app:destination="@id/PropertyCardFragment"
+        />
+        <action
+            android:id="@+id/action_GameBoardUI_to_DrawCardFragment"
+            app:destination="@id/DrawCardFragment" />
 
     </fragment>
+
+    <fragment
+        android:id="@+id/PropertyCardFragment"
+        android:name="com.example.monopoly.ui.PropertyCardFragment"
+        android:label="PropertyCardFragment"
+        tools:layout="@layout/fragment_property_card"
+        >
+        <action
+            app:destination="@id/GameBoardUI"
+            android:id="@+id/action_PropertyCardFragment_to_GameboardUI"/>
+    </fragment>
+
 
     <fragment
         android:id="@+id/DiceFragment"
@@ -109,4 +125,21 @@
             android:id="@+id/action_DiceFragment_to_GameBoardUI"
             app:destination="@id/GameBoardUI" />
     </fragment>
+
+
+    <fragment
+        android:id="@+id/DrawCardFragment"
+        android:name="com.example.monopoly.ui.DrawCardFragment"
+        android:label="DrawCardFragment"
+        tools:layout="@layout/fragment_drawcard"
+        >
+        <action
+            android:id="@+id/action_DrawCardFragment_to_GameBoardUI"
+            app:destination="@id/GameBoardUI" />
+    </fragment>
+
+    <action
+        android:id="@+id/move_to_GameBoardUI"
+        app:destination="@id/GameBoardUI" />
+
 </navigation>

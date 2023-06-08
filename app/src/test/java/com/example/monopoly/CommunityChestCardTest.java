@@ -1,6 +1,5 @@
 package com.example.monopoly;
 
-import com.example.monopoly.gamelogic.ChanceCard;
 import com.example.monopoly.gamelogic.CommunityChestCard;
 import com.example.monopoly.gamelogic.CommunityChestCardCollection;
 
@@ -34,6 +33,7 @@ public class CommunityChestCardTest {
 
     @Test
     public void printAllCards() {
+        Assertions.assertEquals(20, collection.getAllCommunityChestCards().size());
         for (int i = 0; i < collection.getAllCommunityChestCards().size(); i++) {
             CommunityChestCard card = (CommunityChestCard) collection.getAllCommunityChestCards().get(i);
             System.out.println(card.getId() + ", " + card.getFunction());
@@ -42,6 +42,7 @@ public class CommunityChestCardTest {
 
     @Test
     public void printDeck() {
+        Assertions.assertEquals(20, collection.getCommunityChestCardDeck().size());
         for (int i = 0; i < collection.getCommunityChestCardDeck().size(); i++) {
             CommunityChestCard card = (CommunityChestCard) collection.getCommunityChestCardDeck().get(i);
             System.out.println(card.getId() + ", " + card.getFunction());
@@ -60,8 +61,11 @@ public class CommunityChestCardTest {
 
     @Test
     public void testRemove() {
+        CommunityChestCard card1 = collection.getCommunityChestCardDeck().get(2);
         collection.removeCardFromDeck(2);
+        CommunityChestCard card2 = collection.getCommunityChestCardDeck().get(7);
         collection.removeCardFromDeck(7);
+        CommunityChestCard card3 = collection.getCommunityChestCardDeck().get(5);
         collection.removeCardFromDeck(5);
         for (int i = 0; i < collection.getCommunityChestCardDeck().size(); i++) {
             CommunityChestCard card = collection.getCommunityChestCardDeck().get(i);
@@ -69,7 +73,9 @@ public class CommunityChestCardTest {
         }
 
         Assertions.assertEquals(collection.getAllCommunityChestCards().size()-3, collection.getCommunityChestCardDeck().size());
-
+        Assertions.assertFalse(collection.getCommunityChestCardDeck().contains(card1));
+        Assertions.assertFalse(collection.getCommunityChestCardDeck().contains(card2));
+        Assertions.assertFalse(collection.getCommunityChestCardDeck().contains(card3));
     }
 
     @Test
@@ -83,7 +89,9 @@ public class CommunityChestCardTest {
 
         }
         System.out.println("\nAll: " + collection.getAllCommunityChestCards().size());
+        Assertions.assertEquals(20, collection.getAllCommunityChestCards().size());
         System.out.println("Deck: " + collection.getCommunityChestCardDeck().size());
+        Assertions.assertEquals(0, collection.getCommunityChestCardDeck().size());
     }
 
     @Test
@@ -92,4 +100,19 @@ public class CommunityChestCardTest {
         collection.setAllCommunityChestCards(list);
         Assertions.assertEquals(0,collection.getAllCommunityChestCards().size());
     }
+
+    @Test
+    public void testGettersSettersImage() {
+        CommunityChestCard card = new CommunityChestCard(100);
+        card.setImageId(R.drawable.community0);
+        Assertions.assertNotEquals(0,card.getImageId());
+    }
+
+    @Test
+    public void testDrawables() {
+        for(int i =0; i<collection.getCommunityChestCardDeck().size(); i++){
+            Assertions.assertTrue(collection.getCommunityChestCardDeck().get(i).getImageId() > 2131165300);
+        }
+    }
+
 }
