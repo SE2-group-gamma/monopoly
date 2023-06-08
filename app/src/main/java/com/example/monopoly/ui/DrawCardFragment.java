@@ -60,7 +60,7 @@ public class DrawCardFragment extends Fragment {
         });
 
         try {
-            game.doAction(game.getPlayerIDByName(game.getCurrentPlayersTurn()));
+            game.doAction();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
