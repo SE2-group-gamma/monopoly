@@ -281,12 +281,12 @@ public class Client extends Thread {
                 }
             }//}
             if (responseSplit[1].equals("transferToPlayer")) {
-                int senderID = game.getPlayerIDByName(responseSplit[3]);
+                int receiverID = game.getPlayerIDByName(responseSplit[3]);
                 int amount = Integer.parseInt(dataResponseSplit[0]);
                 if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
-                    bank.transferMoneyBankToPlayer(game.getPlayers().get(senderID), bank, amount);
-                    Log.i("MoneyTransfer", "Player: " + game.getPlayers().get(senderID).getUsername() + ", New Capital: " +
-                            game.getPlayers().get(senderID).getCapital());
+                    bank.transferMoneyBankToPlayer(game.getPlayers().get(receiverID), bank, amount);
+                    Log.i("MoneyTransfer", "Player: " + game.getPlayers().get(receiverID).getUsername() + ", New Capital: " +
+                            game.getPlayers().get(receiverID).getCapital());
                 }
             }
             if (responseSplit[1].equals("transferPlayerToPlayer")) {
@@ -301,12 +301,12 @@ public class Client extends Thread {
                             + " -> " + game.getPlayers().get(receiverID).getUsername() + " : $" + amount);
                 }
             }
-            if (responseSplit[1].equals("outOfJailFree")) {
+            if (responseSplit[1].equals("outOfJailCounter")) {
                 //[Fragment]|outOfJailFree|[amount]|[senderUserName]
-                int senderID = game.getPlayerIDByName(responseSplit[3]);
+                int playerID = game.getPlayerIDByName(responseSplit[3]);
                 int amount = Integer.parseInt(dataResponseSplit[0]);
                 if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
-                    game.getPlayers().get(senderID).setOutOfJailFree(game.getPlayers().get(senderID).getOutOfJailFree()+amount);
+                    game.getPlayers().get(playerID).setOutOfJailFreeCounter(game.getPlayers().get(playerID).getOutOfJailFreeCounter()+amount);
                 }
             }
             if (responseSplit[1].equals("transferToBank")) {
@@ -320,10 +320,10 @@ public class Client extends Thread {
             }
             if (responseSplit[1].equals("setCard")) {
                 //[Fragment]|setImage|[imageID]|[senderUserName]
-                int senderID = game.getPlayerIDByName(responseSplit[3]);
-                int imageID = Integer.parseInt(dataResponseSplit[0]);
+                int playerID = game.getPlayerIDByName(responseSplit[3]);
+                int cardID = Integer.parseInt(dataResponseSplit[0]);
                 if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
-                    game.getPlayers().get(senderID).setCardID(imageID);
+                    game.getPlayers().get(playerID).setCardID(cardID);
                 }
             }
 

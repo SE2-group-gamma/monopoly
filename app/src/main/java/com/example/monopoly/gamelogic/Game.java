@@ -81,12 +81,12 @@ public class Game{
 
         //Advance to Strandbad. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance1) {
-            advanceAndCollect(playerID, "Strandbad");
+            advanceAndCollect("Strandbad");
         }
 
         //Advance to Lindwurm. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance2) {
-            advanceAndCollect(playerID, "Lindwurm");
+            advanceAndCollect("Lindwurm");
         }
 
         //Your building loan matures. Receive $150.
@@ -155,7 +155,7 @@ public class Game{
 
         //Get out of Jail Free.
         if (players.get(playerID).getCardID() == R.drawable.chance6 || players.get(playerID).getCardID() == R.drawable.chance12 || players.get(playerID).getCardID() == R.drawable.community4) {
-            outOfJailProtocol(1);
+            outOfJailCounterProtocol(1);
             endTurnProtocol();
         }
 
@@ -192,7 +192,7 @@ public class Game{
 
         //Advance to City Arkaden. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance11) {
-            advanceAndCollect(playerID, "City Arkaden");
+            advanceAndCollect("City Arkaden");
         }
 
         //Go to Jail directly.
@@ -230,7 +230,7 @@ public class Game{
 
         //Advance to Rathaus. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance19) {
-            advanceAndCollect(playerID, "Rathaus");
+            advanceAndCollect("Rathaus");
         }
 
         //Bank error in your favor. Collect $200.
@@ -342,9 +342,11 @@ public class Game{
 
     }
 
-    public void advanceAndCollect(int playerID, String location) throws IOException {
+    public void advanceAndCollect(String location) throws IOException {
+        int playerID = getPlayerIDByName(currentPlayersTurn);
         int fieldId = 0;
         int incr;
+
         for (int i = 0; i < fields.size(); i++) {
             if (fields.get(i).getName() == location) {
                 fieldId = fields.get(i).getId();
@@ -364,33 +366,33 @@ public class Game{
 
     public void transferToPlayerProtocol(int amount) throws IOException {
         int playerID = getPlayerIDByName(currentPlayersTurn);
-        players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferToPlayer|" + amount + "|" + players.get(playerID).getUsername());
+        players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferToPlayer|" + amount + "|" + currentPlayersTurn);
     }
 
     public void transferToBankProtocol(int amount) throws IOException {
         int playerID = getPlayerIDByName(currentPlayersTurn);
-        players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferToBank|" + amount + "|" + players.get(playerID).getUsername());
+        players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferToBank|" + amount + "|" + currentPlayersTurn);
     }
 
     public void transferPlayerToPlayerProtocol(int receiverID, int amount) throws IOException {
         int playerID = getPlayerIDByName(currentPlayersTurn);
         players.get(playerID).getMyClient().
-                writeToServer("GameBoardUI|transferPlayerToPlayer|" + players.get(receiverID) + ":" + amount + "|" + players.get(playerID).getUsername());
+                writeToServer("GameBoardUI|transferPlayerToPlayer|" + players.get(receiverID) + ":" + amount + "|" + currentPlayersTurn);
     }
 
     public void moveProtocol(int incr) throws IOException {
         int playerID = getPlayerIDByName(currentPlayersTurn);
-        players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + players.get(playerID).getUsername());
+        players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + currentPlayersTurn);
     }
 
-    public void outOfJailProtocol(int amount) throws IOException {
+    public void outOfJailCounterProtocol(int amount) throws IOException {
         int playerID = getPlayerIDByName(currentPlayersTurn);
-        players.get(playerID).getMyClient().writeToServer("GameBoardUI|outOfJail|" + amount + "|" + players.get(playerID).getUsername());
+        players.get(playerID).getMyClient().writeToServer("GameBoardUI|outOfJailCounter|" + amount + "|" + currentPlayersTurn);
     }
 
     public void endTurnProtocol() throws IOException {
         int playerID = getPlayerIDByName(currentPlayersTurn);
-        players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + players.get(playerID).getUsername());
+        players.get(playerID).getMyClient().writeToServer("GameBoardUI|endTurn|" + currentPlayersTurn);
     }
 
 }
