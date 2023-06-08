@@ -110,9 +110,6 @@ public class GameBoardUI extends Fragment {
             }
         });
 
-        binding.buy.setOnContextClickListener(view1 -> {
-            return true;
-        });
 
         binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
                 .navigate(R.id.action_GameBoard_to_FirstFragment));
@@ -142,14 +139,6 @@ public class GameBoardUI extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    public void dosleep(){
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }
