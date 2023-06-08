@@ -150,20 +150,20 @@ public class UIHandler extends Handler {
                     this.frag.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
                     this.frag.getActivity().findViewById(R.id.uncover).setEnabled(false);
                     gameBoardUIViewModel.setUncoverEnabled(false);
+                    gameBoardUIViewModel.setThrowDiceEnabled(true);
                 } else {
                     this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);
                     this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(false);
                     this.frag.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
                     this.frag.getActivity().findViewById(R.id.uncover).setEnabled(true);
                     gameBoardUIViewModel.setUncoverEnabled(true);
+                    gameBoardUIViewModel.setThrowDiceEnabled(false);
                 }
                 break;
 
             case "exitDiceFragment":
-
                 NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
                     //Thread.sleep(1000);
-
                 break;
         }
 
@@ -176,6 +176,7 @@ public class UIHandler extends Handler {
             Log.d("move", "Im in: "+counterMove++);
             this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);        // disable dice throwing after not throwing doubles
             this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(false);
+            gameBoardUIViewModel.setThrowDiceEnabled(false);
         }
     }
 }

@@ -38,7 +38,7 @@ public class GameBoardUI extends Fragment {
         diceViewModel = new ViewModelProvider(requireActivity()).get(DiceViewModel.class);
         clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
         diceViewModel.getDicesData().observe(this, dices -> {
-            if(diceViewModel.getContinuePressedData().getValue()) {
+            if(diceViewModel.getContinuePressedData().getValue()) {     // if fragment is exited upon clicking the continue button (not via command)
                 Log.i("Dices", dices.toString());
                 String cheated = dices.isLastRollFlawed() == true ? "t" : "f";
                 String doublets = (dices.getDice1() == dices.getDice2()) == true ? "t" : "f";       // 3 doubles in a row mean jail!!!
@@ -70,18 +70,27 @@ public class GameBoardUI extends Fragment {
 
         this.client = clientViewModel.getClientData().getValue();       // set client
 
+        /**
+         * Reconstruction of GameBoardUI
+         */
         try {
             gameBoardUIViewModel = new ViewModelProvider(this.requireActivity()).get(GameBoardUIViewModel.class);   // restore GameBoardUI state
             ((TextView)this.getActivity().findViewById(R.id.turn)).setText(gameBoardUIViewModel.getCurrentPlayer().getValue());     // set name for player turn
             if (gameBoardUIViewModel.getUncoverEnabled().getValue()) {
-                Log.d("gameTurnCheck","was enabled!");
                 this.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
                 this.getActivity().findViewById(R.id.uncover).setEnabled(true);
             } else {
-                Log.d("gameTurnCheck","was disabled!");
                 this.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
                 this.getActivity().findViewById(R.id.uncover).setEnabled(false);
             }
+            if(gameBoardUIViewModel.getThrowDiceEnabled().getValue()){
+                this.getActivity().findViewById(R.id.throwdice).setAlpha(1.0f);
+                this.getActivity().findViewById(R.id.throwdice).setEnabled(true);
+            } else {
+                this.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);
+                this.getActivity().findViewById(R.id.throwdice).setEnabled(false);
+            }
+            // TODO restore player position
         }catch (Exception e){}
 
         super.onViewCreated(view, savedInstanceState);
