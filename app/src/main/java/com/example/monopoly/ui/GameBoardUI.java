@@ -90,6 +90,13 @@ public class GameBoardUI extends Fragment {
                 this.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);
                 this.getActivity().findViewById(R.id.throwdice).setEnabled(false);
             }
+            if(gameBoardUIViewModel.getEndTurnEnabled().getValue()){
+                this.getActivity().findViewById(R.id.endTurn).setAlpha(1.0f);
+                this.getActivity().findViewById(R.id.endTurn).setEnabled(true);
+            }else{
+                this.getActivity().findViewById(R.id.endTurn).setAlpha(0.5f);
+                this.getActivity().findViewById(R.id.endTurn).setEnabled(false);
+            }
             // TODO restore player position
         }catch (Exception e){}
 
@@ -115,6 +122,20 @@ public class GameBoardUI extends Fragment {
 
         binding.throwdice.setOnClickListener(view1 -> {
             showDiceFragment();
+        });
+
+        binding.endTurn.setOnClickListener(view1 -> {
+            /*this.client = clientViewModel.getClientData().getValue();
+            this.client.endTurnPressed();*/
+
+            Log.d("endTurn",clientViewModel.getClientData().getValue().getUser().getUsername());
+            //clientViewModel.getClientData().getValue().endTurnPressed();
+            //clientViewModel.getClientData().getValue().endTurnPressedBroadCast();
+            try {
+                this.client.writeToServer("GameBoardUI|turnEnd|:|");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         binding.showPropertiesButton.setOnClickListener(view1 -> {
