@@ -1,10 +1,5 @@
 package com.example.monopoly.network;
 
-import android.util.Log;
-
-import com.example.monopoly.gamelogic.Game;
-import com.example.monopoly.utils.LobbyKey;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,10 +15,13 @@ public class MonopolyServer extends Thread{
     private int maxNumberOfClients;
     private boolean isListening;
 
-    private Game game;
+    //private Game game;
     private String hostname;
     private Client client;
     private int counter=1;
+
+
+
 
     private HashMap<Integer, ClientHandler> keyedHandlers;
 
@@ -34,6 +32,7 @@ public class MonopolyServer extends Thread{
         this.clients = new ArrayList<ClientHandler>();
         this.isListening = false;
         this.keyedHandlers=new HashMap<>();
+
     }
 
     public void setHostname(String hostname){
@@ -44,15 +43,22 @@ public class MonopolyServer extends Thread{
         synchronized (this.clients){
             //Log.i("",client.isHost()+"");
             this.client=client;
+
             for (ClientHandler handler:this.clients) {
-                handler.setClient(client);
+                handler.setClient(this.client);
             }
         }
+    }
+
+    public Client getClient() {
+        return client;
     }
 
     public List<ClientHandler> getClients() {
         return clients;
     }
+
+
 
     // Constructor for testing
     public MonopolyServer(int maxNumberOfClients, ServerSocket serverSocket) throws IOException {
@@ -65,6 +71,23 @@ public class MonopolyServer extends Thread{
 
     }
 
+    public void broadCast(String msg){
+        synchronized (this.clients) {
+            for (ClientHandler clientHandler : clients) {
+                clientHandler.writeToClient(msg);
+            }
+        }
+    }
+
+    public void broadCastExceptSelf(String msg, ClientHandler hostHandler){
+        synchronized (this.clients) {
+            for (ClientHandler clientHandler : clients) {
+                if(hostHandler != clientHandler)
+                    clientHandler.writeToClient(msg);
+            }
+        }
+    }
+
     @Override
     public void run() {
         this.isListening = true;
@@ -72,7 +95,7 @@ public class MonopolyServer extends Thread{
 
 
 
-        game = new Game();
+        //game = new Game();
         //Log.d("",""+this.maxNumberOfClients);
         while(isListening() && this.clients.size() < maxNumberOfClients){
             ClientHandler clientHandler = null;
@@ -93,11 +116,14 @@ public class MonopolyServer extends Thread{
             clientHandler.start();
             synchronized (this.clients){
                 this.clients.add(clientHandler);
+                //Log.d("clientcheck1324", "add Client Handler"+ clientHandler.getClientClient().getName());
                 keyedHandlers.put(counter++,clientHandler);
             }
+
         }
         try {
             stopListening();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

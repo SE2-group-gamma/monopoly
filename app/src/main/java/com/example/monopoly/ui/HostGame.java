@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.nsd.NsdManager;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,27 +14,20 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
-
 
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.HostGameBinding;
+import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.network.Client;
-import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.network.MonopolyServer;
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.utils.LobbyKey;
 
 import java.io.IOException;
 import java.text.DecimalFormatSymbols;
-
-import android.content.Context;
-import android.net.nsd.NsdManager;
-import android.net.nsd.NsdServiceInfo;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 public class HostGame extends Fragment {
 
@@ -44,6 +36,9 @@ public class HostGame extends Fragment {
 
     public static int key = 0;
     public static String lobbyname = " ";
+    private ClientViewModel clientViewModel;
+    private static Game game;
+
 
 
     @Override
@@ -58,6 +53,10 @@ public class HostGame extends Fragment {
 
     public static MonopolyServer getMonopolyServer() {
         return ms;
+    }
+
+    public static Game getGame() {
+        return game;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -109,10 +108,12 @@ public class HostGame extends Fragment {
                 .navigate(R.id.action_HostGame_to_FirstFragment));
 
         binding.createButton.setOnClickListener(view12 -> {
+
             String user = binding.userInput.getText().toString();
             String lobby = binding.lobbyInput.getText().toString();
-            int playerCount = binding.seekBar.getProgress();
+            int playerCount = binding.seekBar.getProgress()+2;
             int maxTimeMin = binding.seekBar2.getProgress();
+            Log.d("MaxTimeCheck", "Look here !!"+maxTimeMin);
             if(user.isEmpty() && lobby.isEmpty()){
                 binding.userInput.setError("No Input");
                 binding.lobbyInput.setError("No Input");
@@ -156,6 +157,8 @@ public class HostGame extends Fragment {
 
 
                 Player player = new Player(user, new Color(),500.00,true);
+
+
                 //Client c = new Client(null,0,player);
                 //Client c = new Client(ms.getClients().get(0).getClient().getInetAddress(),ms.getClients().get(0).getClient().getPort(),player);
 
@@ -170,10 +173,18 @@ public class HostGame extends Fragment {
                 nsd.getClient().setHost(true);
                 ms.setClient(nsd.getClient());
 
+
+                //Add client object to ClientViewModel
+                clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
+                clientViewModel.setClient(nsd.getClient());
+
+                player.setMyClient(nsd.getClient());
+                nsd.getClient().setUser(player);
+                nsd.getClient().setKey(key);
+                nsd.getClient().setMonopolyServer(ms);
+
+
                 try {
-                    nsd.getClient().setUser(player);
-                    nsd.getClient().setKey(key);
-                    nsd.getClient().setMonopolyServer(ms);
                     nsd.getClient().writeToServer("Lobby|hostJoined|"+player.getUsername());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -227,4 +238,7 @@ public class HostGame extends Fragment {
         }
         textView.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2.0f);
     }
+
+
+
 }

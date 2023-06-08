@@ -67,6 +67,7 @@ dependencies {
     implementation 'org.jmonkeyengine:jme3-android-native:3.6.0-stable'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
 }
 sonarqube {
     properties {
@@ -75,6 +76,6 @@ sonarqube {
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
-        property "sonar.coverage.exclusions", "**/ui/*"
+        property "sonar.coverage.exclusions", "**/ui/**"
     }
 }

@@ -4,7 +4,10 @@ import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.util.Log;
 
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.monopoly.network.Client;
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
 
 import java.net.InetAddress;
 
@@ -38,6 +41,7 @@ public class NSD_Client {
     public void setIsHost(boolean host){
         this.isHost=host;
     }
+
 
 
     public void start(NsdManager manager){
@@ -119,6 +123,9 @@ public class NSD_Client {
                 Log.d("SocketConn","Searching ...");
                 client = new Client(host, port, isHost);
                 client.start();
+
+
+
                 synchronized (readyToken){
                     isReady=true;
                 }
