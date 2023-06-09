@@ -48,7 +48,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
 
     public DiceFragment() {
         // Required empty public constructor
-        Client.subscribe(this,"DiceFragment");
+        //Client.subscribe(this,"DiceFragment");
     }
 
     /**
