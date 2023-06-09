@@ -266,6 +266,9 @@ public class Client extends Thread {
 
                 }
             }
+            if(responseSplit[1].equals("initializePlayerBottomRight")){
+                monopolyServer.broadCast("GameBoardUI|initializePlayerBottomRight1| : |"+responseSplit[3]);
+            }
             if(responseSplit[1].equals("turnEnd")){
                 Log.d("endTurn","end turn test");
                 endTurnPressed();
@@ -277,8 +280,8 @@ public class Client extends Thread {
                 int tempID = game.getPlayerIDByName(responseSplit[3]);
                 if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
                     game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
-                    Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
-                    Log.d("gameturnCurr", "currUser" + responseSplit[3]);
+                    //Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
+                    //Log.d("gameturnCurr", "currUser" + responseSplit[3]);
                     monopolyServer.broadCast("GameBoardUI|movePlayer|"+responseSplit[2]+"|"+responseSplit[3]);      // broadcast with different action to not interfere with game logic
                 }
             }//}

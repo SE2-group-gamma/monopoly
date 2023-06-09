@@ -26,6 +26,8 @@ import java.io.IOException;
 
 public class GameBoardUI extends Fragment {
 
+    // reconstructions of GameBoardUI + UIHandler: turn swap; opening a different fragment and going back; end turn button
+
     private GameBoardBinding binding;
     private DiceViewModel diceViewModel;
     private ClientViewModel clientViewModel;
@@ -102,7 +104,7 @@ public class GameBoardUI extends Fragment {
         }catch (Exception e){}
 
         try {
-            this.client.writeToServer("GameBoardUI|initializePlayerBottomRight| : |"+this.client.getUser().getId());
+            this.client.writeToServer("GameBoardUI|initializePlayerBottomRight| : |"+this.client.getUser().getUsername());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
