@@ -37,6 +37,7 @@ public class Client extends Thread {
     private MonopolyServer monopolyServer;
     private boolean isHost;
     private int key;
+    boolean onCoolDown = false;
 
     private int serverTurnCounter = 0;
 
@@ -266,8 +267,19 @@ public class Client extends Thread {
 
                 }
             }
-            if(responseSplit[1].equals("initializePlayerBottomRight")){
+            if(responseSplit[1].equals("initializePlayerBottomRight") && (!onCoolDown)){
+                onCoolDown = true;
                 monopolyServer.broadCast("GameBoardUI|initializePlayerBottomRight1| : |"+responseSplit[3]);
+                Timer cdTimer = new Timer();
+                cdTimer.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                onCoolDown = false;
+                            }
+                        },
+                        300
+                );
             }
             if(responseSplit[1].equals("turnEnd")){
                 Log.d("endTurn","end turn test");
@@ -329,7 +341,7 @@ public class Client extends Thread {
         turnEnd = false;
         game.setCurrentPlayersTurn(game.getPlayers().get(serverTurnCounter).getUsername());
         monopolyServer.broadCast("GameBoardUI|playersTurn|"+game.getPlayers().get(serverTurnCounter).getUsername());
-        Log.d("gameTurnCheck", "Yo hey "+game.getCurrentPlayersTurn());
+        //Log.d("gameTurnCheck", "Yo hey "+game.getCurrentPlayersTurn());
         serverTurnCounter++;
         timer = new Timer();
 

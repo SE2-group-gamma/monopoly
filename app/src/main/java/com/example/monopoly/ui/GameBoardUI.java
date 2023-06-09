@@ -103,12 +103,13 @@ public class GameBoardUI extends Fragment {
             // TODO restore player position
         }catch (Exception e){}
 
-        try {
-            this.client.writeToServer("GameBoardUI|initializePlayerBottomRight| : |"+this.client.getUser().getUsername());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        //if(this.client.isHost()) {
+            try {
+                this.client.writeToServer("GameBoardUI|initializePlayerBottomRight| : |" + this.client.getUser().getUsername());      // needs to be sent only once
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        //}
         // DisplayMetrics might still be useful, so keep them for now
 /*
         DisplayMetrics displayMetrics = new DisplayMetrics();

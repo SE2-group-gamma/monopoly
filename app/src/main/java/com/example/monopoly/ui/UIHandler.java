@@ -362,6 +362,9 @@ public class UIHandler extends Handler {
                         }
                     }
                 }
+                Log.d("gameTurnCheck","Host move to: "+
+                        layerDrawable.getLayerInsetRight(1));
+                setPlayerPositions();
                 // Log.d("----COUNTER----",""+playerObjects.get(player1));
                 // Log.d("----COUNTER----",""+playerObjects.get(player2));
                 imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
@@ -653,7 +656,7 @@ public class UIHandler extends Handler {
         if(uiHandlerViewModel.getPlayerPositionX().getValue()!=null){
             playersX = uiHandlerViewModel.getPlayerPositionX().getValue();
             playersY = uiHandlerViewModel.getPlayerPositionY().getValue();
-            Log.d("gameTurnCheck","I am: "+clientObj.getUser().getUsername()+"; my x is: "+playersX[1]);
+            Log.d("gameTurnCheck","I am: "+clientObj.getUser().getUsername()+"; x is: "+playersX[1]);
         }
 
         layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.RIGHT);
