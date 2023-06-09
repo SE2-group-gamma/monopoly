@@ -279,6 +279,11 @@ public class UIHandler extends Handler {
                         int positionBefore = currentPosition[playerNumber];
                         currentPosition[playerNumber] = currentPosition[playerNumber] + fieldsToMove;
                         Log.d("--",""+currentPosition[playerNumber]);
+                        if(currentPosition[playerNumber] >= 40){
+                            currentPosition[playerNumber] = currentPosition[playerNumber]-40;
+                            // TODO get starting money
+                        }
+                        Log.d("--",""+currentPosition[playerNumber]);
 
                         uiHandlerViewModel.setCurrentPosition(currentPosition);
 
@@ -289,59 +294,85 @@ public class UIHandler extends Handler {
                             goFieldBottom(imageView,playerNumber, move);
                             initializePlayerBottomLeft(imageView,playerNumber);
                             if(currentPosition[playerNumber]>11 && currentPosition[playerNumber]<20){
-                                int moveTo = currentPosition[playerNumber]-10;
+                                int moveTo = currentPosition[playerNumber]-11;
                                 goFieldLeft(imageView,playerNumber,moveTo);
                             }
                             if(currentPosition[playerNumber]>=20){
                                 goFieldLeft(imageView,playerNumber,9);
                                 initializePlayerTopLeft(imageView,playerNumber);
                                 if(currentPosition[playerNumber]>20){
-                                    int moveTo = 20-currentPosition[playerNumber];
+                                    int moveTo = currentPosition[playerNumber]-20;
                                     goFieldTop(imageView,playerNumber,moveTo);
                                 }
                             }
-                        } else if (positionBefore > 10 && currentPosition[playerNumber]< 20) {
+                        } else if (positionBefore > 10 && currentPosition[playerNumber]< 20 && currentPosition[playerNumber]>12) {
                             goFieldLeft(imageView,playerNumber, fieldsToMove);
-                        } else if (positionBefore >10 && currentPosition[playerNumber]>= 20) {
-                            goFieldLeft(imageView,playerNumber, 9);
+                        } else if (positionBefore >10 && currentPosition[playerNumber]>= 20 && positionBefore < 20) {
+                            int moveTo = 19-positionBefore;
+                            goFieldLeft(imageView,playerNumber, moveTo);
                             initializePlayerTopLeft(imageView,playerNumber);
                             if(currentPosition[playerNumber]>20 && currentPosition[playerNumber]<30){
-                                int move = 20-currentPosition[playerNumber];
+                                int move = currentPosition[playerNumber]-20;
                                 goFieldTop(imageView,playerNumber,move);
                             }
-                            if(currentPosition[playerNumber]>30){
+                            if(currentPosition[playerNumber]>=30){
                                 goFieldTop(imageView,playerNumber,10);
-                                initializePlayerTopRight(imageView,playerNumber);
+                                if(currentPosition[playerNumber]>30){
+                                    initializePlayerTopRight(imageView,playerNumber);
+                                }
+                                if(currentPosition[playerNumber]>31){
+                                    int moveToRight = currentPosition[playerNumber]-30;
+                                    goFieldRight(imageView, playerNumber,moveToRight);
+                                }
+                            }
+                        } else if (positionBefore >= 20 && currentPosition[playerNumber] <= 30 && currentPosition[playerNumber]> 20) {
+                            goFieldTop(imageView,playerNumber, fieldsToMove);
+                        } else if (positionBefore >= 20 && currentPosition[playerNumber] > 30 && positionBefore <= 30) {
+                            Log.d("-------------------","Im here-------------");
+                            int moveTo = 30-positionBefore;
+                            Log.d("-------------------","moveTo"+moveTo);
+                            goFieldTop(imageView,playerNumber, moveTo);
+                            initializePlayerTopRight(imageView,playerNumber);
+                            if(currentPosition[playerNumber]>31 && currentPosition[playerNumber]< 40){
+                                int move = currentPosition[playerNumber]-31;
+                                Log.d("-------------------","move"+move);
+                                goFieldRight(imageView, playerNumber,move);
+                            }
+                        } else if (positionBefore <=30 && currentPosition[playerNumber] < 5) {
+                            int moveTo = 30-positionBefore;
+                            goFieldTop(imageView,playerNumber, moveTo);
+                            initializePlayerTopRight(imageView,playerNumber);
+                            goFieldRight(imageView, playerNumber,9);
+                            initializePlayerBottomRight(imageView,playerNumber);
+                            if(currentPosition[playerNumber] > 0){
+                                goFieldBottom(imageView,playerNumber,currentPosition[playerNumber]);
+                            }
+                        } else if (positionBefore > 30 && currentPosition[playerNumber] < 40 && currentPosition[playerNumber] > 30) {
+                            goFieldRight(imageView,playerNumber,fieldsToMove);
+                        } else if (positionBefore > 30 && currentPosition[playerNumber] < 12) {
+                            int move = 39-positionBefore;
+                            goFieldRight(imageView,playerNumber,move);
+                            initializePlayerBottomRight(imageView,playerNumber);
+                            if(currentPosition[playerNumber] == 11){
+                                goFieldBottom(imageView,playerNumber,10);
+                                initializePlayerBottomLeft(imageView,playerNumber);
+                            }
+                            if(currentPosition[playerNumber] <= 10){
+                                goFieldBottom(imageView,playerNumber,currentPosition[playerNumber]);
                             }
                         }
 
                     }
                 }
-                Log.d("----COUNTER----",""+playerObjects.get(player1));
-                Log.d("----COUNTER----",""+playerObjects.get(player2));
+                // Log.d("----COUNTER----",""+playerObjects.get(player1));
+                // Log.d("----COUNTER----",""+playerObjects.get(player2));
                 imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
 
-
-                /*
-                initializePlayerBottomLeft(imageView,1);
-                goFieldLeft(imageView,1);
-                initializePlayerTopLeft(imageView,1);
-                goFieldTop(imageView, 1);
-                initializePlayerTopRight(imageView,1);
-                goFieldRight(imageView, 1);*/
-                /*
-                initializePlayerBottomRight(imageView, 1);
-                initializePlayerBottomRight(imageView, 2);
-                initializePlayerBottomRight(imageView, 3);
-                initializePlayerBottomRight(imageView, 4);
-                initializePlayerBottomRight(imageView, 5);
-                initializePlayerBottomRight(imageView, 6);*/
-
-
+/*
                 Log.d("fieldsToMove", "" + fieldsToMove);
                 Log.d("client", "" + client);
                 Log.d("player1", "" + playerObjects.get(player1));
-                Log.d("player2", "" + playerObjects.get(player2));
+                Log.d("player2", "" + playerObjects.get(player2));*/
                 break;
             case "playersTurn":
                 ((TextView) this.frag.getActivity().findViewById(R.id.turn)).setText(data);
@@ -389,6 +420,8 @@ public class UIHandler extends Handler {
 
         layerDrawable.setLayerGravity(player, Gravity.BOTTOM | Gravity.RIGHT);
         layerDrawable.setLayerInset(player, 0, 0, (int) playersX[player], (int) playersY[player]);
+
+        setPlayerPositions();
 
         imageView.setImageDrawable(layerDrawable);
     }
@@ -459,10 +492,11 @@ public class UIHandler extends Handler {
         heightRatio = layerDrawable.getMinimumHeight() / (double) 21000;
         widthRatio = layerDrawable.getMinimumWidth() / (double) 21000;
 
-        goOneSmallField = (double) 1500 * widthRatio;
+        goOneSmallField = (double) 1700 * widthRatio;
 
         layerDrawable.setLayerGravity(player, Gravity.BOTTOM | Gravity.RIGHT);
         playersY[player] = playersY[player] + (goOneSmallField * move);
+        Log.d("------MOVING--",""+move);
         layerDrawable.setLayerInset(player, 0, 0, (int) playersX[player], (int) playersY[player]);
         /*
         player3Y = player3Y + (goOneSmallField * 9);
@@ -511,37 +545,8 @@ public class UIHandler extends Handler {
         }
 
         layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
-        layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersX[player], 0, 0);
+        layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersY[player], 0, 0);
 
-        /*
-        player1X = (double) 1100 * widthRatio;
-        player2X = (double) 1100 * widthRatio;
-        player3X = (double) 1100 * widthRatio;
-        player4X = (double) 2000 * widthRatio;
-        player5X = (double) 2000 * widthRatio;
-        player6X = (double) 2000 * widthRatio;
-
-        player1Y = 0;
-        player2Y = (double) 1000 * heightRatio;
-        player3Y = (double) 1800 * heightRatio;
-        player4Y = 0;
-        player5Y = (double) 1000 * heightRatio;
-        player6Y = (double) 1800 * heightRatio;
-
-        layerDrawable.setLayerGravity(player1, Gravity.TOP | Gravity.LEFT);
-        layerDrawable.setLayerGravity(player2, Gravity.TOP | Gravity.LEFT);
-        layerDrawable.setLayerGravity(player3, Gravity.TOP | Gravity.LEFT);
-        layerDrawable.setLayerGravity(player4, Gravity.TOP | Gravity.LEFT);
-        layerDrawable.setLayerGravity(player5, Gravity.TOP | Gravity.LEFT);
-        layerDrawable.setLayerGravity(player6, Gravity.TOP | Gravity.LEFT);
-
-        layerDrawable.setLayerInset(player1, (int) player1X, (int) player1Y, 0, 0);
-        layerDrawable.setLayerInset(player2, (int) player2X, (int) player2Y, 0, 0);
-        layerDrawable.setLayerInset(player3, (int) player3X, (int) player3Y, 0, 0);
-        layerDrawable.setLayerInset(player4, (int) player4X, (int) player4Y, 0, 0);
-        layerDrawable.setLayerInset(player5, (int) player5X, (int) player5Y, 0, 0);
-        layerDrawable.setLayerInset(player6, (int) player6X, (int) player6Y, 0, 0);
-*/
         setPlayerPositions();
 
         imageView.setImageDrawable(layerDrawable);
@@ -557,29 +562,9 @@ public class UIHandler extends Handler {
 
         layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
         playersX[player] = playersX[player] + (goOneSmallField * move);
+        Log.d("THE X",""+playersX[player]);
         layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersY[player], 0, 0);
-        /*
-        layerDrawable.setLayerGravity(player3, Gravity.TOP | Gravity.LEFT);
-        player3X = player3X + (goOneSmallField * 10);
-        layerDrawable.setLayerInset(player3, (int) player3X, (int) player3Y, 0, 0);
-        layerDrawable.setLayerGravity(player2, Gravity.TOP | Gravity.LEFT);
-        player2X = player2X + (goOneSmallField * 10);
-        layerDrawable.setLayerInset(player2, (int) player2X, (int) player2Y, 0, 0);
 
-        layerDrawable.setLayerGravity(player5, Gravity.TOP | Gravity.LEFT);
-        player5X = player5X + (goOneSmallField * 10);
-        layerDrawable.setLayerInset(player5, (int) player5X, (int) player5Y, 0, 0);
-        layerDrawable.setLayerGravity(player6, Gravity.TOP | Gravity.LEFT);
-        player6X = player6X + (goOneSmallField * 10);
-        layerDrawable.setLayerInset(player6, (int) player6X, (int) player6Y, 0, 0);
-
-        layerDrawable.setLayerGravity(player1, Gravity.TOP | Gravity.LEFT);
-        player1X = player1X + (goOneSmallField * 10);
-        layerDrawable.setLayerInset(player1, (int) player1X, (int) player1Y, 0, 0);
-        layerDrawable.setLayerGravity(player4, Gravity.TOP | Gravity.LEFT);
-        player4X = player4X + (goOneSmallField * 10);
-        layerDrawable.setLayerInset(player4, (int) player4X, (int) player4Y, 0, 0);
-*/
         setPlayerPositions();
 
         imageView.setImageDrawable(layerDrawable);
@@ -595,6 +580,25 @@ public class UIHandler extends Handler {
         double initializeRightY = (double) 1800 * widthRatio;
         double initializeRightX = (double) 1200 * widthRatio;
 
+        if(player == 1){
+            double initializeRight1Y = (double) 2800 * widthRatio;
+            layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
+            playersY[player] = playersY[player] + initializeRight1Y;
+            layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersY[player], 0, 0);
+        } else if (player == 4) {
+            double initializeRight4X = (double) 900 * widthRatio;
+            double initializeRight4Y = (double) 3700 * widthRatio;
+            layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
+            playersX[player] = playersX[player] - initializeRight4X;
+            playersY[player] = playersY[player] + initializeRight4Y;
+            layerDrawable.setLayerInset(player, (int)  playersX[player], (int) playersY[player], 0, 0);
+        } else{
+            layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
+            playersX[player] = playersX[player] + initializeRightX;
+            playersY[player] = playersY[player] + initializeRightY;
+            layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersY[player], 0, 0);
+        }
+/*
         // if(player2 || player3)
         // player2Y = player2Y + 1800;
         // player2X = player2X + 1200;
@@ -637,20 +641,24 @@ public class UIHandler extends Handler {
         player4X = player4X - initializeRight4X;
         player4Y = player4Y + initializeRight4Y;
         layerDrawable.setLayerInset(player4, (int) player4X, (int) player4Y, 0, 0);
-
+*/
         setPlayerPositions();
 
         imageView.setImageDrawable(layerDrawable);
     }
 
-    public void goFieldRight(ImageView imageView, int player){
+    public void goFieldRight(ImageView imageView, int player, int move){
         layerDrawable = (LayerDrawable) this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard);
 
         heightRatio = layerDrawable.getMinimumHeight() / (double) 21000;
         widthRatio = layerDrawable.getMinimumWidth() / (double) 21000;
 
-        goOneSmallField = (double) 1500 * widthRatio;
+        goOneSmallField = (double) 1700 * widthRatio;
 
+        layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
+        playersY[player] = playersY[player] + (goOneSmallField * move);
+        layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersY[player], 0, 0);
+/*
         layerDrawable.setLayerGravity(player3, Gravity.TOP | Gravity.LEFT);
         player3Y = player3Y + (goOneSmallField * 9);
         layerDrawable.setLayerInset(player3, (int) player3X, (int) player3Y, 0, 0);
@@ -671,7 +679,7 @@ public class UIHandler extends Handler {
         layerDrawable.setLayerGravity(player4, Gravity.TOP | Gravity.LEFT);
         player4Y = player4Y + (goOneSmallField * 9);
         layerDrawable.setLayerInset(player4, (int) player4X, (int) player4Y, 0, 0);
-
+*/
         setPlayerPositions();
 
         imageView.setImageDrawable(layerDrawable);
