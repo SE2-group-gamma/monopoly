@@ -74,6 +74,7 @@ public class UIHandler extends Handler {
 
     double[] playersX = new double[7];
     double[] playersY = new double[7];
+    int[] playerGravity = new int[7];
 
     double goOneSmallField;
 
@@ -86,6 +87,7 @@ public class UIHandler extends Handler {
         playerObjects = new HashMap<>();
         currentPosition = new int[7];
         uiHandlerViewModel = new ViewModelProvider(frag.requireActivity()).get(UIHandlerViewModel.class);
+
         if(uiHandlerViewModel.getPlayerObjects().getValue()!=null){
             playerObjects = uiHandlerViewModel.getPlayerObjects().getValue();
         }
@@ -95,6 +97,7 @@ public class UIHandler extends Handler {
         if(uiHandlerViewModel.getPlayerPositionX().getValue()!=null){
             playersX = uiHandlerViewModel.getPlayerPositionX().getValue();
             playersY = uiHandlerViewModel.getPlayerPositionY().getValue();
+            Log.d("hostPosition","X Pos: "+playersX[1]+"; Y Pos: "+playersY[1]);
         }
     }
 
@@ -194,10 +197,15 @@ public class UIHandler extends Handler {
             case "initializePlayerBottomRight1":
                 Log.d("------------", "initializePlayerBottomRight");
 
-                Log.d("gameTurnCheck", "" + client);
+                Log.d("hostPosition", "Initialize Host");
                 if(uiHandlerViewModel.getCheckFirst().getValue()){
                     imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
-                    layerDrawable = (LayerDrawable) imageView.getDrawable();
+                    //layerDrawable = (LayerDrawable) imageView.getDrawable();
+
+                    layerDrawable = (LayerDrawable) this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard);
+
+
+
 
                     // The Ratio is relative to a 1440/3120 phone with density of 3.5
                     // Always multiply by this Ratio
@@ -220,13 +228,21 @@ public class UIHandler extends Handler {
                     playersY[5] = (double) 1000 * widthRatio;
                     playersY[6] = (double) 1800 * widthRatio;
 
+                    for(int i = 0; i <=6; i++){
+                        playerGravity[i]=Gravity.BOTTOM | Gravity.RIGHT;
+                    }
 
-                    layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.RIGHT);
-                    layerDrawable.setLayerGravity(player2, Gravity.BOTTOM | Gravity.RIGHT);
-                    layerDrawable.setLayerGravity(player3, Gravity.BOTTOM | Gravity.RIGHT);
-                    layerDrawable.setLayerGravity(player4, Gravity.BOTTOM | Gravity.RIGHT);
-                    layerDrawable.setLayerGravity(player5, Gravity.BOTTOM | Gravity.RIGHT);
-                    layerDrawable.setLayerGravity(player6, Gravity.BOTTOM | Gravity.RIGHT);
+                    uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
+
+                    Log.d("hostPosition", "Host redraw at start");
+
+
+                    layerDrawable.setLayerGravity(player1, playerGravity[1]);
+                    layerDrawable.setLayerGravity(player2, playerGravity[2]);
+                    layerDrawable.setLayerGravity(player3, playerGravity[3]);
+                    layerDrawable.setLayerGravity(player4, playerGravity[4]);
+                    layerDrawable.setLayerGravity(player5, playerGravity[5]);
+                    layerDrawable.setLayerGravity(player6, playerGravity[6]);
 
                     layerDrawable.setLayerInset(player1, 0, 0, (int) playersX[1], (int) playersY[1]);
                     layerDrawable.setLayerInset(player2, 0, 0, (int) playersX[2], (int) playersY[2]);
@@ -239,7 +255,7 @@ public class UIHandler extends Handler {
 
                     setPlayerPositions();
 
-                    imageView.setImageDrawable(this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard));
+                    imageView.setImageDrawable(layerDrawable);
 
                     uiHandlerViewModel.setCheckFirst(false);
                 }else{
@@ -257,8 +273,9 @@ public class UIHandler extends Handler {
             case "movePlayer":
                 if(clientObj.getUser().getUsername().equals(client)) {
                     movePlayer(data);   // disable ui and viewModel entries
+                    //restore();
                 }else{
-                    restore();
+                    //restore();
                 }
                 //restore();
                 Log.d("move", data); //Data for move distance and player name
@@ -269,9 +286,10 @@ public class UIHandler extends Handler {
                     Log.d("--------XYZ------", "" + fieldsToMove);
                 }*/
                 imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
-                layerDrawable = (LayerDrawable) imageView.getDrawable();
+                //layerDrawable = (LayerDrawable) imageView.getDrawable();
 
-                for (int playerNumber = 1; playerNumber < 6; playerNumber++) {
+
+                for (int playerNumber = 1; playerNumber <= 6; playerNumber++) {
                     if(Objects.equals(playerObjects.get(playerNumber), client)){
                         Log.d("CURRENT POSITION X ",""+uiHandlerViewModel.getPlayerPositionX().getValue()[playerNumber]);
                         Log.d("CURRENT POSITION Y ",""+uiHandlerViewModel.getPlayerPositionY().getValue()[playerNumber]);
@@ -364,11 +382,13 @@ public class UIHandler extends Handler {
                 }
                 Log.d("gameTurnCheck","Host move to: "+
                         layerDrawable.getLayerInsetRight(1));
-                setPlayerPositions();
+                //setPlayerPositions();
+
                 // Log.d("----COUNTER----",""+playerObjects.get(player1));
                 // Log.d("----COUNTER----",""+playerObjects.get(player2));
                 imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
 
+                restore();
 /*
                 Log.d("fieldsToMove", "" + fieldsToMove);
                 Log.d("client", "" + client);
@@ -378,7 +398,7 @@ public class UIHandler extends Handler {
 
             case "playersTurn":
                 //Log.d("gameTurnCheck","; "+NavHostFragment.findNavController(this.frag).getCurrentDestination().getLabel());
-
+/*
                 if(!uiHandlerViewModel.getCheckFirst().getValue())
                     //restore();
 
@@ -389,7 +409,7 @@ public class UIHandler extends Handler {
                     //Navigation.findNavController(this.frag.getActivity().findViewById(NavHostFragment.findNavController(this.frag).getCurrentDestination().getId())).navigate(R.id.move_to_GameBoardUI);
                     //NavHostFragment.findNavController(this.frag.getActivity().getFragmentManager().findFragmentById(NavHostFragment.findNavController(this.frag).getCurrentDestination().getId())).navigate(R.id.move_to_GameBoardUI);
                     //Objects.requireNonNull(this.frag.getActivity()).getSupportFragmentManager().popBackStack();
-                }
+                }*/
 
                 ((TextView) this.frag.getActivity().findViewById(R.id.turn)).setText(data + "'s turn");
                 gameBoardUIViewModel.setCurrentPlayer(data + "'s turn");
@@ -433,7 +453,7 @@ public class UIHandler extends Handler {
     }
 
     public void initializePlayerBottomRight(ImageView imageView, int player){
-        layerDrawable = (LayerDrawable) this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard);
+        //layerDrawable = (LayerDrawable) imageView.getDrawable();
 
         heightRatio = layerDrawable.getMinimumHeight() / (double) 21000;
         widthRatio = layerDrawable.getMinimumWidth() / (double) 21000;
@@ -452,27 +472,31 @@ public class UIHandler extends Handler {
             playersY[player] = (double) 1800 * widthRatio;
         }
 
-        layerDrawable.setLayerGravity(player, Gravity.BOTTOM | Gravity.RIGHT);
-        layerDrawable.setLayerInset(player, 0, 0, (int) playersX[player], (int) playersY[player]);
+        //layerDrawable.setLayerGravity(player, Gravity.BOTTOM | Gravity.RIGHT);
+        //layerDrawable.setLayerInset(player, 0, 0, (int) playersX[player], (int) playersY[player]);
+        playerGravity[player]=Gravity.BOTTOM | Gravity.RIGHT;
+        uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
 
         setPlayerPositions();
 
-        imageView.setImageDrawable(layerDrawable);
+        //imageView.setImageDrawable(layerDrawable);
     }
 
     public void goFieldBottom(ImageView imageView, int player, int move){
-        layerDrawable = (LayerDrawable) this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard);
+        //layerDrawable = (LayerDrawable) imageView.getDrawable();
 
         heightRatio = layerDrawable.getMinimumHeight()/(double)21000;
         widthRatio = layerDrawable.getMinimumWidth()/(double)21000;
 
         goOneSmallField = (double)1700*widthRatio;
 
-        layerDrawable.setLayerGravity(player, Gravity.BOTTOM | Gravity.RIGHT);
+        //layerDrawable.setLayerGravity(player, Gravity.BOTTOM | Gravity.RIGHT);
         Log.d("CURRENT playersX before",""+playersX[player]);
         playersX[player] = playersX[player] + (goOneSmallField*move);
         Log.d("CURRENT playersX after",""+playersX[player]);
-        layerDrawable.setLayerInset(player, 0, 0, (int) playersX[player], (int) playersY[player]);
+        //layerDrawable.setLayerInset(player, 0, 0, (int) playersX[player], (int) playersY[player]);
+        playerGravity[player]=Gravity.BOTTOM | Gravity.RIGHT;
+        uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
 
         Log.d("------------",""+player);
         Log.d("---playersXAfter---",""+playersX[player]);
@@ -482,11 +506,11 @@ public class UIHandler extends Handler {
         setPlayerPositions();
 
         //refresh Image
-        imageView.setImageDrawable(layerDrawable);
+        //imageView.setImageDrawable(layerDrawable);
     }
 
     public void initializePlayerBottomLeft(ImageView imageView, int player){
-        layerDrawable = (LayerDrawable) this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard);
+        //layerDrawable = (LayerDrawable) imageView.getDrawable();
 
         heightRatio = layerDrawable.getMinimumHeight() / (double) 21000;
         widthRatio = layerDrawable.getMinimumWidth() / (double) 21000;
@@ -496,50 +520,58 @@ public class UIHandler extends Handler {
 
         if(player==1){
             double initializeLeft1Y = (double) 2800 * widthRatio;
-            layerDrawable.setLayerGravity(player, Gravity.BOTTOM | Gravity.RIGHT);
+            //layerDrawable.setLayerGravity(player, Gravity.BOTTOM | Gravity.RIGHT);
             playersY[player] =  playersY[player] + initializeLeft1Y;
-            layerDrawable.setLayerInset(player, 0, 0, (int) playersX[player], (int) playersY[player]);
+            //layerDrawable.setLayerInset(player, 0, 0, (int) playersX[player], (int) playersY[player]);
+            playerGravity[player]=Gravity.BOTTOM | Gravity.RIGHT;
+            uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
         }else if(player==4){
             double initializeLeft4X = (double) 900 * widthRatio;
             double initializeLeft4Y = (double) 3700 * widthRatio;
-            layerDrawable.setLayerGravity(player, Gravity.BOTTOM | Gravity.RIGHT);
+            //layerDrawable.setLayerGravity(player, Gravity.BOTTOM | Gravity.RIGHT);
             playersX[player] = playersX[player] - initializeLeft4X;
             playersY[player] = playersY[player] + initializeLeft4Y;
-            layerDrawable.setLayerInset(player, 0, 0, (int) playersX[player], (int) playersY[player]);
+            //layerDrawable.setLayerInset(player, 0, 0, (int) playersX[player], (int) playersY[player]);
+            playerGravity[player]=Gravity.BOTTOM | Gravity.RIGHT;
+            uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
         }else{
-            layerDrawable.setLayerGravity(player, Gravity.BOTTOM | Gravity.RIGHT);
+            //layerDrawable.setLayerGravity(player, Gravity.BOTTOM | Gravity.RIGHT);
             playersX[player] = playersX[player] + initializeLeftX;
             playersY[player] = playersY[player] + initializeLeftY;
-            layerDrawable.setLayerInset(player, 0, 0, (int) player3X, (int) player3Y);
+            //layerDrawable.setLayerInset(player, 0, 0, (int) player3X, (int) player3Y);
+            playerGravity[player]=Gravity.BOTTOM | Gravity.RIGHT;
+            uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
             Log.d("---x---",""+player);
             Log.d("---playersXAfter---",""+playersX[player]);
             Log.d("---playersYAfter---",""+playersY[player]);
         }
 
         setPlayerPositions();
-        imageView.setImageDrawable(layerDrawable);
+        //imageView.setImageDrawable(layerDrawable);
     }
 
     public void goFieldLeft(ImageView imageView, int player, int move){
-        layerDrawable = (LayerDrawable) this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard);
+        //layerDrawable = (LayerDrawable) imageView.getDrawable();
 
         heightRatio = layerDrawable.getMinimumHeight() / (double) 21000;
         widthRatio = layerDrawable.getMinimumWidth() / (double) 21000;
 
         goOneSmallField = (double) 1700 * widthRatio;
 
-        layerDrawable.setLayerGravity(player, Gravity.BOTTOM | Gravity.RIGHT);
+        //layerDrawable.setLayerGravity(player, Gravity.BOTTOM | Gravity.RIGHT);
         playersY[player] = playersY[player] + (goOneSmallField * move);
         Log.d("------MOVING--",""+move);
-        layerDrawable.setLayerInset(player, 0, 0, (int) playersX[player], (int) playersY[player]);
+        //layerDrawable.setLayerInset(player, 0, 0, (int) playersX[player], (int) playersY[player]);
+        playerGravity[player]=Gravity.BOTTOM | Gravity.RIGHT;
+        uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
 
         setPlayerPositions();
 
-        imageView.setImageDrawable(layerDrawable);
+        //imageView.setImageDrawable(layerDrawable);
     }
 
     public void initializePlayerTopLeft(ImageView imageView, int player){
-        layerDrawable = (LayerDrawable) this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard);
+        //layerDrawable = (LayerDrawable) imageView.getDrawable();
 
         heightRatio = layerDrawable.getMinimumHeight() / (double) 21000;
         widthRatio = layerDrawable.getMinimumWidth() / (double) 21000;
@@ -558,35 +590,39 @@ public class UIHandler extends Handler {
             playersY[player] = (double) 1800 * widthRatio;
         }
 
-        layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
-        layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersY[player], 0, 0);
+        //layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
+        //layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersY[player], 0, 0);
+        playerGravity[player]=Gravity.TOP | Gravity.LEFT;
+        uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
 
         setPlayerPositions();
 
-        imageView.setImageDrawable(layerDrawable);
+        //imageView.setImageDrawable(layerDrawable);
     }
 
     public void goFieldTop(ImageView imageView, int player, int move){
-        layerDrawable = (LayerDrawable) this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard);
+        //layerDrawable = (LayerDrawable) imageView.getDrawable();
 
         heightRatio = layerDrawable.getMinimumHeight() / (double) 21000;
         widthRatio = layerDrawable.getMinimumWidth() / (double) 21000;
 
         goOneSmallField = (double) 1700 * widthRatio;
 
-        layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
+        //layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
         playersX[player] = playersX[player] + (goOneSmallField * move);
         Log.d("THE X",""+playersX[player]);
-        layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersY[player], 0, 0);
+        //layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersY[player], 0, 0);
+        playerGravity[player]=Gravity.TOP | Gravity.LEFT;
+        uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
 
         setPlayerPositions();
 
-        imageView.setImageDrawable(layerDrawable);
+        //imageView.setImageDrawable(layerDrawable);
     }
 
 
     public void initializePlayerTopRight(ImageView imageView, int player){
-        layerDrawable = (LayerDrawable) this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard);
+        //layerDrawable = (LayerDrawable) imageView.getDrawable();
 
         heightRatio = layerDrawable.getMinimumHeight() / (double) 21000;
         widthRatio = layerDrawable.getMinimumWidth() / (double) 21000;
@@ -597,50 +633,57 @@ public class UIHandler extends Handler {
 
         if(player == 1){
             double initializeRight1Y = (double) 2800 * widthRatio;
-            layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
+            //layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
             playersY[player] = playersY[player] + initializeRight1Y;
-            layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersY[player], 0, 0);
+            //layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersY[player], 0, 0);
+            playerGravity[player]=Gravity.TOP | Gravity.LEFT;
+            uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
         } else if (player == 4) {
             double initializeRight4X = (double) 900 * widthRatio;
             double initializeRight4Y = (double) 3700 * widthRatio;
-            layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
+            //layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
             playersX[player] = playersX[player] - initializeRight4X;
             playersY[player] = playersY[player] + initializeRight4Y;
-            layerDrawable.setLayerInset(player, (int)  playersX[player], (int) playersY[player], 0, 0);
+            //layerDrawable.setLayerInset(player, (int)  playersX[player], (int) playersY[player], 0, 0);
+            playerGravity[player]=Gravity.TOP | Gravity.LEFT;
+            uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
         } else{
-            layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
+            //layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
             playersX[player] = playersX[player] + initializeRightX;
             playersY[player] = playersY[player] + initializeRightY;
-            layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersY[player], 0, 0);
+            //layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersY[player], 0, 0);
+            playerGravity[player]=Gravity.TOP | Gravity.LEFT;
+            uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
         }
 
         setPlayerPositions();
 
-        imageView.setImageDrawable(layerDrawable);
+        //imageView.setImageDrawable(layerDrawable);
     }
 
     public void goFieldRight(ImageView imageView, int player, int move){
-        layerDrawable = (LayerDrawable) this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard);
+        //layerDrawable = (LayerDrawable) imageView.getDrawable();
 
         heightRatio = layerDrawable.getMinimumHeight() / (double) 21000;
         widthRatio = layerDrawable.getMinimumWidth() / (double) 21000;
 
         goOneSmallField = (double) 1700 * widthRatio;
 
-        layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
+        //layerDrawable.setLayerGravity(player, Gravity.TOP | Gravity.LEFT);
         playersY[player] = playersY[player] + (goOneSmallField * move);
-        layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersY[player], 0, 0);
+        //layerDrawable.setLayerInset(player, (int) playersX[player], (int) playersY[player], 0, 0);
+        playerGravity[player]=Gravity.TOP | Gravity.LEFT;
+        uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
 
         setPlayerPositions();
 
-        imageView.setImageDrawable(layerDrawable);
+        //imageView.setImageDrawable(layerDrawable);
     }
 
 
     private void movePlayer(String data){
         String[] dataResponseSplit = data.split(":");
         if (dataResponseSplit[2].equals("f")) {
-            Log.d("move", "Im in: "+counterMove++);
             this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);        // disable dice throwing after not throwing doubles
             this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(false);
             gameBoardUIViewModel.setThrowDiceEnabled(false);
@@ -651,31 +694,62 @@ public class UIHandler extends Handler {
         Log.d("client123456","I am: "+clientObj.getUser().getUsername());
 
         imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
-        layerDrawable = (LayerDrawable) imageView.getDrawable();
+        //layerDrawable = (LayerDrawable) imageView.getDrawable();
+        layerDrawable = (LayerDrawable) this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard);
 
-        if(uiHandlerViewModel.getPlayerPositionX().getValue()!=null){
+        /*if(uiHandlerViewModel.getPlayerPositionX().getValue()!=null){
             playersX = uiHandlerViewModel.getPlayerPositionX().getValue();
             playersY = uiHandlerViewModel.getPlayerPositionY().getValue();
             Log.d("gameTurnCheck","I am: "+clientObj.getUser().getUsername()+"; x is: "+playersX[1]);
+        }*/
+
+        playerGravity = uiHandlerViewModel.getPlayerGravityLiveData().getValue();
+
+        layerDrawable.setLayerGravity(player1, playerGravity[1]);
+        layerDrawable.setLayerGravity(player2, playerGravity[2]);
+        layerDrawable.setLayerGravity(player3, playerGravity[3]);
+        layerDrawable.setLayerGravity(player4, playerGravity[4]);
+        layerDrawable.setLayerGravity(player5, playerGravity[5]);
+        layerDrawable.setLayerGravity(player6, playerGravity[6]);
+
+        Log.d("gravity1231231231","Host gravity: "+playerGravity[1]+"; Bottom Right: "+(Gravity.BOTTOM | Gravity.RIGHT)+"; Top Left: "+(Gravity.TOP | Gravity.LEFT));
+        Log.d("gravity1231231231","Host X: "+playersX[1]+"; Y: "+playersY[1]);
+
+        if(playerGravity[1]==(Gravity.BOTTOM | Gravity.RIGHT)){
+            layerDrawable.setLayerInset(player1, 0, 0, (int) playersX[1], (int) playersY[1]);
+        }else{
+            layerDrawable.setLayerInset(player1, (int) playersX[1], (int) playersY[1],0, 0);
+        }
+        if(playerGravity[2]==(Gravity.BOTTOM | Gravity.RIGHT)){
+            layerDrawable.setLayerInset(player2, 0, 0, (int) playersX[2], (int) playersY[2]);
+        }else{
+            layerDrawable.setLayerInset(player2, (int) playersX[2], (int) playersY[2],0, 0);
+        }
+        if(playerGravity[3]==(Gravity.BOTTOM | Gravity.RIGHT)){
+            layerDrawable.setLayerInset(player3, 0, 0, (int) playersX[3], (int) playersY[3]);
+        }else{
+            layerDrawable.setLayerInset(player3, (int) playersX[3], (int) playersY[3],0, 0);
+        }
+        if(playerGravity[4]==(Gravity.BOTTOM | Gravity.RIGHT)){
+            layerDrawable.setLayerInset(player4, 0, 0, (int) playersX[4], (int) playersY[4]);
+        }else{
+            layerDrawable.setLayerInset(player4, (int) playersX[4], (int) playersY[4],0, 0);
+        }
+        if(playerGravity[5]==(Gravity.BOTTOM | Gravity.RIGHT)){
+            layerDrawable.setLayerInset(player5, 0, 0, (int) playersX[5], (int) playersY[5]);
+        }else{
+            layerDrawable.setLayerInset(player5, (int) playersX[5], (int) playersY[5],0, 0);
+        }
+        if(playerGravity[6]==(Gravity.BOTTOM | Gravity.RIGHT)){
+            layerDrawable.setLayerInset(player6, 0, 0, (int) playersX[6], (int) playersY[6]);
+        }else{
+            layerDrawable.setLayerInset(player6, (int) playersX[6], (int) playersY[6],0, 0);
         }
 
-        layerDrawable.setLayerGravity(player1, Gravity.BOTTOM | Gravity.RIGHT);
-        layerDrawable.setLayerGravity(player2, Gravity.BOTTOM | Gravity.RIGHT);
-        layerDrawable.setLayerGravity(player3, Gravity.BOTTOM | Gravity.RIGHT);
-        layerDrawable.setLayerGravity(player4, Gravity.BOTTOM | Gravity.RIGHT);
-        layerDrawable.setLayerGravity(player5, Gravity.BOTTOM | Gravity.RIGHT);
-        layerDrawable.setLayerGravity(player6, Gravity.BOTTOM | Gravity.RIGHT);
+        //imageView.setImageDrawable(this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard));
+        imageView.setImageDrawable(layerDrawable);
 
-        layerDrawable.setLayerInset(player1, 0, 0, (int) playersX[1], (int) playersY[1]);
-        layerDrawable.setLayerInset(player2, 0, 0, (int) playersX[2], (int) playersY[2]);
-        layerDrawable.setLayerInset(player3, 0, 0, (int) playersX[3], (int) playersY[3]);
-        layerDrawable.setLayerInset(player4, 0, 0, (int) playersX[4], (int) playersY[4]);
-        layerDrawable.setLayerInset(player5, 0, 0, (int) playersX[5], (int) playersY[5]);
-        layerDrawable.setLayerInset(player6, 0, 0, (int) playersX[6], (int) playersY[6]);
-
-        imageView.setImageDrawable(this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard));
-
-        Log.d("gameTurnCheck","Inset: "+
-        layerDrawable.getLayerInsetRight(1));
+        //Log.d("hostPosition","Draw Host at X: "+ layerDrawable.getLayerInsetRight(1));
+        //Log.d("hostPosition","Draw Host at Y: "+ layerDrawable.getLayerInsetLeft(1));
     }
 }

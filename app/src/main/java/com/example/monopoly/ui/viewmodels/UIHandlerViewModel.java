@@ -1,5 +1,7 @@
 package com.example.monopoly.ui.viewmodels;
 
+import android.graphics.drawable.LayerDrawable;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -16,6 +18,15 @@ public class UIHandlerViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> checkFirst = new MutableLiveData<>(true);
 
+    private final MutableLiveData<int[]> playerGravityLiveData = new MutableLiveData<>();
+
+
+    public MutableLiveData<int[]> getPlayerGravityLiveData() {
+        return this.playerGravityLiveData;
+    }
+    public void setPlayerGravityLiveData(int[] playerGravityLiveData){
+        this.playerGravityLiveData.setValue(playerGravityLiveData);
+    }
 
     public void setCheckFirst(boolean checkFirst){
         this.checkFirst.setValue(checkFirst);
