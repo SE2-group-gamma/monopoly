@@ -37,7 +37,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private float lastX, lastY, lastZ;
-    private static final float SHAKE_THRESHOLD = 50;
+    private static final float SHAKE_THRESHOLD = 10;
     private FragmentDiceBinding binding;
     private Dices dices;
     private boolean hasBeenRolled;
@@ -48,7 +48,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
 
     public DiceFragment() {
         // Required empty public constructor
-        Client.subscribe(this,"DiceFragment");
+        //Client.subscribe(this,"DiceFragment");
     }
 
     /**

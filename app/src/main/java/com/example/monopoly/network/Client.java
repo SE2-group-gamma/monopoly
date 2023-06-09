@@ -37,6 +37,7 @@ public class Client extends Thread {
     private MonopolyServer monopolyServer;
     private boolean isHost;
     private int key;
+    boolean onCoolDown = false;
 
     private int serverTurnCounter = 0;
 
@@ -218,7 +219,6 @@ public class Client extends Thread {
                     b.putString("Client", responseSplit[3]);
                 }
             }catch (Exception e){}
-            //b.putSerializable("clientObject",this);
             handleMessage.setData(b);
             handlers.get(responseSplit[0]).sendMessage(handleMessage);      // UI Handler do ur thing
         }
@@ -267,6 +267,20 @@ public class Client extends Thread {
 
                 }
             }
+            if(responseSplit[1].equals("initializePlayerBottomRight") && (!onCoolDown)){
+                onCoolDown = true;
+                monopolyServer.broadCast("GameBoardUI|initializePlayerBottomRight1| : |"+responseSplit[3]);
+                Timer cdTimer = new Timer();
+                cdTimer.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                onCoolDown = false;
+                            }
+                        },
+                        300
+                );
+            }
             if(responseSplit[1].equals("turnEnd")){
                 Log.d("endTurn","end turn test");
                 endTurnPressed();
@@ -278,8 +292,8 @@ public class Client extends Thread {
                 int tempID = game.getPlayerIDByName(responseSplit[3]);
                 if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
                     game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
-                    Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
-                    Log.d("gameturnCurr", "currUser" + responseSplit[3]);
+                    //Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
+                    //Log.d("gameturnCurr", "currUser" + responseSplit[3]);
                     monopolyServer.broadCast("GameBoardUI|movePlayer|"+responseSplit[2]+"|"+responseSplit[3]);      // broadcast with different action to not interfere with game logic
                 }
             }//}
@@ -327,7 +341,7 @@ public class Client extends Thread {
         turnEnd = false;
         game.setCurrentPlayersTurn(game.getPlayers().get(serverTurnCounter).getUsername());
         monopolyServer.broadCast("GameBoardUI|playersTurn|"+game.getPlayers().get(serverTurnCounter).getUsername());
-        Log.d("gameTurnCheck", "Yo hey "+game.getCurrentPlayersTurn());
+        //Log.d("gameTurnCheck", "Yo hey "+game.getCurrentPlayersTurn());
         serverTurnCounter++;
         timer = new Timer();
 
