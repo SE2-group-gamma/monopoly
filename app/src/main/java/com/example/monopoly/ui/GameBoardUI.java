@@ -17,6 +17,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.GameBoardBinding;
 import com.example.monopoly.network.Client;
+import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
@@ -100,12 +101,40 @@ public class GameBoardUI extends Fragment {
             // TODO restore player position
         }catch (Exception e){}
 
+        try {
+            this.client.writeToServer("GameBoardUI|initializePlayerBottomRight| : |"+this.client.getUser().getId());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // DisplayMetrics might still be useful, so keep them for now
+/*
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager()
+                .getDefaultDisplay()
+                .getRealMetrics(displayMetrics);
+        double height = displayMetrics.heightPixels;
+        double width = displayMetrics.widthPixels;
+
+        // Tried relative calculation with dp
+        //double heightRatio = (double) height / 411.4285583496094;
+        //double widthRatio = (double) width / 891.4285888671875;
+
+        //double heightRatio = (double) height / 1440;
+        //double widthRatio = (double) width / 3120;
+        //heightRatio = heightRatio * (3.5/displayMetrics.density);
+        //widthRatio = widthRatio * (3.5/displayMetrics.density);
+
+        double heightRatio = layerDrawable.getMinimumHeight()/(double)21000;
+        double widthRatio = layerDrawable.getMinimumWidth()/(double)21000;
+*/
+
+
         super.onViewCreated(view, savedInstanceState);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                // TODO: Set textView with key from Lobby
-                //binding.textViewKey.setText("Game-Key: "+key);
+
             }
         });
 

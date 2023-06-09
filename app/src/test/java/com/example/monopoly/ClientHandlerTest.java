@@ -16,22 +16,17 @@ import com.example.monopoly.network.MonopolyServer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 
 class ClientHandlerTest {
@@ -100,26 +95,26 @@ class ClientHandlerTest {
 
     @Test
     public void testGetClient() {
-        assertEquals(socket, clientHandler.getClient());
+        assertEquals(socket, clientHandler.getSocket());
     }
 
     @Test
     public void testGetClientClient() {
         clientHandler.setClient(client);
-        assertEquals(client, clientHandler.getClientClient());
+        assertEquals(client, clientHandler.getClient());
     }
 
     @Test
     public void testSetClient() {
         clientHandler.setClient(client);
-        assertEquals(client, clientHandler.getClientClient());
+        assertEquals(client, clientHandler.getClient());
     }
 
     @Test
     public void testSetSocket() {
         ClientHandler clientHandler = new ClientHandler(null);
         clientHandler.setSocket(socket);
-        assertEquals(socket, clientHandler.getClient());
+        assertEquals(socket, clientHandler.getSocket());
     }
 
     @Test

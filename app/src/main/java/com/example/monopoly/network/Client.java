@@ -218,7 +218,6 @@ public class Client extends Thread {
                     b.putString("Client", responseSplit[3]);
                 }
             }catch (Exception e){}
-            //b.putSerializable("clientObject",this);
             handleMessage.setData(b);
             handlers.get(responseSplit[0]).sendMessage(handleMessage);      // UI Handler do ur thing
         }
