@@ -152,7 +152,8 @@ public class MainActivity extends AppCompatActivity {
         nsdServ.stopNSD();
 
         Log.i("MainActivity", "Conections done");
-
+        binding=null;
+        monopoly=null;
 
     }
 }

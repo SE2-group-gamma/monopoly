@@ -15,8 +15,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
-import com.example.monopoly.gamelogic.Game;
-import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
@@ -26,9 +24,7 @@ import java.util.Objects;
 
 public class UIHandler extends Handler {
     private Fragment frag;
-    private int counter=1;
-    private int currentPlayerindex=1;
-    private Game game = Game.getInstance();
+    private int counter = 1;
 
     private String hostname = "";
     private int counterMove = 0;
@@ -89,11 +85,8 @@ public class UIHandler extends Handler {
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5Name)).setVisibility(View.VISIBLE);
                         ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setText(data);
                         break;
-
                 }
-
                 counter++;
-
                 break;
             case "hostJoined":
                 if (!HostGame.lobbyname.equals(" ")) {
@@ -126,10 +119,6 @@ public class UIHandler extends Handler {
                 }
                 break;
             case "move":
-                Log.d("move",data); //Data for move distance and player name
-                data="turnEnded";
-                msg.getData().putString("Data",data);
-
                 movePlayer(data);
                 Log.d("move", data); //Data for move distance and player name
                 break;
@@ -181,7 +170,7 @@ public class UIHandler extends Handler {
 
             case "exitDiceFragment":
                 NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
-                    //Thread.sleep(1000);
+                //Thread.sleep(1000);
                 break;
         }
 

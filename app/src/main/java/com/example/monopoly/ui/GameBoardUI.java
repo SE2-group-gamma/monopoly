@@ -1,11 +1,13 @@
 package com.example.monopoly.ui;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,8 @@ public class GameBoardUI extends Fragment {
     private ClientViewModel clientViewModel;
     private Client client;
     private GameBoardUIViewModel gameBoardUIViewModel;
+    private MediaPlayer song;
+    boolean sound;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -141,15 +145,50 @@ public class GameBoardUI extends Fragment {
         binding.showPropertiesButton.setOnClickListener(view1 -> {
             NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_ProperyCardFragment);
         });
+
+        binding.switchsound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sound=isChecked;
+                if(isChecked){
+                    playSong();
+
+
+
+                }else{
+                    pauseSong();
+                }
+            }
+        });
+        song = MediaPlayer.create(getActivity(),R.raw.monopoly_song);
     }
 
     private void showDiceFragment(){
         NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_DiceFragment);
     }
 
+    private void pauseSong(){
+        if(song!=null && song.isPlaying()){
+            song.pause();
+            sound=false;
+        }
+    }
+
+    private void playSong(){
+        if(song!=null){
+            song.start();
+            sound=true;
+        }
+
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        if (song != null) {
+            song.release();
+            song = null;
+        }
     }
 }
