@@ -29,6 +29,7 @@ import java.util.Objects;
 
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
+import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
 
 import java.util.Objects;
 
@@ -266,14 +267,11 @@ public class UIHandler extends Handler {
                     ((TextView) this.frag.getActivity().findViewById(R.id.textViewKey)).setText("Game-Key: " + HostGame.key);
                 }
                 break;
-            case "move":
+            case "movePlayer":
                 movePlayer(data);
-                Log.d("move", data); //Data for move distance and player name
                 Log.d("move", data); //Data for move distance and player name
                 String[] dataResponse = data.split(":");
                 int fieldsToMove = Integer.parseInt(dataResponse[0]);
-
-
 
                 if (client.equals(playerObjects.get(player1))) {
                     Log.d("--------XYZ------", "" + fieldsToMove);
@@ -383,12 +381,6 @@ public class UIHandler extends Handler {
                 Log.d("player1", "" + playerObjects.get(player1));
                 Log.d("player2", "" + playerObjects.get(player2));*/
                 break;
-
-            case "movePlayer":
-                movePlayer(data);
-                break;
-
-
 
             case "playersTurn":
                 Log.d("gameTurnCheck","; "+NavHostFragment.findNavController(this.frag).getCurrentDestination().getLabel());
