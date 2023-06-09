@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.monopoly.gamelogic.ChanceCardCollection;
 import com.example.monopoly.gamelogic.CommunityChestCardCollection;
-public class DrawCardViewModel extends ViewModel {
+public class CardViewModel extends ViewModel {
 
     private final MutableLiveData<ChanceCardCollection> chanceCards = new MutableLiveData<>();
     private final MutableLiveData<CommunityChestCardCollection> communityCards = new MutableLiveData<>();

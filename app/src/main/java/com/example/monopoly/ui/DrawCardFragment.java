@@ -15,9 +15,7 @@ import com.example.monopoly.databinding.FragmentDrawcardBinding;
 import com.example.monopoly.gamelogic.ChanceCardCollection;
 import com.example.monopoly.gamelogic.CommunityChestCardCollection;
 import com.example.monopoly.gamelogic.Game;
-import com.example.monopoly.network.Client;
-import com.example.monopoly.ui.viewmodels.ClientViewModel;
-import com.example.monopoly.ui.viewmodels.DrawCardViewModel;
+import com.example.monopoly.ui.viewmodels.CardViewModel;
 
 import java.io.IOException;
 
@@ -26,7 +24,7 @@ public class DrawCardFragment extends Fragment {
     private ChanceCardCollection chanceCards;
     private CommunityChestCardCollection communityCards;
     private FragmentDrawcardBinding binding;
-    private DrawCardViewModel drawCardViewModel;
+    private CardViewModel cardViewModel;
     private final Game game = Game.getInstance();
 
 
@@ -39,9 +37,9 @@ public class DrawCardFragment extends Fragment {
         super.onCreate(savedInstanceState);
         binding = FragmentDrawcardBinding.inflate(getLayoutInflater());
 
-        drawCardViewModel = new ViewModelProvider(requireActivity()).get(DrawCardViewModel.class);
-        this.chanceCards = drawCardViewModel.getChanceCards().getValue();
-        this.communityCards = drawCardViewModel.getCommunityCards().getValue();
+        cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
+        this.chanceCards = cardViewModel.getChanceCards().getValue();
+        this.communityCards = cardViewModel.getCommunityCards().getValue();
 
     }
 
@@ -54,8 +52,8 @@ public class DrawCardFragment extends Fragment {
         }
 
         binding.buttonContinueDrawCard.setOnClickListener(view -> {
-            this.drawCardViewModel.setChanceCards(this.chanceCards);
-            this.drawCardViewModel.setCommunityCards(this.communityCards);
+            this.cardViewModel.setChanceCards(this.chanceCards);
+            this.cardViewModel.setCommunityCards(this.communityCards);
             NavHostFragment.findNavController(this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
         });
 
