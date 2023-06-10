@@ -38,6 +38,7 @@ public class GameTest {
 
     Game g;
     Player p;
+    Player player;
 
     Field field;
     HashMap<Integer,Player> players;
@@ -53,6 +54,7 @@ public class GameTest {
         MockitoAnnotations.initMocks(this);
         g = Game.getInstance();
         p = new Player("Test",new Color(),100.00,true);
+        player = new Player("User",new Color(),100.00,true);
         fields = new HashMap<>();
     }
 
@@ -80,7 +82,6 @@ public class GameTest {
            g.addPlayer(p);
            g.setCurrentPlayersTurn("Test");
 
-
            assertThrows(NullPointerException.class, () ->{
                g.advanceAndCollect("Strandbad");
            });
@@ -96,6 +97,7 @@ public class GameTest {
 
         HashMap<Integer, Field> fields = new HashMap<>();
         fields.put(1,mock(Field.class));
+
 
         g.addPlayer(p0);
         g.setCurrentPlayersTurn("User");
@@ -328,6 +330,154 @@ public class GameTest {
 
         g.addPlayer(p17);
         g.setCurrentPlayersTurn("User17");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void chance12() {
+        Player p18 = new Player("User18", new Color(), 100.00, true);
+        p18.setCardID(R.drawable.chance12);
+
+        g.addPlayer(p18);
+        g.setCurrentPlayersTurn("User18");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void community4() {
+        Player p19 = new Player("User19", new Color(), 100.00, true);
+        p19.setCardID(R.drawable.community4);
+
+        g.addPlayer(p19);
+        g.setCurrentPlayersTurn("User19");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void chance16() {
+        Player p20 = new Player("User20", new Color(), 100.00, true);
+        p20.setCardID(R.drawable.chance16);
+
+        g.addPlayer(p20);
+        g.setCurrentPlayersTurn("User20");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void community5() {
+        Player p21 = new Player("User21", new Color(), 100.00, true);
+        p21.setCardID(R.drawable.community5);
+
+        g.addPlayer(p21);
+        g.setCurrentPlayersTurn("User21");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void testcommunity14() {
+        Player p22 = new Player("User22", new Color(), 100.00, true);
+        p22.setCardID(R.drawable.community14);
+
+        g.addPlayer(p22);
+        g.setCurrentPlayersTurn("User22");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void community1() {
+        Player p23 = new Player("User23", new Color(), 100.00, true);
+        p23.setCardID(R.drawable.community1);
+
+        g.addPlayer(p23);
+        g.setCurrentPlayersTurn("User23");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+
+    @Test
+    public void community2() {
+        Player p24 = new Player("User24", new Color(), 100.00, true);
+        p24.setCardID(R.drawable.community2);
+
+        g.addPlayer(p24);
+        g.setCurrentPlayersTurn("User24");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+
+    @Test
+    public void community3() {
+        Player p25 = new Player("User25", new Color(), 100.00, true);
+        p25.setCardID(R.drawable.community3);
+
+        g.addPlayer(p25);
+        g.setCurrentPlayersTurn("User25");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+
+    @Test
+    public void community6() {
+        Player p26 = new Player("User26", new Color(), 100.00, true);
+        p26.setCardID(R.drawable.community6);
+
+        g.addPlayer(p26);
+        g.setCurrentPlayersTurn("User26");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+
+    @Test
+    public void community7() {
+        Player p27 = new Player("User27", new Color(), 100.00, true);
+        p27.setCardID(R.drawable.community7);
+
+        g.addPlayer(p27);
+        g.setCurrentPlayersTurn("User27");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+
+    @Test
+    public void community8() {
+        Player p28 = new Player("User28", new Color(), 100.00, true);
+        p28.setCardID(R.drawable.community8);
+
+        g.addPlayer(p28);
+        g.setCurrentPlayersTurn("User28");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void community9() {
+        Player p29 = new Player("User29", new Color(), 100.00, true);
+        p29.setCardID(R.drawable.community9);
+
+        g.addPlayer(p29);
+        g.setCurrentPlayersTurn("User29");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void testcommunity10() {
+        Player p30 = new Player("User30", new Color(), 100.00, true);
+        p30.setCardID(R.drawable.community10);
+
+        g.addPlayer(p30);
+        g.setCurrentPlayersTurn("User30");
         assertThrows(NullPointerException.class, () -> {
             g.doAction();
         });
