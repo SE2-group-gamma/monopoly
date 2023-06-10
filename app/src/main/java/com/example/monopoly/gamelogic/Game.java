@@ -363,6 +363,9 @@ public class Game{
                 fieldId = fields.get(i).getId();
             }
         }
+        if (players.get(playerID).getPosition() == 0) {
+            endTurnProtocol();
+        }
         if (players.get(playerID).getPosition() > fieldId) {
             incr = fields.size() - players.get(playerID).getPosition() + fieldId;
             transferToPlayerProtocol(200);
@@ -370,9 +373,7 @@ public class Game{
             incr = fieldId - players.get(playerID).getPosition();
         }
         moveProtocol(incr);
-        if (players.get(playerID).getPosition() == 0) {
-            endTurnProtocol();
-        }
+
     }
 
     public void transferToPlayerProtocol(int amount) throws IOException {

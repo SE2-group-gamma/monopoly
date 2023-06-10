@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.graphics.Color;
+import android.media.Image;
 
 import com.example.monopoly.gamelogic.Field;
 import com.example.monopoly.gamelogic.Game;
@@ -37,30 +38,22 @@ public class GameTest {
 
     Game g;
     Player p;
-    byte IPAddress[] = { 127, 0, 0, 1 };
+
+    Field field;
+    HashMap<Integer,Player> players;
+    HashMap<Integer,Field> fields;
 
     @Mock
-    private HashMap<Integer,Player> mockPlayers;
+    MonopolyServer mockServer;
     @Mock
-    private HashMap<Integer,Field> mockFields;
-    @Mock
-    private MonopolyServer mockServer;
-    @Mock
-    private Client mockClient;
-    @Mock
-    private Player mockPlayer;
-    @Mock
-    private Game mockGame;
-    @Mock
-    private Field mockField;
-
+    Client mockClient;
 
    @BeforeEach
     void setup(){
         MockitoAnnotations.initMocks(this);
         g = Game.getInstance();
         p = new Player("Test",new Color(),100.00,true);
-
+        fields = new HashMap<>();
     }
 
 
@@ -73,7 +66,23 @@ public class GameTest {
         assertEquals(false,g.addPlayer(p));
         assertEquals(1,g.getPlayers().size());
     }
+    @Test
+    public void advanceAndCollect() throws IOException {
+       for(int i =0; i<3; i++) {
+           field = new Field(1, "Strandbad", "x", mock(Color.class), 200, 2, mock(Player.class), 20, 500, 500, mock(Image.class));
+           fields.put(0, field);
+           g.setFields(fields);
 
+           p.setPosition(i);
+           g.addPlayer(p);
+           g.setCurrentPlayersTurn("Test");
+
+
+           assertThrows(NullPointerException.class, () ->{
+               g.advanceAndCollect("Strandbad");
+           });
+       }
+    }
 
     @Test
     public void testDoActionChance0() throws IOException {
@@ -108,6 +117,8 @@ public class GameTest {
             g.doAction();
         });
     }
+
+
 
 
 }
