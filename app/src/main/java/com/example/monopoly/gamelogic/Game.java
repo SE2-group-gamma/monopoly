@@ -67,10 +67,21 @@ public class Game{
         this.currentPlayersTurn = currentPlayersTurn;
     }
 
+    public void setPlayers(HashMap<Integer, Player> players) {
+        this.players = players;
+    }
+
+    public HashMap<Integer,Field> getFields(){
+        return fields;
+    }
+
+    public void setFields(HashMap<Integer, Field> fields) {
+        this.fields = fields;
+    }
 
     public void doAction() throws IOException {
 
-        int playerID = getPlayerIDByName(currentPlayersTurn);
+        int playerID = getPlayerIDByName(getCurrentPlayersTurn());
 
         //Advance to "Go".
         if (players.get(playerID).getCardID() == R.drawable.chance0 || players.get(playerID).getCardID() == R.drawable.community0) {
@@ -365,8 +376,8 @@ public class Game{
     }
 
     public void transferToPlayerProtocol(int amount) throws IOException {
-        int playerID = getPlayerIDByName(currentPlayersTurn);
-        players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferToPlayer|" + amount + "|" + currentPlayersTurn);
+        int playerID = getPlayerIDByName(getCurrentPlayersTurn());
+        getPlayers().get(playerID).getMyClient().writeToServer("GameBoardUI|transferToPlayer|" + amount + "|" + getCurrentPlayersTurn());
     }
 
     public void transferToBankProtocol(int amount) throws IOException {

@@ -7,14 +7,18 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.monopoly.gamelogic.Bank;
+import com.example.monopoly.gamelogic.ChanceCardCollection;
+import com.example.monopoly.gamelogic.CommunityChestCardCollection;
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.ui.HostGame;
 import com.example.monopoly.ui.UIHandler;
 
 import com.example.monopoly.gamelogic.ChanceCard;
+import com.example.monopoly.ui.viewmodels.CardViewModel;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -326,6 +330,28 @@ public class Client extends Thread {
                     game.getPlayers().get(playerID).setCardID(cardID);
                 }
             }
+            /*if (responseSplit[1].equals("removeCardBroadcast")) {
+                //[Fragment]|removeCard|[CardID]:[CardType]|[senderUserName]
+                int cardID = Integer.parseInt(dataResponseSplit[0]);
+                String cardType = dataResponseSplit[1];
+                synchronized (monopolyServer.getClients()) {
+                    monopolyServer.broadCast("DrawFragment|removeCard|" + cardID + ":" + cardType + "|" + monopolyServer.getClient().getUser().getUsername());
+                }
+            }
+            if (responseSplit[1].equals("removeCard")) {
+                //[Fragment]|removeCard|[CardID]:[CardType]|[senderUserName]
+                int playerID = game.getPlayerIDByName(responseSplit[3]);
+                int cardID = Integer.parseInt(dataResponseSplit[0]);
+                String cardType = dataResponseSplit[1];
+
+                if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
+                if (cardType == "chance"){
+
+                }
+                else{}
+
+                }
+            }*/
 
             if(responseSplit[1].equals("gameStart")){
                 Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(0).getUsername());
