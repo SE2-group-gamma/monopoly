@@ -247,5 +247,92 @@ public class GameTest {
         });
     }
 
+    @Test
+    public void chance11() {
+        Player p11 = new Player("User11",new Color(),100.00,true);
+        p11.setCardID(R.drawable.chance11);
+
+        g.addPlayer(p11);
+        g.setCurrentPlayersTurn("User11");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+
+    @Test
+    public void chance13() {
+        Field field1 = new Field(0, "Jail", "x", mock(Color.class), 200, 2, mock(Player.class), 20, 500, 500, mock(Image.class));
+        fields.put(0, field1);
+        g.setFields(fields);
+
+        Player p12 = new Player("User12",new Color(),100.00,true);
+        p12.setCardID(R.drawable.chance13);
+
+        g.addPlayer(p12);
+        g.setCurrentPlayersTurn("User12");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+
+    @Test
+    public void chance14() {
+        Player p13 = new Player("User13", new Color(), 100.00, true);
+        p13.setCardID(R.drawable.chance14);
+
+        g.addPlayer(p13);
+        g.setCurrentPlayersTurn("User13");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+
+    @Test
+    public void chance15() {
+        Player p14 = new Player("User14", new Color(), 100.00, true);
+        p14.setCardID(R.drawable.chance15);
+
+        g.addPlayer(p14);
+        g.setCurrentPlayersTurn("User14");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void chance17() {
+        Player p15 = new Player("User15", new Color(), 100.00, true);
+        p15.setCardID(R.drawable.chance17);
+
+        g.addPlayer(p15);
+        g.setCurrentPlayersTurn("User15");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+
+    @Test
+    public void chance18() {
+        Player p16 = new Player("User16", new Color(), 100.00, true);
+        p16.setCardID(R.drawable.chance18);
+
+        g.addPlayer(p16);
+        g.setCurrentPlayersTurn("User16");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void chance19() {
+        Player p17 = new Player("User17", new Color(), 100.00, true);
+        p17.setCardID(R.drawable.chance19);
+
+        g.addPlayer(p17);
+        g.setCurrentPlayersTurn("User17");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+
+
 }
 
