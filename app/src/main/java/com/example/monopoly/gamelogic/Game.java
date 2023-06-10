@@ -67,14 +67,6 @@ public class Game{
         this.currentPlayersTurn = currentPlayersTurn;
     }
 
-    public void setPlayers(HashMap<Integer, Player> players) {
-        this.players = players;
-    }
-
-    public HashMap<Integer,Field> getFields(){
-        return fields;
-    }
-
     public void setFields(HashMap<Integer, Field> fields) {
         this.fields = fields;
     }

@@ -68,6 +68,7 @@ public class GameTest {
         assertEquals(false,g.addPlayer(p));
         assertEquals(1,g.getPlayers().size());
     }
+
     @Test
     public void testAdvanceAndCollect() throws IOException {
 
@@ -76,16 +77,14 @@ public class GameTest {
 
         g.setFields(fields);
 
-       for(int i =0; i<3; i++) {
+        p.setPosition(0);
+        g.addPlayer(p);
+        g.setCurrentPlayersTurn("Test");
 
-           p.setPosition(i);
-           g.addPlayer(p);
-           g.setCurrentPlayersTurn("Test");
+        assertThrows(NullPointerException.class, () -> {
+            g.advanceAndCollect("Strandbad");
+        });
 
-           assertThrows(NullPointerException.class, () ->{
-               g.advanceAndCollect("Strandbad");
-           });
-       }
     }
 
     @Test
@@ -482,7 +481,110 @@ public class GameTest {
             g.doAction();
         });
     }
+    @Test
+    public void testcommunity11() {
+        Player p31 = new Player("User31", new Color(), 100.00, true);
+        p31.setCardID(R.drawable.community11);
 
+        g.addPlayer(p31);
+        g.setCurrentPlayersTurn("User31");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void testcommunity12() {
+        Player p32 = new Player("User32", new Color(), 100.00, true);
+        p32.setCardID(R.drawable.community12);
 
+        g.addPlayer(p32);
+        g.setCurrentPlayersTurn("User32");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void testcommunity15() {
+        Player p33 = new Player("User33", new Color(), 100.00, true);
+        p33.setCardID(R.drawable.community15);
+
+        g.addPlayer(p33);
+        g.setCurrentPlayersTurn("User33");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void testcommunity16() {
+        Player p34 = new Player("User34", new Color(), 100.00, true);
+        p34.setCardID(R.drawable.community16);
+
+        g.addPlayer(p34);
+        g.setCurrentPlayersTurn("User34");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void testcommunity17() {
+        Player p35 = new Player("User35", new Color(), 100.00, true);
+        p35.setCardID(R.drawable.community17);
+
+        g.addPlayer(p35);
+        g.setCurrentPlayersTurn("User35");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void testcommunity18() {
+        Player p36 = new Player("User36", new Color(), 100.00, true);
+        p36.setCardID(R.drawable.community18);
+
+        g.addPlayer(p36);
+        g.setCurrentPlayersTurn("User36");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void testcommunity19() {
+        Player p37 = new Player("User37", new Color(), 100.00, true);
+        p37.setCardID(R.drawable.community19);
+
+        g.addPlayer(p37);
+        g.setCurrentPlayersTurn("User37");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+
+    @Test
+    public void testAdvanceAndCollect2() throws IOException {
+        field = new Field(0, "Strandbad", "x", mock(Color.class), 200, 2, mock(Player.class), 20, 500, 500, mock(Image.class));
+        fields.put(0, field);
+        g.setFields(fields);
+        p.setPosition(2);
+        g.addPlayer(p);
+        g.setCurrentPlayersTurn("Test");
+
+        assertThrows(NullPointerException.class, () -> {
+            g.advanceAndCollect("Strandbad");
+        });
+    }
+
+    @Test
+    public void testAdvanceAndCollect3() throws IOException {
+        field = new Field(4, "Strandbad", "x", mock(Color.class), 200, 2, mock(Player.class), 20, 500, 500, mock(Image.class));
+        fields.put(0, field);
+        g.setFields(fields);
+        p.setPosition(2);
+        g.addPlayer(p);
+        g.setCurrentPlayersTurn("Test");
+
+        assertThrows(NullPointerException.class, () -> {
+            g.advanceAndCollect("Strandbad");
+        });
+    }
 }
 
