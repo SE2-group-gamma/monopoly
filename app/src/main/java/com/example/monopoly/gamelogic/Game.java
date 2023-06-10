@@ -148,13 +148,13 @@ public class Game{
 
             int amount;
             Player owner;
-            moveProtocol(incr);
-            if (fields.get(players.get(playerID).getPosition()).getOwner() != null) {
+            if (fields.get(players.get(playerID).getPosition() + incr).getOwner() != null) {
                 amount = fields.get(players.get(playerID).getPosition()).getCost() * 2;
-                owner = fields.get(players.get(playerID).getPosition()).getOwner();
+                owner = fields.get(players.get(playerID).getPosition() + incr).getOwner();
 
                 transferPlayerToPlayerProtocol(owner.getId(), amount);
             }
+            moveProtocol(incr);
             endTurnProtocol();
         }
 

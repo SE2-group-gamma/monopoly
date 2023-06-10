@@ -69,10 +69,12 @@ public class GameTest {
     @Test
     public void testAdvanceAndCollect() throws IOException {
 
+        field = new Field(0, "Strandbad", "x", mock(Color.class), 200, 2, mock(Player.class), 20, 500, 500, mock(Image.class));
+        fields.put(0, field);
+
+        g.setFields(fields);
+
        for(int i =0; i<3; i++) {
-           field = new Field(1, "Strandbad", "x", mock(Color.class), 200, 2, mock(Player.class), 20, 500, 500, mock(Image.class));
-           fields.put(0, field);
-           g.setFields(fields);
 
            p.setPosition(i);
            g.addPlayer(p);
@@ -152,6 +154,94 @@ public class GameTest {
 
         g.addPlayer(p4);
         g.setCurrentPlayersTurn("User4");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void chance4() {
+        Field field1 = new Field(0, "S-Bahn Kärnten", "x", mock(Color.class), 200, 2, mock(Player.class), 20, 500, 500, mock(Image.class));
+        fields.put(0, field1);
+        Field field2 = new Field(1, "S-Bahn Wien", "x", mock(Color.class), 200, 2, mock(Player.class), 20, 500, 500, mock(Image.class));
+        fields.put(1, field2);
+        Field field3 = new Field(2, "S-Bahn Tirol", "x", mock(Color.class), 200, 2, mock(Player.class), 20, 500, 500, mock(Image.class));
+        fields.put(2, field3);
+        Field field4 = new Field(3, "S-Bahn Steiermark", "x", mock(Color.class), 200, 2, mock(Player.class), 20, 500, 500, mock(Image.class));
+        fields.put(3, field4);
+
+        g.setFields(fields);
+
+        System.out.println(fields.size());
+
+        Player p5 = new Player("User5",new Color(),100.00,true);
+        p5.setCardID(R.drawable.chance4);
+        p5.setPosition(14);
+
+        g.addPlayer(p5);
+        g.setCurrentPlayersTurn("User5");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+
+    @Test
+    public void chance5() {
+        Player p6 = new Player("User6",new Color(),100.00,true);
+        p6.setCardID(R.drawable.chance5);
+
+        g.addPlayer(p6);
+        g.setCurrentPlayersTurn("User6");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+
+    @Test
+    public void chance6() {
+        Player p7 = new Player("User7",new Color(),100.00,true);
+        p7.setCardID(R.drawable.chance6);
+
+        g.addPlayer(p7);
+        g.setCurrentPlayersTurn("User7");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+
+    @Test
+    public void chance7() {
+        Player p8 = new Player("User8",new Color(),100.00,true);
+        p8.setCardID(R.drawable.chance7);
+
+        g.addPlayer(p8);
+        g.setCurrentPlayersTurn("User8");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+
+    @Test
+    public void chance9() {
+        Field field1 = new Field(0, "S-Bahn Wien", "x", mock(Color.class), 200, 2, mock(Player.class), 20, 500, 500, mock(Image.class));
+        fields.put(0, field1);
+        g.setFields(fields);
+
+        Player p9 = new Player("User9",new Color(),100.00,true);
+        p9.setCardID(R.drawable.chance9);
+
+        g.addPlayer(p9);
+        g.setCurrentPlayersTurn("User9");
+        assertThrows(NullPointerException.class, () -> {
+            g.doAction();
+        });
+    }
+    @Test
+    public void chance10() {
+        Player p10 = new Player("User10",new Color(),100.00,true);
+        p10.setCardID(R.drawable.chance10);
+
+        g.addPlayer(p10);
+        g.setCurrentPlayersTurn("User10");
         assertThrows(NullPointerException.class, () -> {
             g.doAction();
         });
