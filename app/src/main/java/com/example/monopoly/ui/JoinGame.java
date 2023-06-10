@@ -65,7 +65,7 @@ public class JoinGame extends Fragment {
                 NSD_Client nsd = new NSD_Client();
                 nsd.setIsHost(false);
                 nsd.start(manager);
-                Player player = new Player(user, new Color(), 500.00, true);
+                Player player = new Player(user, new Color(), 1500.00, true);
 
                 while (!nsd.isReady()) {
                     try {

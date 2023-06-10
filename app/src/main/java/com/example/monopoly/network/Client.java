@@ -314,6 +314,15 @@ public class Client extends Thread {
                 }catch (Exception e){
 
                 }
+            } if(responseSplit[1].equals("giveMoney")){
+                int id = game.getPlayerIDByName(responseSplit[3]);
+                Log.d("MoneyPlayer","id von player "+responseSplit[3]);
+                Log.d("MoneyPlayer","client "+this.getUser().getUsername());
+                Player p = game.getPlayers().get(id);
+                int money = Integer.parseInt(dataResponseSplit[0]);
+                double capital = p.getCapital();
+                p.setCapital(capital+money);
+                monopolyServer.broadCast("GameBoardUI|changeCapital|"+responseSplit[2]+"|"+responseSplit[3]);
             }
         } else {
             for (String str: responseSplit) {

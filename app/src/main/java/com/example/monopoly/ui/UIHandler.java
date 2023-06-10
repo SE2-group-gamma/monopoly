@@ -24,6 +24,7 @@ import com.example.monopoly.R;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -58,20 +59,6 @@ public class UIHandler extends Handler {
     double heightRatio;
     double widthRatio;
 
-    double player1X;
-    double player2X;
-    double player3X;
-    double player4X;
-    double player5X;
-    double player6X;
-
-    double player1Y;
-    double player2Y;
-    double player3Y;
-    double player4Y;
-    double player5Y;
-    double player6Y;
-
     double[] playersX = new double[7];
     double[] playersY = new double[7];
     int[] playerGravity = new int[7];
@@ -80,6 +67,7 @@ public class UIHandler extends Handler {
 
     HashMap<Integer, String> playerObjects;
     int[] currentPosition;
+    int currentMoney;
 
     //private boolean uncoverEnabled;
     public UIHandler(Fragment app) {
@@ -87,6 +75,9 @@ public class UIHandler extends Handler {
         playerObjects = new HashMap<>();
         currentPosition = new int[7];
         uiHandlerViewModel = new ViewModelProvider(frag.requireActivity()).get(UIHandlerViewModel.class);
+        if(uiHandlerViewModel.getCurrentMoney().getValue()==null){
+            currentMoney = 1500;
+        }
 
         if(uiHandlerViewModel.getPlayerObjects().getValue()!=null){
             playerObjects = uiHandlerViewModel.getPlayerObjects().getValue();
@@ -98,6 +89,9 @@ public class UIHandler extends Handler {
             playersX = uiHandlerViewModel.getPlayerPositionX().getValue();
             playersY = uiHandlerViewModel.getPlayerPositionY().getValue();
             Log.d("hostPosition","X Pos: "+playersX[1]+"; Y Pos: "+playersY[1]);
+        }
+        if(uiHandlerViewModel.getCurrentMoney().getValue()!=null){
+            currentMoney = uiHandlerViewModel.getCurrentMoney().getValue();
         }
     }
 
@@ -192,6 +186,7 @@ public class UIHandler extends Handler {
                     currentPosition[i]=0;
                 }
                 uiHandlerViewModel.setCurrentPosition(currentPosition);
+                uiHandlerViewModel.setCurrentMoney(currentMoney);
 
                 break;
             case "initializePlayerBottomRight1":
@@ -261,13 +256,21 @@ public class UIHandler extends Handler {
                 }else{
                     restore();
                     Log.d("gameTurnCheck","I restored: "+clientObj.getUser().getUsername());
-
                 }
 
                 break;
             case "displayKey":
                 if (HostGame.key != 0) {
                     ((TextView) this.frag.getActivity().findViewById(R.id.textViewKey)).setText("Game-Key: " + HostGame.key);
+                }
+                break;
+            case "changeCapital":
+                if(clientObj.getUser().getUsername().equals(client)) {
+                    int money = currentMoney + Integer.parseInt(data.split(":")[0]);
+                    uiHandlerViewModel.setCurrentMoney(money);
+                    ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n"+money+"$");
+                    Log.d("MoneyPlayer",""+money);
+                    Log.d("MoneyPlayer",""+client);
                 }
                 break;
             case "movePlayer":
@@ -297,8 +300,18 @@ public class UIHandler extends Handler {
                         currentPosition[playerNumber] = currentPosition[playerNumber] + fieldsToMove;
                         Log.d("--",""+currentPosition[playerNumber]);
                         if(currentPosition[playerNumber] >= 40){
+                            Log.d("playerNumber: ",""+playerNumber);
+
                             currentPosition[playerNumber] = currentPosition[playerNumber]-40;
                             // TODO get starting money
+                           if(playerObjects.get(playerNumber).equals(clientObj.getUser().getUsername())){
+                               Log.d("MoneyPlayer","client = "+client);
+                               try {
+                                   clientObj.writeToServer("GameBoardUI|giveMoney|200:|"+clientObj.getUser().getUsername());
+                               } catch (IOException e) {
+                                   throw new RuntimeException(e);
+                               }
+                           }
                         }
                         Log.d("--",""+currentPosition[playerNumber]);
 
@@ -691,7 +704,9 @@ public class UIHandler extends Handler {
     }
 
     private void restore(){
-        Log.d("client123456","I am: "+clientObj.getUser().getUsername());
+        Log.d("MoneyPlayer","I am: "+clientObj.getUser().getUsername());
+        Log.d("MoneyPlayer","curr money: "+currentMoney);
+        ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n"+currentMoney+"$");
 
         imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
         //layerDrawable = (LayerDrawable) imageView.getDrawable();

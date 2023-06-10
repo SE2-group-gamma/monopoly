@@ -19,6 +19,7 @@ public class UIHandlerViewModel extends ViewModel {
     private final MutableLiveData<Boolean> checkFirst = new MutableLiveData<>(true);
 
     private final MutableLiveData<int[]> playerGravityLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Integer> currentMoney = new MutableLiveData<>();
 
 
     public MutableLiveData<int[]> getPlayerGravityLiveData() {
@@ -54,6 +55,13 @@ public class UIHandlerViewModel extends ViewModel {
     }
     public LiveData<double[]> getPlayerPositionY() {
         return this.playerPositionY;
+    }
+
+    public void setCurrentMoney(int currentMoney){
+        this.currentMoney.setValue(currentMoney);
+    }
+    public LiveData<Integer> getCurrentMoney() {
+        return this.currentMoney;
     }
 
 
