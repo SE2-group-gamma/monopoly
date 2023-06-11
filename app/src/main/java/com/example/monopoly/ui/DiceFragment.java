@@ -37,18 +37,19 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private float lastX, lastY, lastZ;
-    private static final float SHAKE_THRESHOLD = 50;
+    private static final float SHAKE_THRESHOLD = 10;
     private FragmentDiceBinding binding;
     private Dices dices;
     private boolean hasBeenRolled;
     private boolean userSetValue;
     private int flawedValue;
     private DiceViewModel diceViewModel;
+    private ClientViewModel clientViewModel;
 
 
     public DiceFragment() {
         // Required empty public constructor
-        Client.subscribe(this,"DiceFragment");
+        //Client.subscribe(this,"DiceFragment");
     }
 
     /**
@@ -78,6 +79,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         this.hasBeenRolled = false;
         this.userSetValue = false;
         this.diceViewModel = new ViewModelProvider(requireActivity()).get(DiceViewModel.class);
+        this.clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
     }
 
     @Override
@@ -90,6 +92,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             if(hasBeenRolled) {
                 this.diceViewModel.setContinuePressed(true);
                 this.diceViewModel.setDices(dices);
+                this.clientViewModel.getClientData().getValue().getUser().setPosition((this.clientViewModel.getClientData().getValue().getUser().getPosition()+dices.getSum())%40);
                 NavHostFragment.findNavController(this).navigate(R.id.action_DiceFragment_to_GameBoardUI);
             }
         });

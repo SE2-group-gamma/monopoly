@@ -18,6 +18,7 @@ public class Player {
 
     private int totalAssetValue;
 
+    private PlayerMapPosition playerMapPosition;
 
 
     public Player(String username, Color col, double capital, boolean alive) {
@@ -89,6 +90,14 @@ public class Player {
 
     public boolean isInPrison() {
         return inPrison;
+    }
+
+    public void setPlayerMapPosition(PlayerMapPosition playerMapPosition){
+        this.playerMapPosition=playerMapPosition;
+    }
+
+    public PlayerMapPosition getPlayerMapPosition(){
+        return this.playerMapPosition;
     }
 
     public boolean isBroke() {

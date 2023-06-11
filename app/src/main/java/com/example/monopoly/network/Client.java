@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.gamelogic.properties.PropertyStorage;
+import com.example.monopoly.gamelogic.PlayerMapPosition;
 import com.example.monopoly.ui.HostGame;
 import com.example.monopoly.ui.UIHandler;
 
@@ -41,6 +42,7 @@ public class Client extends Thread {
     private MonopolyServer monopolyServer;
     private boolean isHost;
     private int key;
+    boolean onCoolDown = false;
 
     private List<Player> playerList ;
     private List<Player> winnerList;
@@ -54,6 +56,9 @@ public class Client extends Thread {
     private Game game;
     private String cheated;
     public static HashMap<String, UIHandler> handlers;
+    private Timer timer;
+
+    private PropertyStorage propertyStorage;
 
     static {
         handlers = new HashMap<>();
@@ -118,6 +123,7 @@ public class Client extends Thread {
         this.user = user;
         this.msgBuffer = new ArrayList<>();
         this.isHost = isHost;
+        this.propertyStorage = PropertyStorage.getInstance();
         this.playerList = new ArrayList<>();
         this.winnerList = new ArrayList<>();
         this.tempList = new ArrayList<>();
@@ -127,6 +133,7 @@ public class Client extends Thread {
         this.host = host;
         this.port = port;
         this.msgBuffer = new ArrayList<>();
+        this.propertyStorage = PropertyStorage.getInstance();
     }
 
     public void setId(int id) {
@@ -246,10 +253,11 @@ public class Client extends Thread {
                     b.putString("Client", responseSplit[3]);
                 }
             }catch (Exception e){}
-            //b.putSerializable("clientObject",this);
             handleMessage.setData(b);
             handlers.get(responseSplit[0]).sendMessage(handleMessage);      // UI Handler do ur thing
         }
+
+
 
         if (isHost) {
             String[] dataResponseSplit = responseSplit[2].split(":");
@@ -293,6 +301,24 @@ public class Client extends Thread {
 
                 }
             }
+            if(responseSplit[1].equals("initializePlayerBottomRight") && (!onCoolDown)){
+                onCoolDown = true;
+                monopolyServer.broadCast("GameBoardUI|initializePlayerBottomRight1| : |"+responseSplit[3]);
+                Timer cdTimer = new Timer();
+                cdTimer.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                onCoolDown = false;
+                            }
+                        },
+                        300
+                );
+            }
+            if(responseSplit[1].equals("turnEnd")){
+                Log.d("endTurn","end turn test");
+                endTurnPressed();
+            }
             if(responseSplit[1].equals("move")){
                 // TODO sent player to jail after 3 doubles
                 // data: 8:t:f  => increment:cheated:double
@@ -301,12 +327,10 @@ public class Client extends Thread {
                 if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
 
                     game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
-
-                    Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
-                    Log.d("gameturnCurr", "currUser" + responseSplit[3]);
+                    //Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
+                    //Log.d("gameturnCurr", "currUser" + responseSplit[3]);
                     monopolyServer.broadCast("GameBoardUI|movePlayer|"+responseSplit[2]+"|"+responseSplit[3]);      // broadcast with different action to not interfere with game logic
                 }
-
             }//}
 
             if(responseSplit[1].equals("gameStart")){
@@ -321,6 +345,7 @@ public class Client extends Thread {
             }
             if(responseSplit[1].equals("uncover")){         // Only 1 player should be able to uncover, else others will just chime in
                 try{
+                    Log.d("uncover","Who: "+responseSplit[3]);
                     if(this.cheated.equals("t")){       // TODO if cheated punish current player (Reference should be saved in Host)
                         Log.d("Dices","Gschummelt->"+cheated);
                     } else {                                    // TODO if not punish sender
@@ -329,9 +354,46 @@ public class Client extends Thread {
                 }catch (Exception e){
 
                 }
+            } if(responseSplit[1].equals("giveMoney")){
+                int id = game.getPlayerIDByName(responseSplit[3]);
+                Log.d("MoneyPlayer","id von player "+responseSplit[3]);
+                Log.d("MoneyPlayer","client "+this.getUser().getUsername());
+                Player player = game.getPlayers().get(id);
+                int money = Integer.parseInt(dataResponseSplit[0]);
+                Log.d("Money", dataResponseSplit[0]);
+                double capital = player.getCapital();
+                player.setCapital(capital+money);
+                monopolyServer.broadCast("GameBoardUI|changeCapital|"+responseSplit[2]+"|"+responseSplit[3]);
+            } if(responseSplit[1].equals("mapPlayers")){
+                int id = game.getPlayerIDByName(responseSplit[3]);
+                Player player = game.getPlayers().get(id);
+                int posX = Integer.parseInt(dataResponseSplit[0]);
+                String[] dataY = dataResponseSplit[1].split(",");
+                int posY = Integer.parseInt(dataY[0]);
+                int round = Integer.parseInt(dataY[1]);
+                PlayerMapPosition playerMapPosition = new PlayerMapPosition(posX,posY,round);
+                player.setPlayerMapPosition(playerMapPosition);
+                Log.d("mapPlayer","player "+responseSplit[3]);
+                Log.d("mapPlayer","x "+posX);
+                Log.d("mapPlayer","y "+posY);
             }
-            if(responseSplit[1].equals("endTurn")){
-                // TODO next player turn
+            if(responseSplit[1].equals("addHouse")){
+                String fieldName = dataResponseSplit[0];
+                Player player = game.getPlayers().get(game.getPlayerIDByName(responseSplit[3]));
+                propertyStorage.addHouse(fieldName, player);
+                monopolyServer.broadCast("GameBoardUI|updateHouse|" + fieldName + "|" + player.getUsername());
+            }
+            if(responseSplit[1].equals("addHotel")){
+                String fieldName = dataResponseSplit[0];
+                Player player = game.getPlayers().get(game.getPlayerIDByName(responseSplit[3]));
+                propertyStorage.addHotel(fieldName, player);
+                monopolyServer.broadCast("GameBoardUI|updateHotel|" + fieldName + "|" + player.getUsername());
+            }
+            if(responseSplit[1].equals("buyField")){
+                String fieldName = dataResponseSplit[0];
+                Player player = game.getPlayers().get(game.getPlayerIDByName(responseSplit[3]));
+                propertyStorage.buyProperty(fieldName, player);
+                monopolyServer.broadCast("GameBoardUI|updateOwner|" + fieldName + "|" + player.getUsername());
             }
         } else {
             for (String str: responseSplit) {
@@ -365,18 +427,18 @@ public class Client extends Thread {
         }
         game.setCurrentPlayersTurn(game.getPlayers().get(serverTurnCounter).getUsername());
         monopolyServer.broadCast("GameBoardUI|playersTurn|"+game.getPlayers().get(serverTurnCounter).getUsername());
-        Log.d("gameTurnCheck", "Yo hey "+game.getCurrentPlayersTurn());
+        //Log.d("gameTurnCheck", "Yo hey "+game.getCurrentPlayersTurn());
         serverTurnCounter++;
-        Timer timer = new Timer();
+        timer = new Timer();
 
         timer.schedule(
                 new TimerTask() {
                     @Override
                     public void run() {
-                        monopolyServer.broadCast("DiceFragment|exitDiceFragment|:|");   // send exit signal
+                        monopolyServer.broadCast("GameBoardUI|exitDiceFragment|:|");   // send exit signal // crashes if any other fragment is open (only if the dice frag hasn't been opened before)
                     }
                 },
-                30000 - 100
+                15000 - 10
         );
         timer.schedule(
                 new TimerTask() {
@@ -385,12 +447,28 @@ public class Client extends Thread {
                         turnEnd = true;
                     }
                 },
-                30000
+                15000
         );
         if(serverTurnCounter== HostGame.getMonopolyServer().getNumberOfClients()){
             serverTurnCounter=0;
         }
 
+
+    public void endTurnPressed(){
+        monopolyServer.broadCast("GameBoardUI|exitDiceFragment|:|");             // if endTurn is pressed the game will crash if someone is in another fragment
+        //timer.cancel();
+        Timer fragChange = new Timer();
+        fragChange.schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        timer.cancel();
+                        turnProcess();
+                    }
+                },
+                10
+        );
+        //turnProcess();
     }
 
     public void setRanks(int maxPlayers){

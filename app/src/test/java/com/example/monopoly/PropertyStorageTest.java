@@ -62,48 +62,48 @@ public class PropertyStorageTest {
     void addHouseToPropertyTest() {
         buyAllPropertiesOfSameColor();
 
-        assertEquals(1, propertyStorage.addHouse("strandbad"));
-        assertEquals(2, propertyStorage.addHouse("strandbad"));
-        assertEquals(3, propertyStorage.addHouse("strandbad"));
-        assertEquals(4, propertyStorage.addHouse("strandbad"));
+        assertEquals(1, propertyStorage.addHouse("strandbad", player));
+        assertEquals(2, propertyStorage.addHouse("strandbad", player));
+        assertEquals(3, propertyStorage.addHouse("strandbad", player));
+        assertEquals(4, propertyStorage.addHouse("strandbad", player));
         assertThrows(IllegalStateException.class, () -> {
-            propertyStorage.addHouse("strandbad");
+            propertyStorage.addHouse("strandbad", player);
         });
     }
 
     @Test
     void addHouseToWrongFieldTest(){
-        assertThrows(IllegalFieldException.class, () -> {propertyStorage.addHouse("s_bahn_kaernten");});
-        assertThrows(IllegalFieldException.class, () -> {propertyStorage.addHouse("kelag");});
-        assertThrows(IllegalFieldException.class, () -> {propertyStorage.addHouse("abc");});
+        assertThrows(IllegalFieldException.class, () -> {propertyStorage.addHouse("s_bahn_kaernten", player);});
+        assertThrows(IllegalFieldException.class, () -> {propertyStorage.addHouse("kelag", player);});
+        assertThrows(IllegalFieldException.class, () -> {propertyStorage.addHouse("abc", player);});
     }
 
     @Test
     void addHotelToPropertyFieldTest(){
         buyAllHousesOnProperty();
 
-        assertDoesNotThrow(() -> {propertyStorage.addHotel("strandbad");});
+        assertDoesNotThrow(() -> {propertyStorage.addHotel("strandbad", player);});
     }
 
     @Test
     void addHotelOnIllegalFieldTest(){
-        assertThrows(IllegalStateException.class, () -> {propertyStorage.addHotel("strandbad");});
+        assertThrows(IllegalStateException.class, () -> {propertyStorage.addHotel("strandbad", player);});
         propertyStorage.buyProperty("strandbad", player);
-        assertThrows(IllegalStateException.class, () -> {propertyStorage.addHotel("strandbad");});
+        assertThrows(IllegalStateException.class, () -> {propertyStorage.addHotel("strandbad", player);});
         propertyStorage.buyProperty("city_arkaden", player);
-        assertThrows(IllegalStateException.class, () -> {propertyStorage.addHotel("strandbad");});
-        propertyStorage.addHouse("strandbad");
-        assertThrows(IllegalStateException.class, () -> {propertyStorage.addHotel("strandbad");});
-        propertyStorage.addHouse("strandbad");
-        assertThrows(IllegalStateException.class, () -> {propertyStorage.addHotel("strandbad");});
-        propertyStorage.addHouse("strandbad");
-        assertThrows(IllegalStateException.class, () -> {propertyStorage.addHotel("strandbad");});
-        propertyStorage.addHouse("strandbad");
-        assertDoesNotThrow(() -> {propertyStorage.addHotel("strandbad");});
+        assertThrows(IllegalStateException.class, () -> {propertyStorage.addHotel("strandbad", player);});
+        propertyStorage.addHouse("strandbad", player);
+        assertThrows(IllegalStateException.class, () -> {propertyStorage.addHotel("strandbad", player);});
+        propertyStorage.addHouse("strandbad", player);
+        assertThrows(IllegalStateException.class, () -> {propertyStorage.addHotel("strandbad", player);});
+        propertyStorage.addHouse("strandbad", player);
+        assertThrows(IllegalStateException.class, () -> {propertyStorage.addHotel("strandbad", player);});
+        propertyStorage.addHouse("strandbad", player);
+        assertDoesNotThrow(() -> {propertyStorage.addHotel("strandbad", player);});
 
-        assertThrows(IllegalFieldException.class, () -> {propertyStorage.addHotel("kelag");});
-        assertThrows(IllegalFieldException.class, () -> {propertyStorage.addHotel("s_bahn_tirol");});
-        assertThrows(IllegalFieldException.class, () -> {propertyStorage.addHotel("sas");});
+        assertThrows(IllegalFieldException.class, () -> {propertyStorage.addHotel("kelag", player);});
+        assertThrows(IllegalFieldException.class, () -> {propertyStorage.addHotel("s_bahn_tirol", player);});
+        assertThrows(IllegalFieldException.class, () -> {propertyStorage.addHotel("sas", player);});
     }
 
     @Test
@@ -128,13 +128,13 @@ public class PropertyStorageTest {
     @Test
     void rentWithHousesTest(){
         buyAllPropertiesOfSameColor();
-        propertyStorage.addHouse("strandbad");
+        propertyStorage.addHouse("strandbad", player);
         assertEquals(10, propertyStorage.getRentOnPropertyField("strandbad", player2));
-        propertyStorage.addHouse("strandbad");
+        propertyStorage.addHouse("strandbad", player);
         assertEquals(30, propertyStorage.getRentOnPropertyField("strandbad", player2));
-        propertyStorage.addHouse("strandbad");
+        propertyStorage.addHouse("strandbad", player);
         assertEquals(90, propertyStorage.getRentOnPropertyField("strandbad", player2));
-        propertyStorage.addHouse("strandbad");
+        propertyStorage.addHouse("strandbad", player);
         assertEquals(160, propertyStorage.getRentOnPropertyField("strandbad", player2));
     }
 
@@ -171,12 +171,12 @@ public class PropertyStorageTest {
 
     private void buyHotelOnProperty(){
         buyAllHousesOnProperty();
-        propertyStorage.addHotel("strandbad");
+        propertyStorage.addHotel("strandbad", player);
     }
 
     private void buyAllHousesOnProperty(){
         buyAllPropertiesOfSameColor();
         for(int i = 0; i < 4; i++)
-            propertyStorage.addHouse("strandbad");
+            propertyStorage.addHouse("strandbad", player);
     }
 }

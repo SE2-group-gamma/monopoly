@@ -47,4 +47,8 @@ public class ClientPropertyStorage {
         if(!(f instanceof PropertyField)) throw new IllegalFieldException("Field is not a property field");
         ((PropertyField) f).addHotel();
     }
+
+    public boolean hasAllColours(Player owner, PropertyFieldColors color) {
+        return properties.values().stream().filter(x -> x instanceof PropertyField && ((PropertyField) x).getColor() == color).allMatch(x -> x.getOwner() != null && x.getOwner().equals(owner));
+    }
 }

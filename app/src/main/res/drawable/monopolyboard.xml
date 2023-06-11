@@ -4,5 +4,5 @@
     android:id="@+id/player_one"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/car_red_transparent"
+    android:src="@drawable/monopolyboardsmall"
     />
