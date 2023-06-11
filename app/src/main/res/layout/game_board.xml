@@ -19,14 +19,47 @@
             android:src="@drawable/monopolyboardsmall"
             />
     -->
+    <!--
+        <RelativeLayout
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.example.monopoly.ui.TouchImageView
+                android:id="@+id/iv_zoom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/layerlist_for_gameboard"
+                android:clickable="true"
+                android:focusable="true"
+                tools:ignore="MissingConstraints" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/player_one"
+               />
+
+        </RelativeLayout>
+
+     -->
+
+
     <com.example.monopoly.ui.TouchImageView
         android:id="@+id/iv_zoom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/monopolyboardsmall"
+        android:src="@drawable/layerlist_for_gameboard"
         android:clickable="true"
         android:focusable="true"
         tools:ignore="MissingConstraints" />
+
+
+
+
+
 
 
     <Button
@@ -71,7 +104,7 @@
         android:id="@+id/currentMoney"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Current money:\n6750$"
+        android:text="Current money:\n1500$"
         android:textColor="@color/white"
         android:shadowColor="#000000"
         android:shadowDx="4"
