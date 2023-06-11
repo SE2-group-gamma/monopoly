@@ -89,6 +89,7 @@ public class GameTest {
         g.getPlayers().get(0).setCardID(R.drawable.chance0);
         HashMap<Integer, Field> fields = new HashMap<>();
         fields.put(1,mock(Field.class));
+
         assertThrows(NullPointerException.class, () ->{
             g.doAction();
         });

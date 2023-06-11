@@ -138,6 +138,26 @@ public class CommunityChestCardCollection {
     getCommunityChestCardDeck().get(17).setImageId(R.drawable.community17);
     getCommunityChestCardDeck().get(18).setImageId(R.drawable.community18);
     getCommunityChestCardDeck().get(19).setImageId(R.drawable.community19);
+    getAllCommunityChestCards().get(0).setImageId(R.drawable.community0);
+    getAllCommunityChestCards().get(1).setImageId(R.drawable.community1);
+    getAllCommunityChestCards().get(2).setImageId(R.drawable.community2);
+    getAllCommunityChestCards().get(3).setImageId(R.drawable.community3);
+    getAllCommunityChestCards().get(4).setImageId(R.drawable.community4);
+    getAllCommunityChestCards().get(5).setImageId(R.drawable.community5);
+    getAllCommunityChestCards().get(6).setImageId(R.drawable.community6);
+    getAllCommunityChestCards().get(7).setImageId(R.drawable.community7);
+    getAllCommunityChestCards().get(8).setImageId(R.drawable.community8);
+    getAllCommunityChestCards().get(9).setImageId(R.drawable.community9);
+    getAllCommunityChestCards().get(10).setImageId(R.drawable.community10);
+    getAllCommunityChestCards().get(11).setImageId(R.drawable.community11);
+    getAllCommunityChestCards().get(12).setImageId(R.drawable.community12);
+    getAllCommunityChestCards().get(13).setImageId(R.drawable.community13);
+    getAllCommunityChestCards().get(14).setImageId(R.drawable.community14);
+    getAllCommunityChestCards().get(15).setImageId(R.drawable.community15);
+    getAllCommunityChestCards().get(16).setImageId(R.drawable.community16);
+    getAllCommunityChestCards().get(17).setImageId(R.drawable.community17);
+    getAllCommunityChestCards().get(18).setImageId(R.drawable.community18);
+    getCommunityChestCardDeck().get(19).setImageId(R.drawable.community19);
 }
 
     public void addToAllCommunityChestCards(CommunityChestCard card) {

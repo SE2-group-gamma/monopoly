@@ -1,5 +1,6 @@
 package com.example.monopoly.network;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
@@ -8,13 +9,17 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.monopoly.gamelogic.Bank;
 import com.example.monopoly.gamelogic.ChanceCardCollection;
+import com.example.monopoly.gamelogic.CommunityChestCard;
 import com.example.monopoly.gamelogic.CommunityChestCardCollection;
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
+import com.example.monopoly.ui.DrawCardFragment;
 import com.example.monopoly.ui.HostGame;
+import com.example.monopoly.ui.MainActivity;
 import com.example.monopoly.ui.UIHandler;
 
 import com.example.monopoly.gamelogic.ChanceCard;
@@ -332,7 +337,7 @@ public class Client extends Thread {
                 }
             }
             if (responseSplit[1].equals("removeCardBroadcast")) {
-                //[Fragment]|removeCard|[CardID]:[CardType]|[senderUserName]
+                //[Fragment]|removeCardBroadcast|[CardID]:[CardType]|[senderUserName]
                 int cardID = Integer.parseInt(dataResponseSplit[0]);
                 String cardType = dataResponseSplit[1];
                 synchronized (monopolyServer.getClients()) {
@@ -379,15 +384,21 @@ public class Client extends Thread {
             }
             if (responseSplit[1].equals("removeCard")) {
                 //[Fragment]|removeCard|[CardID]:[CardType]|[senderUserName]
+
+                Context appContext = DrawCardFragment.getAppContext();
+                cardViewModel = new ViewModelProvider((ViewModelStoreOwner) appContext).get(CardViewModel.class);
+
                 int cardID = Integer.parseInt(dataResponseSplit[0]);
                 String cardType = dataResponseSplit[1];
                 if (cardType == "chance") {
-                    if (cardViewModel.getChanceCards().getValue().getChanceCardDeck().get(cardID) != null) {
+                    ChanceCard card = cardViewModel.getChanceCards().getValue().getAllChanceCards().get(cardID);
+                    if (cardViewModel.getChanceCards().getValue().getChanceCardDeck().contains(card)) {
                         cardViewModel.getChanceCards().getValue().getChanceCardDeck().
                                 remove(cardViewModel.getChanceCards().getValue().getChanceCardDeck().get(cardID));
                     }
                 } else if (cardType == "community") {
-                    if (cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().get(cardID) != null) {
+                    CommunityChestCard card = cardViewModel.getCommunityCards().getValue().getAllCommunityChestCards().get(cardID);
+                    if (cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().contains(card)) {
                         cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().
                                 remove(cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().get(cardID));
                     }

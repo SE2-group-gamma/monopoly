@@ -1,5 +1,6 @@
 package com.example.monopoly.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +28,8 @@ public class DrawCardFragment extends Fragment {
     private CardViewModel cardViewModel;
     private Game game = Game.getInstance();
 
+    public static Context context;
+
 
     public DrawCardFragment() {
         super(R.layout.fragment_drawcard);
@@ -40,7 +43,7 @@ public class DrawCardFragment extends Fragment {
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
         this.chanceCards = cardViewModel.getChanceCards().getValue();
         this.communityCards = cardViewModel.getCommunityCards().getValue();
-
+        context = getAppContext();
     }
 
     @Override
@@ -86,22 +89,24 @@ public class DrawCardFragment extends Fragment {
         int index = chanceCards.drawFromDeck().getId();
         int cardId = chanceCards.getChanceCardDeck().get(index).getImageId();
         binding.ImageCard.setImageResource(cardId);
-        //game.doAction();
         game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
                 "GameBoardUI|setCard|" + cardId + "|" + game.getCurrentPlayersTurn());
 
         game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
-                "DrawFragment|removeCard|" + cardId + ":chance|" + game.getCurrentPlayersTurn());
+                "DrawFragment|removeCardBroadcast|" + cardId + ":chance|" + game.getCurrentPlayersTurn());
     }
 
     private void returnCommunityChestCard() throws IOException {
         int index = communityCards.drawFromDeck().getId();
         int cardId = communityCards.getCommunityChestCardDeck().get(index).getImageId();
         binding.ImageCard.setImageResource(cardId);
-        //game.doAction();
         game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
                 "GameBoardUI|setCard|" + cardId + "|" + game.getCurrentPlayersTurn());
         game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
-                "DrawFragment|removeCard|" + cardId + ":community|" + game.getCurrentPlayersTurn());
+                "DrawFragment|removeCardBroadcast|" + cardId + ":community|" + game.getCurrentPlayersTurn());
+    }
+
+    public static Context getAppContext() {
+        return context;
     }
 }
