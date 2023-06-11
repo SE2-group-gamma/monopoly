@@ -17,6 +17,7 @@ import com.example.monopoly.gamelogic.CommunityChestCardCollection;
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.ui.DrawCardFragment;
+import com.example.monopoly.gamelogic.PlayerMapPosition;
 import com.example.monopoly.ui.HostGame;
 import com.example.monopoly.ui.MainActivity;
 import com.example.monopoly.ui.UIHandler;
@@ -384,6 +385,27 @@ public class Client extends Thread {
                 }catch (Exception e){
 
                 }
+            } if(responseSplit[1].equals("giveMoney")){
+                int id = game.getPlayerIDByName(responseSplit[3]);
+                Log.d("MoneyPlayer","id von player "+responseSplit[3]);
+                Log.d("MoneyPlayer","client "+this.getUser().getUsername());
+                Player player = game.getPlayers().get(id);
+                int money = Integer.parseInt(dataResponseSplit[0]);
+                double capital = player.getCapital();
+                player.setCapital(capital+money);
+                monopolyServer.broadCast("GameBoardUI|changeCapital|"+responseSplit[2]+"|"+responseSplit[3]);
+            } if(responseSplit[1].equals("mapPlayers")){
+                int id = game.getPlayerIDByName(responseSplit[3]);
+                Player player = game.getPlayers().get(id);
+                int posX = Integer.parseInt(dataResponseSplit[0]);
+                String[] dataY = dataResponseSplit[1].split(",");
+                int posY = Integer.parseInt(dataY[0]);
+                int round = Integer.parseInt(dataY[1]);
+                PlayerMapPosition playerMapPosition = new PlayerMapPosition(posX,posY,round);
+                player.setPlayerMapPosition(playerMapPosition);
+                Log.d("mapPlayer","player "+responseSplit[3]);
+                Log.d("mapPlayer","x "+posX);
+                Log.d("mapPlayer","y "+posY);
             }
             if(responseSplit[1].equals("endTurn")){
                 // TODO next player turn

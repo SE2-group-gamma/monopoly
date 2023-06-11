@@ -156,7 +156,7 @@ public class HostGame extends Fragment {
                 Log.d("SocketConn","nsd");
 
 
-                Player player = new Player(user, new Color(),500.00,true);
+                Player player = new Player(user, new Color(),1500.00,true);
 
 
                 //Client c = new Client(null,0,player);
