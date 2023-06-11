@@ -291,9 +291,11 @@ public class UIHandler extends Handler {
                 }
                 break;
             case "uncoverUsed":
-                this.frag.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
-                this.frag.getActivity().findViewById(R.id.uncover).setEnabled(false);
                 gameBoardUIViewModel.setUncoverEnabled(false);
+                if(this.frag.getActivity().findViewById(R.id.uncover)!=null) {
+                    this.frag.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
+                    this.frag.getActivity().findViewById(R.id.uncover).setEnabled(false);
+                }
                 Log.d("uncover","uncoverUsed Broadcast! => disabled");
                 break;
             case "movePlayer":
