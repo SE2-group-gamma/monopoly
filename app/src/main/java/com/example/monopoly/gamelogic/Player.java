@@ -13,7 +13,7 @@ public class Player {
     private Client myClient;        //Reference to the players client
     private int id;
     private int position;
-
+    private PlayerMapPosition playerMapPosition;
 
 
     public Player(String username, Color col, double capital, boolean alive) {
@@ -83,6 +83,14 @@ public class Player {
 
     public boolean isInPrison() {
         return inPrison;
+    }
+
+    public void setPlayerMapPosition(PlayerMapPosition playerMapPosition){
+        this.playerMapPosition=playerMapPosition;
+    }
+
+    public PlayerMapPosition getPlayerMapPosition(){
+        return this.playerMapPosition;
     }
 
     public void transferMoneyPlayerToPlayer(Player sender, Player receiver, double amount){

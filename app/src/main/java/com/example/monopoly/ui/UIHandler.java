@@ -21,6 +21,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
+import com.example.monopoly.gamelogic.PlayerMapPosition;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 
@@ -53,6 +54,8 @@ public class UIHandler extends Handler {
     public int player4 = 4;
     public int player5 = 5;
     public int player6 = 6;
+
+    PlayerMapPosition playerMapPosition;
 
     ImageView imageView;
     LayerDrawable layerDrawable;
@@ -182,7 +185,7 @@ public class UIHandler extends Handler {
                         .navigate(R.id.action_JoinGame_to_GameBoard, bundle);
 
                 uiHandlerViewModel.setPlayerObjects(playerObjects);
-                for (int i = 1; i < 6; i++) {
+                for (int i = 1; i <= 6; i++) {
                     currentPosition[i]=0;
                 }
                 uiHandlerViewModel.setCurrentPosition(currentPosition);
@@ -763,6 +766,19 @@ public class UIHandler extends Handler {
 
         //imageView.setImageDrawable(this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard));
         imageView.setImageDrawable(layerDrawable);
+
+        try {
+
+                for (int i = 1; i <= 6; i++) {
+                    if (clientObj.getUser().getId()==1) {
+                        clientObj.writeToServer("GameBoardUI|mapPlayers|" + (int) playersX[i] + ":" + (int) playersY[i] + "," + 1 + "|" + clientObj.getUser().getUsername());
+                    }
+                }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
 
         //Log.d("hostPosition","Draw Host at X: "+ layerDrawable.getLayerInsetRight(1));
         //Log.d("hostPosition","Draw Host at Y: "+ layerDrawable.getLayerInsetLeft(1));
