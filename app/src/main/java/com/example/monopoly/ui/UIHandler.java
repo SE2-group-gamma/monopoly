@@ -472,7 +472,7 @@ public class UIHandler extends Handler {
                 break;
             case "updateOwner":
                 if(!clientObj.getUser().getUsername().equals(client))
-                    ClientPropertyStorage.getInstance().updateOwner(data, new Player(client, Color.valueOf(Color.BLACK), 0, true));
+                    ClientPropertyStorage.getInstance().updateOwner(data, new Player(client, new Color(), 0, true));
                 break;
         }
     }
