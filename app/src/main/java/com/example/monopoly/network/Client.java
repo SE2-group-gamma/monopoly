@@ -48,6 +48,7 @@ public class Client extends Thread {
     private String cheated;
     public static HashMap<String, UIHandler> handlers;
     private Timer timer;
+    private String lastPlayerMoved;
 
     static {
         handlers = new HashMap<>();
@@ -154,6 +155,7 @@ public class Client extends Thread {
     public void run() {
         try {
             this.cheated = "f";
+            this.lastPlayerMoved = "";
             //Network Protocol: [Fragment Name]|[Action]|[Data]
             //Could also use OP-Codes
             //New Protocoll: Fragment|action|data:additionalData|sender
@@ -289,9 +291,11 @@ public class Client extends Thread {
             if(responseSplit[1].equals("move")){
                 // TODO sent player to jail after 3 doubles
                 // data: 8:t:f  => increment:cheated:double
-                cheated = dataResponseSplit[1];
                 int tempID = game.getPlayerIDByName(responseSplit[3]);
                 if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
+                    this.cheated = dataResponseSplit[1];
+                    this.lastPlayerMoved = responseSplit[3];
+                    Log.d("uncover","Player moved: "+this.lastPlayerMoved);
                     game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
                     //Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
                     //Log.d("gameturnCurr", "currUser" + responseSplit[3]);
@@ -304,13 +308,33 @@ public class Client extends Thread {
                 //Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(1).getUsername());
                 turnProcess();
             }
-            if(responseSplit[1].equals("uncover")){         // Only 1 player should be able to uncover, else others will just chime in
+            if(responseSplit[1].equals("uncover") && !(this.lastPlayerMoved.isEmpty()) && !(responseSplit[3].equals(this.lastPlayerMoved))){         // player cant punish himself, or no player
                 try{
-                    Log.d("uncover","Who: "+responseSplit[3]);
-                    if(this.cheated.equals("t")){       // TODO if cheated punish current player (Reference should be saved in Host)
-                        Log.d("Dices","Gschummelt->"+cheated);
-                    } else {                                    // TODO if not punish sender
-                        Log.d("Dices","Ois OK->"+cheated);
+
+                    monopolyServer.broadCast("GameBoardUI|uncoverUsed|:|"+responseSplit[3]);
+
+                    int idPunisher = game.getPlayerIDByName(responseSplit[3]);  //sender
+                    Player punisher = game.getPlayers().get(idPunisher);
+
+                    int idPunished = game.getPlayerIDByName(this.lastPlayerMoved);  //last moved player
+                    Player punished = game.getPlayers().get(idPunished);
+
+                    if(this.cheated.equals("t")){       // punish last moved player
+                        Log.d("uncover","User: "+this.lastPlayerMoved+" got punished by "+responseSplit[3]);
+
+                        punished.setCapital(punished.getCapital()-200);
+                        monopolyServer.broadCast("GameBoardUI|changeCapital|-200|"+this.lastPlayerMoved);
+
+                        punisher.setCapital(punisher.getCapital()+200);
+                        monopolyServer.broadCast("GameBoardUI|changeCapital|200|"+responseSplit[3]);
+                    } else {                                    // punish sender
+                        Log.d("uncover","User: "+responseSplit[3]+" failed to punish "+this.lastPlayerMoved);
+
+                        punished.setCapital(punished.getCapital()+200);
+                        monopolyServer.broadCast("GameBoardUI|changeCapital|200|"+this.lastPlayerMoved);
+
+                        punisher.setCapital(punisher.getCapital()-200);
+                        monopolyServer.broadCast("GameBoardUI|changeCapital|-200|"+responseSplit[3]);
                     }
                 }catch (Exception e){
 

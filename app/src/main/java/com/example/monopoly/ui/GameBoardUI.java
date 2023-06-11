@@ -82,9 +82,11 @@ public class GameBoardUI extends Fragment {
             if (gameBoardUIViewModel.getUncoverEnabled().getValue()) {
                 this.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
                 this.getActivity().findViewById(R.id.uncover).setEnabled(true);
+                Log.d("uncover","Uncover Enabled restored");
             } else {
                 this.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
                 this.getActivity().findViewById(R.id.uncover).setEnabled(false);
+                Log.d("uncover","Uncover Disabled restored");
             }
             if(gameBoardUIViewModel.getThrowDiceEnabled().getValue()){
                 this.getActivity().findViewById(R.id.throwdice).setAlpha(1.0f);
