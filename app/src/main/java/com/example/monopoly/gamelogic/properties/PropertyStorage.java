@@ -1,6 +1,5 @@
 package com.example.monopoly.gamelogic.properties;
 
-import com.example.monopoly.R;
 import com.example.monopoly.gamelogic.Player;
 
 import java.util.HashMap;
@@ -92,4 +91,23 @@ public class PropertyStorage {
     public Player getOwner(String propertyId){
         return properties.get(propertyId).getOwner();
     }
+
+
+    public int getTotalAssets(Player player) {
+        int totalValue = 0;
+
+        for(Field field : properties.values()) {
+            if(field.getOwner() != null && field.getOwner().equals(player)) {
+                totalValue += field.getPrice();
+                if(field instanceof PropertyField) {
+                    PropertyField propertyField = (PropertyField) field;
+                    int numOfHouses = propertyField.getNumOfHouses();
+                    boolean hasHotel = propertyField.hasHotel();
+                    totalValue += (numOfHouses * propertyField.getRent().getPriceHouseOrHotel()) + (hasHotel ? propertyField.getRent().getPriceHouseOrHotel() : 0);
+                }
+            }
+        }
+        return totalValue;
+    }
+
 }

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
+import com.example.monopoly.gamelogic.properties.PropertyStorage;
 import com.example.monopoly.ui.HostGame;
 import com.example.monopoly.ui.UIHandler;
 
@@ -19,7 +20,10 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -38,9 +42,14 @@ public class Client extends Thread {
     private boolean isHost;
     private int key;
 
+    private List<Player> playerList ;
+    private List<Player> winnerList;
+    private List<Player> tempList;
+
     private int serverTurnCounter = 0;
 
     private boolean turnEnd =false;
+
 
     private Game game;
     private String cheated;
@@ -50,12 +59,26 @@ public class Client extends Thread {
         handlers = new HashMap<>();
     }
 
+    private boolean gameover=false;
+
+    private boolean gameStart=false;
+
+    private boolean gamerank=true;
+
     public MonopolyServer getMonopolyServer() {
         return monopolyServer;
     }
 
     public void setMonopolyServer(MonopolyServer monopolyServer) {
         this.monopolyServer = monopolyServer;
+    }
+
+    public boolean isGameover() {
+        return gameover;
+    }
+
+    public void setGameover(boolean gameover) {
+        this.gameover = gameover;
     }
 
     public InetAddress getHost() {
@@ -95,6 +118,9 @@ public class Client extends Thread {
         this.user = user;
         this.msgBuffer = new ArrayList<>();
         this.isHost = isHost;
+        this.playerList = new ArrayList<>();
+        this.winnerList = new ArrayList<>();
+        this.tempList = new ArrayList<>();
     }
 
     public Client(InetAddress host, int port, boolean isHost) {
@@ -194,6 +220,9 @@ public class Client extends Thread {
                 if(turnEnd){
                     turnProcess();
                 }
+                if(gameStart==true) {
+                    setRanks(HostGame.getPlayerCount());
+                }
             }
 
         } catch (IOException e) {
@@ -270,17 +299,25 @@ public class Client extends Thread {
                 cheated = dataResponseSplit[1];
                 int tempID = game.getPlayerIDByName(responseSplit[3]);
                 if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
+
                     game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
+
                     Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
                     Log.d("gameturnCurr", "currUser" + responseSplit[3]);
                     monopolyServer.broadCast("GameBoardUI|movePlayer|"+responseSplit[2]+"|"+responseSplit[3]);      // broadcast with different action to not interfere with game logic
                 }
+
             }//}
 
             if(responseSplit[1].equals("gameStart")){
                 Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(0).getUsername());
                 //Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(1).getUsername());
                 turnProcess();
+
+
+                monopolyServer.broadCast("GameBoardUI|setStartTime|"+HostGame.getMaxTimeMin()*60000);
+                this.playerList = new ArrayList<>(game.getPlayers().values());
+                this.gameStart=true;
             }
             if(responseSplit[1].equals("uncover")){         // Only 1 player should be able to uncover, else others will just chime in
                 try{
@@ -320,6 +357,12 @@ public class Client extends Thread {
 
     public void turnProcess(){
         turnEnd = false;
+        while(game.getPlayers().get(serverTurnCounter).isBroke()==true){
+            serverTurnCounter++;
+            if(serverTurnCounter> HostGame.getMonopolyServer().getNumberOfClients()){
+                serverTurnCounter=0;
+            }
+        }
         game.setCurrentPlayersTurn(game.getPlayers().get(serverTurnCounter).getUsername());
         monopolyServer.broadCast("GameBoardUI|playersTurn|"+game.getPlayers().get(serverTurnCounter).getUsername());
         Log.d("gameTurnCheck", "Yo hey "+game.getCurrentPlayersTurn());
@@ -347,6 +390,48 @@ public class Client extends Thread {
         if(serverTurnCounter== HostGame.getMonopolyServer().getNumberOfClients()){
             serverTurnCounter=0;
         }
+
+    }
+
+    public void setRanks(int maxPlayers){
+
+        int revCounter = maxPlayers;
+            for(Player player: playerList){
+                if(player.getCapital()<0&&player.isBroke()==false){
+                    player.setBroke(true);
+                    winnerList.add(player);
+                    if(winnerList.size()==maxPlayers){
+                        this.gameover=true;
+                    }
+
+                    monopolyServer.broadCast("GameBoardUI|playerBroke|"+player.getUsername());
+                }
+            }
+
+            if(this.gameover==true&&this.gamerank==true){
+                for(Player player: playerList){
+                    if(player.isBroke()==false){
+                        player.setTotalAssetValue(PropertyStorage.getInstance().getTotalAssets(player));
+                        tempList.add(player);
+                    }
+                }
+                Collections.sort(tempList, new Comparator<Player>() {
+                    public int compare(Player p1, Player p2) {
+                        return Double.compare(p1.getTotalAssetValue(), p2.getTotalAssetValue());
+                    }
+                });
+                winnerList.addAll(tempList);
+                this.gamerank=false;
+
+                for(Player winners: winnerList){
+                    monopolyServer.broadCast("EndGameFragment|setWinners"+revCounter+"|"+winners.getUsername());
+                    revCounter--;
+                }
+                monopolyServer.broadCast("GameBoardUI|endFrag");
+            }
+
+
+
 
     }
 

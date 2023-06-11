@@ -4,13 +4,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.monopoly.network.Client;
-import com.example.monopoly.ui.GameBoardUI;
-
 public class GameBoardUIViewModel extends ViewModel {
     private final MutableLiveData<Boolean> uncover = new MutableLiveData<>();
     private final MutableLiveData<Boolean> throwDice = new MutableLiveData<>();
     private final MutableLiveData<String> currentPlayer = new MutableLiveData<>();
+
+    private final MutableLiveData<String> currentMoney = new MutableLiveData<>();
+
+    private final MutableLiveData<String> currentTime = new MutableLiveData<>();
 
 
     public void setUncoverEnabled(boolean enabled){
@@ -24,5 +25,20 @@ public class GameBoardUIViewModel extends ViewModel {
     }
     public LiveData<String> getCurrentPlayer() {
         return this.currentPlayer;
+    }
+
+    public void setCurrentMoney(String currentMoney){
+        this.currentMoney.setValue(currentMoney);
+    }
+    public LiveData<String> getCurrentMoney() {
+        return this.currentMoney;
+    }
+
+    public MutableLiveData<String> getCurrentTime() {
+        return currentTime;
+    }
+
+    public void setCurrentTime(String currentTime){
+        this.currentTime.setValue(currentTime);
     }
 }

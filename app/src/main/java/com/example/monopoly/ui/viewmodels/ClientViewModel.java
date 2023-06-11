@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.monopoly.gamelogic.Dices;
 import com.example.monopoly.network.Client;
 
 public class ClientViewModel extends ViewModel {
@@ -16,4 +15,6 @@ public class ClientViewModel extends ViewModel {
     public LiveData<Client> getClientData() {
         return this.client;
     }
+
+
 }

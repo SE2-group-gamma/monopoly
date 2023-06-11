@@ -39,7 +39,9 @@ public class HostGame extends Fragment {
     private ClientViewModel clientViewModel;
     private static Game game;
 
+    private static int maxTimeMin;
 
+    private static int playerCount;
 
     @Override
     public View onCreateView(
@@ -57,6 +59,22 @@ public class HostGame extends Fragment {
 
     public static Game getGame() {
         return game;
+    }
+
+    public static int getMaxTimeMin() {
+        return maxTimeMin;
+    }
+
+    public static void setMaxTimeMin(int maxTimeMin) {
+        HostGame.maxTimeMin = maxTimeMin;
+    }
+
+    public static int getPlayerCount() {
+        return playerCount;
+    }
+
+    public static void setPlayerCount(int playerCount) {
+        HostGame.playerCount = playerCount;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -102,6 +120,8 @@ public class HostGame extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
+
+
         });
 
         binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(HostGame.this)
@@ -111,8 +131,8 @@ public class HostGame extends Fragment {
 
             String user = binding.userInput.getText().toString();
             String lobby = binding.lobbyInput.getText().toString();
-            int playerCount = binding.seekBar.getProgress()+2;
-            int maxTimeMin = binding.seekBar2.getProgress();
+            playerCount = binding.seekBar.getProgress()+2;
+            maxTimeMin = (binding.seekBar2.getProgress()*5)+10;
             Log.d("MaxTimeCheck", "Look here !!"+maxTimeMin);
             if(user.isEmpty() && lobby.isEmpty()){
                 binding.userInput.setError("No Input");

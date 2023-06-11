@@ -2,6 +2,7 @@ package com.example.monopoly.ui;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -10,17 +11,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
-import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
-
-import java.util.Objects;
 
 public class UIHandler extends Handler {
     private Fragment frag;
@@ -32,6 +30,8 @@ public class UIHandler extends Handler {
     private ClientViewModel clientViewModel;
     private GameBoardUIViewModel gameBoardUIViewModel;
 
+
+
     //private boolean uncoverEnabled;
     public UIHandler(Fragment app) {
         this.frag = app;
@@ -41,6 +41,17 @@ public class UIHandler extends Handler {
     public void handleMessage(@NonNull Message msg) {
         clientViewModel = new ViewModelProvider(frag.requireActivity()).get(ClientViewModel.class);
         gameBoardUIViewModel = new ViewModelProvider(frag.requireActivity()).get(GameBoardUIViewModel.class);   // GameBoardUI state
+
+
+        if(gameBoardUIViewModel.getCurrentMoney().getValue()!=null){
+            ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText(gameBoardUIViewModel.getCurrentMoney().getValue());
+        }
+
+        if(gameBoardUIViewModel.getCurrentTime().getValue()!=null){
+            ((TextView) this.frag.getActivity().findViewById(R.id.time)).setText(gameBoardUIViewModel.getCurrentTime().getValue());
+        }
+
+
 
         this.client = clientViewModel.getClientData().getValue();
         super.handleMessage(msg);
@@ -165,6 +176,56 @@ public class UIHandler extends Handler {
                     //Thread.sleep(1000);
 
                 break;
+
+            case "setStartTime":
+                startCountUpTimer(Long.parseLong(data), this.frag.getActivity());
+                break;
+
+            case"setWinners6":
+                ((TextView)this.frag.getActivity().findViewById(R.id.w6)).setText(data);
+                this.frag.getActivity().findViewById(R.id.w6).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.bar6).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.p6).setEnabled(true);
+                break;
+
+            case"setWinners5":
+                ((TextView)this.frag.getActivity().findViewById(R.id.w5)).setText(data);
+                this.frag.getActivity().findViewById(R.id.w5).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.bar5).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.p5).setEnabled(true);
+                break;
+
+            case"setWinners4":
+                ((TextView)this.frag.getActivity().findViewById(R.id.w4)).setText(data);
+                this.frag.getActivity().findViewById(R.id.w4).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.bar4).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.p4).setEnabled(true);
+                break;
+
+            case"setWinners3":
+                ((TextView)this.frag.getActivity().findViewById(R.id.w3)).setText(data);
+                this.frag.getActivity().findViewById(R.id.w3).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.bar3).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.p3).setEnabled(true);
+                break;
+
+            case"setWinners2":
+                ((TextView)this.frag.getActivity().findViewById(R.id.w2)).setText(data);
+                this.frag.getActivity().findViewById(R.id.w2).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.bar2).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.p2).setEnabled(true);
+                break;
+
+            case"setWinners1":
+                ((TextView)this.frag.getActivity().findViewById(R.id.w1)).setText(data);
+                this.frag.getActivity().findViewById(R.id.w1).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.bar1).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.p1).setEnabled(true);
+                break;
+
+            case"endFrag":
+                NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_EndGameFragment);
+                break;
         }
 
         //Toast.makeText(this.frag.getActivity(), msg1, Toast.LENGTH_LONG).show();
@@ -178,4 +239,52 @@ public class UIHandler extends Handler {
             this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(false);
         }
     }
+
+    public void startCountUpTimer(long endTime, FragmentActivity activity) {
+        final Handler handler = new Handler(Looper.getMainLooper());
+        final long[] currentTime = {0};
+
+        long totalEndTimeSeconds = endTime / 1000;
+        final long endMinutes = totalEndTimeSeconds / 60;
+        final long endSeconds = totalEndTimeSeconds % 60;
+
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final TextView timerTextView = activity.findViewById(R.id.time);
+
+                        long totalSeconds = currentTime[0];
+                        long minutes = totalSeconds / 60;
+                        long seconds = totalSeconds % 60;
+
+                        String time = String.format("%02d:%02d | %02d:%02d", minutes, seconds, endMinutes, endSeconds);
+                        gameBoardUIViewModel.setCurrentTime(time);
+                        if(timerTextView!=null)
+                        {
+                            timerTextView.setText(gameBoardUIViewModel.getCurrentTime().getValue());
+                        }
+
+                        if (currentTime[0] < endTime / 1000) {
+                            currentTime[0]++;
+                            handler.postDelayed(this, 1000);
+                        } else {
+                            handler.removeCallbacks(this);
+                        }
+
+                        if(HostGame.getMonopolyServer()!=null){
+                        if(HostGame.getMonopolyServer().getClient().isHost()==true&&minutes==endMinutes&&seconds==endSeconds){
+                            HostGame.getMonopolyServer().getClient().setGameover(true);
+                        }
+                        }
+                    }
+                });
+            }
+        };
+
+        handler.post(runnable);
+    }
+
 }

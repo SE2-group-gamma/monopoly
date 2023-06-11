@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/background"
+        android:scaleType="centerCrop"
+        android:src="@drawable/mybg" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center|bottom"
+        android:orientation="horizontal">
+
+        <!-- Podium Positions -->
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Winner 6"
+                android:id="@+id/w6"
+                android:visibility="invisible"
+                android:textStyle="bold"
+                android:textColor="@color/goldColor"
+                android:textSize="15sp"/>
+            <FrameLayout
+                android:layout_width="60dp"
+                android:layout_height="30dp">
+                <View
+                    android:id="@+id/bar6"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bar_background" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="6th"
+                    android:visibility="invisible"
+                    android:id="@+id/p6"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- Bar 2 -->
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Winner 4"
+                android:visibility="invisible"
+                android:id="@+id/w4"
+                android:textStyle="bold"
+                android:textColor="@color/goldColor"
+                android:textSize="15sp"/>
+            <FrameLayout
+                android:layout_width="60dp"
+                android:layout_height="80dp">
+                <View
+                    android:id="@+id/bar4"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bar_background" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="4th"
+                    android:visibility="invisible"
+                    android:id="@+id/p4"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- Bar 3 -->
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Winner 2"
+                android:visibility="invisible"
+                android:id="@+id/w2"
+                android:textStyle="bold"
+                android:textColor="@color/goldColor"
+                android:textSize="15sp"/>
+            <FrameLayout
+                android:layout_width="60dp"
+                android:layout_height="140dp">
+                <View
+                    android:id="@+id/bar2"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bar_background" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="2nd"
+                    android:visibility="invisible"
+                    android:id="@+id/p2"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- Bar 4 -->
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Winner 1"
+                android:visibility="invisible"
+                android:id="@+id/w1"
+                android:textStyle="bold"
+                android:textColor="@color/goldColor"
+                android:textSize="15sp"/>
+            <FrameLayout
+                android:layout_width="60dp"
+                android:layout_height="170dp">
+                <View
+                    android:id="@+id/bar1"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bar_background" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1st"
+                    android:visibility="invisible"
+                    android:id="@+id/p1"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- Bar 5 -->
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Winner 3"
+                android:visibility="invisible"
+                android:id="@+id/w3"
+                android:textStyle="bold"
+                android:textColor="@color/goldColor"
+                android:textSize="15sp"/>
+            <FrameLayout
+                android:layout_width="60dp"
+                android:layout_height="110dp">
+                <View
+                    android:id="@+id/bar3"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bar_background" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="3rd"
+                    android:visibility="invisible"
+                    android:id="@+id/p3"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- Bar 6 -->
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Winner 5"
+                android:visibility="invisible"
+                android:id="@+id/w5"
+                android:textStyle="bold"
+                android:textColor="@color/goldColor"
+                android:textSize="15sp"/>
+            <FrameLayout
+                android:layout_width="60dp"
+                android:layout_height="50dp">
+                <View
+                    android:id="@+id/bar5"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bar_background" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="5th"
+                    android:visibility="invisible"
+                    android:id="@+id/p5"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
