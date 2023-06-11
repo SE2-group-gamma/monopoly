@@ -57,6 +57,7 @@ public class Client extends Thread {
     private String cheated;
     public static HashMap<String, UIHandler> handlers;
     private Timer timer;
+
     private boolean buttonCheck=false;
 
     private String lastPlayerMoved;
@@ -547,6 +548,10 @@ public class Client extends Thread {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public void setButtonCheck(boolean buttonCheck) {
+        this.buttonCheck = buttonCheck;
     }
 
 }
