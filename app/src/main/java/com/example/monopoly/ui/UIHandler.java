@@ -298,7 +298,6 @@ public class UIHandler extends Handler {
                         Log.d("CURRENT POSITION Y ",""+uiHandlerViewModel.getPlayerPositionY().getValue()[playerNumber]);
                         int positionBefore = currentPosition[playerNumber];
                         currentPosition[playerNumber] = currentPosition[playerNumber] + fieldsToMove;
-                        clientViewModel.getClientData().getValue().getUser().setPosition(currentPosition[playerNumber]);
                         Log.d("--",""+currentPosition[playerNumber]);
                         if(currentPosition[playerNumber] >= 40){
                             currentPosition[playerNumber] = currentPosition[playerNumber]-40;

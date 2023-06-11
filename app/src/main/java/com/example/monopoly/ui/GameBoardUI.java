@@ -56,6 +56,7 @@ public class GameBoardUI extends Fragment {
 
                 try {
                     this.client.writeToServer("GameBoardUI|move|" + dices.getSum() + ":" + cheated + ":" + doublets + "|" + this.client.getUser().getUsername());
+                    this.clientViewModel.getClientData().getValue().getUser().setPosition(this.clientViewModel.getClientData().getValue().getUser().getPosition()+dices.getSum());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
