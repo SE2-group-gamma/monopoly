@@ -277,7 +277,6 @@ public class Client extends Thread {
                     Player tempPlayer = new Player(responseSplit[2],new Color(),500.00,true);
                     Log.i("Dices","Client Gonna join: ");
                     game.addPlayer(tempPlayer);
-
                 }
             }
             if(responseSplit[1].equals("move")){
