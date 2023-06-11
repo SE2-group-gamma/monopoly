@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import java.io.IOException;
+import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,8 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -106,54 +105,9 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-
-
-    private void closeServerConnection(){
-        if (nsdServ != null && monopoly != null){
-            try{
-                monopoly.shutdownServer();
-                nsdServ.stopNSD();
-                Log.i("ServerActivity", "Server done main");
-            }catch ( IOException e){
-                e.printStackTrace();
-            }
-
-        }
-
-    }
-
-    private void closeClientConnection() {
-        if(clientHandler != null && clientHandler.getClient() != null){
-            try{
-                clientHandler.getClient().close();
-                //clientHandler.endConn();
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        }
-        if (nsdClient != null){
-            nsdClient.stopDiscovery();
-
-        }
-        Log.i("ClientActivity","Client closed 3");
-    }
-
     @Override
     protected void onDestroy(){
         super.onDestroy();
-
-        nsdClient.stopDiscovery();
-        try {
-            monopoly.shutdownServer();
-            clientHandler.getClient().close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        nsdServ.stopNSD();
-
-        Log.i("MainActivity", "Conections done");
-        binding=null;
-        monopoly=null;
 
     }
 }

@@ -1,11 +1,18 @@
 package com.example.monopoly.ui;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.SeekBar;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,15 +25,29 @@ public class Settings extends Fragment {
 
     private SettingsBinding binding;
     private MediaPlayer song;
-    boolean sound;
-
+    private Intent musicService;
+    boolean switchCheck;
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
         binding = SettingsBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        View rootView = binding.getRoot();
+
+        Switch soundMusic = rootView.findViewById(R.id.switch1);
+        //View game = inflater.inflate(R.layout.game_board,container,false);
+        //Switch soundMusic2 = game.findViewById(R.id.switchsound);
+        soundMusic.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                playSong();
+            } else {
+                pauseSong();
+            }
+
+        });
+
+        return rootView;
 
     }
 
@@ -35,7 +56,7 @@ public class Settings extends Fragment {
 
         binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(Settings.this)
                 .navigate(R.id.action_Settings_to_FirstFragment));
-        binding.switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        /*binding.switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 sound=isChecked;
@@ -45,11 +66,17 @@ public class Settings extends Fragment {
                     pauseSong();
                 }
             }
-        });
+        });*/
         binding.saveButton.setOnClickListener(view12 -> {
             // TODO: Save Settings here
+            SharedPreferences sharedSets = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+            SharedPreferences.Editor edit = sharedSets.edit();
+            edit.putBoolean("sound",binding.switch1.isChecked());
+            edit.putBoolean("placeholder",binding.switch2.isChecked());
+            edit.apply();
+            /*
             sound = binding.switch1.isChecked();
-            boolean placeholder = binding.switch2.isChecked();
+            boolean placeholder = binding.switch2.isChecked();*/
 
             NavHostFragment.findNavController(Settings.this)
                     .navigate(R.id.action_Settings_to_FirstFragment);
@@ -59,16 +86,16 @@ public class Settings extends Fragment {
     }
 
     public void pauseSong(){
-        if(song!=null && song.isPlaying()){
-            song.pause();
-            sound=false;
+        if(musicService !=null){
+            getActivity().stopService(musicService);
+            musicService=null;
         }
     }
 
     public void playSong(){
-        if(song!=null){
-            song.start();
-            sound=true;
+        if(musicService==null){
+            musicService = new Intent(getActivity(), MusicPlayer.class);
+            getActivity().startService(musicService);
         }
 
     }
@@ -77,10 +104,7 @@ public class Settings extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        if (song != null) {
-            song.release();
-            song = null;
-        }
+        musicService=null;
     }
 
 }

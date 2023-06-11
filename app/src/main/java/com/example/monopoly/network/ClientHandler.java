@@ -32,6 +32,7 @@ public class ClientHandler extends Thread{
     public ArrayList<String> msgBuffer;
 
     public MonopolyServer server;
+    private boolean playerActive;
 
     public void setSocket(Socket socket) {
         this.socket = socket;
@@ -60,6 +61,7 @@ public class ClientHandler extends Thread{
         this.client=client;
         //this.clientName=client.getName();
         this.msgBuffer=new ArrayList<>();
+        this.playerActive=true;
     }
 
     public String getClientName() {
@@ -130,6 +132,7 @@ public class ClientHandler extends Thread{
             }
         }
     }
+
 
     /*public void endConn() throws IOException {
         socket.close();

@@ -1,29 +1,40 @@
 package com.example.monopoly.ui;
 
+import android.content.Context;
 import android.media.MediaPlayer;
+import android.net.nsd.NsdManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
+import com.example.monopoly.databinding.FragmentFirstBinding;
 import com.example.monopoly.databinding.GameBoardBinding;
+import com.example.monopoly.databinding.SettingsBinding;
 import com.example.monopoly.network.Client;
+import com.example.monopoly.network.ClientHandler;
+import com.example.monopoly.network.MonopolyServer;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
 
 import java.io.IOException;
+import java.net.BindException;
+import java.net.Socket;
 
 public class GameBoardUI extends Fragment {
 
@@ -32,8 +43,11 @@ public class GameBoardUI extends Fragment {
     private ClientViewModel clientViewModel;
     private Client client;
     private GameBoardUIViewModel gameBoardUIViewModel;
-    private MediaPlayer song;
-    boolean sound;
+
+    private NSD_Client nsdClient;
+    private MonopolyServer monopoly;
+    private ClientHandler clientHandler;
+    private Socket socket;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,6 +71,7 @@ public class GameBoardUI extends Fragment {
             }
 
         });
+
     }
 
     @Override
@@ -67,6 +82,22 @@ public class GameBoardUI extends Fragment {
         Client.subscribe(this,"GameBoardUI");
 
         binding = GameBoardBinding.inflate(inflater, container, false);
+
+           /*
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            monopoly = (MonopolyServer) bundle.getSerializable("monopolyServer");
+        }
+        socket=new Socket();
+        clientHandler = new ClientHandler(socket);
+        try {
+
+            monopoly = new MonopolyServer(HostGame.getMonopolyServer.getNumberOfClients());
+            //clientHandler.setServer(monopoly);
+            //monopoly.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
         return binding.getRoot();
     }
 
@@ -146,49 +177,36 @@ public class GameBoardUI extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_ProperyCardFragment);
         });
 
-        binding.switchsound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sound=isChecked;
-                if(isChecked){
-                    playSong();
 
-
-
-                }else{
-                    pauseSong();
-                }
-            }
-        });
-        song = MediaPlayer.create(getActivity(),R.raw.monopoly_song);
     }
 
     private void showDiceFragment(){
         NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_DiceFragment);
     }
 
-    private void pauseSong(){
-        if(song!=null && song.isPlaying()){
-            song.pause();
-            sound=false;
-        }
-    }
 
-    private void playSong(){
-        if(song!=null){
-            song.start();
-            sound=true;
-        }
 
-    }
+
+
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        if (song != null) {
-            song.release();
-            song = null;
+
+
+
+
+        //nsdClient.stopDiscovery();
+        /*try {
+            monopoly.shutdownServer();
+            clientHandler.getClient().close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        nsdServ.stopNSD();
+
+        Log.i("GameBoardUI", "Conections done");
+        monopoly=null;*/
     }
 }
