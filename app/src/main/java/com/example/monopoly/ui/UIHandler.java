@@ -1,11 +1,13 @@
 package com.example.monopoly.ui;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import android.graphics.drawable.LayerDrawable;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,11 +18,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
+import com.example.monopoly.gamelogic.Player;
+import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.gamelogic.PlayerMapPosition;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
@@ -32,8 +37,6 @@ import java.util.Objects;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
 import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
-
-import java.util.Objects;
 
 public class UIHandler extends Handler {
     private Fragment frag;
@@ -98,12 +101,22 @@ public class UIHandler extends Handler {
         }
     }
 
-
-
     @Override
     public void handleMessage(@NonNull Message msg) {
         clientViewModel = new ViewModelProvider(frag.requireActivity()).get(ClientViewModel.class);
         gameBoardUIViewModel = new ViewModelProvider(frag.requireActivity()).get(GameBoardUIViewModel.class);   // GameBoardUI state
+
+
+        this.clientObj = clientViewModel.getClientData().getValue();
+
+        if(gameBoardUIViewModel.getCurrentMoney().getValue()!=null){
+            ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText(gameBoardUIViewModel.getCurrentMoney().getValue());
+        }
+
+        if(gameBoardUIViewModel.getCurrentTime().getValue()!=null && ((TextView) this.frag.getActivity().findViewById(R.id.time)) != null){
+            ((TextView) this.frag.getActivity().findViewById(R.id.time)).setText(gameBoardUIViewModel.getCurrentTime().getValue());
+        }
+
 
 
         this.clientObj = clientViewModel.getClientData().getValue();
@@ -271,7 +284,8 @@ public class UIHandler extends Handler {
                 if(clientObj.getUser().getUsername().equals(client)) {
                     int money = currentMoney + Integer.parseInt(data.split(":")[0]);
                     uiHandlerViewModel.setCurrentMoney(money);
-                    ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n"+money+"$");
+                    if(((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null)
+                        ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n"+money+"$");
                     Log.d("MoneyPlayer",""+money);
                     Log.d("MoneyPlayer",""+client);
                 }
@@ -483,6 +497,69 @@ public class UIHandler extends Handler {
             case "exitDiceFragment":
                 NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
                     //Thread.sleep(1000);
+
+                break;
+
+            case "setStartTime":
+                startCountUpTimer(Long.parseLong(data), this.frag.getActivity());
+                break;
+
+            case"setWinners6":
+                ((TextView)this.frag.getActivity().findViewById(R.id.w6)).setText(data);
+                this.frag.getActivity().findViewById(R.id.w6).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.bar6).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.p6).setEnabled(true);
+                break;
+
+            case"setWinners5":
+                ((TextView)this.frag.getActivity().findViewById(R.id.w5)).setText(data);
+                this.frag.getActivity().findViewById(R.id.w5).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.bar5).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.p5).setEnabled(true);
+                break;
+
+            case"setWinners4":
+                ((TextView)this.frag.getActivity().findViewById(R.id.w4)).setText(data);
+                this.frag.getActivity().findViewById(R.id.w4).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.bar4).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.p4).setEnabled(true);
+                break;
+
+            case"setWinners3":
+                ((TextView)this.frag.getActivity().findViewById(R.id.w3)).setText(data);
+                this.frag.getActivity().findViewById(R.id.w3).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.bar3).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.p3).setEnabled(true);
+                break;
+
+            case"setWinners2":
+                ((TextView)this.frag.getActivity().findViewById(R.id.w2)).setText(data);
+                this.frag.getActivity().findViewById(R.id.w2).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.bar2).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.p2).setEnabled(true);
+                break;
+
+            case"setWinners1":
+                ((TextView)this.frag.getActivity().findViewById(R.id.w1)).setText(data);
+                this.frag.getActivity().findViewById(R.id.w1).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.bar1).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.p1).setEnabled(true);
+                break;
+
+            case"endFrag":
+                NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_EndGameFragment);
+                break;
+            case "updateHouse":
+                if(!clientObj.getUser().getUsername().equals(client))
+                    ClientPropertyStorage.getInstance().addHouse(data);
+                break;
+            case "updateHotel":
+                if(!clientObj.getUser().getUsername().equals(client))
+                    ClientPropertyStorage.getInstance().addHotel(data);
+                break;
+            case "updateOwner":
+                if(!clientObj.getUser().getUsername().equals(client))
+                    ClientPropertyStorage.getInstance().updateOwner(data, new Player(client, new Color(), 0, true));
                 break;
         }
     }
@@ -813,4 +890,52 @@ public class UIHandler extends Handler {
         //Log.d("hostPosition","Draw Host at X: "+ layerDrawable.getLayerInsetRight(1));
         //Log.d("hostPosition","Draw Host at Y: "+ layerDrawable.getLayerInsetLeft(1));
     }
+
+    public void startCountUpTimer(long endTime, FragmentActivity activity) {
+        final Handler handler = new Handler(Looper.getMainLooper());
+        final long[] currentTime = {0};
+
+        long totalEndTimeSeconds = endTime / 1000;
+        final long endMinutes = totalEndTimeSeconds / 60;
+        final long endSeconds = totalEndTimeSeconds % 60;
+
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final TextView timerTextView = activity.findViewById(R.id.time);
+
+                        long totalSeconds = currentTime[0];
+                        long minutes = totalSeconds / 60;
+                        long seconds = totalSeconds % 60;
+
+                        String time = String.format("%02d:%02d | %02d:%02d", minutes, seconds, endMinutes, endSeconds);
+                        gameBoardUIViewModel.setCurrentTime(time);
+                        if(timerTextView!=null)
+                        {
+                            timerTextView.setText(gameBoardUIViewModel.getCurrentTime().getValue());
+                        }
+
+                        if (currentTime[0] < endTime / 1000) {
+                            currentTime[0]++;
+                            handler.postDelayed(this, 1000);
+                        } else {
+                            handler.removeCallbacks(this);
+                        }
+
+                        if(HostGame.getMonopolyServer()!=null){
+                        if(HostGame.getMonopolyServer().getClient().isHost()==true&&minutes==endMinutes&&seconds==endSeconds){
+                            HostGame.getMonopolyServer().getClient().setGameover(true);
+                        }
+                        }
+                    }
+                });
+            }
+        };
+
+        handler.post(runnable);
+    }
+
 }

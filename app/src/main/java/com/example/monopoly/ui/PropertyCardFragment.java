@@ -3,6 +3,7 @@ package com.example.monopoly.ui;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.FragmentPropertyCardBinding;
 import com.example.monopoly.ui.propertycards.PropertyCardsAdapter;
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,7 +57,8 @@ public class PropertyCardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_property_card, container, false);
-        PropertyCardsAdapter pca = new PropertyCardsAdapter();
+        ClientViewModel clientViewModel = (new ViewModelProvider(requireActivity())).get(ClientViewModel.class);
+        PropertyCardsAdapter pca = new PropertyCardsAdapter(clientViewModel);
         RecyclerView recyclerView = rootView.findViewById(R.id.propertyCardsListView);
         recyclerView.setAdapter(pca);
         rootView.findViewById(R.id.exitButton).setOnClickListener((view1) -> {

@@ -1,6 +1,5 @@
 package com.example.monopoly.gamelogic.properties;
 
-import com.example.monopoly.R;
 import com.example.monopoly.gamelogic.Player;
 
 import java.util.HashMap;
@@ -61,19 +60,21 @@ public class PropertyStorage {
         this.properties.get(propertyId).setOwner(owner);
     }
 
-    public int addHouse(String propertyId){
+    public int addHouse(String propertyId, Player player){
         if(!hasField(propertyId)) throw new IllegalFieldException("Invalid field name: " + propertyId);
         Field field = this.properties.get(propertyId);
         if(!(field instanceof PropertyField)) throw new IllegalFieldException("Field is not a PropertyField");
         if(!hasAllColours(field.getOwner(), ((PropertyField) field).getColor())) throw new IllegalStateException("Owner does not have all colors");
         ((PropertyField) field).addHouse();
+        player.setCapital(player.getCapital()-((PropertyField) field).getRent().getPriceHouseOrHotel());
         return ((PropertyField) field).getNumOfHouses();
     }
 
-    public void addHotel(String propertyId){
+    public void addHotel(String propertyId, Player player){
         if(!hasField(propertyId)) throw new IllegalFieldException("Invalid field name: " + propertyId);
         Field field = this.properties.get(propertyId);
         if(!(field instanceof PropertyField)) throw new IllegalFieldException("Field is not a PropertyField");
+        player.setCapital(player.getCapital()-((PropertyField) field).getRent().getPriceHouseOrHotel());
         ((PropertyField) field).addHotel();
     }
 
@@ -92,4 +93,23 @@ public class PropertyStorage {
     public Player getOwner(String propertyId){
         return properties.get(propertyId).getOwner();
     }
+
+
+    public int getTotalAssets(Player player) {
+        int totalValue = 0;
+
+        for(Field field : properties.values()) {
+            if(field.getOwner() != null && field.getOwner().equals(player)) {
+                totalValue += field.getPrice();
+                if(field instanceof PropertyField) {
+                    PropertyField propertyField = (PropertyField) field;
+                    int numOfHouses = propertyField.getNumOfHouses();
+                    boolean hasHotel = propertyField.hasHotel();
+                    totalValue += (numOfHouses * propertyField.getRent().getPriceHouseOrHotel()) + (hasHotel ? propertyField.getRent().getPriceHouseOrHotel() : 0);
+                }
+            }
+        }
+        return totalValue;
+    }
+
 }
