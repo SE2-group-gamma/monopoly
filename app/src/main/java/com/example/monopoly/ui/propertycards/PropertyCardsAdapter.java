@@ -41,6 +41,10 @@ public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdap
         return new ViewHolder(view);
     }
 
+    private boolean canBuyHouseOrHotel(PropertyField field){
+        return player.equals(field.getOwner()) && cps.hasAllColours(player, ((PropertyField) field).getColor()) && player.getCapital() >= field.getRent().getPriceHouseOrHotel();
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Field field = cps.getPropertyList().get(position);
@@ -60,7 +64,7 @@ public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdap
             holder.propertyHouses.setText("");
         }
 
-        if(field instanceof PropertyField /*&& player.equals(field.getOwner())*/) {
+        if(field instanceof PropertyField /*&& canBuyHouseOrHotel((PropertyField) field)*/) {
             holder.buyHouseButton.setVisibility(View.VISIBLE);
             if(((PropertyField) field).getNumOfHouses() < 4) {
                 holder.buyHouseButton.setText("Buy House");
