@@ -56,7 +56,7 @@ public class GameBoardUI extends Fragment {
 
                 try {
                     this.client.writeToServer("GameBoardUI|move|" + dices.getSum() + ":" + cheated + ":" + doublets + "|" + this.client.getUser().getUsername());
-                    this.clientViewModel.getClientData().getValue().getUser().setPosition(this.clientViewModel.getClientData().getValue().getUser().getPosition()+dices.getSum());
+                    this.clientViewModel.getClientData().getValue().getUser().setPosition((this.clientViewModel.getClientData().getValue().getUser().getPosition()+dices.getSum())%40);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -148,6 +148,8 @@ public class GameBoardUI extends Fragment {
 
             }
         });
+        UIHandlerViewModel uiHandlerViewModel = (new ViewModelProvider(requireActivity())).get(UIHandlerViewModel.class);
+        binding.currentMoney.setText("Current Money \n"+uiHandlerViewModel.getCurrentMoney().getValue()+"$");
 
         binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
                 .navigate(R.id.action_GameBoard_to_FirstFragment));
@@ -192,6 +194,7 @@ public class GameBoardUI extends Fragment {
                 clientPropertyStorage.updateOwner(field.getName(), this.client.getUser());
                 try {
                     client.writeToServer("GameBoardUI|buyField|" + field.getName() + "|" + this.client.getUser().getUsername());
+                    client.writeToServer("GameBoardUI|giveMoney|" + (-field.getPrice()) + "|" + this.client.getUser().getUsername());
                     binding.buy.setAlpha(0.5f);
                     binding.buy.setEnabled(false);
                 } catch (IOException e) {

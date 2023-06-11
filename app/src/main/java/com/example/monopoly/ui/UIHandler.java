@@ -274,7 +274,8 @@ public class UIHandler extends Handler {
                 if(clientObj.getUser().getUsername().equals(client)) {
                     int money = currentMoney + Integer.parseInt(data.split(":")[0]);
                     uiHandlerViewModel.setCurrentMoney(money);
-                    ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n"+money+"$");
+                    if(((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null)
+                        ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n"+money+"$");
                     Log.d("MoneyPlayer",""+money);
                     Log.d("MoneyPlayer",""+client);
                 }

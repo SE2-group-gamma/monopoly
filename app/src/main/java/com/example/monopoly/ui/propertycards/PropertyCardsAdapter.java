@@ -53,6 +53,7 @@ public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdap
     private void updateOnServer(String action, Field field) {
         try {
             client.writeToServer("PropertyCards|" + action + "|" + field.getName() + "|" + player.getUsername());
+            client.writeToServer("PropertyCards|giveMoney|" + (-field.getPrice()) + "|" + player.getUsername());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

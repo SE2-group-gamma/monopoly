@@ -326,6 +326,7 @@ public class Client extends Thread {
                 Log.d("MoneyPlayer","client "+this.getUser().getUsername());
                 Player player = game.getPlayers().get(id);
                 int money = Integer.parseInt(dataResponseSplit[0]);
+                Log.d("Money", dataResponseSplit[0]);
                 double capital = player.getCapital();
                 player.setCapital(capital+money);
                 monopolyServer.broadCast("GameBoardUI|changeCapital|"+responseSplit[2]+"|"+responseSplit[3]);
