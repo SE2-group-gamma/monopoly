@@ -55,6 +55,7 @@ public class Client extends Thread {
     private Bank bank;
 
     public static HashMap<String, UIHandler> handlers;
+    private CardViewModel cardViewModel;
 
     static {
         handlers = new HashMap<>();
@@ -330,7 +331,7 @@ public class Client extends Thread {
                     game.getPlayers().get(playerID).setCardID(cardID);
                 }
             }
-            /*if (responseSplit[1].equals("removeCardBroadcast")) {
+            if (responseSplit[1].equals("removeCardBroadcast")) {
                 //[Fragment]|removeCard|[CardID]:[CardType]|[senderUserName]
                 int cardID = Integer.parseInt(dataResponseSplit[0]);
                 String cardType = dataResponseSplit[1];
@@ -338,21 +339,6 @@ public class Client extends Thread {
                     monopolyServer.broadCast("DrawFragment|removeCard|" + cardID + ":" + cardType + "|" + monopolyServer.getClient().getUser().getUsername());
                 }
             }
-            if (responseSplit[1].equals("removeCard")) {
-                //[Fragment]|removeCard|[CardID]:[CardType]|[senderUserName]
-                int playerID = game.getPlayerIDByName(responseSplit[3]);
-                int cardID = Integer.parseInt(dataResponseSplit[0]);
-                String cardType = dataResponseSplit[1];
-
-                if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
-                if (cardType == "chance"){
-
-                }
-                else{}
-
-                }
-            }*/
-
             if(responseSplit[1].equals("gameStart")){
                 Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(0).getUsername());
                 //Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(1).getUsername());
@@ -375,6 +361,8 @@ public class Client extends Thread {
         } else {
             for (String str: responseSplit) {
             }
+            String[] dataResponseSplit = responseSplit[2].split(":");
+
             if (responseSplit[1].equals("keyFromLobby") && responseSplit[2].equals("1")) {
                 try {
                     writeToServer("Lobby|JOINED|" + user.getUsername());
@@ -387,6 +375,22 @@ public class Client extends Thread {
                     writeToServer("Lobby|hostJoined|"+"REPLACER");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
+                }
+            }
+            if (responseSplit[1].equals("removeCard")) {
+                //[Fragment]|removeCard|[CardID]:[CardType]|[senderUserName]
+                int cardID = Integer.parseInt(dataResponseSplit[0]);
+                String cardType = dataResponseSplit[1];
+                if (cardType == "chance") {
+                    if (cardViewModel.getChanceCards().getValue().getChanceCardDeck().get(cardID) != null) {
+                        cardViewModel.getChanceCards().getValue().getChanceCardDeck().
+                                remove(cardViewModel.getChanceCards().getValue().getChanceCardDeck().get(cardID));
+                    }
+                } else if (cardType == "community") {
+                    if (cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().get(cardID) != null) {
+                        cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().
+                                remove(cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().get(cardID));
+                    }
                 }
             }
         }

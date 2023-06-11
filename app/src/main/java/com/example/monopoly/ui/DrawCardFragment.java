@@ -25,7 +25,7 @@ public class DrawCardFragment extends Fragment {
     private CommunityChestCardCollection communityCards;
     private FragmentDrawcardBinding binding;
     private CardViewModel cardViewModel;
-    private final Game game = Game.getInstance();
+    private Game game = Game.getInstance();
 
 
     public DrawCardFragment() {
@@ -86,15 +86,22 @@ public class DrawCardFragment extends Fragment {
         int index = chanceCards.drawFromDeck().getId();
         int cardId = chanceCards.getChanceCardDeck().get(index).getImageId();
         binding.ImageCard.setImageResource(cardId);
+        //game.doAction();
         game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
                 "GameBoardUI|setCard|" + cardId + "|" + game.getCurrentPlayersTurn());
+
+        game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
+                "DrawFragment|removeCard|" + cardId + ":chance|" + game.getCurrentPlayersTurn());
     }
 
     private void returnCommunityChestCard() throws IOException {
         int index = communityCards.drawFromDeck().getId();
         int cardId = communityCards.getCommunityChestCardDeck().get(index).getImageId();
         binding.ImageCard.setImageResource(cardId);
+        //game.doAction();
         game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
                 "GameBoardUI|setCard|" + cardId + "|" + game.getCurrentPlayersTurn());
+        game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
+                "DrawFragment|removeCard|" + cardId + ":community|" + game.getCurrentPlayersTurn());
     }
 }

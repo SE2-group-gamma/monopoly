@@ -7,25 +7,16 @@ import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.MonopolyServer;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 
 import android.graphics.Color;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 
 public class GameTestNetwork {
@@ -61,26 +52,17 @@ public class GameTestNetwork {
 
     @Test
     public void transferToBank() throws IOException {
-
-        //g.getPlayers().get(0).setMyClient(mockClient);
-
         g.transferToBankProtocol(10);
         verify(mockClient).writeToServer("GameBoardUI|transferToBank|10|Test");
     }
    @Test
     public void testMove() throws IOException {
-
-        //g.getPlayers().get(0).setMyClient(mockClient);
-
         g.moveProtocol(1);
         verify(mockClient).writeToServer("GameBoardUI|move|1|Test");
     }
 
     @Test
     public void outOfJail() throws IOException {
-
-        //g.getPlayers().get(0).setMyClient(mockClient);
-
         g.outOfJailCounterProtocol(1);
         verify(mockClient).writeToServer("GameBoardUI|outOfJailCounter|1|Test");
     }
