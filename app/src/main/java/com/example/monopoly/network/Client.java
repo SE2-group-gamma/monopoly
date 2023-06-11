@@ -289,9 +289,10 @@ public class Client extends Thread {
                     game.incrementPlayerPosition(tempID, Integer.parseInt(responseSplit[2]));
                     Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
                     Log.d("gameturnCurr", "currUser" + responseSplit[3]);
-                    
+
                 }
             }//}
+            
             if (responseSplit[1].equals("transferToPlayer")) {
                 int receiverID = game.getPlayerIDByName(responseSplit[3]);
                 int amount = Integer.parseInt(dataResponseSplit[0]);
