@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,40 +17,42 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.GameBoardBinding;
 import com.example.monopoly.network.Client;
+import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
+import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
 
 import java.io.IOException;
 
 public class GameBoardUI extends Fragment {
 
+    // reconstructions of GameBoardUI + UIHandler: turn swap; opening a different fragment and going back; end turn button
+
     private GameBoardBinding binding;
     private DiceViewModel diceViewModel;
     private ClientViewModel clientViewModel;
-    private String clientName;
     private Client client;
-    private boolean didCheat;
+    private GameBoardUIViewModel gameBoardUIViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Bundle implementation
-        /*if (getArguments() != null) {
-            Log.i("Dices", "Client over bundle: "+getArguments().getString("client"));
-            clientName = getArguments().getString("client");            //getting the client name using argument bundle
-        }*/
-
         diceViewModel = new ViewModelProvider(requireActivity()).get(DiceViewModel.class);
         clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
         diceViewModel.getDicesData().observe(this, dices -> {
-            Log.i("Dices", dices.toString());
-            String cheated = dices.isLastRollFlawed()==true?"t":"f";
+            if(diceViewModel.getContinuePressedData().getValue()) {     // if fragment is exited upon clicking the continue button (not via command)
+                Log.i("Dices", dices.toString());
+                String cheated = dices.isLastRollFlawed() == true ? "t" : "f";
+                String doublets = (dices.getDice1() == dices.getDice2()) == true ? "t" : "f";       // 3 doubles in a row mean jail!!!
+                //String passedStartField = dices.isLastRollFlawed()==true?"t":"f";
 
-            try {
-                this.client.writeToServer("GameBoardUI|move|"+dices.getSum()+":"+cheated+"|"+this.client.getUser().getUsername());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                try {
+                    this.client.writeToServer("GameBoardUI|move|" + dices.getSum() + ":" + cheated + ":" + doublets + "|" + this.client.getUser().getUsername());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                diceViewModel.setContinuePressed(false);
             }
 
         });
@@ -70,12 +73,71 @@ public class GameBoardUI extends Fragment {
 
         this.client = clientViewModel.getClientData().getValue();       // set client
 
+        /**
+         * Reconstruction of GameBoardUI
+         */
+        try {
+            gameBoardUIViewModel = new ViewModelProvider(this.requireActivity()).get(GameBoardUIViewModel.class);   // restore GameBoardUI state
+            ((TextView)this.getActivity().findViewById(R.id.turn)).setText(gameBoardUIViewModel.getCurrentPlayer().getValue());     // set name for player turn
+            if (gameBoardUIViewModel.getUncoverEnabled().getValue()) {
+                this.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
+                this.getActivity().findViewById(R.id.uncover).setEnabled(true);
+            } else {
+                this.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
+                this.getActivity().findViewById(R.id.uncover).setEnabled(false);
+            }
+            if(gameBoardUIViewModel.getThrowDiceEnabled().getValue()){
+                this.getActivity().findViewById(R.id.throwdice).setAlpha(1.0f);
+                this.getActivity().findViewById(R.id.throwdice).setEnabled(true);
+            } else {
+                this.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);
+                this.getActivity().findViewById(R.id.throwdice).setEnabled(false);
+            }
+            if(gameBoardUIViewModel.getEndTurnEnabled().getValue()){
+                this.getActivity().findViewById(R.id.endTurn).setAlpha(1.0f);
+                this.getActivity().findViewById(R.id.endTurn).setEnabled(true);
+            }else{
+                this.getActivity().findViewById(R.id.endTurn).setAlpha(0.5f);
+                this.getActivity().findViewById(R.id.endTurn).setEnabled(false);
+            }
+            // TODO restore player position
+        }catch (Exception e){}
+
+        //if(this.client.isHost()) {
+            try {
+                this.client.writeToServer("GameBoardUI|initializePlayerBottomRight| : |" + this.client.getUser().getUsername());      // needs to be sent only once
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        //}
+        // DisplayMetrics might still be useful, so keep them for now
+/*
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager()
+                .getDefaultDisplay()
+                .getRealMetrics(displayMetrics);
+        double height = displayMetrics.heightPixels;
+        double width = displayMetrics.widthPixels;
+
+        // Tried relative calculation with dp
+        //double heightRatio = (double) height / 411.4285583496094;
+        //double widthRatio = (double) width / 891.4285888671875;
+
+        //double heightRatio = (double) height / 1440;
+        //double widthRatio = (double) width / 3120;
+        //heightRatio = heightRatio * (3.5/displayMetrics.density);
+        //widthRatio = widthRatio * (3.5/displayMetrics.density);
+
+        double heightRatio = layerDrawable.getMinimumHeight()/(double)21000;
+        double widthRatio = layerDrawable.getMinimumWidth()/(double)21000;
+*/
+
+
         super.onViewCreated(view, savedInstanceState);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                // TODO: Set textView with key from Lobby
-                //binding.textViewKey.setText("Game-Key: "+key);
+
             }
         });
 
@@ -92,9 +154,24 @@ public class GameBoardUI extends Fragment {
 
         binding.throwdice.setOnClickListener(view1 -> {
             showDiceFragment();
-            /*for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
-                handler.writeToClient("GameBoardUI|gameStart| ");
-            }*/
+        });
+
+        binding.endTurn.setOnClickListener(view1 -> {
+            /*this.client = clientViewModel.getClientData().getValue();
+            this.client.endTurnPressed();*/
+
+            Log.d("endTurn",clientViewModel.getClientData().getValue().getUser().getUsername());
+            //clientViewModel.getClientData().getValue().endTurnPressed();
+            //clientViewModel.getClientData().getValue().endTurnPressedBroadCast();
+            try {
+                this.client.writeToServer("GameBoardUI|turnEnd|:|");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        binding.showPropertiesButton.setOnClickListener(view1 -> {
+            NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_ProperyCardFragment);
         });
     }
 

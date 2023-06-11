@@ -22,6 +22,8 @@ import android.widget.SeekBar;
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.FragmentDiceBinding;
 import com.example.monopoly.gamelogic.Dices;
+import com.example.monopoly.network.Client;
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
 
 /**
@@ -35,7 +37,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private float lastX, lastY, lastZ;
-    private static final float SHAKE_THRESHOLD = 50;
+    private static final float SHAKE_THRESHOLD = 10;
     private FragmentDiceBinding binding;
     private Dices dices;
     private boolean hasBeenRolled;
@@ -46,6 +48,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
 
     public DiceFragment() {
         // Required empty public constructor
+        //Client.subscribe(this,"DiceFragment");
     }
 
     /**
@@ -85,6 +88,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         this.binding.sliderTooltip.setText(""+this.binding.numberSlider.getProgress()+2);
         this.binding.continueButtonDiceFragment.setOnClickListener(view -> {
             if(hasBeenRolled) {
+                this.diceViewModel.setContinuePressed(true);
                 this.diceViewModel.setDices(dices);
                 NavHostFragment.findNavController(this).navigate(R.id.action_DiceFragment_to_GameBoardUI);
             }

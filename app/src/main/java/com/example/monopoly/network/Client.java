@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
@@ -50,6 +49,7 @@ public class Client extends Thread {
     private MonopolyServer monopolyServer;
     private boolean isHost;
     private int key;
+    boolean onCoolDown = false;
 
     private int serverTurnCounter = 0;
 
@@ -61,6 +61,7 @@ public class Client extends Thread {
 
     public static HashMap<String, UIHandler> handlers;
     private CardViewModel cardViewModel;
+    private Timer timer;
 
     static {
         handlers = new HashMap<>();
@@ -207,7 +208,7 @@ public class Client extends Thread {
                     }
                 }
 
-                if(turnEnd==true){
+                if(turnEnd){
                     turnProcess();
                 }
             }
@@ -233,10 +234,11 @@ public class Client extends Thread {
                     b.putString("Client", responseSplit[3]);
                 }
             }catch (Exception e){}
-            //b.putSerializable("clientObject",this);
             handleMessage.setData(b);
             handlers.get(responseSplit[0]).sendMessage(handleMessage);      // UI Handler do ur thing
         }
+
+
 
         if (isHost) {
             String[] dataResponseSplit = responseSplit[2].split(":");
@@ -281,18 +283,37 @@ public class Client extends Thread {
                 }
             }
 
+            if(responseSplit[1].equals("initializePlayerBottomRight") && (!onCoolDown)){
+                onCoolDown = true;
+                monopolyServer.broadCast("GameBoardUI|initializePlayerBottomRight1| : |"+responseSplit[3]);
+                Timer cdTimer = new Timer();
+                cdTimer.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                onCoolDown = false;
+                            }
+                        },
+                        300
+                );
+            }
+            if(responseSplit[1].equals("turnEnd")){
+                Log.d("endTurn","end turn test");
+                endTurnPressed();
+            }
             if(responseSplit[1].equals("move")){
-                // data: 8:t    ... t=cheated; f=notcheated
+                // TODO sent player to jail after 3 doubles
+                // data: 8:t:f  => increment:cheated:double
                 cheated = dataResponseSplit[1];
                 int tempID = game.getPlayerIDByName(responseSplit[3]);
                 if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
-                    game.incrementPlayerPosition(tempID, Integer.parseInt(responseSplit[2]));
-                    Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
-                    Log.d("gameturnCurr", "currUser" + responseSplit[3]);
-
+                    game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
+                    //Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
+                    //Log.d("gameturnCurr", "currUser" + responseSplit[3]);
+                    monopolyServer.broadCast("GameBoardUI|movePlayer|"+responseSplit[2]+"|"+responseSplit[3]);      // broadcast with different action to not interfere with game logic
                 }
             }//}
-            
+
             if (responseSplit[1].equals("transferToPlayer")) {
                 int receiverID = game.getPlayerIDByName(responseSplit[3]);
                 int amount = Integer.parseInt(dataResponseSplit[0]);
@@ -354,6 +375,7 @@ public class Client extends Thread {
             }
             if(responseSplit[1].equals("uncover")){         // Only 1 player should be able to uncover, else others will just chime in
                 try{
+                    Log.d("uncover","Who: "+responseSplit[3]);
                     if(this.cheated.equals("t")){       // TODO if cheated punish current player (Reference should be saved in Host)
                         Log.d("Dices","Gschummelt->"+cheated);
                     } else {                                    // TODO if not punish sender
@@ -416,20 +438,49 @@ public class Client extends Thread {
         turnEnd = false;
         game.setCurrentPlayersTurn(game.getPlayers().get(serverTurnCounter).getUsername());
         monopolyServer.broadCast("GameBoardUI|playersTurn|"+game.getPlayers().get(serverTurnCounter).getUsername());
-        Log.d("gameTurnCheck", "Yo hey"+game.getCurrentPlayersTurn());
+        //Log.d("gameTurnCheck", "Yo hey "+game.getCurrentPlayersTurn());
         serverTurnCounter++;
-        new Timer().schedule(
+        timer = new Timer();
+
+        timer.schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        monopolyServer.broadCast("GameBoardUI|exitDiceFragment|:|");   // send exit signal // crashes if any other fragment is open (only if the dice frag hasn't been opened before)
+                    }
+                },
+                15000 - 10
+        );
+        timer.schedule(
                 new TimerTask() {
                     @Override
                     public void run() {
                         turnEnd = true;
                     }
                 },
-                60000
+                15000
         );
         if(serverTurnCounter== HostGame.getMonopolyServer().getNumberOfClients()){
             serverTurnCounter=0;
         }
+    }
+
+
+    public void endTurnPressed(){
+        monopolyServer.broadCast("GameBoardUI|exitDiceFragment|:|");             // if endTurn is pressed the game will crash if someone is in another fragment
+        //timer.cancel();
+        Timer fragChange = new Timer();
+        fragChange.schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        timer.cancel();
+                        turnProcess();
+                    }
+                },
+                10
+        );
+        //turnProcess();
     }
 
     public void setGame(Game game) {
