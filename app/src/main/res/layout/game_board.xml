@@ -104,7 +104,7 @@
         android:id="@+id/currentMoney"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Current money:\n6750$"
+        android:text="Current money:\n1500$"
         android:textColor="@color/white"
         android:shadowColor="#000000"
         android:shadowDx="4"
