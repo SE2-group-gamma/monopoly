@@ -1,27 +1,38 @@
 package com.example.monopoly.ui;
 
+import android.content.Context;
+import android.media.MediaPlayer;
+import android.net.nsd.NsdManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
+import com.example.monopoly.databinding.FragmentFirstBinding;
 import com.example.monopoly.databinding.GameBoardBinding;
 import com.example.monopoly.gamelogic.Board;
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.gamelogic.properties.Field;
 import com.example.monopoly.gamelogic.properties.IllegalFieldException;
+import com.example.monopoly.databinding.SettingsBinding;
 import com.example.monopoly.network.Client;
+import com.example.monopoly.network.ClientHandler;
+import com.example.monopoly.network.MonopolyServer;
 import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
@@ -29,6 +40,8 @@ import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
 import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
 
 import java.io.IOException;
+import java.net.BindException;
+import java.net.Socket;
 
 public class GameBoardUI extends Fragment {
 
@@ -40,6 +53,11 @@ public class GameBoardUI extends Fragment {
     private Client client;
     private GameBoardUIViewModel gameBoardUIViewModel;
     private ClientPropertyStorage clientPropertyStorage;
+
+    private NSD_Client nsdClient;
+    private MonopolyServer monopoly;
+    private ClientHandler clientHandler;
+    private Socket socket;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,6 +81,7 @@ public class GameBoardUI extends Fragment {
             }
 
         });
+
     }
 
     @Override
@@ -75,7 +94,6 @@ public class GameBoardUI extends Fragment {
         Log.d("MSG", "OnCreateView");
 
         binding = GameBoardBinding.inflate(inflater, container, false);
-
         return binding.getRoot();
     }
 
@@ -215,9 +233,29 @@ public class GameBoardUI extends Fragment {
         NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_DiceFragment);
     }
 
+
+
+
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+
+
+
+
+        //nsdClient.stopDiscovery();
+        /*try {
+            monopoly.shutdownServer();
+            clientHandler.getClient().close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        nsdServ.stopNSD();
+
+        Log.i("GameBoardUI", "Conections done");
+        monopoly=null;*/
     }
 }

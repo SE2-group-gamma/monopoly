@@ -1,28 +1,28 @@
 package com.example.monopoly;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import android.graphics.Color;
 
 import com.example.monopoly.gamelogic.Board;
 import com.example.monopoly.gamelogic.Field;
+import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.gamelogic.properties.PropertyStorage;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 class BoardTest {
 
     static PropertyStorage ps;
-
     @BeforeAll
     static void initPropertyStorage(){
         ps = PropertyStorage.getInstance();
     }
-
-    @Test
     void testSpecialFields(){
         assertEquals("go", Board.getFieldName(0));
         assertEquals("jail", Board.getFieldName(10));

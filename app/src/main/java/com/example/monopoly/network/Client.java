@@ -57,6 +57,9 @@ public class Client extends Thread {
     private String cheated;
     public static HashMap<String, UIHandler> handlers;
     private Timer timer;
+
+    private boolean buttonCheck=false;
+
     private String lastPlayerMoved;
 
     private PropertyStorage propertyStorage;
@@ -215,13 +218,13 @@ public class Client extends Thread {
                     handleMessage(responseSplit);
                 }
                 synchronized (msgBuffer) {
-                    if (msgBuffer.size() != 0) {
-                        for (int i = msgBuffer.size() - 1; i >= 0; i--) {
-                            //Log.d("msgBuffer", msgBuffer.get(i));
-                            outToServer.writeBytes(msgBuffer.get(i) + System.lineSeparator());
-                            outToServer.flush();
-                            msgBuffer.remove(i);
-                        }
+
+                    for (int i = msgBuffer.size() - 1; i >= 0; i--) {
+                        Log.d("msgBuffer", msgBuffer.get(i));
+                        outToServer.writeBytes(msgBuffer.get(i) + System.lineSeparator());
+                        outToServer.flush();
+                        msgBuffer.remove(i);
+
                     }
                 }
 
@@ -233,11 +236,8 @@ public class Client extends Thread {
                 }
             }
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException(e);
+        } catch (IOException  | InterruptedException e) {
+            throw new RuntimeException();
         }
     }
 
@@ -441,7 +441,8 @@ public class Client extends Thread {
     }
 
 
-    public void turnProcess() {
+    public void turnProcess(){
+        setButtonCheck(true);
         turnEnd = false;
         while (game.getPlayers().get(serverTurnCounter).isBroke() == true) {
             serverTurnCounter++;
@@ -459,7 +460,9 @@ public class Client extends Thread {
                 new TimerTask() {
                     @Override
                     public void run() {
+
                         monopolyServer.broadCast("GameBoardUI|exitDiceFragment|:|");   // send exit signal // crashes if any other fragment is open (only if the dice frag hasn't been opened before)
+
                     }
                 },
                 15000 - 10
@@ -468,7 +471,11 @@ public class Client extends Thread {
                 new TimerTask() {
                     @Override
                     public void run() {
+
                         turnEnd = true;
+
+                        Log.i("GameBoardUI","inside timer");
+
                     }
                 },
                 15000
@@ -496,6 +503,9 @@ public class Client extends Thread {
         //turnProcess();
     }
 
+    private boolean isButtonCheck() {
+        return buttonCheck;
+    }
     public void setRanks(int maxPlayers) {
 
         int revCounter = maxPlayers;
@@ -539,4 +549,9 @@ public class Client extends Thread {
     public void setGame(Game game) {
         this.game = game;
     }
+
+    public void setButtonCheck(boolean buttonCheck) {
+        this.buttonCheck = buttonCheck;
+    }
+
 }

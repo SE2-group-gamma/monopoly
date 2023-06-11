@@ -1,5 +1,7 @@
 package com.example.monopoly.network;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -145,5 +147,8 @@ public class MonopolyServer extends Thread{
     public int getLocalPort() {
         return localPort;
     }
+
+
+
 
 }

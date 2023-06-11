@@ -80,7 +80,7 @@
                 android:textColor="@color/white"
                 android:thumbTint="@color/white"
                 android:trackTint="@color/white"
-                android:checked="true"
+                android:checked="false"
                 tools:ignore="TouchTargetSizeCheck,UseSwitchCompatOrMaterialXml" />
 
             <TextView

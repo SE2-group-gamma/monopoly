@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -20,6 +21,7 @@ public class Game{
 
     private String currentPlayersTurn;
     private static final AtomicInteger count = new AtomicInteger(0);
+    //private volatile int ids = 0;
 
     private Game() {
         players = new HashMap<>();
@@ -35,6 +37,7 @@ public class Game{
      * true on success, false otherwise
      */
     public boolean addPlayer(Player player){
+
         if(players.containsValue(player))
             return false;
         int id = count.getAndIncrement();
@@ -69,4 +72,10 @@ public class Game{
     public void setCurrentPlayersTurn(String currentPlayersTurn) {
         this.currentPlayersTurn = currentPlayersTurn;
     }
+
+
+
+
+
+
 }
