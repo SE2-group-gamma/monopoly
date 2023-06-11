@@ -1,6 +1,7 @@
 package com.example.monopoly.ui;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import android.graphics.drawable.LayerDrawable;
@@ -21,6 +22,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
+import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
@@ -296,6 +298,7 @@ public class UIHandler extends Handler {
                         Log.d("CURRENT POSITION Y ",""+uiHandlerViewModel.getPlayerPositionY().getValue()[playerNumber]);
                         int positionBefore = currentPosition[playerNumber];
                         currentPosition[playerNumber] = currentPosition[playerNumber] + fieldsToMove;
+                        clientViewModel.getClientData().getValue().getUser().setPosition(currentPosition[playerNumber]);
                         Log.d("--",""+currentPosition[playerNumber]);
                         if(currentPosition[playerNumber] >= 40){
                             currentPosition[playerNumber] = currentPosition[playerNumber]-40;
@@ -450,6 +453,10 @@ public class UIHandler extends Handler {
             case "updateHotel":
                 if(!clientObj.getUser().getUsername().equals(client))
                     ClientPropertyStorage.getInstance().addHotel(data);
+                break;
+            case "updateOwner":
+                if(!clientObj.getUser().getUsername().equals(client))
+                    ClientPropertyStorage.getInstance().updateOwner(data, new Player(client, Color.valueOf(Color.BLACK), 0, true));
                 break;
         }
     }

@@ -16,11 +16,17 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.GameBoardBinding;
+import com.example.monopoly.gamelogic.Board;
+import com.example.monopoly.gamelogic.Game;
+import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
+import com.example.monopoly.gamelogic.properties.Field;
+import com.example.monopoly.gamelogic.properties.IllegalFieldException;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
+import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
 
 import java.io.IOException;
 
@@ -33,6 +39,7 @@ public class GameBoardUI extends Fragment {
     private ClientViewModel clientViewModel;
     private Client client;
     private GameBoardUIViewModel gameBoardUIViewModel;
+    private ClientPropertyStorage clientPropertyStorage;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +79,7 @@ public class GameBoardUI extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
         this.client = clientViewModel.getClientData().getValue();       // set client
-
+        this.clientPropertyStorage = ClientPropertyStorage.getInstance();
         /**
          * Reconstruction of GameBoardUI
          */
@@ -173,6 +180,28 @@ public class GameBoardUI extends Fragment {
         binding.showPropertiesButton.setOnClickListener(view1 -> {
             NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_ProperyCardFragment);
         });
+
+        try{
+            Log.d("gameboardBuy", Board.getFieldName(this.client.getUser().getPosition()));
+            Field field = clientPropertyStorage.getProperty(Board.getFieldName(this.client.getUser().getPosition()));
+            if(field.getOwner() != null || this.client.getUser().getCapital() < field.getPrice()) throw new IllegalFieldException();
+            binding.buy.setAlpha(1f);
+            binding.buy.setEnabled(true);
+            binding.buy.setOnClickListener((viewX) -> {
+                clientPropertyStorage.updateOwner(field.getName(), this.client.getUser());
+                try {
+                    client.writeToServer("GameBoardUI|buyField|" + field.getName() + "|" + this.client.getUser().getUsername());
+                    binding.buy.setAlpha(0.5f);
+                    binding.buy.setEnabled(false);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        } catch (IllegalFieldException ie) {
+            Log.d("gameboardBuy", "disabled");
+            binding.buy.setAlpha(0.5f);
+            binding.buy.setEnabled(false);
+        }
     }
 
     private void showDiceFragment(){

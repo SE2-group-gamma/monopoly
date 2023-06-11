@@ -77,7 +77,7 @@ public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdap
             holder.propertyHouses.setText("");
         }
 
-        if(field instanceof PropertyField /*&& canBuyHouseOrHotel((PropertyField) field)*/) {
+        if(field instanceof PropertyField && canBuyHouseOrHotel((PropertyField) field)) {
             holder.buyHouseButton.setVisibility(View.VISIBLE);
             if(((PropertyField) field).getNumOfHouses() < 4) {
                 holder.buyHouseButton.setText("Buy House");

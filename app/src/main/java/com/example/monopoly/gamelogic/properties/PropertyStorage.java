@@ -65,7 +65,7 @@ public class PropertyStorage {
         if(!hasField(propertyId)) throw new IllegalFieldException("Invalid field name: " + propertyId);
         Field field = this.properties.get(propertyId);
         if(!(field instanceof PropertyField)) throw new IllegalFieldException("Field is not a PropertyField");
-        //if(!hasAllColours(field.getOwner(), ((PropertyField) field).getColor())) throw new IllegalStateException("Owner does not have all colors");
+        if(!hasAllColours(field.getOwner(), ((PropertyField) field).getColor())) throw new IllegalStateException("Owner does not have all colors");
         ((PropertyField) field).addHouse();
         player.setCapital(player.getCapital()-((PropertyField) field).getRent().getPriceHouseOrHotel());
         return ((PropertyField) field).getNumOfHouses();

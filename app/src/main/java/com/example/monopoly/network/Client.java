@@ -332,6 +332,12 @@ public class Client extends Thread {
                 propertyStorage.addHotel(fieldName, player);
                 monopolyServer.broadCast("GameBoardUI|updateHotel|" + fieldName + "|" + player.getUsername());
             }
+            if(responseSplit[1].equals("buyField")){
+                String fieldName = dataResponseSplit[0];
+                Player player = game.getPlayers().get(game.getPlayerIDByName(responseSplit[3]));
+                propertyStorage.buyProperty(fieldName, player);
+                monopolyServer.broadCast("GameBoardUI|updateOwner|" + fieldName + "|" + player.getUsername());
+            }
         } else {
             for (String str: responseSplit) {
             }
