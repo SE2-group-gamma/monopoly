@@ -113,13 +113,13 @@ public class UIHandler extends Handler {
             ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText(gameBoardUIViewModel.getCurrentMoney().getValue());
         }
 
-        if(gameBoardUIViewModel.getCurrentTime().getValue()!=null){
+        if(gameBoardUIViewModel.getCurrentTime().getValue()!=null && ((TextView) this.frag.getActivity().findViewById(R.id.time)) != null){
             ((TextView) this.frag.getActivity().findViewById(R.id.time)).setText(gameBoardUIViewModel.getCurrentTime().getValue());
         }
 
 
 
-        this.client = clientViewModel.getClientData().getValue();
+        this.clientObj = clientViewModel.getClientData().getValue();
         super.handleMessage(msg);
         String data = msg.getData().get("Data").toString();
         String type = msg.getData().get("ActionType").toString();
