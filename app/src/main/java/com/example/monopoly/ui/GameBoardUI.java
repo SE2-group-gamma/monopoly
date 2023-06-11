@@ -53,10 +53,9 @@ public class GameBoardUI extends Fragment {
                 String cheated = dices.isLastRollFlawed() == true ? "t" : "f";
                 String doublets = (dices.getDice1() == dices.getDice2()) == true ? "t" : "f";       // 3 doubles in a row mean jail!!!
                 //String passedStartField = dices.isLastRollFlawed()==true?"t":"f";
-
                 try {
-                    this.client.writeToServer("GameBoardUI|move|" + dices.getSum() + ":" + cheated + ":" + doublets + "|" + this.client.getUser().getUsername());
-                    this.clientViewModel.getClientData().getValue().getUser().setPosition((this.clientViewModel.getClientData().getValue().getUser().getPosition()+dices.getSum())%40);
+                    client.writeToServer("GameBoardUI|move|" + dices.getSum() + ":" + cheated + ":" + doublets + "|" + this.client.getUser().getUsername());
+                    Log.d("gameboardBuy", "After dice: " + Board.getFieldName(this.client.getUser().getPosition()));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -73,13 +72,16 @@ public class GameBoardUI extends Fragment {
     ) {
         Client.subscribe(this,"GameBoardUI");
 
+        Log.d("MSG", "OnCreateView");
+
         binding = GameBoardBinding.inflate(inflater, container, false);
+
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-
         this.client = clientViewModel.getClientData().getValue();       // set client
+        Log.d("MSG", "OnViewCreated");
         this.clientPropertyStorage = ClientPropertyStorage.getInstance();
         /**
          * Reconstruction of GameBoardUI
@@ -185,8 +187,8 @@ public class GameBoardUI extends Fragment {
         });
 
         try{
-            Log.d("gameboardBuy", Board.getFieldName(this.client.getUser().getPosition()));
-            Field field = clientPropertyStorage.getProperty(Board.getFieldName(this.client.getUser().getPosition()));
+            Log.d("gameboardBuy", Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()));
+            Field field = clientPropertyStorage.getProperty(Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()));
             if(field.getOwner() != null || this.client.getUser().getCapital() < field.getPrice()) throw new IllegalFieldException();
             binding.buy.setAlpha(1f);
             binding.buy.setEnabled(true);
@@ -202,7 +204,6 @@ public class GameBoardUI extends Fragment {
                 }
             });
         } catch (IllegalFieldException ie) {
-            Log.d("gameboardBuy", "disabled");
             binding.buy.setAlpha(0.5f);
             binding.buy.setEnabled(false);
         }
