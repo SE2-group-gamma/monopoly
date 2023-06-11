@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
+import com.example.monopoly.gamelogic.properties.PropertyStorage;
 import com.example.monopoly.gamelogic.PlayerMapPosition;
 import com.example.monopoly.ui.HostGame;
 import com.example.monopoly.ui.UIHandler;
@@ -48,6 +49,8 @@ public class Client extends Thread {
     private String cheated;
     public static HashMap<String, UIHandler> handlers;
     private Timer timer;
+
+    private PropertyStorage propertyStorage;
 
     static {
         handlers = new HashMap<>();
@@ -98,12 +101,14 @@ public class Client extends Thread {
         this.user = user;
         this.msgBuffer = new ArrayList<>();
         this.isHost = isHost;
+        this.propertyStorage = PropertyStorage.getInstance();
     }
 
     public Client(InetAddress host, int port, boolean isHost) {
         this.host = host;
         this.port = port;
         this.msgBuffer = new ArrayList<>();
+        this.propertyStorage = PropertyStorage.getInstance();
     }
 
     public void setId(int id) {
@@ -321,6 +326,7 @@ public class Client extends Thread {
                 Log.d("MoneyPlayer","client "+this.getUser().getUsername());
                 Player player = game.getPlayers().get(id);
                 int money = Integer.parseInt(dataResponseSplit[0]);
+                Log.d("Money", dataResponseSplit[0]);
                 double capital = player.getCapital();
                 player.setCapital(capital+money);
                 monopolyServer.broadCast("GameBoardUI|changeCapital|"+responseSplit[2]+"|"+responseSplit[3]);
@@ -336,6 +342,24 @@ public class Client extends Thread {
                 Log.d("mapPlayer","player "+responseSplit[3]);
                 Log.d("mapPlayer","x "+posX);
                 Log.d("mapPlayer","y "+posY);
+            }
+            if(responseSplit[1].equals("addHouse")){
+                String fieldName = dataResponseSplit[0];
+                Player player = game.getPlayers().get(game.getPlayerIDByName(responseSplit[3]));
+                propertyStorage.addHouse(fieldName, player);
+                monopolyServer.broadCast("GameBoardUI|updateHouse|" + fieldName + "|" + player.getUsername());
+            }
+            if(responseSplit[1].equals("addHotel")){
+                String fieldName = dataResponseSplit[0];
+                Player player = game.getPlayers().get(game.getPlayerIDByName(responseSplit[3]));
+                propertyStorage.addHotel(fieldName, player);
+                monopolyServer.broadCast("GameBoardUI|updateHotel|" + fieldName + "|" + player.getUsername());
+            }
+            if(responseSplit[1].equals("buyField")){
+                String fieldName = dataResponseSplit[0];
+                Player player = game.getPlayers().get(game.getPlayerIDByName(responseSplit[3]));
+                propertyStorage.buyProperty(fieldName, player);
+                monopolyServer.broadCast("GameBoardUI|updateOwner|" + fieldName + "|" + player.getUsername());
             }
         } else {
             for (String str: responseSplit) {

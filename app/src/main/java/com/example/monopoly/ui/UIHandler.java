@@ -1,6 +1,7 @@
 package com.example.monopoly.ui;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import android.graphics.drawable.LayerDrawable;
@@ -21,6 +22,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
+import com.example.monopoly.gamelogic.Player;
+import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.gamelogic.PlayerMapPosition;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
@@ -271,7 +274,8 @@ public class UIHandler extends Handler {
                 if(clientObj.getUser().getUsername().equals(client)) {
                     int money = currentMoney + Integer.parseInt(data.split(":")[0]);
                     uiHandlerViewModel.setCurrentMoney(money);
-                    ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n"+money+"$");
+                    if(((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null)
+                        ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n"+money+"$");
                     Log.d("MoneyPlayer",""+money);
                     Log.d("MoneyPlayer",""+client);
                 }
@@ -457,6 +461,18 @@ public class UIHandler extends Handler {
             case "exitDiceFragment":
                 NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
                     //Thread.sleep(1000);
+                break;
+            case "updateHouse":
+                if(!clientObj.getUser().getUsername().equals(client))
+                    ClientPropertyStorage.getInstance().addHouse(data);
+                break;
+            case "updateHotel":
+                if(!clientObj.getUser().getUsername().equals(client))
+                    ClientPropertyStorage.getInstance().addHotel(data);
+                break;
+            case "updateOwner":
+                if(!clientObj.getUser().getUsername().equals(client))
+                    ClientPropertyStorage.getInstance().updateOwner(data, new Player(client, new Color(), 0, true));
                 break;
         }
     }
