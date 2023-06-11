@@ -210,13 +210,13 @@ public class UIHandler extends Handler {
 
                 Log.d("hostPosition", "Initialize Host");
                 if(uiHandlerViewModel.getCheckFirst().getValue()){
+
+                    gameBoardUIViewModel.setUncoverEnabled(this.frag.getActivity().findViewById(R.id.uncover).isEnabled());     // save uncover status on first turn
+
                     imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
                     //layerDrawable = (LayerDrawable) imageView.getDrawable();
 
                     layerDrawable = (LayerDrawable) this.frag.getResources().getDrawable(R.drawable.layerlist_for_gameboard);
-
-
-
 
                     // The Ratio is relative to a 1440/3120 phone with density of 3.5
                     // Always multiply by this Ratio
@@ -290,6 +290,12 @@ public class UIHandler extends Handler {
                     Log.d("MoneyPlayer",""+client);
                 }
                 break;
+            case "uncoverUsed":
+                this.frag.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
+                this.frag.getActivity().findViewById(R.id.uncover).setEnabled(false);
+                gameBoardUIViewModel.setUncoverEnabled(false);
+                Log.d("uncover","uncoverUsed Broadcast! => disabled");
+                break;
             case "movePlayer":
                 if(clientObj.getUser().getUsername().equals(client)) {
                     movePlayer(data);   // disable ui and viewModel entries
@@ -297,6 +303,10 @@ public class UIHandler extends Handler {
                 }else{
                     //restore();
                 }
+
+
+                Log.d("uncover","uncoverUsed Broadcast! => enabled");
+
                 //restore();
                 Log.d("move", data); //Data for move distance and player name
                 String[] dataResponse = data.split(":");
@@ -305,7 +315,7 @@ public class UIHandler extends Handler {
                 /*if (client.equals(playerObjects.get(player1))) {
                     Log.d("--------XYZ------", "" + fieldsToMove);
                 }*/
-                imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
+                //imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
                 //layerDrawable = (LayerDrawable) imageView.getDrawable();
 
 
@@ -414,6 +424,14 @@ public class UIHandler extends Handler {
                         layerDrawable.getLayerInsetRight(1));
                 //setPlayerPositions();
 
+                gameBoardUIViewModel.setUncoverEnabled(true);
+
+                if(this.frag.getActivity().findViewById(R.id.uncover)==null)
+                    return;
+                this.frag.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
+                this.frag.getActivity().findViewById(R.id.uncover).setEnabled(true);
+
+
                 // Log.d("----COUNTER----",""+playerObjects.get(player1));
                 // Log.d("----COUNTER----",""+playerObjects.get(player2));
                 imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
@@ -441,6 +459,15 @@ public class UIHandler extends Handler {
                     //Objects.requireNonNull(this.frag.getActivity()).getSupportFragmentManager().popBackStack();
                 }*/
 
+                if(gameBoardUIViewModel.getUncoverEnabled().getValue()!=null) {
+                    if (gameBoardUIViewModel.getUncoverEnabled().getValue()) {
+                        this.frag.getActivity().findViewById(R.id.uncover).setEnabled(true);
+                        this.frag.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
+                    } else {
+                        this.frag.getActivity().findViewById(R.id.uncover).setEnabled(false);
+                        this.frag.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
+                    }
+                }
                 ((TextView) this.frag.getActivity().findViewById(R.id.turn)).setText(data + "'s turn");
                 gameBoardUIViewModel.setCurrentPlayer(data + "'s turn");
                 Log.d("ButtonGreyCheck", "Here is Button" + this.clientObj.getUser().getUsername());
@@ -450,9 +477,9 @@ public class UIHandler extends Handler {
                     this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(true);
                     this.frag.getActivity().findViewById(R.id.endTurn).setAlpha(1.0f);
                     this.frag.getActivity().findViewById(R.id.endTurn).setEnabled(true);
-                    this.frag.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
-                    this.frag.getActivity().findViewById(R.id.uncover).setEnabled(false);
-                    gameBoardUIViewModel.setUncoverEnabled(false);
+                    //this.frag.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
+                    //this.frag.getActivity().findViewById(R.id.uncover).setEnabled(false);
+                    //gameBoardUIViewModel.setUncoverEnabled(false);
                     gameBoardUIViewModel.setEndTurnEnabled(true);
                     gameBoardUIViewModel.setThrowDiceEnabled(true);
                 } else {                                                    // not your turn
@@ -460,9 +487,8 @@ public class UIHandler extends Handler {
                     this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(false);
                     this.frag.getActivity().findViewById(R.id.endTurn).setAlpha(0.5f);
                     this.frag.getActivity().findViewById(R.id.endTurn).setEnabled(false);
-                    this.frag.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
-                    this.frag.getActivity().findViewById(R.id.uncover).setEnabled(true);
-                    gameBoardUIViewModel.setUncoverEnabled(true);
+
+
                     gameBoardUIViewModel.setEndTurnEnabled(false);
                     gameBoardUIViewModel.setThrowDiceEnabled(false);
                 }
@@ -786,6 +812,10 @@ public class UIHandler extends Handler {
     private void restore(){
         Log.d("MoneyPlayer","I am: "+clientObj.getUser().getUsername());
         Log.d("MoneyPlayer","curr money: "+currentMoney);
+
+        if(this.frag.getActivity().findViewById(R.id.currentMoney)==null)
+            return;
+
         ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n"+currentMoney+"$");
 
         imageView = this.frag.getActivity().findViewById(R.id.iv_zoom);
