@@ -277,8 +277,10 @@ public class Client extends Thread {
                     Player tempPlayer = new Player(responseSplit[2],new Color(),500.00,true);
                     Log.i("Dices","Client Gonna join: ");
                     game.addPlayer(tempPlayer);
+
                 }
             }
+
             if(responseSplit[1].equals("move")){
                 // data: 8:t    ... t=cheated; f=notcheated
                 cheated = dataResponseSplit[1];
@@ -287,6 +289,7 @@ public class Client extends Thread {
                     game.incrementPlayerPosition(tempID, Integer.parseInt(responseSplit[2]));
                     Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
                     Log.d("gameturnCurr", "currUser" + responseSplit[3]);
+                    
                 }
             }//}
             if (responseSplit[1].equals("transferToPlayer")) {
