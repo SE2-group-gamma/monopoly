@@ -341,7 +341,7 @@ public class Client extends Thread {
                 int cardID = Integer.parseInt(dataResponseSplit[0]);
                 String cardType = dataResponseSplit[1];
                 synchronized (monopolyServer.getClients()) {
-                    monopolyServer.broadCast("DrawFragment|removeCard|" + cardID + ":" + cardType + "|" + monopolyServer.getClient().getUser().getUsername());
+                    monopolyServer.broadCast("GameBoardUI|removeCard|" + cardID + ":" + cardType + "|" + monopolyServer.getClient().getUser().getUsername());
                 }
             }
             if(responseSplit[1].equals("gameStart")){
@@ -390,13 +390,13 @@ public class Client extends Thread {
 
                 int cardID = Integer.parseInt(dataResponseSplit[0]);
                 String cardType = dataResponseSplit[1];
-                if (cardType == "chance") {
+                if (cardType.equals("chance")) {
                     ChanceCard card = cardViewModel.getChanceCards().getValue().getAllChanceCards().get(cardID);
                     if (cardViewModel.getChanceCards().getValue().getChanceCardDeck().contains(card)) {
                         cardViewModel.getChanceCards().getValue().getChanceCardDeck().
                                 remove(cardViewModel.getChanceCards().getValue().getChanceCardDeck().get(cardID));
                     }
-                } else if (cardType == "community") {
+                } else if (cardType.equals("community")) {
                     CommunityChestCard card = cardViewModel.getCommunityCards().getValue().getAllCommunityChestCards().get(cardID);
                     if (cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().contains(card)) {
                         cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().

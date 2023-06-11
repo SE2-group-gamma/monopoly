@@ -147,7 +147,6 @@ public class Game{
                 transferPlayerToPlayerProtocol(owner.getId(), amount);
             }
             moveProtocol(incr);
-            endTurnProtocol();
         }
 
         //Bank pays you dividend of $50.
@@ -351,13 +350,11 @@ public class Game{
         int incr;
 
         for (int i = 0; i < fields.size(); i++) {
-            if (fields.get(i).getName() == location) {
+            if (fields.get(i).getName().equals(location)) {
                 fieldId = fields.get(i).getId();
             }
         }
-        if (players.get(playerID).getPosition() == 0) {
-            endTurnProtocol();
-        }
+
         if (players.get(playerID).getPosition() > fieldId) {
             incr = fields.size() - players.get(playerID).getPosition() + fieldId;
             transferToPlayerProtocol(200);
@@ -365,6 +362,10 @@ public class Game{
             incr = fieldId - players.get(playerID).getPosition();
         }
         moveProtocol(incr);
+
+        if (players.get(playerID).getPosition() == 0) {
+            endTurnProtocol();
+        }
 
     }
 
