@@ -444,11 +444,11 @@ public class UIHandler extends Handler {
                     //Thread.sleep(1000);
                 break;
             case "updateHouse":
-                if(!client.equals(clientObj.getUser().getUsername()))
+                if(!clientObj.getUser().getUsername().equals(client))
                     ClientPropertyStorage.getInstance().addHouse(data);
                 break;
             case "updateHotel":
-                if(!client.equals(clientObj.getUser().getUsername()))
+                if(!clientObj.getUser().getUsername().equals(client))
                     ClientPropertyStorage.getInstance().addHotel(data);
                 break;
         }
