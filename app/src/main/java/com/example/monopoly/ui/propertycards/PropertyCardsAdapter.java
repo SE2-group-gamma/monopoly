@@ -19,18 +19,23 @@ import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.gamelogic.properties.Field;
 import com.example.monopoly.gamelogic.properties.PropertyField;
+import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 
 import org.w3c.dom.Text;
+
+import java.io.IOException;
 
 
 public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdapter.ViewHolder> {
 
     private static ClientPropertyStorage cps = ClientPropertyStorage.getInstance();
     private Player player;
+    private Client client;
 
     public PropertyCardsAdapter(ClientViewModel clientViewModel) {
         this.player = clientViewModel.getClientData().getValue().getUser();
+        this.client = clientViewModel.getClientData().getValue();
     }
 
     @NonNull
@@ -43,6 +48,14 @@ public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdap
 
     private boolean canBuyHouseOrHotel(PropertyField field){
         return player.equals(field.getOwner()) && cps.hasAllColours(player, ((PropertyField) field).getColor()) && player.getCapital() >= field.getRent().getPriceHouseOrHotel();
+    }
+
+    private void updateOnServer(String action, Field field) {
+        try {
+            client.writeToServer("PropertyCards|" + action + "|" + field.getName() + "|" + player.getUsername());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -71,12 +84,14 @@ public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdap
                 holder.buyHouseButton.setOnClickListener((view) -> {
                     ((PropertyField) field).addHouse();
                     onBindViewHolder(holder, position);
+                    updateOnServer("addHouse", field);
                 });
             } else if (!((PropertyField) field).hasHotel()){
                 holder.buyHouseButton.setText("Buy Hotel");
                 holder.buyHouseButton.setOnClickListener((view) -> {
                     ((PropertyField) field).addHotel();
                     onBindViewHolder(holder, position);
+                    updateOnServer("addHotel", field);
                 });
             } else {
                 holder.buyHouseButton.setVisibility(View.GONE);

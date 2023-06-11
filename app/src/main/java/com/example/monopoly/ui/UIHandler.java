@@ -21,6 +21,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
+import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 
@@ -441,6 +442,14 @@ public class UIHandler extends Handler {
             case "exitDiceFragment":
                 NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
                     //Thread.sleep(1000);
+                break;
+            case "updateHouse":
+                if(!client.equals(clientObj.getUser().getUsername()))
+                    ClientPropertyStorage.getInstance().addHouse(data);
+                break;
+            case "updateHotel":
+                if(!client.equals(clientObj.getUser().getUsername()))
+                    ClientPropertyStorage.getInstance().addHotel(data);
                 break;
         }
     }
