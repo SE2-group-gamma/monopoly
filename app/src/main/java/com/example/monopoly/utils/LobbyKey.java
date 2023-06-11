@@ -9,5 +9,6 @@ public class LobbyKey {
 
     public int generateKey(){
         return new Random().nextInt(9000) + 1000;
+        //return 1;
     }
 }

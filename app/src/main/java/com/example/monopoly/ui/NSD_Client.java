@@ -4,7 +4,11 @@ import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.util.Log;
 
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.network.Client;
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
 
 import java.net.InetAddress;
 
@@ -28,16 +32,18 @@ public class NSD_Client {
     private Object readyToken="";
     private boolean isReady = false;
     private boolean isHost = false;
-
+    private Player user;
     public boolean isReady() {
         synchronized (readyToken){
             return isReady;
         }
     }
 
+
     public void setIsHost(boolean host){
         this.isHost=host;
     }
+
 
 
     public void start(NsdManager manager){
@@ -47,6 +53,13 @@ public class NSD_Client {
         initializeResolveListener();
 
         manager.discoverServices(serviceType, NsdManager.PROTOCOL_DNS_SD, discoveryListener);
+    }
+
+    public void stopDiscovery(){
+        if (manager !=null && discoveryListener !=null){
+            manager.stopServiceDiscovery(discoveryListener);
+            Log.i("NSD_Client","NSD discovery stop");
+        }
     }
 
 
@@ -119,6 +132,9 @@ public class NSD_Client {
                 Log.d("SocketConn","Searching ...");
                 client = new Client(host, port, isHost);
                 client.start();
+
+
+
                 synchronized (readyToken){
                     isReady=true;
                 }

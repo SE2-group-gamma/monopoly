@@ -1,37 +1,27 @@
 package com.example.monopoly.network;
 
-import android.os.Bundle;
-import android.os.Message;
-import android.util.Log;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.monopoly.ui.UIHandler;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ClientHandler extends Thread{
 
     private Socket socket;
 
-
-
     public BufferedReader br;
     public BufferedWriter bw;
 
     private String hostname;
-    Client client;
+    private Client client;
+    private String clientName;
     public ArrayList<String> msgBuffer;
 
     public MonopolyServer server;
+    private boolean playerActive;
 
     public void setSocket(Socket socket) {
         this.socket = socket;
@@ -42,6 +32,7 @@ public class ClientHandler extends Thread{
     }
 
     private Object clientToken="";
+
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
@@ -57,14 +48,20 @@ public class ClientHandler extends Thread{
         this.hostname = hostname;
         this.socket=socket;
         this.client=client;
+        //this.clientName=client.getName();
         this.msgBuffer=new ArrayList<>();
+        this.playerActive=true;
     }
 
-    public Socket getClient() {
+    public String getClientName() {
+        return clientName;
+    }
+
+    public Socket getSocket() {
         return socket;
     }
 
-    public Client getClientClient() {
+    public Client getClient() {
         return client;
     }
 
@@ -73,9 +70,6 @@ public class ClientHandler extends Thread{
         try {
             this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-
-            //bw.write("Lobby|changeText|Martin Jäger"+System.lineSeparator());
-            //bw.flush();
             while(true){
                 replacer();
                 msgBuffer();
@@ -101,8 +95,10 @@ public class ClientHandler extends Thread{
                     String[] response = client.handleMessage(strings);
                     if(response!=null){
                         for (String str: response) {
-                            bw.write(str.replaceAll("REPLACER",hostname));
-                            bw.flush();
+
+                            server.broadCast(str.replaceAll("REPLACER",hostname));
+                            //server.broadCastExceptSelf(str.replaceAll("REPLACER",hostname),this);
+
                         }
                     }
                 }
@@ -116,9 +112,8 @@ public class ClientHandler extends Thread{
         synchronized (msgBuffer) {
             if (msgBuffer.size() != 0) {
                 for (int i = msgBuffer.size() - 1; i >= 0; i--) {
-                    //Log.d("msgBuffer", msgBuffer.get(i));
                     try {
-                        bw.write(msgBuffer.get(i) + System.lineSeparator());
+                        bw.write(msgBuffer.get(i)+ System.lineSeparator());
                         bw.flush();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -127,8 +122,14 @@ public class ClientHandler extends Thread{
                 }
             }
         }
-
     }
+
+
+    /*public void endConn() throws IOException {
+        socket.close();
+        Log.i("ClientHandler","Clienthandler gone");
+
+    }*/
 
 
 }

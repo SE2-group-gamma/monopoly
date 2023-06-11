@@ -1,41 +1,25 @@
 package com.example.monopoly;
 
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 
 import android.graphics.Color;
-import android.os.Message;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.network.Client;
-import com.example.monopoly.ui.UIHandler;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 
 public class ClientTest {
@@ -251,4 +235,32 @@ public class ClientTest {
         clientThread.interrupt();
     }
 */
+
+  /*  @Test
+    public void testTurnProcess() throws Exception {
+        MonopolyServer monopolyServerMock = Mockito.mock(MonopolyServer.class);
+        HashMap<String, Player> playersMock = new HashMap<>();
+        playersMock.put("user1", new Player("user1", new Color(), 500.00, true));
+        playersMock.put("user2", new Player("user2", new Color(), 500.00, false));
+        Game gameMock = Mockito.mock(Game.class);
+
+        when(gameMock.getPlayers()).thenReturn(playersMock);
+        when(gameMock.getCurrentPlayersTurn()).thenReturn("user1");
+        when(monopolyServerMock.getNumberOfClients()).thenReturn(playersMock.size());
+
+        client.setMonopolyServer(monopolyServerMock);
+        client.setGame(gameMock);
+
+        client.turnProcess();
+
+        Thread.sleep(70000);
+
+        verify(gameMock).setCurrentPlayersTurn(anyString());
+        verify(monopolyServerMock).broadCast(contains("GameBoardUI|playersTurn|"));
+        assertEquals("user2", gameMock.getCurrentPlayersTurn());
+    }
+*/
+
+
+
 }

@@ -13,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.LobbyBinding;
+import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.network.MonopolyServer;
@@ -23,6 +24,7 @@ public class Lobby extends Fragment {
 
     private int key;
     private String lobbyname;
+    private Game game;
 
     @Override
     public View onCreateView(
@@ -42,10 +44,7 @@ public class Lobby extends Fragment {
             @Override
             public void onGlobalLayout() {
                 MonopolyServer x = HostGame.getMonopolyServer();
-                //Log.d("",""+x.getNumberOfClients());
-                //Log.d("",""+x.getNumberOfClients());
                 // TODO: Set textView with key from Lobby
-
             }
 
         });
@@ -57,11 +56,7 @@ public class Lobby extends Fragment {
         });
 
         binding.startButton.setOnClickListener(view12 -> {
-            // TODO: join into game
-            for (ClientHandler handler: HostGame.getMonopolyServer().getClients()) {
-                handler.writeToClient("Lobby|gameStart| ");
-            }
-            //HostGame.getMonopolyServer().getClients().get(0).getClientClient().handleMessage("Lobby|gameStart| ".split("\\|"));
+            HostGame.getMonopolyServer().broadCast("Lobby|gameStart| ");
         });
     }
 

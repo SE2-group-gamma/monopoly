@@ -46,4 +46,9 @@ public class NSDServer implements NsdManager.RegistrationListener{
     public void onServiceUnregistered(NsdServiceInfo nsdServiceInfo) {
         Log.i("NSDServer", "Service unregistered");
     }
+
+    public void stopNSD(){
+        unregisterNSDService();
+        Log.i("NSDServer","NSD Service gone");
+    }
 }
