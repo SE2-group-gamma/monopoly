@@ -5,16 +5,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.monopoly.R;
+import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.gamelogic.properties.Field;
 import com.example.monopoly.gamelogic.properties.PropertyField;
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
 
 import org.w3c.dom.Text;
 
@@ -22,13 +27,17 @@ import org.w3c.dom.Text;
 public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdapter.ViewHolder> {
 
     private static ClientPropertyStorage cps = ClientPropertyStorage.getInstance();
+    private Player player;
+
+    public PropertyCardsAdapter(ClientViewModel clientViewModel) {
+        this.player = clientViewModel.getClientData().getValue().getUser();
+    }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.property_card_element, parent, false);
-
         return new ViewHolder(view);
     }
 
@@ -50,6 +59,27 @@ public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdap
         } else {
             holder.propertyHouses.setText("");
         }
+
+        if(field instanceof PropertyField /*&& player.equals(field.getOwner())*/) {
+            holder.buyHouseButton.setVisibility(View.VISIBLE);
+            if(((PropertyField) field).getNumOfHouses() < 4) {
+                holder.buyHouseButton.setText("Buy House");
+                holder.buyHouseButton.setOnClickListener((view) -> {
+                    ((PropertyField) field).addHouse();
+                    onBindViewHolder(holder, position);
+                });
+            } else if (!((PropertyField) field).hasHotel()){
+                holder.buyHouseButton.setText("Buy Hotel");
+                holder.buyHouseButton.setOnClickListener((view) -> {
+                    ((PropertyField) field).addHotel();
+                    onBindViewHolder(holder, position);
+                });
+            } else {
+                holder.buyHouseButton.setVisibility(View.GONE);
+            }
+        } else {
+            holder.buyHouseButton.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -61,12 +91,14 @@ public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdap
         private final ImageView propertyCard;
         private final TextView ownerName;
         private final TextView propertyHouses;
+        private final Button buyHouseButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             propertyCard = itemView.findViewById(R.id.propertyCardImageView);
             ownerName = itemView.findViewById(R.id.ownerName);
             propertyHouses = itemView.findViewById(R.id.propertyHouses);
+            buyHouseButton = itemView.findViewById(R.id.buyHouseBtn);
         }
     }
 }
