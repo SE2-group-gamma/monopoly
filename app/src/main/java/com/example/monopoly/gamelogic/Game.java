@@ -381,7 +381,7 @@ public class Game{
     public void transferPlayerToPlayerProtocol(int receiverID, int amount) throws IOException {
         int playerID = getPlayerIDByName(currentPlayersTurn);
         players.get(playerID).getMyClient().
-                writeToServer("GameBoardUI|transferPlayerToPlayer|" + players.get(receiverID) + ":" + amount + "|" + currentPlayersTurn);
+                writeToServer("GameBoardUI|transferPlayerToPlayer|" + players.get(receiverID).getId() + ":" + amount + "|" + currentPlayersTurn);
     }
 
     public void moveProtocol(int incr) throws IOException {

@@ -18,6 +18,7 @@ import com.example.monopoly.network.Client;
 import com.example.monopoly.network.MonopolyServer;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -86,7 +87,6 @@ public class GameTest {
     @Test
     public void chance0() throws IOException {
         g.getPlayers().get(0).setCardID(R.drawable.chance0);
-
         HashMap<Integer, Field> fields = new HashMap<>();
         fields.put(1,mock(Field.class));
         assertThrows(NullPointerException.class, () ->{
@@ -96,9 +96,7 @@ public class GameTest {
 
     @Test
     public void community0() throws IOException {
-
         g.getPlayers().get(0).setCardID(R.drawable.community0);
-
         HashMap<Integer, Field> fields = new HashMap<>();
         fields.put(1,mock(Field.class));
 
@@ -466,9 +464,7 @@ public class GameTest {
         field = new Field(0, "Strandbad", "x", mock(Color.class), 200, 2, mock(Player.class), 20, 500, 500, mock(Image.class));
         fields.put(0, field);
         g.setFields(fields);
-        p.setPosition(2);
-        g.addPlayer(p);
-        g.setCurrentPlayersTurn("Test");
+        g.getPlayers().get(0).setPosition(2);
 
         assertThrows(NullPointerException.class, () -> {
             g.advanceAndCollect("Strandbad");
@@ -480,13 +476,13 @@ public class GameTest {
         field = new Field(4, "Strandbad", "x", mock(Color.class), 200, 2, mock(Player.class), 20, 500, 500, mock(Image.class));
         fields.put(0, field);
         g.setFields(fields);
-        p.setPosition(2);
-        g.addPlayer(p);
-        g.setCurrentPlayersTurn("Test");
+        g.getPlayers().get(0).setPosition(2);
 
         assertThrows(NullPointerException.class, () -> {
             g.advanceAndCollect("Strandbad");
         });
+
     }
 }
+
 
