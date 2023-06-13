@@ -239,14 +239,14 @@ public class Client extends Thread {
                 }
             }
 
-        } catch (IOException  | InterruptedException e) {
+        } catch (Exception e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException();
         }
     }
 
 
-    public String[] handleMessage(String[] responseSplit) {
+    public String[] handleMessage(String[] responseSplit) throws Exception {
         if (handlers.containsKey(responseSplit[0])) {
             android.os.Message handleMessage = new Message();
             Bundle b = new Bundle();

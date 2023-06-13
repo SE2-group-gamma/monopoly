@@ -59,13 +59,13 @@ public class Game{
             throw new Exception("Dice Value invalid!");
     }
 
-    public int getPlayerIDByName(String userName){
+    public int getPlayerIDByName(String userName) throws Exception {
         for(int i = 0; i < this.players.size(); i++){
             if(userName.equals(this.players.get(i).getUsername())){
                 return i;
             }
         }
-        return 0;
+        throw new Exception("404 not found!");
     }
 
     public String getCurrentPlayersTurn() {
@@ -78,7 +78,7 @@ public class Game{
 
     public void removeAllPlayers(){
         this.players.clear();
-        count.set(0);
+        this.count.set(0);
     }
 
 }
