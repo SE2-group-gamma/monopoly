@@ -154,9 +154,9 @@ public class MonopolyServer extends Thread{
             keyedHandlers.values().remove(clientHandler);
 
             boolean allPlayersLeft = clients.isEmpty();
-            boolean hostLeft = clientHandler.getClientClient().isHost();
+            boolean hostLeft = clientHandler.getClient().isHost();
 
-            if (!clientHandler.isPlayerActive() || (clients.isEmpty() && clientHandler.getClientClient().isHost())) {
+            if (!clientHandler.isPlayerActive() || (clients.isEmpty() && clientHandler.getClient().isHost())) {
                 clientHandler.setPlayerInactive();
                 closeConnectionsAndShutdown();
             } else {
@@ -169,7 +169,8 @@ public class MonopolyServer extends Thread{
     public synchronized void closeConnectionsAndShutdown() {
         try {
             for (ClientHandler clientHandler : clients) {
-                clientHandler.getClient().close();
+                clientHandler.getClient().setGameover(true);
+                clientHandler.getSocket().close();
                 //clientHandler.server.broadCast("Server down");
                 Log.i("MonopolyServer", "Connection closed for client: " + clientHandler.getClient());
             }

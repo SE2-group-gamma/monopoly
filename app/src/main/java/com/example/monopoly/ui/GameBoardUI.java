@@ -24,13 +24,20 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.FragmentFirstBinding;
 import com.example.monopoly.databinding.GameBoardBinding;
+import com.example.monopoly.gamelogic.Board;
+import com.example.monopoly.gamelogic.Game;
+import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
+import com.example.monopoly.gamelogic.properties.Field;
+import com.example.monopoly.gamelogic.properties.IllegalFieldException;
 import com.example.monopoly.databinding.SettingsBinding;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.network.MonopolyServer;
+import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
+import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
 
 import java.io.IOException;
 import java.net.BindException;
@@ -38,11 +45,14 @@ import java.net.Socket;
 
 public class GameBoardUI extends Fragment {
 
+    // reconstructions of GameBoardUI + UIHandler: turn swap; opening a different fragment and going back; end turn button
+
     private GameBoardBinding binding;
     private DiceViewModel diceViewModel;
     private ClientViewModel clientViewModel;
     private Client client;
     private GameBoardUIViewModel gameBoardUIViewModel;
+    private ClientPropertyStorage clientPropertyStorage;
 
     private NSD_Client nsdClient;
     private MonopolyServer monopoly;
@@ -52,7 +62,7 @@ public class GameBoardUI extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Client.subscribe(this,"GameBoardUI");
         diceViewModel = new ViewModelProvider(requireActivity()).get(DiceViewModel.class);
         clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
         diceViewModel.getDicesData().observe(this, dices -> {
@@ -61,9 +71,9 @@ public class GameBoardUI extends Fragment {
                 String cheated = dices.isLastRollFlawed() == true ? "t" : "f";
                 String doublets = (dices.getDice1() == dices.getDice2()) == true ? "t" : "f";       // 3 doubles in a row mean jail!!!
                 //String passedStartField = dices.isLastRollFlawed()==true?"t":"f";
-
                 try {
-                    this.client.writeToServer("GameBoardUI|move|" + dices.getSum() + ":" + cheated + ":" + doublets + "|" + this.client.getUser().getUsername());
+                    client.writeToServer("GameBoardUI|move|" + dices.getSum() + ":" + cheated + ":" + doublets + "|" + this.client.getUser().getUsername());
+                    Log.d("gameboardBuy", "After dice: " + Board.getFieldName(this.client.getUser().getPosition()));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -71,7 +81,6 @@ public class GameBoardUI extends Fragment {
             }
 
         });
-
     }
 
     @Override
@@ -79,70 +88,63 @@ public class GameBoardUI extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        Client.subscribe(this,"GameBoardUI");
 
-        binding = GameBoardBinding.inflate(inflater, container, false);
 
-           /*
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            monopoly = (MonopolyServer) bundle.getSerializable("monopolyServer");
-        }
-        socket=new Socket();
-        clientHandler = new ClientHandler(socket);
+        Log.d("MSG", "OnCreateView");
+
+        this.client = clientViewModel.getClientData().getValue();       // set client
+
+
+        //if(this.client.isHost()) {
         try {
-
-            monopoly = new MonopolyServer(HostGame.getMonopolyServer.getNumberOfClients());
-            //clientHandler.setServer(monopoly);
-            //monopoly.start();
+            this.client.writeToServer("GameBoardUI|initializePlayerBottomRight| : |" + this.client.getUser().getUsername());      // needs to be sent only once
         } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+            throw new RuntimeException(e);
+        }
+        binding = GameBoardBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
-        this.client = clientViewModel.getClientData().getValue();       // set client
+        Log.d("MSG", "OnViewCreated");
+        this.clientPropertyStorage = ClientPropertyStorage.getInstance();
 
-        /**
-         * Reconstruction of GameBoardUI
-         */
-        try {
-            gameBoardUIViewModel = new ViewModelProvider(this.requireActivity()).get(GameBoardUIViewModel.class);   // restore GameBoardUI state
-            ((TextView)this.getActivity().findViewById(R.id.turn)).setText(gameBoardUIViewModel.getCurrentPlayer().getValue());     // set name for player turn
-            if (gameBoardUIViewModel.getUncoverEnabled().getValue()) {
-                this.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
-                this.getActivity().findViewById(R.id.uncover).setEnabled(true);
-            } else {
-                this.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
-                this.getActivity().findViewById(R.id.uncover).setEnabled(false);
-            }
-            if(gameBoardUIViewModel.getThrowDiceEnabled().getValue()){
-                this.getActivity().findViewById(R.id.throwdice).setAlpha(1.0f);
-                this.getActivity().findViewById(R.id.throwdice).setEnabled(true);
-            } else {
-                this.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);
-                this.getActivity().findViewById(R.id.throwdice).setEnabled(false);
-            }
-            if(gameBoardUIViewModel.getEndTurnEnabled().getValue()){
-                this.getActivity().findViewById(R.id.endTurn).setAlpha(1.0f);
-                this.getActivity().findViewById(R.id.endTurn).setEnabled(true);
-            }else{
-                this.getActivity().findViewById(R.id.endTurn).setAlpha(0.5f);
-                this.getActivity().findViewById(R.id.endTurn).setEnabled(false);
-            }
-            // TODO restore player position
-        }catch (Exception e){}
+        //}
+
+        // DisplayMetrics might still be useful, so keep them for now
+/*
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager()
+                .getDefaultDisplay()
+                .getRealMetrics(displayMetrics);
+        double height = displayMetrics.heightPixels;
+        double width = displayMetrics.widthPixels;
+
+        // Tried relative calculation with dp
+        //double heightRatio = (double) height / 411.4285583496094;
+        //double widthRatio = (double) width / 891.4285888671875;
+
+        //double heightRatio = (double) height / 1440;
+        //double widthRatio = (double) width / 3120;
+        //heightRatio = heightRatio * (3.5/displayMetrics.density);
+        //widthRatio = widthRatio * (3.5/displayMetrics.density);
+
+        double heightRatio = layerDrawable.getMinimumHeight()/(double)21000;
+        double widthRatio = layerDrawable.getMinimumWidth()/(double)21000;
+*/
+
 
         super.onViewCreated(view, savedInstanceState);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                // TODO: Set textView with key from Lobby
-                //binding.textViewKey.setText("Game-Key: "+key);
+
             }
         });
+        UIHandlerViewModel uiHandlerViewModel = (new ViewModelProvider(requireActivity())).get(UIHandlerViewModel.class);
+
+        //binding.currentMoney.setText("Current Money \n"+uiHandlerViewModel.getCurrentMoney().getValue()+"$"); // dont redraw
 
         binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
                 .navigate(R.id.action_GameBoard_to_FirstFragment));
@@ -178,6 +180,27 @@ public class GameBoardUI extends Fragment {
         });
         leaveGame();
 
+        try{
+            Log.d("gameboardBuy", Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()));
+            Field field = clientPropertyStorage.getProperty(Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()));
+            if(field.getOwner() != null || this.client.getUser().getCapital() < field.getPrice()) throw new IllegalFieldException();
+            binding.buy.setAlpha(1f);
+            binding.buy.setEnabled(true);
+            binding.buy.setOnClickListener((viewX) -> {
+                clientPropertyStorage.updateOwner(field.getName(), this.client.getUser());
+                try {
+                    client.writeToServer("GameBoardUI|buyField|" + field.getName() + "|" + this.client.getUser().getUsername());
+                    client.writeToServer("GameBoardUI|giveMoney|" + (-field.getPrice()) + "|" + this.client.getUser().getUsername());
+                    binding.buy.setAlpha(0.5f);
+                    binding.buy.setEnabled(false);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        } catch (IllegalFieldException ie) {
+            binding.buy.setAlpha(0.5f);
+            binding.buy.setEnabled(false);
+        }
     }
 
     private void showDiceFragment(){
@@ -191,7 +214,7 @@ public class GameBoardUI extends Fragment {
                 socket=new Socket();
                 clientHandler=new ClientHandler(socket);
                 try {
-                    monopoly = new MonopolyServer(5);
+                    monopoly = new MonopolyServer(6);
                 }catch (BindException b){
                     b.printStackTrace();
                 } catch (IOException e) {
@@ -212,7 +235,7 @@ public class GameBoardUI extends Fragment {
             try{
                 Socket socket = new Socket();
                 clientHandler = new ClientHandler(socket);
-                clientHandler.getClient().close();
+                clientHandler.getSocket().close();
                 //clientHandler.endConn();
                 Log.i("ClientActivity", "Client closed 1");
             }catch (IOException e){

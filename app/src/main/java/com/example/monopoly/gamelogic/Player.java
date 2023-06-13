@@ -14,6 +14,11 @@ public class Player {
     private int id;
     private int position;
 
+    private boolean broke;
+
+    private int totalAssetValue;
+
+    private PlayerMapPosition playerMapPosition;
 
 
     public Player(String username, Color col, double capital, boolean alive) {
@@ -23,6 +28,8 @@ public class Player {
         this.alive = alive;
         this.inPrison = false;
         this.position = 0;
+        this.broke = false;
+        this.totalAssetValue=0;
     }
 
     public int getId() {
@@ -83,6 +90,30 @@ public class Player {
 
     public boolean isInPrison() {
         return inPrison;
+    }
+
+    public void setPlayerMapPosition(PlayerMapPosition playerMapPosition){
+        this.playerMapPosition=playerMapPosition;
+    }
+
+    public PlayerMapPosition getPlayerMapPosition(){
+        return this.playerMapPosition;
+    }
+
+    public boolean isBroke() {
+        return broke;
+    }
+
+    public void setBroke(boolean broke) {
+        this.broke = broke;
+    }
+
+    public int getTotalAssetValue() {
+        return totalAssetValue;
+    }
+
+    public void setTotalAssetValue(int totalAssetValue) {
+        this.totalAssetValue = totalAssetValue;
     }
 
     public void transferMoneyPlayerToPlayer(Player sender, Player receiver, double amount){

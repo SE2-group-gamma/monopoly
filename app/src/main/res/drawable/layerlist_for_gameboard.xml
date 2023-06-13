@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:drawable="@drawable/monopolyboard"/>
+    <item android:drawable="@drawable/player_one"
+        android:gravity="bottom|right"/>
+    <item android:drawable="@drawable/player_two"
+        android:gravity="bottom|right"/>
+    <item android:drawable="@drawable/player_three"
+        android:gravity="bottom|right"/>
+    <item android:drawable="@drawable/player_four"
+        android:gravity="bottom|right"/>
+    <item android:drawable="@drawable/player_five"
+        android:gravity="bottom|right"/>
+    <item android:drawable="@drawable/player_six"
+        android:gravity="bottom|right"/>
+
+
+</layer-list>
