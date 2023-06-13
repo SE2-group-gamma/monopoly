@@ -348,7 +348,7 @@ public class Client extends Thread {
             if(responseSplit[1].equals("uncover") && !(this.lastPlayerMoved.isEmpty()) && !(responseSplit[3].equals(this.lastPlayerMoved))){         // player cant punish himself, or no player
                 try{
 
-                    monopolyServer.broadCast("GameBoardUI|uncoverUsed|:|"+responseSplit[3]);
+
 
                     int idPunisher = game.getPlayerIDByName(responseSplit[3]);  //sender
                     Player punisher = game.getPlayers().get(idPunisher);
@@ -357,6 +357,7 @@ public class Client extends Thread {
                     Player punished = game.getPlayers().get(idPunished);
 
                     if(this.cheated.equals("t")){       // punish last moved player
+                        monopolyServer.broadCast("GameBoardUI|uncoverUsed|t:"+this.lastPlayerMoved+"|"+responseSplit[3]);   // punish success
                         Log.d("uncover","User: "+this.lastPlayerMoved+" got punished by "+responseSplit[3]);
 
                         punished.setCapital(punished.getCapital()-200);
@@ -365,6 +366,7 @@ public class Client extends Thread {
                         punisher.setCapital(punisher.getCapital()+200);
                         monopolyServer.broadCast("GameBoardUI|changeCapital|200|"+responseSplit[3]);
                     } else {                                    // punish sender
+                        monopolyServer.broadCast("GameBoardUI|uncoverUsed|f:"+this.lastPlayerMoved+"|"+responseSplit[3]);   // punish failed
                         Log.d("uncover","User: "+responseSplit[3]+" failed to punish "+this.lastPlayerMoved);
 
                         punished.setCapital(punished.getCapital()+200);
