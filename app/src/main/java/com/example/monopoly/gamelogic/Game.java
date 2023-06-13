@@ -76,9 +76,9 @@ public class Game{
         this.currentPlayersTurn = currentPlayersTurn;
     }
 
-
-
-
-
+    public void removeAllPlayers(){
+        this.players.clear();
+        count.set(0);
+    }
 
 }
