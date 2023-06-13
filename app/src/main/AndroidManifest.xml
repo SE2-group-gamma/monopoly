@@ -25,6 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".ui.MusicPlayer" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

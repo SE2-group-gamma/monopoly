@@ -13,6 +13,11 @@ public class Player {
     private Client myClient;        //Reference to the players client
     private int id;
     private int position;
+
+    private boolean broke;
+
+    private int totalAssetValue;
+
     private int cardID;
     private int outOfJailFreeCounter;
     private PlayerMapPosition playerMapPosition;
@@ -25,6 +30,8 @@ public class Player {
         this.alive = alive;
         this.inPrison = false;
         this.position = 0;
+        this.broke = false;
+        this.totalAssetValue=0;
     }
 
     public int getCardID(){
@@ -109,6 +116,22 @@ public class Player {
 
     public PlayerMapPosition getPlayerMapPosition(){
         return this.playerMapPosition;
+    }
+
+    public boolean isBroke() {
+        return broke;
+    }
+
+    public void setBroke(boolean broke) {
+        this.broke = broke;
+    }
+
+    public int getTotalAssetValue() {
+        return totalAssetValue;
+    }
+
+    public void setTotalAssetValue(int totalAssetValue) {
+        this.totalAssetValue = totalAssetValue;
     }
 
     public void transferMoneyPlayerToPlayer(Player sender, Player receiver, double amount){

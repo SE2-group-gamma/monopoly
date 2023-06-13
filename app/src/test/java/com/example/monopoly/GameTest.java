@@ -3,6 +3,8 @@ package com.example.monopoly;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -11,6 +13,7 @@ import static org.mockito.Mockito.when;
 import android.graphics.Color;
 import android.media.Image;
 
+import com.example.monopoly.gamelogic.Board;
 import com.example.monopoly.gamelogic.Field;
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
@@ -39,6 +42,9 @@ public class GameTest {
 
     Game g;
     Player p;
+    Player q;
+    static Color col;
+    static Board board;
     Field field;
     HashMap<Integer,Field> fields;
 
@@ -47,11 +53,12 @@ public class GameTest {
     @Mock
     Client mockClient;
 
-   @BeforeEach
+    @BeforeEach
     void setup(){
         MockitoAnnotations.initMocks(this);
         g = Game.getInstance();
         p = new Player("Test",new Color(),100.00,true);
+        q = new Player("HAns", new Color(),123.00,true);
         fields = new HashMap<>();
     }
 

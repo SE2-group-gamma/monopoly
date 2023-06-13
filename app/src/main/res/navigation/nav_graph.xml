@@ -36,6 +36,12 @@
             app:destination="@id/Lobby" />
     </fragment>
     <fragment
+        android:id="@+id/EndGameFragment"
+        android:name="com.example.monopoly.ui.EndGameFragment"
+        android:label="EndGameFragment"
+        tools:layout="@layout/fragment_end_game">
+    </fragment>
+    <fragment
         android:id="@+id/HostGame"
         android:name="com.example.monopoly.ui.HostGame"
         android:label="Host Game"
@@ -100,6 +106,9 @@
         <action
             android:id="@+id/action_GameBoardUI_to_DrawCardFragment"
             app:destination="@id/DrawCardFragment" />
+        <action
+            android:id="@+id/move_to_EndGameFragment"
+            app:destination="@id/EndGameFragment" />
 
     </fragment>
 
