@@ -174,6 +174,8 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             case 6:
                 diceImage.setImageResource(R.drawable.dice_6);
                 break;
+            default:
+                diceImage.setImageResource(R.drawable.dice_0);
         }
     }
 
