@@ -51,18 +51,21 @@ public class Game{
     public HashMap<Integer, Player> getPlayers() {
         return players;
     }
-    public void incrementPlayerPosition(int id,int incr){
-        Log.i("Dices","Player:"+this.players.get(id).getUsername()+"; Pos to increment:"+incr+"; Current Pos:"+this.players.get(id).getPosition());
-        this.players.get(id).incrementPosition(incr);
+    public void incrementPlayerPosition(int id,int incr) throws Exception {
+        //Log.i("Dices","Player:"+this.players.get(id).getUsername()+"; Pos to increment:"+incr+"; Current Pos:"+this.players.get(id).getPosition());
+        if(incr<=12 && incr >= 2)
+            this.players.get(id).incrementPosition(incr);
+        else
+            throw new Exception("Dice Value invalid!");
     }
 
-    public int getPlayerIDByName(String userName){
+    public int getPlayerIDByName(String userName) throws Exception {
         for(int i = 0; i < this.players.size(); i++){
             if(userName.equals(this.players.get(i).getUsername())){
                 return i;
             }
         }
-        return 0;
+        throw new Exception("404 not found!");
     }
 
     public String getCurrentPlayersTurn() {
@@ -73,9 +76,9 @@ public class Game{
         this.currentPlayersTurn = currentPlayersTurn;
     }
 
-
-
-
-
+    public void removeAllPlayers(){
+        this.players.clear();
+        this.count.set(0);
+    }
 
 }

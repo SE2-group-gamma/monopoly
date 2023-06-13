@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.gamelogic.properties.IllegalFieldException;
+import com.example.monopoly.gamelogic.properties.PropertyField;
 import com.example.monopoly.gamelogic.properties.PropertyStorage;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -164,6 +165,20 @@ public class PropertyStorageTest {
         assertThrows(IllegalFieldException.class, () -> {propertyStorage.getRentOnPropertyField("dad", player2);});
     }
 
+    @Test
+    void getTotalAssetValue(){
+        propertyStorage.buyProperty("strandbad",player);
+        propertyStorage.buyProperty("xxxlutz",player);
+        propertyStorage.buyProperty("wappensaal",player);
+        propertyStorage.buyProperty("pumpe",player);
+        int totalValue = propertyStorage.getProperties().get("strandbad").getPrice()+
+                propertyStorage.getProperties().get("xxxlutz").getPrice()+
+                propertyStorage.getProperties().get("wappensaal").getPrice()+
+                propertyStorage.getProperties().get("pumpe").getPrice();
+
+        assertEquals(totalValue, propertyStorage.getTotalAssets(player));
+    }
+
     private void buyAllPropertiesOfSameColor() {
         propertyStorage.buyProperty("strandbad", player);
         propertyStorage.buyProperty("city_arkaden", player);
@@ -179,4 +194,5 @@ public class PropertyStorageTest {
         for(int i = 0; i < 4; i++)
             propertyStorage.addHouse("strandbad", player);
     }
+
 }
