@@ -331,7 +331,11 @@ public class Client extends Thread {
                 if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
                     this.cheated = dataResponseSplit[1];
                     this.lastPlayerMoved = responseSplit[3];
-                    game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
+                    try {
+                        game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     //Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
                     //Log.d("gameturnCurr", "currUser" + responseSplit[3]);
                     monopolyServer.broadCast("GameBoardUI|movePlayer|" + responseSplit[2] + "|" + responseSplit[3]);      // broadcast with different action to not interfere with game logic

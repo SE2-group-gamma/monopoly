@@ -1,9 +1,8 @@
 package com.example.monopoly;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import android.graphics.Color;
 
@@ -19,8 +18,6 @@ public class GameTest {
     Game g;
     Player p;
     Player q;
-    static Color col;
-    static Board board;
     @BeforeEach
     void setup(){
         g = Game.getInstance();
@@ -29,7 +26,7 @@ public class GameTest {
     }
 
     @Test
-    public void testAddPlayer(){
+    void testAddPlayer(){
         assertEquals(0,g.getPlayers().size());
         assertEquals(true,g.addPlayer(p));
         assertEquals(p,g.getPlayers().get(0));
@@ -38,5 +35,17 @@ public class GameTest {
         assertEquals(1,g.getPlayers().size());
     }
 
+    @Test
+    void testIncrementPlayerPosition() throws Exception {
+        g.addPlayer(p);
+        g.incrementPlayerPosition(0,10);
+        assertEquals(10,p.getPosition());
+    }
+
+    @Test
+    void testIncrementPlayerPositionThrows() {
+        g.addPlayer(p);
+        assertThrows(Exception.class, ()->g.incrementPlayerPosition(0,13));
+    }
 
 }
