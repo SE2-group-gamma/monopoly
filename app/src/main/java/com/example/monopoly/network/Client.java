@@ -201,6 +201,15 @@ public class Client extends Thread {
 
         } catch (IOException  | InterruptedException e) {
             e.printStackTrace();
+        } finally{
+            try{
+                if(clientSocket != null ){
+                    clientSocket.close();
+                    monopolyServer.closeConnectionsAndShutdown();
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -323,6 +332,9 @@ public class Client extends Thread {
 
 
     public void turnProcess(){
+        if(isButtonCheck()){
+            return;
+        }
         setButtonCheck(true);
         turnEnd = false;
         game.setCurrentPlayersTurn(game.getPlayers().get(serverTurnCounter).getUsername());
@@ -335,9 +347,9 @@ public class Client extends Thread {
                 new TimerTask() {
                     @Override
                     public void run() {
-
-                        monopolyServer.broadCast("GameBoardUI|exitDiceFragment|:|");   // send exit signal // crashes if any other fragment is open (only if the dice frag hasn't been opened before)
-
+                        if(isButtonCheck()){
+                            monopolyServer.broadCast("GameBoardUI|exitDiceFragment|:|");   // send exit signal // crashes if any other fragment is open (only if the dice frag hasn't been opened before)
+                        }
                     }
                 },
                 15000 - 10
@@ -346,11 +358,11 @@ public class Client extends Thread {
                 new TimerTask() {
                     @Override
                     public void run() {
-
-                        turnEnd = true;
-
-                        Log.i("GameBoardUI","inside timer");
-
+                        if(isButtonCheck()){
+                            turnEnd = true;
+                            setButtonCheck(false);
+                            Log.i("GameBoardUI","inside timer");
+                        }
                     }
                 },
                 15000
@@ -381,5 +393,11 @@ public class Client extends Thread {
     private boolean isButtonCheck(){
         return buttonCheck;
     }
+    public void setButtonCheck(boolean buttonCheck){
+        this.buttonCheck=buttonCheck;
+    }
 
+    public void setGame(Game game) {
+        this.game = game;
+    }
 }
