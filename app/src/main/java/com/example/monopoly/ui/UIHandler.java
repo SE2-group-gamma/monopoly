@@ -37,6 +37,7 @@ import java.util.Objects;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
 import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 public class UIHandler extends Handler {
     private Fragment frag;
@@ -291,9 +292,18 @@ public class UIHandler extends Handler {
                 break;
             case "uncoverUsed":
                 gameBoardUIViewModel.setUncoverEnabled(false);
+
+
+                String[] dataResponseSplit = data.split(":");
+
                 if (this.frag.getActivity().findViewById(R.id.uncover) != null) {
                     this.frag.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
                     this.frag.getActivity().findViewById(R.id.uncover).setEnabled(false);
+                    if(dataResponseSplit[0].equals("t")){
+                        Toast.makeText(this.frag.getActivity(),dataResponseSplit[1]+" successfully punished "+client+"!",Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(this.frag.getActivity(),dataResponseSplit[1]+" failed to punish "+client+"!",Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
             case "movePlayer":
@@ -563,6 +573,8 @@ public class UIHandler extends Handler {
             case "updateOwner":
                 if (!clientObj.getUser().getUsername().equals(client))
                     ClientPropertyStorage.getInstance().updateOwner(data, new Player(client, new Color(), 0, true));
+                else
+                    Toast.makeText(this.frag.getActivity(),"You just bought "+data,Toast.LENGTH_SHORT).show();
                 break;
         }
     }

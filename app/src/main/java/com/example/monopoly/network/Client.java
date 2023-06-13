@@ -136,6 +136,9 @@ public class Client extends Thread {
         this.host = host;
         this.port = port;
         this.msgBuffer = new ArrayList<>();
+        this.playerList = new ArrayList<>();
+        this.winnerList = new ArrayList<>();
+        this.tempList = new ArrayList<>();
         this.propertyStorage = PropertyStorage.getInstance();
     }
 
@@ -232,7 +235,7 @@ public class Client extends Thread {
                     turnProcess();
                 }
                 if (gameStart == true) {
-                    setRanks(HostGame.getPlayerCount());
+
                 }
             }
 
@@ -289,7 +292,7 @@ public class Client extends Thread {
             game = Game.getInstance();
             //Host should only join once
             if (responseSplit[1].equals("hostJoined") && game.getPlayers().isEmpty()) {       //Host should only join once
-                Player tempPlayer = new Player(dataResponseSplit[0], new Color(), 500.00, true);
+                Player tempPlayer = new Player(dataResponseSplit[0], new Color(), 1500.00, true);
                 Log.i("Dices", "Host gonna join: ");
                 game.addPlayer(tempPlayer);
             }
@@ -297,7 +300,7 @@ public class Client extends Thread {
                 synchronized (monopolyServer.getClients()) {
                     monopolyServer.broadCast("Lobby|userJoined|" + responseSplit[2]);
                     monopolyServer.broadCast("Lobby|hostJoined|" + monopolyServer.getClient().getUser().getUsername());
-                    Player tempPlayer = new Player(responseSplit[2], new Color(), 500.00, true);
+                    Player tempPlayer = new Player(responseSplit[2], new Color(), 1500.00, true);
                     Log.i("Dices", "Client Gonna join: ");
                     game.addPlayer(tempPlayer);
 
@@ -348,7 +351,7 @@ public class Client extends Thread {
             if(responseSplit[1].equals("uncover") && !(this.lastPlayerMoved.isEmpty()) && !(responseSplit[3].equals(this.lastPlayerMoved))){         // player cant punish himself, or no player
                 try{
 
-                    monopolyServer.broadCast("GameBoardUI|uncoverUsed|:|"+responseSplit[3]);
+
 
                     int idPunisher = game.getPlayerIDByName(responseSplit[3]);  //sender
                     Player punisher = game.getPlayers().get(idPunisher);
@@ -357,6 +360,7 @@ public class Client extends Thread {
                     Player punished = game.getPlayers().get(idPunished);
 
                     if(this.cheated.equals("t")){       // punish last moved player
+                        monopolyServer.broadCast("GameBoardUI|uncoverUsed|t:"+this.lastPlayerMoved+"|"+responseSplit[3]);   // punish success
                         Log.d("uncover","User: "+this.lastPlayerMoved+" got punished by "+responseSplit[3]);
 
                         punished.setCapital(punished.getCapital()-200);
@@ -365,6 +369,7 @@ public class Client extends Thread {
                         punisher.setCapital(punisher.getCapital()+200);
                         monopolyServer.broadCast("GameBoardUI|changeCapital|200|"+responseSplit[3]);
                     } else {                                    // punish sender
+                        monopolyServer.broadCast("GameBoardUI|uncoverUsed|f:"+this.lastPlayerMoved+"|"+responseSplit[3]);   // punish failed
                         Log.d("uncover","User: "+responseSplit[3]+" failed to punish "+this.lastPlayerMoved);
 
                         punished.setCapital(punished.getCapital()+200);
@@ -387,6 +392,8 @@ public class Client extends Thread {
                 double capital = player.getCapital();
                 player.setCapital(capital + money);
                 monopolyServer.broadCast("GameBoardUI|changeCapital|" + responseSplit[2] + "|" + responseSplit[3]);
+                Log.d("currentCapital","Capital: "+player.getCapital()+" from "+player.getUsername());
+                setRanks(HostGame.getPlayerCount());
             }
             if (responseSplit[1].equals("mapPlayers")) {
                 int id = game.getPlayerIDByName(responseSplit[3]);
@@ -512,6 +519,7 @@ public class Client extends Thread {
     public void setRanks(int maxPlayers) {
 
         int revCounter = maxPlayers;
+
         for (Player player : playerList) {
             if (player.getCapital() < 0 && player.isBroke() == false) {
                 player.setBroke(true);
