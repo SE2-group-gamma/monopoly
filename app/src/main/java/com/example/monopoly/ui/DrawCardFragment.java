@@ -44,16 +44,15 @@ public class DrawCardFragment extends Fragment {
         this.chanceCards = cardViewModel.getChanceCards().getValue();
         this.communityCards = cardViewModel.getCommunityCards().getValue();
         context = getAppContext();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         try {
             checkField();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding.buttonContinueDrawCard.setOnClickListener(view -> {
             this.cardViewModel.setChanceCards(this.chanceCards);
             this.cardViewModel.setCommunityCards(this.communityCards);
@@ -83,6 +82,8 @@ public class DrawCardFragment extends Fragment {
             Log.i("Cards", "The Player is neither on a Chance-Field nor on a Community-Chest-Field");
         }
 
+        //temp
+        returnChanceCard();
     }
 
     private void returnChanceCard() throws IOException {
