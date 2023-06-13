@@ -1,6 +1,10 @@
 package com.example.monopoly;
 
 
+import static org.mockito.Mockito.verify;
+
+import android.graphics.Color;
+
 import com.example.monopoly.gamelogic.Field;
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
@@ -9,12 +13,8 @@ import com.example.monopoly.network.MonopolyServer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import static org.mockito.Mockito.verify;
-
-import android.graphics.Color;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -70,7 +70,7 @@ public class GameTestNetwork {
     @Test
     public void endTurn() throws IOException {
         g.endTurnProtocol();
-        verify(mockClient).writeToServer("GameBoardUI|endTurn|Test");
+        verify(mockClient).writeToServer("GameBoardUI|turnEnd|Test");
     }
     @Test
     public void transferPlayerToPlayer() throws IOException {

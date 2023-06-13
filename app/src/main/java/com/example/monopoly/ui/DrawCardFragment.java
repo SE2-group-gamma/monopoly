@@ -60,11 +60,11 @@ public class DrawCardFragment extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
         });
 
-        try {
+        /*try {
             game.doAction();
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
         return this.binding.getRoot();
     }
 
@@ -89,21 +89,21 @@ public class DrawCardFragment extends Fragment {
         int index = chanceCards.drawFromDeck().getId();
         int cardId = chanceCards.getChanceCardDeck().get(index).getImageId();
         binding.ImageCard.setImageResource(cardId);
-        game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
+        /*game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
                 "GameBoardUI|setCard|" + cardId + "|" + game.getCurrentPlayersTurn());
 
         game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
-                "DrawFragment|removeCardBroadcast|" + cardId + ":chance|" + game.getCurrentPlayersTurn());
+                "DrawFragment|removeCardBroadcast|" + cardId + ":chance|" + game.getCurrentPlayersTurn());*/
     }
 
     private void returnCommunityChestCard() throws IOException {
         int index = communityCards.drawFromDeck().getId();
         int cardId = communityCards.getCommunityChestCardDeck().get(index).getImageId();
         binding.ImageCard.setImageResource(cardId);
-        game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
+        /*game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
                 "GameBoardUI|setCard|" + cardId + "|" + game.getCurrentPlayersTurn());
         game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getMyClient().writeToServer(
-                "DrawFragment|removeCardBroadcast|" + cardId + ":community|" + game.getCurrentPlayersTurn());
+                "DrawFragment|removeCardBroadcast|" + cardId + ":community|" + game.getCurrentPlayersTurn());*/
     }
 
     public static Context getAppContext() {
