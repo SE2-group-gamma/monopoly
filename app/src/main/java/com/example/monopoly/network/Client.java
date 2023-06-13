@@ -328,7 +328,6 @@ public class Client extends Thread {
                 if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
                     this.cheated = dataResponseSplit[1];
                     this.lastPlayerMoved = responseSplit[3];
-                    Log.d("uncover","Player moved: "+this.lastPlayerMoved);
                     game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
                     //Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
                     //Log.d("gameturnCurr", "currUser" + responseSplit[3]);
@@ -456,7 +455,7 @@ public class Client extends Thread {
         //Log.d("gameTurnCheck", "Yo hey "+game.getCurrentPlayersTurn());
         serverTurnCounter++;
         timer = new Timer();
-
+/*
         timer.schedule(
                 new TimerTask() {
                     @Override
@@ -466,8 +465,8 @@ public class Client extends Thread {
 
                     }
                 },
-                15000 - 10
-        );
+                15000
+        );*/
         timer.schedule(
                 new TimerTask() {
                     @Override
@@ -488,7 +487,7 @@ public class Client extends Thread {
 
 
     public void endTurnPressed() {
-        monopolyServer.broadCast("GameBoardUI|exitDiceFragment|:|");             // if endTurn is pressed the game will crash if someone is in another fragment
+        /*monopolyServer.broadCast("GameBoardUI|exitDiceFragment|:|");             // if endTurn is pressed the game will crash if someone is in another fragment
         //timer.cancel();
         Timer fragChange = new Timer();
         fragChange.schedule(
@@ -499,9 +498,12 @@ public class Client extends Thread {
                         turnProcess();
                     }
                 },
-                10
-        );
+                0
+        );*/
         //turnProcess();
+
+        timer.cancel();
+        turnProcess();
     }
 
     private boolean isButtonCheck() {
