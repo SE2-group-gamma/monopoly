@@ -62,7 +62,7 @@ public class GameBoardUI extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Client.subscribe(this,"GameBoardUI");
         diceViewModel = new ViewModelProvider(requireActivity()).get(DiceViewModel.class);
         clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
         diceViewModel.getDicesData().observe(this, dices -> {
@@ -89,57 +89,32 @@ public class GameBoardUI extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        Client.subscribe(this,"GameBoardUI");
+
 
         Log.d("MSG", "OnCreateView");
+
+        this.client = clientViewModel.getClientData().getValue();       // set client
+
+
+        //if(this.client.isHost()) {
+        try {
+            this.client.writeToServer("GameBoardUI|initializePlayerBottomRight| : |" + this.client.getUser().getUsername());      // needs to be sent only once
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
 
         binding = GameBoardBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        this.client = clientViewModel.getClientData().getValue();       // set client
+
         Log.d("MSG", "OnViewCreated");
         this.clientPropertyStorage = ClientPropertyStorage.getInstance();
-        /**
-         * Reconstruction of GameBoardUI
-         */
-        try {
-            gameBoardUIViewModel = new ViewModelProvider(this.requireActivity()).get(GameBoardUIViewModel.class);   // restore GameBoardUI state
-            ((TextView)this.getActivity().findViewById(R.id.turn)).setText(gameBoardUIViewModel.getCurrentPlayer().getValue());     // set name for player turn
-            if (gameBoardUIViewModel.getUncoverEnabled().getValue()) {
-                this.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
-                this.getActivity().findViewById(R.id.uncover).setEnabled(true);
-                Log.d("uncover","Uncover Enabled restored");
-            } else {
-                this.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
-                this.getActivity().findViewById(R.id.uncover).setEnabled(false);
-                Log.d("uncover","Uncover Disabled restored");
-            }
-            if(gameBoardUIViewModel.getThrowDiceEnabled().getValue()){
-                this.getActivity().findViewById(R.id.throwdice).setAlpha(1.0f);
-                this.getActivity().findViewById(R.id.throwdice).setEnabled(true);
-            } else {
-                this.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);
-                this.getActivity().findViewById(R.id.throwdice).setEnabled(false);
-            }
-            if(gameBoardUIViewModel.getEndTurnEnabled().getValue()){
-                this.getActivity().findViewById(R.id.endTurn).setAlpha(1.0f);
-                this.getActivity().findViewById(R.id.endTurn).setEnabled(true);
-            }else{
-                this.getActivity().findViewById(R.id.endTurn).setAlpha(0.5f);
-                this.getActivity().findViewById(R.id.endTurn).setEnabled(false);
-            }
-            // TODO restore player position
-        }catch (Exception e){}
 
-        //if(this.client.isHost()) {
-            try {
-                this.client.writeToServer("GameBoardUI|initializePlayerBottomRight| : |" + this.client.getUser().getUsername());      // needs to be sent only once
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         //}
+
         // DisplayMetrics might still be useful, so keep them for now
 /*
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -171,7 +146,8 @@ public class GameBoardUI extends Fragment {
             }
         });
         UIHandlerViewModel uiHandlerViewModel = (new ViewModelProvider(requireActivity())).get(UIHandlerViewModel.class);
-        binding.currentMoney.setText("Current Money \n"+uiHandlerViewModel.getCurrentMoney().getValue()+"$");
+
+        //binding.currentMoney.setText("Current Money \n"+uiHandlerViewModel.getCurrentMoney().getValue()+"$"); // dont redraw
 
         binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
                 .navigate(R.id.action_GameBoard_to_FirstFragment));
