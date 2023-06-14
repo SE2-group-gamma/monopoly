@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
@@ -17,6 +19,7 @@ import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.network.MonopolyServer;
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
 
 public class Lobby extends Fragment {
 
@@ -25,6 +28,17 @@ public class Lobby extends Fragment {
     private int key;
     private String lobbyname;
     private Game game;
+    private Client client;
+    private ClientViewModel clientViewModel;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
+        Client.subscribe(this,"GameBoardUI");
+
+    }
 
     @Override
     public View onCreateView(
@@ -33,6 +47,7 @@ public class Lobby extends Fragment {
     ) {
         Client.subscribe(this,"Lobby");
         binding = LobbyBinding.inflate(inflater, container, false);
+        this.client = clientViewModel.getClientData().getValue();       // set client
         return binding.getRoot();
     }
 
@@ -58,6 +73,10 @@ public class Lobby extends Fragment {
         binding.startButton.setOnClickListener(view12 -> {
             HostGame.getMonopolyServer().broadCast("Lobby|gameStart| ");
         });
+
+        if(!client.isHost()){
+            binding.startButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

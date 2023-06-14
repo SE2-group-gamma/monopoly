@@ -81,7 +81,6 @@ public class GameBoardUI extends Fragment {
             }
 
         });
-
     }
 
     @Override
@@ -102,8 +101,6 @@ public class GameBoardUI extends Fragment {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
         binding = GameBoardBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -211,12 +208,12 @@ public class GameBoardUI extends Fragment {
 
 
 
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-
-
 
 
         //nsdClient.stopDiscovery();

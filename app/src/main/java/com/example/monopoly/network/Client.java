@@ -239,6 +239,8 @@ public class Client extends Thread {
                 }
             }
 
+        } catch(IOException io) {
+            throw new RuntimeException();
         } catch (Exception e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException();
@@ -471,9 +473,9 @@ public class Client extends Thread {
                 new TimerTask() {
                     @Override
                     public void run() {
-
-                        monopolyServer.broadCast("GameBoardUI|exitDiceFragment|:|");   // send exit signal // crashes if any other fragment is open (only if the dice frag hasn't been opened before)
-
+                        if(isButtonCheck()){
+                            monopolyServer.broadCast("GameBoardUI|exitDiceFragment|:|");   // send exit signal // crashes if any other fragment is open (only if the dice frag hasn't been opened before)
+                        }
                     }
                 },
                 15000
@@ -484,7 +486,6 @@ public class Client extends Thread {
                     public void run() {
 
                         turnEnd = true;
-
                         Log.i("GameBoardUI","inside timer");
 
                     }
@@ -520,6 +521,7 @@ public class Client extends Thread {
     private boolean isButtonCheck() {
         return buttonCheck;
     }
+
     public void setRanks(int maxPlayers) {
 
         int revCounter = maxPlayers;
