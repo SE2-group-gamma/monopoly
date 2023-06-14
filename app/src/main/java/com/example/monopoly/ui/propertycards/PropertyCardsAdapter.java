@@ -61,7 +61,7 @@ public class PropertyCardsAdapter extends RecyclerView.Adapter<PropertyCardsAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Field field = cps.getPropertyList().get(position);
+        Field field = cps.getSortedPropertyListByPlayer(this.player).get(position);
         holder.propertyCard.setImageResource(field.getImageId());
         if(field.getOwner() == null)
             holder.ownerName.setText("Owner: none");
