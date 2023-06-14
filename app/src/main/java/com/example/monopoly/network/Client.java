@@ -7,8 +7,10 @@ import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.monopoly.gamelogic.Board;
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
+import com.example.monopoly.gamelogic.properties.Field;
 import com.example.monopoly.gamelogic.properties.PropertyStorage;
 import com.example.monopoly.gamelogic.PlayerMapPosition;
 import com.example.monopoly.ui.HostGame;
@@ -398,6 +400,41 @@ public class Client extends Thread {
                 monopolyServer.broadCast("GameBoardUI|changeCapital|" + responseSplit[2] + "|" + responseSplit[3]);
                 Log.d("currentCapital","Capital: "+player.getCapital()+" from "+player.getUsername());
                 setRanks(HostGame.getPlayerCount());
+            }
+            if (responseSplit[1].equals("checkRent")) {
+                Log.d("checkRent", "player " + responseSplit[3]);
+                Log.d("checkRent", "field " + responseSplit[2]);
+                int propertyId = Integer.parseInt(responseSplit[2]);
+                int playerId = game.getPlayerIDByName(responseSplit[3]);
+
+                Player player = game.getPlayers().get(playerId);
+                String fieldName = Board.getFieldName(this.getUser().getPosition());
+
+                if(propertyStorage.hasField(fieldName)){
+                    int rent = propertyStorage.getRentOnPropertyField(fieldName,player);
+                    Log.d("checkRent", "fieldName " + fieldName);
+                    Log.d("checkRent", "rent " + rent);
+
+                    if(rent!=0){
+                        double capital = player.getCapital();
+                        player.setCapital(capital - rent);
+
+                        String playerOwner = propertyStorage.getOwner(fieldName);
+                        Log.d("checkRent", "playerOwner in if " + playerOwner);
+                        Player owner = game.getPlayers().get(game.getPlayerIDByName(playerOwner));
+
+                        //Log.d("checkRent", "playerOwner " + playerOwner.getUsername());
+                        double capitalOwner = owner.getCapital();
+                        owner.setCapital(capitalOwner + rent);
+
+                        rent=rent*(-1);
+                        Log.d("checkRent", "capital Buyer " + capital);
+                        Log.d("checkRent", "capital Owner " + capitalOwner);
+                        monopolyServer.broadCast("GameBoardUI|changeCapital|" + rent + ":"+playerOwner+"|" + responseSplit[3]);
+                    }
+                }
+
+
             }
             if (responseSplit[1].equals("mapPlayers")) {
                 int id = game.getPlayerIDByName(responseSplit[3]);

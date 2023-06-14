@@ -90,8 +90,8 @@ public class PropertyStorage {
         return properties.containsKey(name);
     }
 
-    public Player getOwner(String propertyId){
-        return properties.get(propertyId).getOwner();
+    public String getOwner(String propertyId){
+        return properties.get(propertyId).getOwner().getUsername();
     }
 
 

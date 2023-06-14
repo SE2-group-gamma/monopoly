@@ -282,13 +282,33 @@ public class UIHandler extends Handler {
                 break;
             case "changeCapital":
                 if (clientObj.getUser().getUsername().equals(client)) {
-                    int money = currentMoney + Integer.parseInt(data.split(":")[0]);
+                    int payedMoney = Integer.parseInt(data.split(":")[0]);
+                    int money = currentMoney + payedMoney;
+                    Log.d("checkRent"," moneyFromPlayer "+money);
                     uiHandlerViewModel.setCurrentMoney(money);
-                    if (((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null)
+                    if (((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null) {
+                        payedMoney = payedMoney * (-1);
+                        Toast.makeText(this.frag.getActivity(), "You just payed " + payedMoney + "$", Toast.LENGTH_SHORT).show();
                         ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n" + money + "$");
+                    }
                     Log.d("MoneyPlayer", "" + money);
                     Log.d("MoneyPlayer", "" + client);
                 }
+                String[] playerArray = data.split(":");
+                if(playerArray.length==2){
+                    if (clientObj.getUser().getUsername().equals(playerArray[1])) {
+                        int receivedMoney = Integer.parseInt(data.split(":")[0]);
+                        int money = currentMoney - receivedMoney;
+                        Log.d("checkRent"," moneyFromOwner "+money);
+                        uiHandlerViewModel.setCurrentMoney(money);
+                        if (((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null) {
+                            receivedMoney = receivedMoney * (-1);
+                            Toast.makeText(this.frag.getActivity(), "You just received " + receivedMoney + "$", Toast.LENGTH_SHORT).show();
+                            ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n" + money + "$");
+                        }
+                    }
+                }
+
                 break;
             case "uncoverUsed":
                 gameBoardUIViewModel.setUncoverEnabled(false);
@@ -337,7 +357,6 @@ public class UIHandler extends Handler {
                             Log.d("playerNumber: ", "" + playerNumber);
 
                             currentPosition[playerNumber] = currentPosition[playerNumber] - 40;
-                            // TODO get starting money
                             if (playerObjects.get(playerNumber).equals(clientObj.getUser().getUsername())) {
                                 Log.d("MoneyPlayer", "client = " + client);
                                 try {
@@ -348,6 +367,14 @@ public class UIHandler extends Handler {
                             }
                         }
                         Log.d("--", "" + currentPosition[playerNumber]);
+                        if (playerObjects.get(playerNumber).equals(clientObj.getUser().getUsername())) {
+                            Log.d("MoneyPlayer", "client = " + client);
+                            try {
+                                clientObj.writeToServer("GameBoardUI|checkRent|"+currentPosition[playerNumber]+"|" + clientObj.getUser().getUsername());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
 
                         uiHandlerViewModel.setCurrentPosition(currentPosition);
 
