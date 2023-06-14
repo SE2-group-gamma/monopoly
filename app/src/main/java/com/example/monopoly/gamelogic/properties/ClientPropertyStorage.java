@@ -40,15 +40,7 @@ public class ClientPropertyStorage {
                 } else if(t1.getOwner().getUsername().equals(player.getUsername()) && field.getOwner() == null){
                     return 1;
                 } else {
-                    if(field instanceof PropertyField && t1 instanceof PropertyField){
-                        return ((PropertyField) t1).getNumOfHouses() - ((PropertyField) field).getNumOfHouses();
-                    } else if (field instanceof PropertyField) {
-                        return -1;
-                    } else if (t1 instanceof  PropertyField) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
+                    return compareHouses(field, t1);
                 }
             } else if (field.getOwner() != null) {
                 return -1;
@@ -60,6 +52,18 @@ public class ClientPropertyStorage {
         });
 
         return fields;
+    }
+
+    private int compareHouses(Field field, Field t1) {
+        if(field instanceof PropertyField && t1 instanceof PropertyField){
+            return ((PropertyField) t1).getNumOfHouses() - ((PropertyField) field).getNumOfHouses();
+        } else if (field instanceof PropertyField) {
+            return -1;
+        } else if (t1 instanceof  PropertyField) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     public Field getProperty(String id){
