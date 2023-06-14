@@ -5,6 +5,7 @@ import com.example.monopoly.gamelogic.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,6 +28,38 @@ public class ClientPropertyStorage {
 
     public List<Field> getPropertyList(){
         return List.copyOf(properties.values());
+    }
+
+    public List<Field> getSortedPropertyListByPlayer(Player player){
+        List<Field> fields = new ArrayList<>(properties.values());
+
+        fields.sort((field, t1) -> {
+            if(field.getOwner() != null && t1.getOwner() != null){
+                if(field.getOwner().getUsername().equals(player.getUsername()) && t1.getOwner() == null){
+                    return -1;
+                } else if(t1.getOwner().getUsername().equals(player.getUsername()) && field.getOwner() == null){
+                    return 1;
+                } else {
+                    if(field instanceof PropertyField && t1 instanceof PropertyField){
+                        return ((PropertyField) t1).getNumOfHouses() - ((PropertyField) field).getNumOfHouses();
+                    } else if (field instanceof PropertyField) {
+                        return -1;
+                    } else if (t1 instanceof  PropertyField) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            } else if (field.getOwner() != null) {
+                return -1;
+            } else if (t1.getOwner() != null) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        return fields;
     }
 
     public Field getProperty(String id){
