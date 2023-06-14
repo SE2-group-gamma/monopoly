@@ -244,6 +244,15 @@ public class Client extends Thread {
         } catch (Exception e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException();
+        } finally {
+            try {
+                if (clientSocket != null) {
+                    clientSocket.close();
+                    monopolyServer.closeConnectionsAndShutdown();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -455,6 +464,9 @@ public class Client extends Thread {
 
 
     public void turnProcess(){
+        if(isButtonCheck()){
+            return;
+        }
         setButtonCheck(true);
         turnEnd = false;
         while (game.getPlayers().get(serverTurnCounter).isBroke() == true) {
@@ -484,11 +496,11 @@ public class Client extends Thread {
                 new TimerTask() {
                     @Override
                     public void run() {
-
-                        turnEnd = true;
-                        setButtonCheck(false);
-                        Log.i("GameBoardUI","inside timer");
-
+                        if(isButtonCheck()){
+                            turnEnd = true;
+                            setButtonCheck(false);
+                            Log.i("GameBoardUI","inside timer");
+                        }
                     }
                 },
                 15000

@@ -126,7 +126,12 @@ public class ClientHandler extends Thread{
         }
     }
 
-
+    public boolean isPlayerActive(){
+        return playerActive;
+    }
+    public void setPlayerInactive(){
+        playerActive=false;
+    }
 
     /*public void endConn() throws IOException {
         socket.close();

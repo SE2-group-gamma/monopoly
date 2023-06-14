@@ -79,6 +79,7 @@ public class GameBoardUI extends Fragment {
                 }
                 diceViewModel.setContinuePressed(false);
             }
+            monopoly = HostGame.getMonopolyServer();
 
         });
     }
@@ -178,6 +179,7 @@ public class GameBoardUI extends Fragment {
         binding.showPropertiesButton.setOnClickListener(view1 -> {
             NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_ProperyCardFragment);
         });
+        leaveGame();
 
         try{
             Log.d("gameboardBuy", Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()));
@@ -205,15 +207,53 @@ public class GameBoardUI extends Fragment {
     private void showDiceFragment(){
         NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_DiceFragment);
     }
+    private void leaveGame(){
+        Button leave = getView().findViewById(R.id.backButton);
+        leave.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                socket=new Socket();
+                clientHandler=new ClientHandler(socket);
+                //monopoly.playerLeftGame(clientHandler);
+                closeClientConnection();
+                client.setButtonCheck(false);
+                Navigation.findNavController(v).navigate(R.id.FirstFragment);
+                Log.i("ServerAct","CLOSED!!");
+
+            }
+        });
+    }
+
+    private void closeClientConnection() {
+
+            try{
+                Socket socket = new Socket();
+                clientHandler = new ClientHandler(socket);
+                clientHandler.getSocket().close();
+                //clientHandler.endConn();
+                Log.i("ClientActivity", "Client closed 1");
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+        nsdClient = new NSD_Client();
+        nsdClient.stopDiscovery();
 
 
-
+        Log.i("ClientActivity","Client closed 3");
+    }
 
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+
+        //closeServerConnection();
+        closeClientConnection();
+        if(monopoly!=null){
+            monopoly.closeConnectionsAndShutdown();
+        }
 
 
         //nsdClient.stopDiscovery();
