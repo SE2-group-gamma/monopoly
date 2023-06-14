@@ -239,8 +239,8 @@ public class Client extends Thread {
                 }
             }
 
-        } catch (IOException  | InterruptedException e) {
-            e.printStackTrace();
+        } catch(IOException io) {
+            throw new RuntimeException();
         } catch (Exception e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException();
