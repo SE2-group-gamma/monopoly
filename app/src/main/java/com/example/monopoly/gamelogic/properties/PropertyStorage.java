@@ -112,4 +112,7 @@ public class PropertyStorage {
         return totalValue;
     }
 
+    public HashMap<String, Field> getProperties() {
+        return properties;
+    }
 }

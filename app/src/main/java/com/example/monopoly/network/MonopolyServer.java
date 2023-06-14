@@ -148,41 +148,5 @@ public class MonopolyServer extends Thread{
         return localPort;
     }
 
-    public void playerLeftGame(ClientHandler clientHandler) {
-        synchronized (clients) {
-            clients.remove(clientHandler);
-            keyedHandlers.values().remove(clientHandler);
-
-            boolean allPlayersLeft = clients.isEmpty();
-            boolean hostLeft = clientHandler.getClient().isHost();
-
-            if (!clientHandler.isPlayerActive() || (clients.isEmpty() && clientHandler.getClient().isHost())) {
-                clientHandler.setPlayerInactive();
-                closeConnectionsAndShutdown();
-            } else {
-                String playerLeftMsg = "PLAYER_LEFT|" + clientHandler.getClientName();
-                broadCast(playerLeftMsg);
-            }
-        }
-    }
-
-    public synchronized void closeConnectionsAndShutdown() {
-        try {
-            for (ClientHandler clientHandler : clients) {
-                clientHandler.getClient().setGameover(true);
-                clientHandler.getSocket().close();
-                //clientHandler.server.broadCast("Server down");
-                Log.i("MonopolyServer", "Connection closed for client: " + clientHandler.getClient());
-            }
-            stopListening();
-            clients.clear();
-            keyedHandlers.clear();
-            serverSocket.close();
-            Log.i("MonopolyServer", "Server shutdown complete");
-        } catch (IOException e) {
-            Log.e("MonopolyServer", "Error while closing connections and shutting down server", e);
-        }
-    }
-
 
 }

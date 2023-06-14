@@ -75,7 +75,7 @@ public class Lobby extends Fragment {
         });
 
         if(!client.isHost()){
-            binding.startButton.setEnabled(false);
+            binding.startButton.setVisibility(View.INVISIBLE);
         }
     }
 
