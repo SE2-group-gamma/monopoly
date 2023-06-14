@@ -486,7 +486,6 @@ public class Client extends Thread {
                     public void run() {
 
                         turnEnd = true;
-                        setButtonCheck(false);
                         Log.i("GameBoardUI","inside timer");
 
                     }
