@@ -13,10 +13,13 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.databinding.FragmentDrawcardBinding;
+import com.example.monopoly.gamelogic.Board;
 import com.example.monopoly.gamelogic.ChanceCardCollection;
 import com.example.monopoly.gamelogic.CommunityChestCardCollection;
 import com.example.monopoly.gamelogic.Game;
+import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.CardViewModel;
+import com.example.monopoly.ui.viewmodels.ClientViewModel;
 
 import java.io.IOException;
 
@@ -27,6 +30,8 @@ public class DrawCardFragment extends Fragment {
     private FragmentDrawcardBinding binding;
     private CardViewModel cardViewModel;
     private Game game = Game.getInstance();
+    private ClientViewModel clientViewModel;
+     Client client;
 
     public static Context context;
 
@@ -41,8 +46,9 @@ public class DrawCardFragment extends Fragment {
         binding = FragmentDrawcardBinding.inflate(getLayoutInflater());
 
         cardViewModel = new ViewModelProvider(requireActivity()).get(CardViewModel.class);
-        this.chanceCards = cardViewModel.getChanceCards().getValue();
-        this.communityCards = cardViewModel.getCommunityCards().getValue();
+        clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
+        chanceCards = cardViewModel.getChanceCards().getValue();
+        communityCards = cardViewModel.getCommunityCards().getValue();
         context = getAppContext();
         try {
             checkField();
@@ -53,6 +59,8 @@ public class DrawCardFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        this.client = clientViewModel.getClientData().getValue();
+
         binding.buttonContinueDrawCard.setOnClickListener(view -> {
             this.cardViewModel.setChanceCards(this.chanceCards);
             this.cardViewModel.setCommunityCards(this.communityCards);
@@ -69,21 +77,15 @@ public class DrawCardFragment extends Fragment {
 
 
     private void checkField() throws IOException {
-        if (game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 7 ||
-                game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 22 ||
-                game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 36) {
+        Log.i("Cards", "Field:" + Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()));
+        if (Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()).equals("chance")) {
             returnChanceCard();
-
-        } else if (game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 2 ||
-                game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 17 ||
-                game.getPlayers().get(game.getPlayerIDByName(game.getCurrentPlayersTurn())).getPosition() == 33) {
+        } else if (Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()).equals("community")) {
             returnCommunityChestCard();
         } else {
             Log.i("Cards", "The Player is neither on a Chance-Field nor on a Community-Chest-Field");
         }
 
-        //temp
-        returnChanceCard();
     }
 
     private void returnChanceCard() throws IOException {
