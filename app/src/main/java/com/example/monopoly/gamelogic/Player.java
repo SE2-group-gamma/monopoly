@@ -22,6 +22,7 @@ public class Player {
     private int outOfJailFreeCounter;
     private PlayerMapPosition playerMapPosition;
 
+    private boolean drewCard = false;
 
     public Player(String username, Color col, double capital, boolean alive) {
         this.username = username;
@@ -48,6 +49,13 @@ public class Player {
 
     public void setOutOfJailFreeCounter(int outOfJailFreeCounter){
         this.outOfJailFreeCounter = outOfJailFreeCounter;
+    }
+
+    public void setDrewCard(boolean drewCard) {
+        this.drewCard = drewCard;
+    }
+    public boolean getDrewCard(){
+        return drewCard;
     }
 
     public int getId() {

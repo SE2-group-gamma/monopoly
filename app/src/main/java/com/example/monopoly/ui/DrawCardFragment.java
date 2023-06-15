@@ -66,6 +66,11 @@ public class DrawCardFragment extends Fragment {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            try {
+                clientViewModel.getClientData().getValue().writeToServer("GameBoardUI|move|2:f:f|" + clientViewModel.getClientData().getValue().getUser());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
         return this.binding.getRoot();
     }

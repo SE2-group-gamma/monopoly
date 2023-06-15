@@ -193,22 +193,23 @@ public class GameBoardUI extends Fragment {
             binding.buy.setEnabled(false);
         }
 
-        binding.pay.setOnClickListener(view1 -> {
-                NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_DrawCardFragment);
-        });
-
-        if (Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()).equals("chance") ||
-                Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()).equals("community")) {
-            Handler handler = new Handler(Looper.getMainLooper());
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    NavHostFragment.findNavController(GameBoardUI.this).navigate(R.id.action_GameBoardUI_to_DrawCardFragment);
-                }
-            };
-            handler.postDelayed(runnable,1000);
+      
+        if(!clientViewModel.getClientData().getValue().getUser().getDrewCard()) {
+            if (Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()).equals("chance") ||
+                    Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()).equals("community")) {
+                Handler handler = new Handler(Looper.getMainLooper());
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        NavHostFragment.findNavController(GameBoardUI.this).navigate(R.id.action_GameBoardUI_to_DrawCardFragment);
+                    }
+                };
+                handler.postDelayed(runnable, 2000);
+                clientViewModel.getClientData().getValue().getUser().setDrewCard(true);
+            }
         }
     }
+
 
     private void showDiceFragment(){
         NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_DiceFragment);

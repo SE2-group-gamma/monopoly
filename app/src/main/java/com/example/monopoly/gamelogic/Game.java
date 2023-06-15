@@ -414,7 +414,7 @@ public class Game{
         Log.i("Cards", "endTurnProtocol");
         int playerID = getPlayerIDByName(currentPlayersTurn);
         //players.get(playerID).getMyClient().writeToServer("GameBoardUI|turnEnd|" + currentPlayersTurn);
-        client.writeToServer("GameBoardUI|turnEnd|" + currentPlayersTurn);
+        client.writeToServer("GameBoardUI|turnEnd|:|");
     }
 
 }
