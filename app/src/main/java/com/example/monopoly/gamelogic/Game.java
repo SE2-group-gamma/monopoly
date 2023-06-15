@@ -14,7 +14,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Game{
     private static final Game OBJ = new Game();
     private HashMap<Integer,Player> players;        //ID,Player ... ID will be set server-side
-    private HashMap<Integer,Field> fields;
 
     private String currentPlayersTurn;
     private static final AtomicInteger count = new AtomicInteger(0);
@@ -69,29 +68,29 @@ public class Game{
         this.currentPlayersTurn = currentPlayersTurn;
     }
 
-    public void setFields(HashMap<Integer, Field> fields) {
-        this.fields = fields;
-    }
 
-    public void doAction() throws IOException {
+    public void doAction(int cardID) throws IOException {
+
 
         int playerID = getPlayerIDByName(getCurrentPlayersTurn());
+        players.get(playerID).setCardID(cardID);
+        Log.i("Cards", "CardID:" + getPlayers().get(playerID).getCardID());
 
         //Advance to "Go".
         if (players.get(playerID).getCardID() == R.drawable.chance0 || players.get(playerID).getCardID() == R.drawable.community0) {
-            int incr = fields.size() - players.get(playerID).getPosition();
+            int incr = Board.FELDER_ANZAHL - players.get(playerID).getPosition();
             moveProtocol(incr);
             endTurnProtocol();
         }
 
         //Advance to Strandbad. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance1) {
-            advanceAndCollect("Strandbad");
+            advanceAndCollect("strandbad");
         }
 
         //Advance to Lindwurm. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance2) {
-            advanceAndCollect("Lindwurm");
+            advanceAndCollect("lindwurm");
         }
 
         //Your building loan matures. Receive $150.
@@ -108,18 +107,18 @@ public class Game{
             int steiermark = 0;
             int wien = 0;
 
-            for (int i = 0; i < fields.size(); i++) {
-                if (fields.get(i).getName() == "S-Bahn Kärnten") {
-                    kaernten = fields.get(i).getId();
+            for (int i = 0; i < Board.FELDER_ANZAHL; i++) {
+                if (Board.getFieldName(i) == "s_bahn_kaernten") {
+                    kaernten = i;
                 }
-                if (fields.get(i).getName() == "S-Bahn Tirol") {
-                    tirol = fields.get(i).getId();
+                if (Board.getFieldName(i) == "s_bahn_tirol") {
+                    tirol = i;
                 }
-                if (fields.get(i).getName() == "S-Bahn Steiermark") {
-                    steiermark = fields.get(i).getId();
+                if (Board.getFieldName(i) == "s_bahn_steiermark") {
+                    steiermark = i;
                 }
-                if (fields.get(i).getName() == "S-Bahn Wien") {
-                    wien = fields.get(i).getId();
+                if (Board.getFieldName(i) == "s_bahn_wien") {
+                    wien = i;
                 }
             }
 
@@ -142,12 +141,13 @@ public class Game{
 
             int amount;
             Player owner;
-            if (fields.get(players.get(playerID).getPosition() + incr).getOwner() != null) {
+
+            /*if (Board.getFieldName(players.get(playerID).getPosition() + incr).getOwner() != null) {
                 amount = fields.get(players.get(playerID).getPosition()).getCost() * 2;
                 owner = fields.get(players.get(playerID).getPosition() + incr).getOwner();
 
                 transferPlayerToPlayerProtocol(owner.getId(), amount);
-            }
+            }*/
             moveProtocol(incr);
         }
 
@@ -176,9 +176,9 @@ public class Game{
         //Take a trip to S-Bahn Wien.
         if (players.get(playerID).getCardID() == R.drawable.chance9) {
             int incr;
-            for (int i = 0; i < fields.size(); i++) {
-                if (fields.get(i).getName() == "S-Bahn Wien") {
-                    incr = players.get(playerID).getPosition() - fields.get(i).getId();
+            for (int i = 0; i < Board.FELDER_ANZAHL; i++) {
+                if (Board.getFieldName(i) == "s_bahn_wien") {
+                    incr = players.get(playerID).getPosition() - i;
                     moveProtocol(incr);
                 }
             }
@@ -196,14 +196,14 @@ public class Game{
 
         //Advance to City Arkaden. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance11) {
-            advanceAndCollect("City Arkaden");
+            advanceAndCollect("city_arkaden");
         }
 
         //Go to Jail directly.
         if (players.get(playerID).getCardID() == R.drawable.chance13 || players.get(playerID).getCardID() == R.drawable.chance16 || players.get(playerID).getCardID() == R.drawable.community5) {
-            for (int i = 0; i < fields.size(); i++) {
-                if (fields.get(i).getName() == "Jail") {
-                    int incr = fields.get(i).getId() - players.get(playerID).getPosition();
+            for (int i = 0; i < Board.FELDER_ANZAHL; i++) {
+                if (Board.getFieldName(i) == "jail") {
+                    int incr = i - players.get(playerID).getPosition();
                     moveProtocol(incr);
                 }
             }
@@ -234,7 +234,7 @@ public class Game{
 
         //Advance to Rathaus. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance19) {
-            advanceAndCollect("Rathaus");
+            advanceAndCollect("rathaus");
         }
 
         //Bank error in your favor. Collect $200.
@@ -351,15 +351,14 @@ public class Game{
         int fieldId = 0;
         int incr;
 
-        for (int i = 0; i < fields.size(); i++) {
-            if (fields.get(i).getName().equals(location)) {
-                fieldId = fields.get(i).getId();
+        for (int i = 0; i < Board.FELDER_ANZAHL; i++) {
+            if (Board.getFieldName(i).equals(location)) {
+                fieldId = i;
             }
         }
 
         if (players.get(playerID).getPosition() > fieldId) {
-            incr = fields.size() - players.get(playerID).getPosition() + fieldId;
-            transferToPlayerProtocol(200);
+            incr = Board.FELDER_ANZAHL - players.get(playerID).getPosition() + fieldId;
         } else {
             incr = fieldId - players.get(playerID).getPosition();
         }
@@ -372,32 +371,38 @@ public class Game{
     }
 
     public void transferToPlayerProtocol(int amount) throws IOException {
+        Log.i("Cards", "transferToPlayerProtocol");
         int playerID = getPlayerIDByName(getCurrentPlayersTurn());
-        getPlayers().get(playerID).getMyClient().writeToServer("GameBoardUI|transferToPlayer|" + amount + "|" + getCurrentPlayersTurn());
+        getPlayers().get(playerID).getMyClient().writeToServer("GameBoardUI|giveMoney|" + amount + "|" + getCurrentPlayersTurn());
     }
 
     public void transferToBankProtocol(int amount) throws IOException {
+        Log.i("Cards", "transferToBankProtocol");
         int playerID = getPlayerIDByName(currentPlayersTurn);
         players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferToBank|" + amount + "|" + currentPlayersTurn);
     }
 
     public void transferPlayerToPlayerProtocol(int receiverID, int amount) throws IOException {
+        Log.i("Cards", "transferPlayerToPlayerProtocol");
         int playerID = getPlayerIDByName(currentPlayersTurn);
         players.get(playerID).getMyClient().
                 writeToServer("GameBoardUI|transferPlayerToPlayer|" + players.get(receiverID).getId() + ":" + amount + "|" + currentPlayersTurn);
     }
 
     public void moveProtocol(int incr) throws IOException {
+        Log.i("Cards", "moveProtocol");
         int playerID = getPlayerIDByName(currentPlayersTurn);
         players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + currentPlayersTurn);
     }
 
     public void outOfJailCounterProtocol(int amount) throws IOException {
+        Log.i("Cards", "outOfJailCounterProtocol");
         int playerID = getPlayerIDByName(currentPlayersTurn);
         players.get(playerID).getMyClient().writeToServer("GameBoardUI|outOfJailCounter|" + amount + "|" + currentPlayersTurn);
     }
 
     public void endTurnProtocol() throws IOException {
+        Log.i("Cards", "endTurnProtocol");
         int playerID = getPlayerIDByName(currentPlayersTurn);
         players.get(playerID).getMyClient().writeToServer("GameBoardUI|turnEnd|" + currentPlayersTurn);
     }
