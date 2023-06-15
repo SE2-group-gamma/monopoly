@@ -578,9 +578,8 @@ public class UIHandler extends Handler {
                 break;
 
             case "exitDiceFragment":
-                NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
-                //Thread.sleep(1000);
-
+                if(this.frag.getActivity().findViewById(R.id.continueButtonDiceFragment)!=null)
+                    NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
                 break;
 
             case "setStartTime":

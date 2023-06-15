@@ -563,10 +563,9 @@ public class Client extends Thread {
                 new TimerTask() {
                     @Override
                     public void run() {
-
                         turnEnd = true;
                         Log.i("GameBoardUI","inside timer");
-
+                        monopolyServer.broadCast("DiceFragment|exitDiceFragment|:|");
                     }
                 },
                 15000
