@@ -414,7 +414,7 @@ public class Client extends Thread {
                 //Log.d("checkRent", "Player position " + player.getPosition());
                 if(player.getPosition()==40){
                     fieldName = Board.getFieldName(0);
-                    player.setPosition(40);
+                    player.setPosition(0);
                 }
                 else if(player.getPosition()>=40){
                     int fieldNewRound = player.getPosition()-40;
