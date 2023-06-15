@@ -2,10 +2,8 @@ package com.example.monopoly.ui;
 
 
 import android.graphics.Color;
-import android.os.Bundle;
-
 import android.graphics.drawable.LayerDrawable;
-
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -20,23 +18,20 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.gamelogic.Player;
-import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.gamelogic.PlayerMapPosition;
+import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
+import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
+import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
-
-import com.example.monopoly.ui.viewmodels.DiceViewModel;
-import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
-import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
 
 public class UIHandler extends Handler {
     private Fragment frag;

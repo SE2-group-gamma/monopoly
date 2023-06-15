@@ -1,29 +1,19 @@
 package com.example.monopoly.network;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.monopoly.gamelogic.Bank;
-import com.example.monopoly.gamelogic.ChanceCardCollection;
-import com.example.monopoly.gamelogic.CommunityChestCard;
-import com.example.monopoly.gamelogic.CommunityChestCardCollection;
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
-import com.example.monopoly.gamelogic.properties.PropertyStorage;
-import com.example.monopoly.ui.DrawCardFragment;
 import com.example.monopoly.gamelogic.PlayerMapPosition;
+import com.example.monopoly.gamelogic.properties.PropertyStorage;
 import com.example.monopoly.ui.HostGame;
-import com.example.monopoly.ui.MainActivity;
 import com.example.monopoly.ui.UIHandler;
-
-import com.example.monopoly.gamelogic.ChanceCard;
 import com.example.monopoly.ui.viewmodels.CardViewModel;
 
 import java.io.BufferedReader;
@@ -349,17 +339,7 @@ public class Client extends Thread {
                     monopolyServer.broadCast("GameBoardUI|movePlayer|" + responseSplit[2] + "|" + responseSplit[3]);      // broadcast with different action to not interfere with game logic
                 }
             }//}
-
-            /*if (responseSplit[1].equals("transferToPlayer")) {
-                int receiverID = game.getPlayerIDByName(responseSplit[3]);
-                int amount = Integer.parseInt(dataResponseSplit[0]);
-                if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
-                    bank.transferMoneyBankToPlayer(game.getPlayers().get(receiverID), bank, amount);
-                    Log.i("MoneyTransfer", "Player: " + game.getPlayers().get(receiverID).getUsername() + ", New Capital: " +
-                            game.getPlayers().get(receiverID).getCapital());
-                }
-            }
-            if (responseSplit[1].equals("transferPlayerToPlayer")) {
+            /*if (responseSplit[1].equals("transferPlayerToPlayer")) {
                 //[Fragment]|transferPlayerToPlayer|[receiverID]:[amount]|[senderUserName]
                 int senderID = game.getPlayerIDByName(responseSplit[3]);
                 int receiverID = Integer.parseInt(dataResponseSplit[0]);
@@ -370,40 +350,29 @@ public class Client extends Thread {
                     Log.i("MoneyTransfer", game.getPlayers().get(senderID).getUsername()
                             + " -> " + game.getPlayers().get(receiverID).getUsername() + " : $" + amount);
                 }
-            }
+            }*/
             if (responseSplit[1].equals("outOfJailCounter")) {
                 //[Fragment]|outOfJailFree|[amount]|[senderUserName]
                 int playerID = game.getPlayerIDByName(responseSplit[3]);
+                Player player = game.getPlayers().get(playerID);
                 int amount = Integer.parseInt(dataResponseSplit[0]);
-                if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
-                    game.getPlayers().get(playerID).setOutOfJailFreeCounter(game.getPlayers().get(playerID).getOutOfJailFreeCounter()+amount);
-                }
+                Log.i("Cards", "jailCounterBefore:" + player.getOutOfJailFreeCounter());
+                player.setOutOfJailFreeCounter(player.getOutOfJailFreeCounter()+amount);
+                Log.i("Cards", "jailCounterAfter:" + player.getOutOfJailFreeCounter());
             }
             if (responseSplit[1].equals("transferToBank")) {
-                int senderID = game.getPlayerIDByName(responseSplit[3]);
-                int amount = Integer.parseInt(dataResponseSplit[0]);
-                if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
-                    bank.transferMoneyPlayerToBank(game.getPlayers().get(senderID), bank, amount);
-                    Log.i("MoneyTransfer", "Player: " + game.getPlayers().get(senderID).getUsername() + ", New Capital: " +
-                            game.getPlayers().get(senderID).getCapital());
-                }
+                int id = game.getPlayerIDByName(responseSplit[3]);
+                Log.d("MoneyPlayer", "id von player " + responseSplit[3]);
+                Log.d("MoneyPlayer", "client " + this.getUser().getUsername());
+                Player player = game.getPlayers().get(id);
+                int money = Integer.parseInt(dataResponseSplit[0]);
+                Log.d("Money", dataResponseSplit[0]);
+                double capital = player.getCapital();
+                Log.i("Cards", "playerCapitalBefore: "+ player.getCapital());
+                player.setCapital(capital + money);
+                Log.i("Cards", "playerCapitalAfter: "+ player.getCapital());
+                monopolyServer.broadCast("GameBoardUI|changeCapital|" + responseSplit[2] + "|" + responseSplit[3]);
             }
-            if (responseSplit[1].equals("setCard")) {
-                //[Fragment]|setImage|[imageID]|[senderUserName]
-                int playerID = game.getPlayerIDByName(responseSplit[3]);
-                int cardID = Integer.parseInt(dataResponseSplit[0]);
-                if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
-                    game.getPlayers().get(playerID).setCardID(cardID);
-                }
-            }
-            if (responseSplit[1].equals("removeCardBroadcast")) {
-                //[Fragment]|removeCardBroadcast|[CardID]:[CardType]|[senderUserName]
-                int cardID = Integer.parseInt(dataResponseSplit[0]);
-                String cardType = dataResponseSplit[1];
-                synchronized (monopolyServer.getClients()) {
-                    monopolyServer.broadCast("GameBoardUI|removeCard|" + cardID + ":" + cardType + "|" + monopolyServer.getClient().getUser().getUsername());
-                }
-            }*/
             if (responseSplit[1].equals("gameStart")) {
                 Log.d("gameRevCheck", "Yo hey" + game.getPlayers().get(0).getUsername());
                 //Log.d("gameRevCheck", "Yo hey"+game.getPlayers().get(1).getUsername());

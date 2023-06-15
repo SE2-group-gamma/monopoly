@@ -377,43 +377,32 @@ public class Game{
 
     public void transferToPlayerProtocol(int amount) throws IOException {
         Log.i("Cards", "transferToPlayerProtocol");
-        int playerID = getPlayerIDByName(getCurrentPlayersTurn());
-        //getPlayers().get(playerID).getMyClient().writeToServer("GameBoardUI|giveMoney|" + amount + "|" + getCurrentPlayersTurn());#
         client.writeToServer("GameBoardUI|giveMoney|" + amount + "|" + getCurrentPlayersTurn());
     }
 
     public void transferToBankProtocol(int amount) throws IOException {
         Log.i("Cards", "transferToBankProtocol");
-        int playerID = getPlayerIDByName(currentPlayersTurn);
-        //players.get(playerID).getMyClient().writeToServer("GameBoardUI|transferToBank|" + amount + "|" + currentPlayersTurn);
-        client.writeToServer("GameBoardUI|transferToBank|" + amount + "|" + currentPlayersTurn);
+        int amountNew= -amount;
+        client.writeToServer("GameBoardUI|transferToBank|" + amountNew + "|" + currentPlayersTurn);
     }
 
     public void transferPlayerToPlayerProtocol(int receiverID, int amount) throws IOException {
         Log.i("Cards", "transferPlayerToPlayerProtocol");
-        int playerID = getPlayerIDByName(currentPlayersTurn);
-        //players.get(playerID).getMyClient().
-                client.writeToServer("GameBoardUI|transferPlayerToPlayer|" + players.get(receiverID).getId() + ":" + amount + "|" + currentPlayersTurn);
+        client.writeToServer("GameBoardUI|transferPlayerToPlayer|" + players.get(receiverID).getId() + ":" + amount + "|" + currentPlayersTurn);
     }
 
     public void moveProtocol(int incr) throws IOException {
         Log.i("Cards", "moveProtocol");
-        int playerID = getPlayerIDByName(currentPlayersTurn);
-        //players.get(playerID).getMyClient().writeToServer("GameBoardUI|move|" + incr + "|" + currentPlayersTurn);
         client.writeToServer("GameBoardUI|move|" + incr + ":f:f|" + currentPlayersTurn);
     }
 
     public void outOfJailCounterProtocol(int amount) throws IOException {
         Log.i("Cards", "outOfJailCounterProtocol");
-        int playerID = getPlayerIDByName(currentPlayersTurn);
-        //players.get(playerID).getMyClient().writeToServer("GameBoardUI|outOfJailCounter|" + amount + "|" + currentPlayersTurn);
         client.writeToServer("GameBoardUI|outOfJailCounter|" + amount + ":|" + currentPlayersTurn);
     }
 
     public void endTurnProtocol() throws IOException {
         Log.i("Cards", "endTurnProtocol");
-        int playerID = getPlayerIDByName(currentPlayersTurn);
-        //players.get(playerID).getMyClient().writeToServer("GameBoardUI|turnEnd|" + currentPlayersTurn);
         client.writeToServer("GameBoardUI|turnEnd|:|");
     }
 

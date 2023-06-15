@@ -193,7 +193,7 @@ public class GameBoardUI extends Fragment {
             binding.buy.setEnabled(false);
         }
 
-      
+
         if(!clientViewModel.getClientData().getValue().getUser().getDrewCard()) {
             if (Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()).equals("chance") ||
                     Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()).equals("community")) {
