@@ -287,8 +287,12 @@ public class UIHandler extends Handler {
                     Log.d("checkRent"," moneyFromPlayer "+money);
                     uiHandlerViewModel.setCurrentMoney(money);
                     if (((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null) {
-                        payedMoney = payedMoney * (-1);
-                        Toast.makeText(this.frag.getActivity(), "You just payed " + payedMoney + "$", Toast.LENGTH_SHORT).show();
+                        if(payedMoney<0){
+                            payedMoney = payedMoney * (-1);
+                            Toast.makeText(this.frag.getActivity(), "You just payed " + payedMoney + "$", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(this.frag.getActivity(), "You just received " + payedMoney + "$", Toast.LENGTH_SHORT).show();
+                        }
                         ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n" + money + "$");
                     }
                     Log.d("MoneyPlayer", "" + money);

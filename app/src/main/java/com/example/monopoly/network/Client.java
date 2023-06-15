@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -402,35 +403,54 @@ public class Client extends Thread {
                 setRanks(HostGame.getPlayerCount());
             }
             if (responseSplit[1].equals("checkRent")) {
-                Log.d("checkRent", "player " + responseSplit[3]);
-                Log.d("checkRent", "field " + responseSplit[2]);
+                //Log.d("checkRent", "player " + responseSplit[3]);
+                Log.d("checkRent", "Expected field " + responseSplit[2]);
                 int propertyId = Integer.parseInt(responseSplit[2]);
                 int playerId = game.getPlayerIDByName(responseSplit[3]);
 
                 Player player = game.getPlayers().get(playerId);
-                String fieldName = Board.getFieldName(this.getUser().getPosition());
+                String fieldName;
+                assert player != null;
+                //Log.d("checkRent", "Player position " + player.getPosition());
+                if(player.getPosition()==40){
+                    fieldName = Board.getFieldName(0);
+                    player.setPosition(40);
+                }
+                else if(player.getPosition()>=40){
+                    int fieldNewRound = player.getPosition()-40;
+                    fieldName = Board.getFieldName(fieldNewRound);
+                    player.setPosition(fieldNewRound);
+                }else{
+                    fieldName = Board.getFieldName(player.getPosition());
+                }
+
+                Log.d("checkRent", "Current field " + fieldName);
+                Log.d("checkRent", "Player position " + player.getPosition());
 
                 if(propertyStorage.hasField(fieldName)){
                     int rent = propertyStorage.getRentOnPropertyField(fieldName,player);
-                    Log.d("checkRent", "fieldName " + fieldName);
-                    Log.d("checkRent", "rent " + rent);
+                    //Log.d("checkRent", "fieldName " + fieldName);
+                    //Log.d("checkRent", "rent " + rent);
 
                     if(rent!=0){
                         double capital = player.getCapital();
                         player.setCapital(capital - rent);
 
-                        String playerOwner = propertyStorage.getOwner(fieldName);
-                        Log.d("checkRent", "playerOwner in if " + playerOwner);
-                        Player owner = game.getPlayers().get(game.getPlayerIDByName(playerOwner));
+                        String playerOwner = propertyStorage.getOwnerName(fieldName);
+                        if(!(Objects.equals(playerOwner, ""))){
+                            //Log.d("checkRent", "playerOwner in if " + playerOwner);
+                            Player owner = game.getPlayers().get(game.getPlayerIDByName(playerOwner));
 
-                        //Log.d("checkRent", "playerOwner " + playerOwner.getUsername());
-                        double capitalOwner = owner.getCapital();
-                        owner.setCapital(capitalOwner + rent);
+                            if(!owner.getUsername().equals(player.getUsername())){
+                                double capitalOwner = owner.getCapital();
+                                owner.setCapital(capitalOwner + rent);
 
-                        rent=rent*(-1);
-                        Log.d("checkRent", "capital Buyer " + capital);
-                        Log.d("checkRent", "capital Owner " + capitalOwner);
-                        monopolyServer.broadCast("GameBoardUI|changeCapital|" + rent + ":"+playerOwner+"|" + responseSplit[3]);
+                                rent=rent*(-1);
+                                //Log.d("checkRent", "capital Buyer " + capital);
+                                //Log.d("checkRent", "capital Owner " + (capitalOwner+rent));
+                                monopolyServer.broadCast("GameBoardUI|changeCapital|" + rent + ":"+playerOwner+"|" + responseSplit[3]);
+                            }
+                        }
                     }
                 }
 
