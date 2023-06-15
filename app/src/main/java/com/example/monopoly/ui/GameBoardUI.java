@@ -1,6 +1,8 @@
 package com.example.monopoly.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -197,9 +199,14 @@ public class GameBoardUI extends Fragment {
 
         if (Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()).equals("chance") ||
                 Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()).equals("community")) {
-
-            NavHostFragment.findNavController(GameBoardUI.this).navigate(R.id.action_GameBoardUI_to_DrawCardFragment);
-
+            Handler handler = new Handler(Looper.getMainLooper());
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    NavHostFragment.findNavController(GameBoardUI.this).navigate(R.id.action_GameBoardUI_to_DrawCardFragment);
+                }
+            };
+            handler.postDelayed(runnable,1000);
         }
     }
 
