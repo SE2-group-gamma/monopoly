@@ -18,6 +18,7 @@ import com.example.monopoly.gamelogic.CommunityChestCardCollection;
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.ui.viewmodels.CardViewModel;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
+import com.example.monopoly.ui.viewmodels.DiceViewModel;
 
 import java.io.IOException;
 
@@ -26,6 +27,7 @@ public class DrawCardFragment extends Fragment {
     private ChanceCardCollection chanceCards;
     private CommunityChestCardCollection communityCards;
     private FragmentDrawcardBinding binding;
+    private DiceViewModel diceViewModel;
     private CardViewModel cardViewModel;
     private Game game = Game.getInstance();
     private ClientViewModel clientViewModel;
@@ -63,11 +65,6 @@ public class DrawCardFragment extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
             try {
                 game.doAction(clientViewModel.getClientData().getValue().getUser().getCardID(),clientViewModel.getClientData().getValue());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                clientViewModel.getClientData().getValue().writeToServer("GameBoardUI|move|2:f:f|" + clientViewModel.getClientData().getValue().getUser());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

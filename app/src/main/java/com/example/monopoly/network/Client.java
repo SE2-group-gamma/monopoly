@@ -457,8 +457,10 @@ public class Client extends Thread {
                 propertyStorage.buyProperty(fieldName, player);
                 monopolyServer.broadCast("GameBoardUI|updateOwner|" + fieldName + "|" + player.getUsername());
             }
-            if(responseSplit[1].equals("endTurn")){
-                // TODO next player turn
+            if (responseSplit[1].equals("cardDrawn")) {
+                Player player = game.getPlayers().get(game.getPlayerIDByName(responseSplit[3]));
+                String cardID = dataResponseSplit[0];
+                monopolyServer.broadCast("GameBoardUI|cardDrawn|" + cardID + "|" + player.getUsername());
             }
         } else {
             for (String str : responseSplit) {

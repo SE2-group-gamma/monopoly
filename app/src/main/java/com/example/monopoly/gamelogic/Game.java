@@ -349,6 +349,8 @@ public class Game{
             endTurnProtocol();
         }
 
+        cardDrawnProtocol(cardID);
+
     }
 
     public void advanceTo(String location) throws IOException {
@@ -404,6 +406,11 @@ public class Game{
     public void endTurnProtocol() throws IOException {
         Log.i("Cards", "endTurnProtocol");
         client.writeToServer("GameBoardUI|turnEnd|:|");
+    }
+
+    public void cardDrawnProtocol(int cardID) throws IOException {
+        Log.i("Cards", "endTurnProtocol");
+        client.writeToServer("GameBoardUI|cardDrawn|"+ cardID + "|"+ currentPlayersTurn);
     }
 
 }

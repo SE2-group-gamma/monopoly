@@ -25,6 +25,7 @@ import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.gamelogic.PlayerMapPosition;
 import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.network.Client;
+import com.example.monopoly.ui.viewmodels.CardViewModel;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
 import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
@@ -42,6 +43,7 @@ public class UIHandler extends Handler {
     private Client clientObj;
     private ClientViewModel clientViewModel;
     private GameBoardUIViewModel gameBoardUIViewModel;
+    private CardViewModel cardViewModel;
 
     private UIHandlerViewModel uiHandlerViewModel;
 
@@ -75,6 +77,7 @@ public class UIHandler extends Handler {
         this.frag = app;
         playerObjects = new HashMap<>();
         currentPosition = new int[7];
+        cardViewModel = new ViewModelProvider(frag.requireActivity()).get(CardViewModel.class);
         uiHandlerViewModel = new ViewModelProvider(frag.requireActivity()).get(UIHandlerViewModel.class);
         if (uiHandlerViewModel.getCurrentMoney().getValue() == null) {
             currentMoney = 1500;
@@ -162,6 +165,20 @@ public class UIHandler extends Handler {
                         break;
                 }
                 counter++;
+                break;
+            case "cardDrawn":
+                int cardID = Integer.parseInt(data);
+                String cardFunction = "";
+                for (int i = 0; i < cardViewModel.getChanceCards().getValue().getAllChanceCards().size(); i++) {
+                    if (cardID == cardViewModel.getChanceCards().getValue().getChanceCardDeck().get(i).getImageId()) {
+                        cardFunction = cardViewModel.getChanceCards().getValue().getChanceCardDeck().get(i).getFunction();
+                    }
+                    if (cardID == cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().get(i).getId()) {
+                        cardFunction = cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().get(i).getFunction();
+                    }
+                }
+
+                Toast.makeText(this.frag.getActivity(),client + " drew a Card: " + cardFunction, Toast.LENGTH_SHORT).show();
                 break;
             case "hostJoined":
                 if (playerObjects.get(player1) == null) {
