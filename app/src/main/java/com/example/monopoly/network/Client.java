@@ -428,6 +428,12 @@ public class Client extends Thread {
                     fieldName = Board.getFieldName(player.getPosition());
                 }
 
+                if(fieldName=="income_tax"){
+                    double capital = player.getCapital();
+                    player.setCapital(capital - 200);
+                    monopolyServer.broadCast("GameBoardUI|changeCapital|-200|" + responseSplit[3]);
+                }
+
                 Log.d("checkRent", "Current field " + fieldName);
                 Log.d("checkRent", "Player position " + player.getPosition());
 
