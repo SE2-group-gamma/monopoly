@@ -175,6 +175,12 @@ public class GameBoardUI extends Fragment {
             }
         });
 
+        try {
+            client.writeToServer("GameBoardUI|setPlayers|" + HostGame.getPlayerCount() + "|" + this.client.getUser().getUsername());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         binding.showPropertiesButton.setOnClickListener(view1 -> {
             NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_ProperyCardFragment);
         });
