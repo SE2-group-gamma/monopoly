@@ -71,7 +71,7 @@ public class Game{
     }
 
 
-    public void doAction(int cardID, Client client) throws IOException {
+    public int doAction(int cardID, Client client) throws IOException {
         this.client = client;
         int playerID = getPlayerIDByName(getCurrentPlayersTurn());
         players.get(playerID).setCardID(cardID);
@@ -83,18 +83,20 @@ public class Game{
         //Advance to "Go".
         if (players.get(playerID).getCardID() == R.drawable.chance0 || players.get(playerID).getCardID() == R.drawable.community0) {
             int incr = Board.FELDER_ANZAHL - players.get(playerID).getPosition();
-            moveProtocol(incr);
-            endTurnProtocol();
+            return incr;
+            //endTurnProtocol();
         }
 
         //Advance to Strandbad. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance1) {
-            advanceTo("strandbad");
+            return 1;
+            //advanceTo("strandbad");
         }
 
         //Advance to Lindwurm. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance2) {
-            advanceTo("lindwurm");
+            return 1;
+            //advanceTo("lindwurm");
         }
 
         //Your building loan matures. Receive $150.
@@ -153,7 +155,7 @@ public class Game{
 
                 transferPlayerToPlayerProtocol(owner.getId(), amount);
             }*/
-            moveProtocol(incr);
+            return incr;
         }
 
         //Bank pays you dividend of $50.
@@ -170,7 +172,7 @@ public class Game{
 
         //Go back 3 spaces.
         if (players.get(playerID).getCardID() == R.drawable.chance7) {
-            moveProtocol(-3);
+            return -3;
         }
 
         //Make general repairs on all your property: For each house pay $25, for each hotel pay $100.
@@ -184,7 +186,7 @@ public class Game{
             for (int i = 0; i < Board.FELDER_ANZAHL; i++) {
                 if (Board.getFieldName(i) == "s_bahn_wien") {
                     incr = players.get(playerID).getPosition() - i;
-                    moveProtocol(incr);
+                    return incr;
                 }
             }
         }
@@ -201,7 +203,8 @@ public class Game{
 
         //Advance to City Arkaden. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance11) {
-            advanceTo("city_arkaden");
+            return 1;
+            //advanceTo("city_arkaden");
         }
 
         //Go to Jail directly.
@@ -209,7 +212,7 @@ public class Game{
             for (int i = 0; i < Board.FELDER_ANZAHL; i++) {
                 if (Board.getFieldName(i) == "jail") {
                     int incr = i - players.get(playerID).getPosition();
-                    moveProtocol(incr);
+                    return incr;
                 }
             }
             endTurnProtocol();
@@ -223,7 +226,7 @@ public class Game{
 
         //Advance two spaces.
         if (players.get(playerID).getCardID() == R.drawable.chance15) {
-            moveProtocol(2);
+            return 2;
         }
 
         //Happy Birthday! Receive $100.
@@ -234,12 +237,13 @@ public class Game{
 
         //Go back one space.
         if (players.get(playerID).getCardID() == R.drawable.chance18) {
-            moveProtocol(-1);
+            return -1;
         }
 
         //Advance to Rathaus. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance19) {
-            advanceTo("rathaus");
+            return 1;
+            //advanceTo("rathaus");
         }
 
         //Bank error in your favor. Collect $200.
@@ -349,7 +353,8 @@ public class Game{
             endTurnProtocol();
         }
 
-        cardDrawnProtocol(cardID);
+        //cardDrawnProtocol(cardID);
+        return 0;
 
     }
 
@@ -369,7 +374,7 @@ public class Game{
         } else {
             incr = fieldId - players.get(playerID).getPosition();
         }
-        moveProtocol(incr);
+        //moveProtocol(incr);
 
         if (players.get(playerID).getPosition() == 0) {
             endTurnProtocol();
@@ -409,7 +414,7 @@ public class Game{
     }
 
     public void cardDrawnProtocol(int cardID) throws IOException {
-        Log.i("Cards", "endTurnProtocol");
+        Log.i("Cards", "cardDrawn");
         client.writeToServer("GameBoardUI|cardDrawn|"+ cardID + "|"+ currentPlayersTurn);
     }
 

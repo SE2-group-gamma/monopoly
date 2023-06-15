@@ -178,7 +178,8 @@ public class UIHandler extends Handler {
                     }
                 }
 
-                Toast.makeText(this.frag.getActivity(),client + " drew a Card: " + cardFunction, Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(frag.requireContext(), cardFunction, Toast.LENGTH_SHORT).show();
                 break;
             case "hostJoined":
                 if (playerObjects.get(player1) == null) {

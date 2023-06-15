@@ -207,6 +207,15 @@ public class GameBoardUI extends Fragment {
                 };
                 handler.postDelayed(runnable, 2000);
                 clientViewModel.getClientData().getValue().getUser().setDrewCard(true);
+                if (clientViewModel.getClientData().getValue().getUser().getIncrement() !=0) {
+                    int incr = clientViewModel.getClientData().getValue().getUser().getIncrement();
+                    try {
+                        client.writeToServer("GameBoardUI|move|" + incr + ":f:f|" + this.client.getUser().getUsername());
+                        clientViewModel.getClientData().getValue().getUser().setIncrement(0);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
         }
     }
