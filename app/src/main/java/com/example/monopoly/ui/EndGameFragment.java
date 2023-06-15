@@ -14,25 +14,20 @@ public class EndGameFragment extends Fragment {
 
     public EndGameFragment() {
         // Required empty public constructor
-        Client.subscribe(this,"EndGameFragment");
+
     }
 
     public static EndGameFragment newInstance() {
         EndGameFragment fragment = new EndGameFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Client.subscribe(this, "EndGameFragment");
         return inflater.inflate(R.layout.fragment_end_game, container, false);
     }
+
 }

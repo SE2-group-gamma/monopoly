@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
-import com.example.monopoly.gamelogic.properties.PropertyStorage;
 import com.example.monopoly.gamelogic.PlayerMapPosition;
+import com.example.monopoly.gamelogic.properties.PropertyStorage;
 import com.example.monopoly.ui.HostGame;
 import com.example.monopoly.ui.UIHandler;
 
@@ -234,8 +234,8 @@ public class Client extends Thread {
                 if (turnEnd) {
                     turnProcess();
                 }
-                if (gameStart == true) {
-
+                if (gameStart == true&&isHost) {
+                    setRanks(HostGame.getPlayerCount());
                 }
             }
 
@@ -292,7 +292,7 @@ public class Client extends Thread {
             game = Game.getInstance();
             //Host should only join once
             if (responseSplit[1].equals("hostJoined") && game.getPlayers().isEmpty()) {       //Host should only join once
-                Player tempPlayer = new Player(dataResponseSplit[0], new Color(), 1500.00, true);
+                Player tempPlayer = new Player(dataResponseSplit[0], new Color(), 100.00, true);
                 Log.i("Dices", "Host gonna join: ");
                 game.addPlayer(tempPlayer);
             }
@@ -300,7 +300,7 @@ public class Client extends Thread {
                 synchronized (monopolyServer.getClients()) {
                     monopolyServer.broadCast("Lobby|userJoined|" + responseSplit[2]);
                     monopolyServer.broadCast("Lobby|hostJoined|" + monopolyServer.getClient().getUser().getUsername());
-                    Player tempPlayer = new Player(responseSplit[2], new Color(), 1500.00, true);
+                    Player tempPlayer = new Player(responseSplit[2], new Color(), 100.00, true);
                     Log.i("Dices", "Client Gonna join: ");
                     game.addPlayer(tempPlayer);
 
@@ -397,7 +397,7 @@ public class Client extends Thread {
                 player.setCapital(capital + money);
                 monopolyServer.broadCast("GameBoardUI|changeCapital|" + responseSplit[2] + "|" + responseSplit[3]);
                 Log.d("currentCapital","Capital: "+player.getCapital()+" from "+player.getUsername());
-                setRanks(HostGame.getPlayerCount());
+
             }
             if (responseSplit[1].equals("mapPlayers")) {
                 int id = game.getPlayerIDByName(responseSplit[3]);
@@ -521,43 +521,54 @@ public class Client extends Thread {
         return buttonCheck;
     }
     public void setRanks(int maxPlayers) {
+            int revCounter = maxPlayers;
+            //Log.d("maxitout", "kek"+maxPlayers);
 
-        int revCounter = maxPlayers;
+            for (Player player : this.playerList) {
+                //Log.d("winnerCc", "hey" + winnerList.size());
+                if (player.getCapital() < 0 && player.isBroke() == false && winnerList.size() < maxPlayers - 1) {
+                    player.setBroke(true);
+                    this.winnerList.add(player);
+                    Log.d("winnerC", "hey" + player.getUsername());
+                    if (winnerList.size() == maxPlayers - 1) {
+                        this.gameover = true;
+                    }
 
-        for (Player player : playerList) {
-            if (player.getCapital() < 0 && player.isBroke() == false) {
-                player.setBroke(true);
-                winnerList.add(player);
-                if (winnerList.size() == maxPlayers) {
-                    this.gameover = true;
-                }
-
-                monopolyServer.broadCast("GameBoardUI|playerBroke|" + player.getUsername());
-            }
-        }
-
-        if (this.gameover == true && this.gamerank == true) {
-            for (Player player : playerList) {
-                if (player.isBroke() == false) {
-                    player.setTotalAssetValue(PropertyStorage.getInstance().getTotalAssets(player));
-                    tempList.add(player);
+                    monopolyServer.broadCast("GameBoardUI|playerBroke|" + player.getUsername());
                 }
             }
-            Collections.sort(tempList, new Comparator<Player>() {
+
+            if (this.gameover == true&&this.gamerank==true) {
+                for (Player player : this.playerList) {
+                    if (player.isBroke() == false) {
+                        //player.setTotalAssetValue(PropertyStorage.getInstance().getTotalAssets(player));
+                        this.tempList.add(player);
+                        Log.d("winnerC", "temp" + player.getUsername());
+                    }
+                }
+            Collections.sort(this.tempList, new Comparator<Player>() {
                 public int compare(Player p1, Player p2) {
                     return Double.compare(p1.getTotalAssetValue(), p2.getTotalAssetValue());
                 }
             });
-            winnerList.addAll(tempList);
-            this.gamerank = false;
+                if (this.tempList != null) {
+                    this.winnerList.addAll(this.tempList);
+                    //Log.d("winnerC", "temp"+player.getUsername());
+                }
 
-            for (Player winners : winnerList) {
-                monopolyServer.broadCast("EndGameFragment|setWinners" + revCounter + "|" + winners.getUsername());
-                revCounter--;
+
+
+
+                monopolyServer.broadCast("GameBoardUI|endFrag|:|");
+
+                for (Player winners : this.winnerList) {
+                    monopolyServer.broadCast("EndGameFragment|setWinners" + revCounter + "|" + winners.getUsername());
+                    //Log.d("revCount", "hey" + revCounter);
+                    revCounter--;
+                }
+
+                this.gamerank = false;
             }
-            monopolyServer.broadCast("GameBoardUI|endFrag");
-        }
-
 
     }
 

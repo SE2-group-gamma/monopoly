@@ -2,10 +2,8 @@ package com.example.monopoly.ui;
 
 
 import android.graphics.Color;
-import android.os.Bundle;
-
 import android.graphics.drawable.LayerDrawable;
-
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -20,24 +18,20 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.gamelogic.Player;
-import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.gamelogic.PlayerMapPosition;
+import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
+import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
+import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
-
-import com.example.monopoly.ui.viewmodels.DiceViewModel;
-import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
-import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
-import com.google.android.material.snackbar.Snackbar;
 
 public class UIHandler extends Handler {
     private Fragment frag;
@@ -83,7 +77,7 @@ public class UIHandler extends Handler {
         currentPosition = new int[7];
         uiHandlerViewModel = new ViewModelProvider(frag.requireActivity()).get(UIHandlerViewModel.class);
         if (uiHandlerViewModel.getCurrentMoney().getValue() == null) {
-            currentMoney = 1500;
+            currentMoney = 100;
         }
 
         if (uiHandlerViewModel.getPlayerObjects().getValue() != null) {
@@ -519,47 +513,49 @@ public class UIHandler extends Handler {
 
             case "setWinners6":
                 ((TextView) this.frag.getActivity().findViewById(R.id.w6)).setText(data);
-                this.frag.getActivity().findViewById(R.id.w6).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.bar6).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.p6).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.w6).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.bar6).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.p6).setVisibility(View.VISIBLE);
                 break;
 
             case "setWinners5":
                 ((TextView) this.frag.getActivity().findViewById(R.id.w5)).setText(data);
-                this.frag.getActivity().findViewById(R.id.w5).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.bar5).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.p5).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.w5).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.bar5).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.p5).setVisibility(View.VISIBLE);
                 break;
 
             case "setWinners4":
                 ((TextView) this.frag.getActivity().findViewById(R.id.w4)).setText(data);
-                this.frag.getActivity().findViewById(R.id.w4).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.bar4).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.p4).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.w4).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.bar4).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.p4).setVisibility(View.VISIBLE);
                 break;
 
             case "setWinners3":
                 ((TextView) this.frag.getActivity().findViewById(R.id.w3)).setText(data);
-                this.frag.getActivity().findViewById(R.id.w3).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.bar3).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.p3).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.w3).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.bar3).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.p3).setVisibility(View.VISIBLE);
                 break;
 
             case "setWinners2":
+                Log.d("revCount", "heyUser" + data);
                 ((TextView) this.frag.getActivity().findViewById(R.id.w2)).setText(data);
-                this.frag.getActivity().findViewById(R.id.w2).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.bar2).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.p2).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.w2).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.bar2).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.p2).setVisibility(View.VISIBLE);
                 break;
 
             case "setWinners1":
                 ((TextView) this.frag.getActivity().findViewById(R.id.w1)).setText(data);
-                this.frag.getActivity().findViewById(R.id.w1).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.bar1).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.p1).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.w1).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.bar1).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.p1).setVisibility(View.VISIBLE);
                 break;
 
             case "endFrag":
+                Log.d("revCount", "heyEnd");
                 NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_EndGameFragment);
                 break;
             case "updateHouse":
