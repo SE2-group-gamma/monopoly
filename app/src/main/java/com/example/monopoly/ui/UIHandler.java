@@ -648,14 +648,17 @@ public class UIHandler extends Handler {
                     ClientPropertyStorage.getInstance().updateOwner(data, new Player(client, new Color(), 0, true));
 
                     ClientPropertyStorage clientPropertyStorage = ClientPropertyStorage.getInstance();
-                    Field field = clientPropertyStorage.getProperty(Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()));
-                    try {               // check if field is buyable
-                        if (field.getOwner() != null || this.clientObj.getUser().getCapital() < field.getPrice())
-                            throw new IllegalFieldException();
-                    }catch (IllegalFieldException e){
-                        this.frag.getActivity().findViewById(R.id.buy).setEnabled(false);
-                        this.frag.getActivity().findViewById(R.id.buy).setAlpha(0.5f);
-                    }
+
+                    try {
+                        Field field = clientPropertyStorage.getProperty(Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()));
+                        try {               // check if field is buyable
+                            if (field.getOwner() != null || this.clientObj.getUser().getCapital() < field.getPrice())
+                                throw new IllegalFieldException();
+                        } catch (IllegalFieldException e) {
+                            this.frag.getActivity().findViewById(R.id.buy).setEnabled(false);
+                            this.frag.getActivity().findViewById(R.id.buy).setAlpha(0.5f);
+                        }
+                    }catch (IllegalFieldException e){}
                 }
                 else
                     Toast.makeText(this.frag.getActivity(),"You just bought "+data,Toast.LENGTH_SHORT).show();
