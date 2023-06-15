@@ -430,8 +430,15 @@ public class Client extends Thread {
 
                 if(fieldName=="income_tax"){
                     double capital = player.getCapital();
-                    player.setCapital(capital - 200);
-                    monopolyServer.broadCast("GameBoardUI|changeCapital|-200|" + responseSplit[3]);
+                    int newCapital=0;
+                    if(capital*0.1 > 200){
+                        player.setCapital(capital - 200);
+                        newCapital = 200;
+                    }else {
+                        player.setCapital(capital * 0.9);
+                        newCapital = (int) (capital * 0.1);
+                    }
+                    monopolyServer.broadCast("GameBoardUI|changeCapital|-"+newCapital+"|" + responseSplit[3]);
                 }
 
                 Log.d("checkRent", "Current field " + fieldName);
