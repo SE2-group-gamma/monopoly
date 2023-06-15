@@ -176,7 +176,7 @@ public class ChanceCardCollection {
         int random = generateRandom();
         if (random >= 0) {
             ChanceCard card = chanceCardDeck.get(random);
-            removeCardFromDeck(random);
+            //removeCardFromDeck(random);
             return card;
         } else return null;
     }

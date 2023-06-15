@@ -185,7 +185,7 @@ public class CommunityChestCardCollection {
         int random = generateRandom();
         if (random >= 0) {
             CommunityChestCard card = communityChestCardDeck.get(random);
-            removeCardFromDeck(random);
+            //removeCardFromDeck(random);
             return card;
         } else return null;
     }

@@ -50,7 +50,6 @@ public class DrawCardFragment extends Fragment {
         context = getAppContext();
         try {
             checkField();
-            game.doAction(clientViewModel.getClientData().getValue().getUser().getCardID());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -62,6 +61,11 @@ public class DrawCardFragment extends Fragment {
             this.cardViewModel.setChanceCards(this.chanceCards);
             this.cardViewModel.setCommunityCards(this.communityCards);
             NavHostFragment.findNavController(this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
+            try {
+                game.doAction(clientViewModel.getClientData().getValue().getUser().getCardID(),clientViewModel.getClientData().getValue());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
         return this.binding.getRoot();
     }
