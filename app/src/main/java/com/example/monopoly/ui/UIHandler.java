@@ -2,10 +2,8 @@ package com.example.monopoly.ui;
 
 
 import android.graphics.Color;
-import android.os.Bundle;
-
 import android.graphics.drawable.LayerDrawable;
-
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -20,24 +18,20 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.gamelogic.Player;
-import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.gamelogic.PlayerMapPosition;
+import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
+import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
+import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
-
-import com.example.monopoly.ui.viewmodels.DiceViewModel;
-import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
-import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
-import com.google.android.material.snackbar.Snackbar;
 
 public class UIHandler extends Handler {
     private Fragment frag;
@@ -50,6 +44,9 @@ public class UIHandler extends Handler {
     private GameBoardUIViewModel gameBoardUIViewModel;
 
     private UIHandlerViewModel uiHandlerViewModel;
+
+    private boolean hostJoinCounter = true;
+
 
 
     public int player1 = 1;
@@ -134,45 +131,45 @@ public class UIHandler extends Handler {
             case "changeText":
                 ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
                 break;
-            case "userJoined":
-                switch (counter) {
-                    case 2:
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1Name)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
-                        playerObjects.put(player2, data);
-                        break;
-                    case 3:
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2Name)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setText(data);
-                        playerObjects.put(player3, data);
-                        break;
-                    case 4:
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3Name)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setText(data);
-                        playerObjects.put(player4, data);
-                        break;
-                    case 5:
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4Name)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setText(data);
-                        playerObjects.put(player5, data);
-                        break;
-                    case 6:
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5Name)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setText(data);
-                        playerObjects.put(player6, data);
-                        break;
-                }
-                counter++;
+
+            case "userJoined1":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1Name)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
+                playerObjects.put(player2, data);
                 break;
+            case "userJoined2":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2Name)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setText(data);
+                playerObjects.put(player3, data);
+                break;
+            case "userJoined3":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3Name)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setText(data);
+                playerObjects.put(player4, data);
+                break;
+            case "userJoined4":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4Name)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setText(data);
+                playerObjects.put(player5, data);
+                break;
+            case "userJoined5":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5Name)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setText(data);
+                playerObjects.put(player6, data);
+                break;
+
             case "hostJoined":
                 if (playerObjects.get(player1) == null) {
                     playerObjects.put(player1, data);
-                    counter++;
+                    if(hostJoinCounter) {
+                        counter++;
+                        hostJoinCounter=false;
+                    }
                 }
                 if (!HostGame.lobbyname.equals(" ")) {
                     ((TextView) this.frag.getActivity().findViewById(R.id.textViewLobby)).setText("Lobby: " + HostGame.lobbyname);
@@ -180,7 +177,7 @@ public class UIHandler extends Handler {
                 ((TextView) this.frag.getActivity().findViewById(R.id.textViewHost)).setText(data);
                 break;
             case "keyFromLobby":
-                if (data.equals("1")) {
+                if (data.equals("1")&&client.equals(this.clientObj.getUser().getUsername())) {
                     NavHostFragment.findNavController(frag).navigate(R.id.action_JoinGame_to_Lobby);
                 } else {
                     Log.d("", "gib toast");
