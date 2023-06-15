@@ -352,8 +352,12 @@ public class Client extends Thread {
 
 
                 monopolyServer.broadCast("GameBoardUI|setStartTime|" + HostGame.getMaxTimeMin() * 60000);
+
                 this.playerList = new ArrayList<>(game.getPlayers().values());
                 this.gameStart = true;
+            }
+            if (responseSplit[1].equals("setPlayers")) {
+                monopolyServer.broadCast("GameBoardUI|setPlayerCount|" + HostGame.getPlayerCount());
             }
             if(responseSplit[1].equals("uncover") && !(this.lastPlayerMoved.isEmpty()) && !(responseSplit[3].equals(this.lastPlayerMoved))){         // player cant punish himself, or no player
                 try{

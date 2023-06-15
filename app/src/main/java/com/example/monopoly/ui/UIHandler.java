@@ -2,6 +2,7 @@ package com.example.monopoly.ui;
 
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import android.graphics.drawable.LayerDrawable;
@@ -209,6 +210,9 @@ public class UIHandler extends Handler {
                 Log.d("------------", "initializePlayerBottomRight");
 
                 Log.d("hostPosition", "Initialize Host");
+
+                Log.d("playerCount","I am "+client);
+                Log.d("playerCount","I am with obj "+clientObj.getUser().getUsername());
                 if (uiHandlerViewModel.getCheckFirst().getValue()) {
 
                     gameBoardUIViewModel.setUncoverEnabled(this.frag.getActivity().findViewById(R.id.uncover).isEnabled());     // save uncover status on first turn
@@ -275,11 +279,42 @@ public class UIHandler extends Handler {
                 }
 
                 break;
+
             case "displayKey":
                 if (HostGame.key != 0) {
                     ((TextView) this.frag.getActivity().findViewById(R.id.textViewKey)).setText("Game-Key: " + HostGame.key);
                 }
                 break;
+            case "setPlayerCount":
+                int playerCount = Integer.parseInt(data);
+                Log.d("playerCount",""+playerCount);
+
+                Drawable player6Drawable = layerDrawable.findDrawableByLayerId(R.id.player6);
+                Drawable player5Drawable = layerDrawable.findDrawableByLayerId(R.id.player5);
+                Drawable player4Drawable = layerDrawable.findDrawableByLayerId(R.id.player4);
+                Drawable player3Drawable = layerDrawable.findDrawableByLayerId(R.id.player3);
+                switch (playerCount){
+                    case 5:
+                        player6Drawable.setAlpha(0);
+                        break;
+                    case 4:
+                        player6Drawable.setAlpha(0);
+                        player5Drawable.setAlpha(0);
+                        break;
+                    case 3:
+                        player6Drawable.setAlpha(0);
+                        player5Drawable.setAlpha(0);
+                        player4Drawable.setAlpha(0);
+                        break;
+                    case 2:
+                        player6Drawable.setAlpha(0);
+                        player5Drawable.setAlpha(0);
+                        player4Drawable.setAlpha(0);
+                        player3Drawable.setAlpha(0);
+                        break;
+                    default:
+                        Log.d("playerCount",""+playerCount);
+                }
             case "changeCapital":
                 if (clientObj.getUser().getUsername().equals(client)) {
                     int payedMoney = Integer.parseInt(data.split(":")[0]);
