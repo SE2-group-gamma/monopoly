@@ -87,11 +87,11 @@ public class DrawCardFragment extends Fragment {
     private void returnChanceCard() throws IOException {
         int index = chanceCards.drawFromDeck().getId();
         int cardId = chanceCards.getChanceCardDeck().get(index).getImageId();
-        if (cardId == 2131165338){
-            cardId = 2131165329;
+        if (cardId == R.drawable.chance8){
+            cardId = R.drawable.chance17;
         }
-        if (cardId == 2131165322){
-            cardId = 2131165333;
+        if (cardId == R.drawable.chance10){
+            cardId = R.drawable.chance3;
         }
         binding.ImageCard.setImageResource(cardId);
         clientViewModel.getClientData().getValue().getUser().setCardID(cardId);
@@ -101,14 +101,14 @@ public class DrawCardFragment extends Fragment {
     private void returnCommunityChestCard() throws IOException {
         int index = communityCards.drawFromDeck().getId();
         int cardId = communityCards.getCommunityChestCardDeck().get(index).getImageId();
-        if (cardId == 2131165359){
-            cardId = 2131165353;
+        if (cardId == R.drawable.community8){
+            cardId = R.drawable.community2;
         }
-        if (cardId == 2131165346){
-            cardId = 2131165358;
+        if (cardId == R.drawable.community13){
+            cardId = R.drawable.community7;
         }
-        if (cardId == 2131165352){
-            cardId = 2131165344;
+        if (cardId == R.drawable.community19){
+            cardId = R.drawable.community11;
         }
         binding.ImageCard.setImageResource(cardId);
         clientViewModel.getClientData().getValue().getUser().setCardID(cardId);
