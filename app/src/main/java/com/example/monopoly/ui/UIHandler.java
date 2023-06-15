@@ -318,6 +318,7 @@ public class UIHandler extends Handler {
                     default:
                         Log.d("playerCount",""+playerCount);
                 }
+                break;
             case "changeCapital":
                 if (clientObj.getUser().getUsername().equals(client)) {
                     int payedMoney = Integer.parseInt(data.split(":")[0]);
@@ -362,9 +363,9 @@ public class UIHandler extends Handler {
                     this.frag.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
                     this.frag.getActivity().findViewById(R.id.uncover).setEnabled(false);
                     if(dataResponseSplit[0].equals("t")){
-                        Toast.makeText(this.frag.getActivity(),dataResponseSplit[1]+" successfully punished "+client+"!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this.frag.getActivity(),client+" successfully punished "+dataResponseSplit[1]+"!",Toast.LENGTH_SHORT).show();
                     }else{
-                        Toast.makeText(this.frag.getActivity(),dataResponseSplit[1]+" failed to punish "+client+"!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this.frag.getActivity(),client+" failed to punish "+dataResponseSplit[1]+"!",Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
