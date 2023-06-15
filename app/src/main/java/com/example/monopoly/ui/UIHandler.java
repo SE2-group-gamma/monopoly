@@ -25,9 +25,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
+import com.example.monopoly.gamelogic.Board;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.gamelogic.PlayerMapPosition;
+import com.example.monopoly.gamelogic.properties.Field;
+import com.example.monopoly.gamelogic.properties.IllegalFieldException;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 
@@ -640,8 +643,20 @@ public class UIHandler extends Handler {
                     ClientPropertyStorage.getInstance().addHotel(data);
                 break;
             case "updateOwner":
-                if (!clientObj.getUser().getUsername().equals(client))
+                if (!clientObj.getUser().getUsername().equals(client)) {
+
                     ClientPropertyStorage.getInstance().updateOwner(data, new Player(client, new Color(), 0, true));
+
+                    ClientPropertyStorage clientPropertyStorage = ClientPropertyStorage.getInstance();
+                    Field field = clientPropertyStorage.getProperty(Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()));
+                    try {               // check if field is buyable
+                        if (field.getOwner() != null || this.clientObj.getUser().getCapital() < field.getPrice())
+                            throw new IllegalFieldException();
+                    }catch (IllegalFieldException e){
+                        this.frag.getActivity().findViewById(R.id.buy).setEnabled(false);
+                        this.frag.getActivity().findViewById(R.id.buy).setAlpha(0.5f);
+                    }
+                }
                 else
                     Toast.makeText(this.frag.getActivity(),"You just bought "+data,Toast.LENGTH_SHORT).show();
                 break;
