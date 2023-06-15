@@ -327,7 +327,7 @@ public class Game{
 
         //You inherit $100.
         if (players.get(playerID).getCardID() == R.drawable.community16) {
-            transferToBankProtocol(100);
+            transferToPlayerProtocol(100);
             endTurnProtocol();
         }
 
