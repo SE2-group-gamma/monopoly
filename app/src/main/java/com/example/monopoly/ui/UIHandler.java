@@ -289,6 +289,9 @@ public class UIHandler extends Handler {
                 int playerCount = Integer.parseInt(data);
                 Log.d("playerCount",""+playerCount);
 
+                if(layerDrawable==null)
+                    return;
+
                 Drawable player6Drawable = layerDrawable.findDrawableByLayerId(R.id.player6);
                 Drawable player5Drawable = layerDrawable.findDrawableByLayerId(R.id.player5);
                 Drawable player4Drawable = layerDrawable.findDrawableByLayerId(R.id.player4);
