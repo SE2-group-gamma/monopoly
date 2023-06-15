@@ -440,6 +440,11 @@ public class Client extends Thread {
                     }
                     monopolyServer.broadCast("GameBoardUI|changeCapital|-"+newCapital+"|" + responseSplit[3]);
                 }
+                if(fieldName=="luxury_tax"){
+                    double capital = player.getCapital();
+                    player.setCapital(capital - 75);
+                    monopolyServer.broadCast("GameBoardUI|changeCapital|-"+75+"|" + responseSplit[3]);
+                }
 
                 Log.d("checkRent", "Current field " + fieldName);
                 Log.d("checkRent", "Player position " + player.getPosition());
