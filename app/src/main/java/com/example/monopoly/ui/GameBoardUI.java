@@ -146,8 +146,8 @@ public class GameBoardUI extends Fragment {
 
         //binding.currentMoney.setText("Current Money \n"+uiHandlerViewModel.getCurrentMoney().getValue()+"$"); // dont redraw
 
-        binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
-                .navigate(R.id.action_GameBoard_to_FirstFragment));
+        /*binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
+                .navigate(R.id.action_GameBoard_to_FirstFragment));*/
 
         binding.uncover.setOnClickListener(view1 -> {
             try {
