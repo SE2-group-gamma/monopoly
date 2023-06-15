@@ -151,6 +151,7 @@ public class GameBoardUI extends Fragment {
 
         binding.throwdice.setOnClickListener(view1 -> {
             showDiceFragment();
+            clientViewModel.getClientData().getValue().getUser().setDrewCard(false);
         });
 
         binding.endTurn.setOnClickListener(view1 -> {

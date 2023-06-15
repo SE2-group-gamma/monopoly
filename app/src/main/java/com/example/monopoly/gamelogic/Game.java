@@ -89,12 +89,12 @@ public class Game{
 
         //Advance to Strandbad. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance1) {
-            advanceAndCollect("strandbad");
+            advanceTo("strandbad");
         }
 
         //Advance to Lindwurm. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance2) {
-            advanceAndCollect("lindwurm");
+            advanceTo("lindwurm");
         }
 
         //Your building loan matures. Receive $150.
@@ -201,7 +201,7 @@ public class Game{
 
         //Advance to City Arkaden. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance11) {
-            advanceAndCollect("city_arkaden");
+            advanceTo("city_arkaden");
         }
 
         //Go to Jail directly.
@@ -239,7 +239,7 @@ public class Game{
 
         //Advance to Rathaus. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance19) {
-            advanceAndCollect("rathaus");
+            advanceTo("rathaus");
         }
 
         //Bank error in your favor. Collect $200.
@@ -351,7 +351,7 @@ public class Game{
 
     }
 
-    public void advanceAndCollect(String location) throws IOException {
+    public void advanceTo(String location) throws IOException {
         int playerID = getPlayerIDByName(currentPlayersTurn);
         int fieldId = 0;
         int incr;
