@@ -238,9 +238,6 @@ public class Client extends Thread {
                 if (turnEnd) {
                     turnProcess();
                 }
-                /*if (gameStart == true) {
-                    setRanks(HostGame.getPlayerCount());
-                }*/
             }
 
         } catch(IOException io) {
