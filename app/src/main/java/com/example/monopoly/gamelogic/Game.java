@@ -1,17 +1,10 @@
 package com.example.monopoly.gamelogic;
 
-import android.util.Log;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import com.example.monopoly.R;
 import com.example.monopoly.network.Client;
-import java.util.List;
+
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -84,7 +77,7 @@ public class Game{
         this.count.set(0);
     }
 
-    public void doAction(int cardID, Client client) throws IOException {
+    public void doAction(int cardID, Client client) throws Exception {
         this.client = client;
         int playerID = getPlayerIDByName(getCurrentPlayersTurn());
         players.get(playerID).setCardID(cardID);
