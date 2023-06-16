@@ -82,4 +82,14 @@ public class DicesTest {
             assertEquals(dices.getDice1() + dices.getDice2(), dices.getSum());
         }
     }
+
+    @Test
+    public void testToString() {
+        Dices dices = new Dices();
+        String expectedString = "dice1=0, dice2=0, sum=0, isflawed=false";
+        String actualString = dices.toString();
+
+        assertEquals(expectedString, actualString);
+    }
+
 }

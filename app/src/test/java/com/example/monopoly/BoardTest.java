@@ -23,6 +23,7 @@ class BoardTest {
     static void initPropertyStorage(){
         ps = PropertyStorage.getInstance();
     }
+
     void testSpecialFields(){
         assertEquals("go", Board.getFieldName(0));
         assertEquals("jail", Board.getFieldName(10));
@@ -50,4 +51,15 @@ class BoardTest {
             }
         }
     }
+
+    @Test
+    public void testBoardConstructor() {
+        int id = 1;
+        ArrayList<Field> fields = new ArrayList<>();
+        Board board = new Board(id, fields);
+
+        assertEquals(id, board.getId());
+        assertEquals(fields, board.getFields());
+    }
+
 }

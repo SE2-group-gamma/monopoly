@@ -123,25 +123,45 @@ public class ChanceCardCollection {
 
     private void setDrawables() {
        getChanceCardDeck().get(0).setImageId(R.drawable.chance0);
+       getAllChanceCards().get(0).setImageId(R.drawable.chance0);
        getChanceCardDeck().get(1).setImageId(R.drawable.chance1);
+       getAllChanceCards().get(1).setImageId(R.drawable.chance1);
        getChanceCardDeck().get(2).setImageId(R.drawable.chance2);
+       getAllChanceCards().get(2).setImageId(R.drawable.chance2);
        getChanceCardDeck().get(3).setImageId(R.drawable.chance3);
+       getAllChanceCards().get(3).setImageId(R.drawable.chance3);
        getChanceCardDeck().get(4).setImageId(R.drawable.chance4);
+       getAllChanceCards().get(4).setImageId(R.drawable.chance4);
        getChanceCardDeck().get(5).setImageId(R.drawable.chance5);
+       getAllChanceCards().get(5).setImageId(R.drawable.chance5);
        getChanceCardDeck().get(6).setImageId(R.drawable.chance6);
+       getAllChanceCards().get(6).setImageId(R.drawable.chance6);
        getChanceCardDeck().get(7).setImageId(R.drawable.chance7);
+       getAllChanceCards().get(7).setImageId(R.drawable.chance7);
        getChanceCardDeck().get(8).setImageId(R.drawable.chance8);
+       getAllChanceCards().get(8).setImageId(R.drawable.chance8);
        getChanceCardDeck().get(9).setImageId(R.drawable.chance9);
+       getAllChanceCards().get(9).setImageId(R.drawable.chance9);
        getChanceCardDeck().get(10).setImageId(R.drawable.chance10);
+       getAllChanceCards().get(10).setImageId(R.drawable.chance10);
        getChanceCardDeck().get(11).setImageId(R.drawable.chance11);
+       getAllChanceCards().get(11).setImageId(R.drawable.chance11);
        getChanceCardDeck().get(12).setImageId(R.drawable.chance12);
+       getAllChanceCards().get(12).setImageId(R.drawable.chance12);
        getChanceCardDeck().get(13).setImageId(R.drawable.chance13);
+       getAllChanceCards().get(13).setImageId(R.drawable.chance13);
        getChanceCardDeck().get(14).setImageId(R.drawable.chance14);
+       getAllChanceCards().get(14).setImageId(R.drawable.chance14);
        getChanceCardDeck().get(15).setImageId(R.drawable.chance15);
+       getAllChanceCards().get(15).setImageId(R.drawable.chance15);
        getChanceCardDeck().get(16).setImageId(R.drawable.chance16);
+       getAllChanceCards().get(16).setImageId(R.drawable.chance16);
        getChanceCardDeck().get(17).setImageId(R.drawable.chance17);
+       getAllChanceCards().get(17).setImageId(R.drawable.chance17);
        getChanceCardDeck().get(18).setImageId(R.drawable.chance18);
+       getAllChanceCards().get(18).setImageId(R.drawable.chance18);
        getChanceCardDeck().get(19).setImageId(R.drawable.chance19);
+       getAllChanceCards().get(19).setImageId(R.drawable.chance19);
     }
 
     public void addCardsToDeck() {
@@ -154,23 +174,23 @@ public class ChanceCardCollection {
 
     public ChanceCard drawFromDeck() {
         int random = generateRandom();
-        if (random >= 0) {
+        //if (random >= 0) {
             ChanceCard card = chanceCardDeck.get(random);
-            removeCardFromDeck(random);
+            //removeCardFromDeck(random);
             return card;
-        } else return null;
+        //} else return null;
     }
 
     public int generateRandom() {
         Random r = new Random();
-        if (chanceCardDeck.size() == 0){
-            return -1;
-        }
+        //if (chanceCardDeck.size() == 0){
+          //  return -1;
+        //}
         int random = r.nextInt(chanceCardDeck.size());
         random --;
-        if (random <= 0){
-            return 0;
-        }
+       // if (random <= 0){
+         //   return 0;
+        //}
         return random;
     }
 

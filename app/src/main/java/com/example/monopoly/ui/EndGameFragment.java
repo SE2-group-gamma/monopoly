@@ -1,5 +1,6 @@
 package com.example.monopoly.ui;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,11 @@ import androidx.fragment.app.Fragment;
 
 import com.example.monopoly.R;
 import com.example.monopoly.network.Client;
+import com.example.monopoly.network.MonopolyServer;
 
 public class EndGameFragment extends Fragment {
+
+    private MonopolyServer monopolyServer = HostGame.getMonopolyServer();
 
     public EndGameFragment() {
         // Required empty public constructor
@@ -33,6 +37,9 @@ public class EndGameFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        if (monopolyServer != null) {
+            monopolyServer.closeConnectionsAndShutdown();
+        }
         return inflater.inflate(R.layout.fragment_end_game, container, false);
     }
 }

@@ -2,9 +2,12 @@ package com.example.monopoly.network;
 
 import android.util.Log;
 
+import com.example.monopoly.ui.HostGame;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -112,6 +115,10 @@ public class MonopolyServer extends Thread{
                         + socket.getInetAddress() + ":"
                         + socket.getPort() + "\n";
                 //Log.d("SocketConn",message);
+            } catch (SocketException e) {
+                if (!serverSocket.isClosed()) {
+                    Log.e("MonopolyServer", "Error accepting socket connection", e);
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -148,40 +155,24 @@ public class MonopolyServer extends Thread{
         return localPort;
     }
 
-    public void playerLeftGame(ClientHandler clientHandler) {
-        synchronized (clients) {
-            clients.remove(clientHandler);
-            keyedHandlers.values().remove(clientHandler);
-
-            boolean allPlayersLeft = clients.isEmpty();
-            boolean hostLeft = clientHandler.getClient().isHost();
-
-            if (!clientHandler.isPlayerActive() || (clients.isEmpty() && clientHandler.getClient().isHost())) {
-                clientHandler.setPlayerInactive();
-                closeConnectionsAndShutdown();
-            } else {
-                String playerLeftMsg = "PLAYER_LEFT|" + clientHandler.getClientName();
-                broadCast(playerLeftMsg);
-            }
-        }
-    }
-
     public synchronized void closeConnectionsAndShutdown() {
         try {
-            for (ClientHandler clientHandler : clients) {
-                clientHandler.getClient().setGameover(true);
-                clientHandler.getSocket().close();
-                //clientHandler.server.broadCast("Server down");
-                Log.i("MonopolyServer", "Connection closed for client: " + clientHandler.getClient());
-            }
+
+            //clientHandler.getSocket().close();
+            //clientHandler.server.broadCast("Server down");
+            this.broadCast("GameBoardUI|endFrag");
             stopListening();
             clients.clear();
             keyedHandlers.clear();
-            serverSocket.close();
+            //serverSocket.close();
             Log.i("MonopolyServer", "Server shutdown complete");
         } catch (IOException e) {
             Log.e("MonopolyServer", "Error while closing connections and shutting down server", e);
         }
+    }
+
+    public HashMap<Integer, ClientHandler> getKeyedHandlers() {
+        return keyedHandlers;
     }
 
 

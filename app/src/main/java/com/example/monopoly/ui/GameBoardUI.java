@@ -1,46 +1,35 @@
 package com.example.monopoly.ui;
 
-import android.content.Context;
-import android.media.MediaPlayer;
-import android.net.nsd.NsdManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
-import com.example.monopoly.databinding.FragmentFirstBinding;
 import com.example.monopoly.databinding.GameBoardBinding;
 import com.example.monopoly.gamelogic.Board;
-import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.gamelogic.properties.Field;
 import com.example.monopoly.gamelogic.properties.IllegalFieldException;
-import com.example.monopoly.databinding.SettingsBinding;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.network.MonopolyServer;
-import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
 import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
 
 import java.io.IOException;
-import java.net.BindException;
 import java.net.Socket;
 
 public class GameBoardUI extends Fragment {
@@ -55,7 +44,7 @@ public class GameBoardUI extends Fragment {
     private ClientPropertyStorage clientPropertyStorage;
 
     private NSD_Client nsdClient;
-    private MonopolyServer monopoly;
+    private MonopolyServer monopoly = HostGame.getMonopolyServer();
     private ClientHandler clientHandler;
     private Socket socket;
 
@@ -79,8 +68,6 @@ public class GameBoardUI extends Fragment {
                 }
                 diceViewModel.setContinuePressed(false);
             }
-            monopoly = HostGame.getMonopolyServer();
-
         });
     }
 
@@ -147,8 +134,8 @@ public class GameBoardUI extends Fragment {
 
         //binding.currentMoney.setText("Current Money \n"+uiHandlerViewModel.getCurrentMoney().getValue()+"$"); // dont redraw
 
-        binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
-                .navigate(R.id.action_GameBoard_to_FirstFragment));
+        /*binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
+                .navigate(R.id.action_GameBoard_to_FirstFragment));*/
 
         binding.uncover.setOnClickListener(view1 -> {
             try {
@@ -160,6 +147,7 @@ public class GameBoardUI extends Fragment {
 
         binding.throwdice.setOnClickListener(view1 -> {
             showDiceFragment();
+            clientViewModel.getClientData().getValue().getUser().setDrewCard(false);
         });
 
         binding.endTurn.setOnClickListener(view1 -> {
@@ -176,10 +164,16 @@ public class GameBoardUI extends Fragment {
             }
         });
 
+        try {
+            client.writeToServer("GameBoardUI|setPlayers|" + HostGame.getPlayerCount() + "|" + this.client.getUser().getUsername());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         binding.showPropertiesButton.setOnClickListener(view1 -> {
             NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_ProperyCardFragment);
         });
-        leaveGame();
+        //leaveGame();
 
         try{
             Log.d("gameboardBuy", Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()));
@@ -202,27 +196,29 @@ public class GameBoardUI extends Fragment {
             binding.buy.setAlpha(0.5f);
             binding.buy.setEnabled(false);
         }
+
+
+        if(!clientViewModel.getClientData().getValue().getUser().getDrewCard()) {
+            if (Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()).equals("chance") ||
+                    Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()).equals("community")) {
+                Handler handler = new Handler(Looper.getMainLooper());
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        NavHostFragment.findNavController(GameBoardUI.this).navigate(R.id.action_GameBoardUI_to_DrawCardFragment);
+                    }
+                };
+                handler.postDelayed(runnable, 2000);
+                clientViewModel.getClientData().getValue().getUser().setDrewCard(true);
+            }
+        }
     }
+
 
     private void showDiceFragment(){
         NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_DiceFragment);
     }
-    private void leaveGame(){
-        Button leave = getView().findViewById(R.id.backButton);
-        leave.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                socket=new Socket();
-                clientHandler=new ClientHandler(socket);
-                //monopoly.playerLeftGame(clientHandler);
-                closeClientConnection();
-                client.setButtonCheck(false);
-                Navigation.findNavController(v).navigate(R.id.FirstFragment);
-                Log.i("ServerAct","CLOSED!!");
 
-            }
-        });
-    }
 
     private void closeClientConnection() {
 
@@ -251,21 +247,9 @@ public class GameBoardUI extends Fragment {
 
         //closeServerConnection();
         closeClientConnection();
-        if(monopoly!=null){
+        if(HostGame.getMonopolyServer()!=null){
             monopoly.closeConnectionsAndShutdown();
         }
-
-
-        //nsdClient.stopDiscovery();
-        /*try {
-            monopoly.shutdownServer();
-            clientHandler.getClient().close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        nsdServ.stopNSD();
-
-        Log.i("GameBoardUI", "Conections done");
-        monopoly=null;*/
+        nsdClient.stopDiscovery();
     }
 }
