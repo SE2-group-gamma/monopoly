@@ -230,12 +230,13 @@ public class Client extends Thread {
 
                     }
                 }
-
+                if(gamerank==true){
                 if (turnEnd) {
                     turnProcess();
-                }
-                if (gameStart == true&&isHost) {
-                    setRanks(HostGame.getPlayerCount());
+                }}
+                if (gameStart == true&&isHost&&gamerank==true) {
+                    setRanks(HostGame.getMonopolyServer().getClients().size());
+                    //Log.d("GGLOLWP", "maxplayersize"+HostGame.getMonopolyServer().getClients().size());
                 }
             }
 
@@ -292,7 +293,7 @@ public class Client extends Thread {
             game = Game.getInstance();
             //Host should only join once
             if (responseSplit[1].equals("hostJoined") && game.getPlayers().isEmpty()) {       //Host should only join once
-                Player tempPlayer = new Player(dataResponseSplit[0], new Color(), 1500, true);
+                Player tempPlayer = new Player(dataResponseSplit[0], new Color(), 100, true);
                 Log.i("Dices", "Host gonna join: ");
                 game.addPlayer(tempPlayer);
             }
@@ -300,7 +301,7 @@ public class Client extends Thread {
                 synchronized (monopolyServer.getClients()) {
                     monopolyServer.broadCast("Lobby|userJoined|" + responseSplit[2]);
                     monopolyServer.broadCast("Lobby|hostJoined|" + monopolyServer.getClient().getUser().getUsername());
-                    Player tempPlayer = new Player(responseSplit[2], new Color(), 1500, true);
+                    Player tempPlayer = new Player(responseSplit[2], new Color(), 100, true);
                     Log.i("Dices", "Client Gonna join: ");
                     game.addPlayer(tempPlayer);
 
@@ -523,14 +524,14 @@ public class Client extends Thread {
     public void setRanks(int maxPlayers) {
             int revCounter = maxPlayers;
             //Log.d("maxitout", "kek"+maxPlayers);
-
+         //if(this.gamerank==true){
             for (Player player : this.playerList) {
                 //Log.d("winnerCc", "hey" + winnerList.size());
-                if (player.getCapital() < 0 && player.isBroke() == false && winnerList.size() < maxPlayers - 1) {
+                if ((player.getCapital() < 0 && player.isBroke() == false && winnerList.size() < maxPlayers - 1)||(player.getCapital() < 0 && player.isBroke() == false &&maxPlayers==1)) {
                     player.setBroke(true);
                     this.winnerList.add(player);
                     Log.d("winnerC", "hey" + player.getUsername());
-                    if (winnerList.size() == maxPlayers - 1) {
+                    if (winnerList.size() == maxPlayers - 1||maxPlayers==1) {
                         this.gameover = true;
                     }
 
@@ -538,7 +539,7 @@ public class Client extends Thread {
                 }
             }
 
-            if (this.gameover == true&&this.gamerank==true) {
+            if (this.gameover == true) {
                 for (Player player : this.playerList) {
                     if (player.isBroke() == false) {
                         //player.setTotalAssetValue(PropertyStorage.getInstance().getTotalAssets(player));
@@ -569,7 +570,7 @@ public class Client extends Thread {
 
                 this.gamerank = false;
             }
-
+       //}
     }
 
     public void setGame(Game game) {

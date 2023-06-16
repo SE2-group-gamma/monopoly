@@ -77,7 +77,7 @@ public class UIHandler extends Handler {
         currentPosition = new int[7];
         uiHandlerViewModel = new ViewModelProvider(frag.requireActivity()).get(UIHandlerViewModel.class);
         if (uiHandlerViewModel.getCurrentMoney().getValue() == null) {
-            currentMoney = 1500;
+            currentMoney = 100;
         }
 
         if (uiHandlerViewModel.getPlayerObjects().getValue() != null) {
@@ -549,9 +549,11 @@ public class UIHandler extends Handler {
 
             case "setWinners1":
                 ((TextView) this.frag.getActivity().findViewById(R.id.w1)).setText(data);
+                ((TextView) this.frag.getActivity().findViewById(R.id.congratulationsText)).setText("Congratulations, "+data+", on your formidable victory!");
                 this.frag.getActivity().findViewById(R.id.w1).setVisibility(View.VISIBLE);
                 this.frag.getActivity().findViewById(R.id.bar1).setVisibility(View.VISIBLE);
                 this.frag.getActivity().findViewById(R.id.p1).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.congratulationsText).setVisibility(View.VISIBLE);
                 break;
 
             case "endFrag":
