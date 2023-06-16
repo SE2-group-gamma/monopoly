@@ -77,7 +77,7 @@ public class UIHandler extends Handler {
         currentPosition = new int[7];
         uiHandlerViewModel = new ViewModelProvider(frag.requireActivity()).get(UIHandlerViewModel.class);
         if (uiHandlerViewModel.getCurrentMoney().getValue() == null) {
-            currentMoney = 100;
+            currentMoney = 1500;
         }
 
         if (uiHandlerViewModel.getPlayerObjects().getValue() != null) {
