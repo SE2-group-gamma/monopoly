@@ -38,7 +38,7 @@ public class Dices {
                 dice1 = random.nextInt(sum/2)+1;
                 dice2 = sum - dice1;
             } else {
-                dice1 = random.nextInt(6)+1;
+                dice1 = random.nextInt(6-(sum-6))+(sum-6);
                 dice2 = sum - dice1;
             }
         }
