@@ -230,11 +230,11 @@ public class Client extends Thread {
 
                     }
                 }
-                if(gamerank==true){
+
                 if (turnEnd) {
                     turnProcess();
-                }}
-                if (gameStart == true&&isHost&&gamerank==true) {
+                }
+                if (gameStart == true&&isHost) {
                     setRanks(HostGame.getMonopolyServer().getClients().size());
                     //Log.d("GGLOLWP", "maxplayersize"+HostGame.getMonopolyServer().getClients().size());
                 }
@@ -527,11 +527,11 @@ public class Client extends Thread {
          //if(this.gamerank==true){
             for (Player player : this.playerList) {
                 //Log.d("winnerCc", "hey" + winnerList.size());
-                if ((player.getCapital() < 0 && player.isBroke() == false && winnerList.size() < maxPlayers - 1)||(player.getCapital() < 0 && player.isBroke() == false &&maxPlayers==1)) {
+                if ((player.getCapital() < 0 && player.isBroke() == false && winnerList.size() < maxPlayers - 1)) {
                     player.setBroke(true);
                     this.winnerList.add(player);
                     Log.d("winnerC", "hey" + player.getUsername());
-                    if (winnerList.size() == maxPlayers - 1||maxPlayers==1) {
+                    if (winnerList.size() == maxPlayers - 1) {
                         this.gameover = true;
                     }
 
@@ -539,7 +539,7 @@ public class Client extends Thread {
                 }
             }
 
-            if (this.gameover == true) {
+            if (this.gameover == true&&this.gamerank==true) {
                 for (Player player : this.playerList) {
                     if (player.isBroke() == false) {
                         //player.setTotalAssetValue(PropertyStorage.getInstance().getTotalAssets(player));
