@@ -7,17 +7,14 @@ import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.monopoly.gamelogic.Bank;
+import com.example.monopoly.R;
 import com.example.monopoly.gamelogic.Board;
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
-import com.example.monopoly.gamelogic.properties.Field;
-import com.example.monopoly.gamelogic.properties.PropertyStorage;
 import com.example.monopoly.gamelogic.PlayerMapPosition;
 import com.example.monopoly.gamelogic.properties.PropertyStorage;
 import com.example.monopoly.ui.HostGame;
 import com.example.monopoly.ui.UIHandler;
-import com.example.monopoly.ui.viewmodels.CardViewModel;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -676,6 +673,142 @@ public class Client extends Thread {
 
     public void setButtonCheck(boolean buttonCheck) {
         this.buttonCheck = buttonCheck;
+    }
+
+    public void doAction(int cardID) throws Exception {
+
+        //Your building loan matures. Receive $150.
+        if (getUser().getCardID() == R.drawable.chance3) {
+            transferToPlayerProtocol(150);
+            endTurnProtocol();
+        }
+
+        //Bank pays you dividend of $50.
+        if (getUser().getCardID() == R.drawable.chance5) {
+            transferToPlayerProtocol(50);
+            endTurnProtocol();
+        }
+
+        //Get out of Jail Free.
+        if (getUser().getCardID() == R.drawable.chance6 || getUser().getCardID() == R.drawable.chance12 || getUser().getCardID() == R.drawable.community4) {
+            outOfJailCounterProtocol(1);
+            endTurnProtocol();
+        }
+
+        //Parking Ticket! Pay $15.
+        if (getUser().getCardID() == R.drawable.chance14 || getUser().getCardID() == R.drawable.community14) {
+            transferToBankProtocol(15);
+            endTurnProtocol();
+        }
+
+
+        //Happy Birthday! Receive $100.
+        if (getUser().getCardID() == R.drawable.chance17) {
+            transferToPlayerProtocol(100);
+            endTurnProtocol();
+        }
+
+        //Bank error in your favor. Collect $200.
+        if (getUser().getCardID() == R.drawable.community1) {
+            transferToPlayerProtocol(200);
+            endTurnProtocol();
+        }
+
+        //Doctor’s fee. Pay $50.
+        if (getUser().getCardID() == R.drawable.community2) {
+            transferToBankProtocol(50);
+            endTurnProtocol();
+        }
+
+        //From sale of stock you receive $50.
+        if (getUser().getCardID() == R.drawable.community3) {
+            transferToPlayerProtocol(50);
+            endTurnProtocol();
+        }
+
+        //community6: Holiday fund matures. Receive $100.
+        if (getUser().getCardID() == R.drawable.community6) {
+            transferToPlayerProtocol(100);
+            endTurnProtocol();
+        }
+
+        //Income tax refund. Collect $20.
+        if (getUser().getCardID() == R.drawable.community7) {
+            transferToPlayerProtocol(20);
+            endTurnProtocol();
+        }
+
+        //Life insurance matures. Collect $100.
+        if (getUser().getCardID() == R.drawable.community9) {
+            transferToPlayerProtocol(100);
+            endTurnProtocol();
+        }
+
+        //Pay hospital fees of $100.
+        if (getUser().getCardID() == R.drawable.community10) {
+            transferToBankProtocol(100);
+            endTurnProtocol();
+        }
+
+        //Pay school fees of $50.
+        if (getUser().getCardID() == R.drawable.community11) {
+            transferToBankProtocol(50);
+            endTurnProtocol();
+        }
+
+        //Receive $25 consultancy fee.
+        if (getUser().getCardID() == R.drawable.community12) {
+            transferToPlayerProtocol(25);
+            endTurnProtocol();
+        }
+
+        //You have won second prize in a beauty contest. Collect $10.
+        if (getUser().getCardID() == R.drawable.community15) {
+            transferToPlayerProtocol(10);
+            endTurnProtocol();
+        }
+
+        //You inherit $100.
+        if (getUser().getCardID() == R.drawable.community16) {
+            transferToPlayerProtocol(100);
+            endTurnProtocol();
+        }
+
+        //You receive $50 from warehouse sales.
+        if (getUser().getCardID() == R.drawable.community17) {
+            transferToPlayerProtocol(50);
+            endTurnProtocol();
+        }
+
+        //You receive a 7% dividend on preferred stock: $25.
+        if (getUser().getCardID() == R.drawable.community18) {
+            transferToPlayerProtocol(25);
+            endTurnProtocol();
+        }
+
+    }
+
+
+    public void transferToPlayerProtocol(int amount) throws IOException {
+        //Log.i("Cards", "transferToPlayerProtocol");
+        writeToServer("GameBoardUI|giveMoney|" + amount + "|" + getUser().getUsername());
+    }
+
+    public void transferToBankProtocol(int amount) throws IOException {
+        //Log.i("Cards", "transferToBankProtocol");
+        int amountNew= -amount;
+        writeToServer("GameBoardUI|transferToBank|" + amountNew + "|" + getUser().getUsername());
+    }
+
+
+    public void outOfJailCounterProtocol(int amount) throws IOException {
+        //Log.i("Cards", "outOfJailCounterProtocol");
+        writeToServer("GameBoardUI|outOfJailCounter|" + amount + "|" + getUser().getUsername());
+    }
+
+    public void endTurnProtocol() throws IOException {
+        //Log.i("Cards", "endTurnProtocol");
+        writeToServer("GameBoardUI|turnEnd|:|");
     }
 
 }

@@ -64,8 +64,9 @@ public class DrawCardFragment extends Fragment {
             this.cardViewModel.setCommunityCards(this.communityCards);
             NavHostFragment.findNavController(this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
             try {
-                game.doAction(clientViewModel.getClientData().getValue().getUser().getCardID(),clientViewModel.getClientData().getValue());
-            } catch (Exception e) {
+                //game.doAction(clientViewModel.getClientData().getValue().getUser().getCardID(),clientViewModel.getClientData().getValue());
+                clientViewModel.getClientData().getValue().doAction(clientViewModel.getClientData().getValue().getUser().getCardID());
+                } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
