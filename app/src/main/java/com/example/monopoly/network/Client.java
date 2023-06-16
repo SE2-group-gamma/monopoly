@@ -53,8 +53,9 @@ public class Client extends Thread {
 
     private int serverTurnCounter = 0;
 
-    private boolean turnEnd = false;
+    private boolean joinGame = true;
 
+    private boolean turnEnd = false;
 
     private Game game;
     private String cheated;
@@ -76,6 +77,8 @@ public class Client extends Thread {
     private boolean gameStart = false;
 
     private boolean gamerank = true;
+
+    private ArrayList<String> lobbyref = new ArrayList<String>();
 
     public MonopolyServer getMonopolyServer() {
         return monopolyServer;
@@ -207,7 +210,8 @@ public class Client extends Thread {
 
             Thread.sleep(100);
             if (!isHost) {
-                writeToServer("CLIENTMESSAGE|key|" + key);
+                Log.d("daheck", "myguy");
+                writeToServer("CLIENTMESSAGE|key|" + key+"|"+user.getUsername());
             } else {
                 handleMessage("Lobby|displayKey| ".split("\\|"));
             }
@@ -225,7 +229,7 @@ public class Client extends Thread {
                 }
                 synchronized (msgBuffer) {
 
-                    for (int i = msgBuffer.size() - 1; i >= 0; i--) {
+                    for (int i = msgBuffer.size() -1; i >= 0; i--) {
                         Log.d("msgBuffer", msgBuffer.get(i));
                         outToServer.writeBytes(msgBuffer.get(i) + System.lineSeparator());
                         outToServer.flush();
@@ -236,9 +240,6 @@ public class Client extends Thread {
 
                 if (turnEnd) {
                     turnProcess();
-                }
-                if (gameStart == true) {
-
                 }
             }
 
@@ -281,7 +282,8 @@ public class Client extends Thread {
 
                     //monopolyServer.getClients().get(0).writeToClient("JoinLobby|keyFromLobby|1");
                     // TODO make this with IDs instead (properly)
-                    return new String[]{"JoinGame|keyFromLobby|1", "Lobby|hostJoined|" + "REPLACER"};
+                    return new String[]{"JoinGame|keyFromLobby|1|"+responseSplit[3]};
+                    //return new String[]{"JoinGame|keyFromLobby|1", "Lobby|hostJoined|" + "REPLACER"};
 
                 } else {
 
@@ -303,7 +305,13 @@ public class Client extends Thread {
             }
             if (responseSplit[1].equals("JOINED")) {
                 synchronized (monopolyServer.getClients()) {
-                    monopolyServer.broadCast("Lobby|userJoined|" + responseSplit[2]);
+                    Log.d("daheck", "bruh");
+                    lobbyref.add(responseSplit[2]);
+                    int indexref = 1;
+                    for(String users : lobbyref) {
+                        monopolyServer.broadCast("Lobby|userJoined"+indexref+"|" + users);
+                        indexref++;
+                    }
                     monopolyServer.broadCast("Lobby|hostJoined|" + monopolyServer.getClient().getUser().getUsername());
                     Player tempPlayer = new Player(responseSplit[2], new Color(), 1500.00, true);
                     Log.i("Dices", "Client Gonna join: ");
@@ -427,7 +435,6 @@ public class Client extends Thread {
                 player.setCapital(capital + money);
                 monopolyServer.broadCast("GameBoardUI|changeCapital|" + responseSplit[2] + "|" + responseSplit[3]);
                 Log.d("currentCapital","Capital: "+player.getCapital()+" from "+player.getUsername());
-                setRanks(HostGame.getPlayerCount());
             }
             if (responseSplit[1].equals("checkRent")) {
                 //Log.d("checkRent", "player " + responseSplit[3]);
@@ -559,22 +566,24 @@ public class Client extends Thread {
                 monopolyServer.broadCast("GameBoardUI|cardDrawn|" + cardID + "|" + player.getUsername());
             }
         } else {
-            for (String str : responseSplit) {
-            }
+
             if (responseSplit[1].equals("keyFromLobby") && responseSplit[2].equals("1")) {
                 try {
-                    writeToServer("Lobby|JOINED|" + user.getUsername());
+                    if(this.joinGame) {
+                        writeToServer("Lobby|JOINED|" + user.getUsername());
+                        this.joinGame=false;
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
-            if (responseSplit[1].equals("hostJoined")) {
+            /*if (responseSplit[1].equals("hostJoined")) {
                 try {
                     writeToServer("Lobby|hostJoined|" + "REPLACER");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            }
+            }*/
         }
         return null;
     }

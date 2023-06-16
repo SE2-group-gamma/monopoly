@@ -51,6 +51,9 @@ public class UIHandler extends Handler {
 
     private UIHandlerViewModel uiHandlerViewModel;
 
+    private boolean hostJoinCounter = true;
+
+
 
     public int player1 = 1;
     public int player2 = 2;
@@ -135,40 +138,36 @@ public class UIHandler extends Handler {
             case "changeText":
                 ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
                 break;
-            case "userJoined":
-                switch (counter) {
-                    case 2:
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1Name)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
-                        playerObjects.put(player2, data);
-                        break;
-                    case 3:
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2Name)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setText(data);
-                        playerObjects.put(player3, data);
-                        break;
-                    case 4:
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3Name)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setText(data);
-                        playerObjects.put(player4, data);
-                        break;
-                    case 5:
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4Name)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setText(data);
-                        playerObjects.put(player5, data);
-                        break;
-                    case 6:
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5Name)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setText(data);
-                        playerObjects.put(player6, data);
-                        break;
-                }
-                counter++;
+
+            case "userJoined1":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1Name)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
+                playerObjects.put(player2, data);
+                break;
+            case "userJoined2":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2Name)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setText(data);
+                playerObjects.put(player3, data);
+                break;
+            case "userJoined3":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3Name)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setText(data);
+                playerObjects.put(player4, data);
+                break;
+            case "userJoined4":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4Name)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setText(data);
+                playerObjects.put(player5, data);
+                break;
+            case "userJoined5":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5Name)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setText(data);
+                playerObjects.put(player6, data);
                 break;
             case "cardDrawn":
                 int cardID = Integer.parseInt(data);
@@ -187,7 +186,10 @@ public class UIHandler extends Handler {
             case "hostJoined":
                 if (playerObjects.get(player1) == null) {
                     playerObjects.put(player1, data);
-                    counter++;
+                    if(hostJoinCounter) {
+                        counter++;
+                        hostJoinCounter=false;
+                    }
                 }
                 if (!HostGame.lobbyname.equals(" ")) {
                     ((TextView) this.frag.getActivity().findViewById(R.id.textViewLobby)).setText("Lobby: " + HostGame.lobbyname);
@@ -195,7 +197,7 @@ public class UIHandler extends Handler {
                 ((TextView) this.frag.getActivity().findViewById(R.id.textViewHost)).setText(data);
                 break;
             case "keyFromLobby":
-                if (data.equals("1")) {
+                if (data.equals("1")&&client.equals(this.clientObj.getUser().getUsername())) {
                     NavHostFragment.findNavController(frag).navigate(R.id.action_JoinGame_to_Lobby);
                 } else {
                     Log.d("", "gib toast");
