@@ -306,7 +306,7 @@ public class UIHandler extends Handler {
                     }
                 }
                 break;
-            case "movePlayer":
+                case "movePlayer":
                 if (clientObj.getUser().getUsername().equals(client)) {
                     movePlayer(data);   // disable ui and viewModel entries
                     //restore();

@@ -53,7 +53,7 @@ public class Game{
     }
     public void incrementPlayerPosition(int id,int incr) throws Exception {
         //Log.i("Dices","Player:"+this.players.get(id).getUsername()+"; Pos to increment:"+incr+"; Current Pos:"+this.players.get(id).getPosition());
-        if(incr<=12 && incr >= 2)
+        if(incr == 0 || incr<=12 && incr >= 2)
             this.players.get(id).incrementPosition(incr);
         else
             throw new Exception("Dice Value invalid!");

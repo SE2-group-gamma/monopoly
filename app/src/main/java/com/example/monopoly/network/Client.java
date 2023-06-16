@@ -58,7 +58,7 @@ public class Client extends Thread {
     public static HashMap<String, UIHandler> handlers;
     private Timer timer;
 
-    private boolean buttonCheck=false;
+    private boolean buttonCheck = false;
 
     private String lastPlayerMoved;
 
@@ -236,7 +236,7 @@ public class Client extends Thread {
                 }
             }
 
-        } catch(IOException io) {
+        } catch (IOException io) {
             throw new RuntimeException();
         } catch (Exception e) {
             Thread.currentThread().interrupt();
@@ -327,48 +327,66 @@ public class Client extends Thread {
                 // TODO sent player to jail after 3 doubles
                 // data: 8:t:f  => increment:cheated:double
                 int tempID = game.getPlayerIDByName(responseSplit[3]);
-                if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
+                if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
 
-                    if(dataResponseSplit[2].equals("t")&&game.getPlayers().get(tempID).isDoubletsFirstChain()==true){
-                        game.getPlayers().get(tempID).setDoubletsCounter(game.getPlayers().get(tempID).getDoubletsCounter()+1);
+                    if (dataResponseSplit[2].equals("t") && game.getPlayers().get(tempID).isDoubletsFirstChain() == true) {
+                        game.getPlayers().get(tempID).setDoubletsCounter(game.getPlayers().get(tempID).getDoubletsCounter() + 1);
                         game.getPlayers().get(tempID).setDoubletsFirstChain(false);
                     }
-                    if(game.getPlayers().get(tempID).isDoubletsFirstChain()==false){
-                    if(game.getPlayers().get(tempID).getUsername().equals(this.lastPlayerMoved)){
-                        game.getPlayers().get(tempID).setDoubletsCounter(game.getPlayers().get(tempID).getDoubletsCounter()+1);
-                    }}
+                    if (game.getPlayers().get(tempID).isDoubletsFirstChain() == false && this.lastPlayerMoved != "") {
+                        if (game.getPlayers().get(tempID).getUsername().equals(this.lastPlayerMoved)) {
+                            game.getPlayers().get(tempID).setDoubletsCounter(game.getPlayers().get(tempID).getDoubletsCounter() + 1);
+                        }
 
-                    if(!game.getPlayers().get(tempID).getUsername().equals(this.lastPlayerMoved)){
-                        game.getPlayers().get(game.getPlayerIDByName(this.lastPlayerMoved)).setDoubletsFirstChain(true);
-                        game.getPlayers().get(game.getPlayerIDByName(this.lastPlayerMoved)).setDoubletsCounter(0);
+                        if (!game.getPlayers().get(tempID).getUsername().equals(this.lastPlayerMoved)) {
+                            game.getPlayers().get(game.getPlayerIDByName(this.lastPlayerMoved)).setDoubletsFirstChain(true);
+                            game.getPlayers().get(game.getPlayerIDByName(this.lastPlayerMoved)).setDoubletsCounter(0);
+                        }
                     }
+                    if (game.getPlayers().get(tempID).getDoubletsCounter() != 3) {
 
-                    if(game.getPlayers().get(tempID).getDoubletsCounter()!=3){
-
-                    if(game.getPlayers().get(tempID).isInPrison()==false) {
-                        this.cheated = dataResponseSplit[1];
-                        this.lastPlayerMoved = responseSplit[3];
-                        try {
+                        if (game.getPlayers().get(tempID).isInPrison() == false) {
+                            this.cheated = dataResponseSplit[1];
+                            this.lastPlayerMoved = responseSplit[3];
+                            try {
+                                game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                            //Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
+                            //Log.d("gameturnCurr", "currUser" + responseSplit[3]);
+                            monopolyServer.broadCast("GameBoardUI|movePlayer|" + responseSplit[2] + "|" + responseSplit[3]);      // broadcast with different action to not interfere with game logic
+                        } else if (game.getPlayers().get(tempID).getDoubletsCounter() == 2 || game.getPlayers().get(tempID).getDoubletsCounter() == 1) {       // breakout
+                            game.getPlayers().get(tempID).setInPrison(false);
+                            monopolyServer.broadCast("GameBoardUI|movePlayer|" + responseSplit[2] + "|" + responseSplit[3]);
                             game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
+                            game.getPlayers().get(tempID).setDoubletsCounter(0);
+                            game.getPlayers().get(tempID).setDoubletsFirstChain(true);
+                            Log.d("InJail","Breakout");
+                        }else{
+                            monopolyServer.broadCast("GameBoardUI|movePlayer|" + 0 + ":f:f|" + responseSplit[3]);
+                        }
+                    } else {
+                        try {
+                            //game.getPlayers().get(tempID).setPosition(10);
+                            int jailOffset = 0;
+                            if(game.getPlayers().get(tempID).getPosition() >= 10){
+                                jailOffset = game.getPlayers().get(tempID).getPosition()-10;
+                                game.incrementPlayerPosition(tempID, -jailOffset);
+                                monopolyServer.broadCast("GameBoardUI|movePlayer|" + -jailOffset + ":f:f|" + responseSplit[3]);
+                            }else{
+                                jailOffset = 10-game.getPlayers().get(tempID).getPosition();
+                                game.incrementPlayerPosition(tempID, jailOffset);
+                                monopolyServer.broadCast("GameBoardUI|movePlayer|" + jailOffset + ":f:f|" + responseSplit[3]);
+                            }
+
+                            Log.d("InJail","JAILTIME");
+                            game.getPlayers().get(tempID).setInPrison(true);
+                            game.getPlayers().get(tempID).setDoubletsCounter(0);
+                            game.getPlayers().get(tempID).setDoubletsFirstChain(true);
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
-                        //Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
-                        //Log.d("gameturnCurr", "currUser" + responseSplit[3]);
-                        monopolyServer.broadCast("GameBoardUI|movePlayer|" + responseSplit[2] + "|" + responseSplit[3]);      // broadcast with different action to not interfere with game logic
-                    }else if(game.getPlayers().get(tempID).getDoubletsCounter()==2){
-                            game.getPlayers().get(tempID).setInPrison(false);
-                            monopolyServer.broadCast("GameBoardUI|movePlayer|" + responseSplit[2] + "|" + responseSplit[3]);
-                        }
-
-                }}else{
-                    try {
-                        game.getPlayers().get(tempID).setPosition(39);
-                        game.getPlayers().get(tempID).setInPrison(true);
-                        game.getPlayers().get(tempID).setDoubletsCounter(0);
-                        game.getPlayers().get(tempID).setDoubletsFirstChain(true);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
                     }
                 }
             }//}
@@ -383,9 +401,8 @@ public class Client extends Thread {
                 this.playerList = new ArrayList<>(game.getPlayers().values());
                 this.gameStart = true;
             }
-            if(responseSplit[1].equals("uncover") && !(this.lastPlayerMoved.isEmpty()) && !(responseSplit[3].equals(this.lastPlayerMoved))){         // player cant punish himself, or no player
-                try{
-
+            if (responseSplit[1].equals("uncover") && !(this.lastPlayerMoved.isEmpty()) && !(responseSplit[3].equals(this.lastPlayerMoved))) {         // player cant punish himself, or no player
+                try {
 
 
                     int idPunisher = game.getPlayerIDByName(responseSplit[3]);  //sender
@@ -394,24 +411,24 @@ public class Client extends Thread {
                     int idPunished = game.getPlayerIDByName(this.lastPlayerMoved);  //last moved player
                     Player punished = game.getPlayers().get(idPunished);
 
-                    if(this.cheated.equals("t")){       // punish last moved player
-                        monopolyServer.broadCast("GameBoardUI|uncoverUsed|t:"+this.lastPlayerMoved+"|"+responseSplit[3]);   // punish success
-                        Log.d("uncover","User: "+this.lastPlayerMoved+" got punished by "+responseSplit[3]);
+                    if (this.cheated.equals("t")) {       // punish last moved player
+                        monopolyServer.broadCast("GameBoardUI|uncoverUsed|t:" + this.lastPlayerMoved + "|" + responseSplit[3]);   // punish success
+                        Log.d("uncover", "User: " + this.lastPlayerMoved + " got punished by " + responseSplit[3]);
 
-                        punished.setCapital(punished.getCapital()-200);
-                        monopolyServer.broadCast("GameBoardUI|changeCapital|-200|"+this.lastPlayerMoved);
+                        punished.setCapital(punished.getCapital() - 200);
+                        monopolyServer.broadCast("GameBoardUI|changeCapital|-200|" + this.lastPlayerMoved);
 
-                        punisher.setCapital(punisher.getCapital()+200);
-                        monopolyServer.broadCast("GameBoardUI|changeCapital|200|"+responseSplit[3]);
+                        punisher.setCapital(punisher.getCapital() + 200);
+                        monopolyServer.broadCast("GameBoardUI|changeCapital|200|" + responseSplit[3]);
                     } else {                                    // punish sender
-                        monopolyServer.broadCast("GameBoardUI|uncoverUsed|f:"+this.lastPlayerMoved+"|"+responseSplit[3]);   // punish failed
-                        Log.d("uncover","User: "+responseSplit[3]+" failed to punish "+this.lastPlayerMoved);
+                        monopolyServer.broadCast("GameBoardUI|uncoverUsed|f:" + this.lastPlayerMoved + "|" + responseSplit[3]);   // punish failed
+                        Log.d("uncover", "User: " + responseSplit[3] + " failed to punish " + this.lastPlayerMoved);
 
-                        punished.setCapital(punished.getCapital()+200);
-                        monopolyServer.broadCast("GameBoardUI|changeCapital|200|"+this.lastPlayerMoved);
+                        punished.setCapital(punished.getCapital() + 200);
+                        monopolyServer.broadCast("GameBoardUI|changeCapital|200|" + this.lastPlayerMoved);
 
-                        punisher.setCapital(punisher.getCapital()-200);
-                        monopolyServer.broadCast("GameBoardUI|changeCapital|-200|"+responseSplit[3]);
+                        punisher.setCapital(punisher.getCapital() - 200);
+                        monopolyServer.broadCast("GameBoardUI|changeCapital|-200|" + responseSplit[3]);
                     }
                 } catch (Exception e) {
 
@@ -427,7 +444,7 @@ public class Client extends Thread {
                 double capital = player.getCapital();
                 player.setCapital(capital + money);
                 monopolyServer.broadCast("GameBoardUI|changeCapital|" + responseSplit[2] + "|" + responseSplit[3]);
-                Log.d("currentCapital","Capital: "+player.getCapital()+" from "+player.getUsername());
+                Log.d("currentCapital", "Capital: " + player.getCapital() + " from " + player.getUsername());
 
             }
             if (responseSplit[1].equals("mapPlayers")) {
@@ -483,7 +500,7 @@ public class Client extends Thread {
     }
 
 
-    public void turnProcess(){
+    public void turnProcess() {
         setButtonCheck(true);
         turnEnd = false;
         while (game.getPlayers().get(serverTurnCounter).isBroke() == true) {
@@ -515,11 +532,11 @@ public class Client extends Thread {
                     public void run() {
 
                         turnEnd = true;
-                        Log.i("GameBoardUI","inside timer");
+                        Log.i("GameBoardUI", "inside timer");
 
                     }
                 },
-                15000
+                45000
         );
         if (serverTurnCounter == HostGame.getMonopolyServer().getNumberOfClients()) {
             serverTurnCounter = 0;
