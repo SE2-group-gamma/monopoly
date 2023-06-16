@@ -234,9 +234,6 @@ public class Client extends Thread {
                 if (turnEnd) {
                     turnProcess();
                 }
-                if (gameStart == true) {
-
-                }
             }
 
         } catch(IOException io) {
@@ -431,7 +428,7 @@ public class Client extends Thread {
                 player.setCapital(capital + money);
                 monopolyServer.broadCast("GameBoardUI|changeCapital|" + responseSplit[2] + "|" + responseSplit[3]);
                 Log.d("currentCapital","Capital: "+player.getCapital()+" from "+player.getUsername());
-                setRanks(HostGame.getPlayerCount());
+
             }
             if (responseSplit[1].equals("mapPlayers")) {
                 int id = game.getPlayerIDByName(responseSplit[3]);
