@@ -454,7 +454,7 @@ public class Client extends Thread {
                     fieldName = Board.getFieldName(player.getPosition());
                 }
 
-                if(fieldName=="income_tax"){
+                if(Objects.equals(fieldName, "income_tax")){
                     double capital = player.getCapital();
                     int newCapital=0;
                     if(capital*0.1 > 200){
@@ -466,7 +466,7 @@ public class Client extends Thread {
                     }
                     monopolyServer.broadCast("GameBoardUI|changeCapital|-"+newCapital+"|" + responseSplit[3]);
                 }
-                if(fieldName=="luxury_tax"){
+                if(Objects.equals(fieldName, "luxury_tax")){
                     double capital = player.getCapital();
                     player.setCapital(capital - 75);
                     monopolyServer.broadCast("GameBoardUI|changeCapital|-"+75+"|" + responseSplit[3]);

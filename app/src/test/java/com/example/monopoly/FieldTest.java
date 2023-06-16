@@ -89,4 +89,12 @@ class FieldTest {
         assertEquals(field.getCol(),col);
     }
 
+    @Test
+    public void testGetImageIdAndSetImageId() {
+        assertEquals(0, field.getImageId());
+
+        field.setImageId(1);
+        assertEquals(1, field.getImageId());
+    }
+
 }

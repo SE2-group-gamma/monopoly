@@ -50,6 +50,16 @@ public class PropertyStorageTest {
     }
 
     @Test
+    void testGetOwnerName(){
+        String propertyId = "lindwurm";
+        Player newOwner = mock(Player.class);
+
+        propertyStorage.buyProperty(propertyId, newOwner);
+
+        assertEquals(newOwner.getUsername(), propertyStorage.getOwnerName(propertyId));
+    }
+
+    @Test
     void buyPropertyWithWrongNameTest() {
         String propertyId = "abc";
         Player newOwner = mock(Player.class);

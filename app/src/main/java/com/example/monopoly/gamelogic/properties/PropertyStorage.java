@@ -61,7 +61,7 @@ public class PropertyStorage {
     }
 
     public int addHouse(String propertyId, Player player){
-        if(!hasField(propertyId)) throw new IllegalFieldException("Invalid field name: " + propertyId);
+        if(!hasField(propertyId)) throw new IllegalFieldException();
         Field field = this.properties.get(propertyId);
         if(!(field instanceof PropertyField)) throw new IllegalFieldException("Field is not a PropertyField");
         if(!hasAllColours(field.getOwner(), ((PropertyField) field).getColor())) throw new IllegalStateException("Owner does not have all colors");
