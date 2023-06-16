@@ -2,11 +2,16 @@ package com.example.monopoly.gamelogic;
 
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import com.example.monopoly.R;
 import com.example.monopoly.network.Client;
-
-import java.io.IOException;
-import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -45,21 +50,25 @@ public class Game{
         return true;
     }
 
+
     public HashMap<Integer, Player> getPlayers() {
         return players;
     }
-    public void incrementPlayerPosition(int id,int incr){
-        Log.i("Dices","Player:"+this.players.get(id).getUsername()+"; Pos to increment:"+incr+"; Current Pos:"+this.players.get(id).getPosition());
-        this.players.get(id).incrementPosition(incr);
+    public void incrementPlayerPosition(int id,int incr) throws Exception {
+        //Log.i("Dices","Player:"+this.players.get(id).getUsername()+"; Pos to increment:"+incr+"; Current Pos:"+this.players.get(id).getPosition());
+        if(incr<=12 && incr >= 2)
+            this.players.get(id).incrementPosition(incr);
+        else
+            throw new Exception("Dice Value invalid!");
     }
 
-    public int getPlayerIDByName(String userName){
+    public int getPlayerIDByName(String userName) throws Exception {
         for(int i = 0; i < this.players.size(); i++){
             if(userName.equals(this.players.get(i).getUsername())){
                 return i;
             }
         }
-        return 0;
+        throw new Exception("404 not found!");
     }
 
     public String getCurrentPlayersTurn() {
@@ -70,6 +79,10 @@ public class Game{
         this.currentPlayersTurn = currentPlayersTurn;
     }
 
+    public void removeAllPlayers(){
+        this.players.clear();
+        this.count.set(0);
+    }
 
     public void doAction(int cardID, Client client) throws IOException {
         this.client = client;

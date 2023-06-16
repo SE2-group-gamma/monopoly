@@ -2,8 +2,11 @@ package com.example.monopoly.ui;
 
 
 import android.graphics.Color;
-import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+
+import android.graphics.drawable.LayerDrawable;
+
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -18,12 +21,16 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
+import com.example.monopoly.gamelogic.Board;
 import com.example.monopoly.gamelogic.Player;
-import com.example.monopoly.gamelogic.PlayerMapPosition;
 import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
+import com.example.monopoly.gamelogic.PlayerMapPosition;
+import com.example.monopoly.gamelogic.properties.Field;
+import com.example.monopoly.gamelogic.properties.IllegalFieldException;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.ui.viewmodels.CardViewModel;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
@@ -33,6 +40,11 @@ import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
+
+import com.example.monopoly.ui.viewmodels.DiceViewModel;
+import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
+import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 public class UIHandler extends Handler {
     private Fragment frag;
@@ -220,6 +232,9 @@ public class UIHandler extends Handler {
                 Log.d("------------", "initializePlayerBottomRight");
 
                 Log.d("hostPosition", "Initialize Host");
+
+                Log.d("playerCount","I am "+client);
+                Log.d("playerCount","I am with obj "+clientObj.getUser().getUsername());
                 if (uiHandlerViewModel.getCheckFirst().getValue()) {
 
                     gameBoardUIViewModel.setUncoverEnabled(this.frag.getActivity().findViewById(R.id.uncover).isEnabled());     // save uncover status on first turn
@@ -286,26 +301,94 @@ public class UIHandler extends Handler {
                 }
 
                 break;
+
             case "displayKey":
                 if (HostGame.key != 0) {
                     ((TextView) this.frag.getActivity().findViewById(R.id.textViewKey)).setText("Game-Key: " + HostGame.key);
                 }
                 break;
+            case "setPlayerCount":
+                int playerCount = Integer.parseInt(data);
+                Log.d("playerCount",""+playerCount);
+
+                if(layerDrawable==null)
+                    return;
+
+                Drawable player6Drawable = layerDrawable.findDrawableByLayerId(R.id.player6);
+                Drawable player5Drawable = layerDrawable.findDrawableByLayerId(R.id.player5);
+                Drawable player4Drawable = layerDrawable.findDrawableByLayerId(R.id.player4);
+                Drawable player3Drawable = layerDrawable.findDrawableByLayerId(R.id.player3);
+                switch (playerCount){
+                    case 5:
+                        player6Drawable.setAlpha(0);
+                        break;
+                    case 4:
+                        player6Drawable.setAlpha(0);
+                        player5Drawable.setAlpha(0);
+                        break;
+                    case 3:
+                        player6Drawable.setAlpha(0);
+                        player5Drawable.setAlpha(0);
+                        player4Drawable.setAlpha(0);
+                        break;
+                    case 2:
+                        player6Drawable.setAlpha(0);
+                        player5Drawable.setAlpha(0);
+                        player4Drawable.setAlpha(0);
+                        player3Drawable.setAlpha(0);
+                        break;
+                    default:
+                        Log.d("playerCount",""+playerCount);
+                }
+                break;
             case "changeCapital":
                 if (clientObj.getUser().getUsername().equals(client)) {
-                    int money = currentMoney + Integer.parseInt(data.split(":")[0]);
+                    int payedMoney = Integer.parseInt(data.split(":")[0]);
+                    int money = currentMoney + payedMoney;
+                    Log.d("checkRent"," moneyFromPlayer "+money);
                     uiHandlerViewModel.setCurrentMoney(money);
-                    if (((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null)
+                    if (((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null) {
+                        if(payedMoney<0){
+                            payedMoney = payedMoney * (-1);
+                            Toast.makeText(this.frag.getActivity(), "You just payed " + payedMoney + "$", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(this.frag.getActivity(), "You just received " + payedMoney + "$", Toast.LENGTH_SHORT).show();
+                        }
                         ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n" + money + "$");
+                    }
                     Log.d("MoneyPlayer", "" + money);
                     Log.d("MoneyPlayer", "" + client);
                 }
+                String[] playerArray = data.split(":");
+                if(playerArray.length==2){
+                    if (clientObj.getUser().getUsername().equals(playerArray[1])) {
+                        int receivedMoney = Integer.parseInt(data.split(":")[0]);
+                        int money = currentMoney - receivedMoney;
+                        Log.d("checkRent"," moneyFromOwner "+money);
+                        uiHandlerViewModel.setCurrentMoney(money);
+                        if (((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null) {
+                            receivedMoney = receivedMoney * (-1);
+                            Toast.makeText(this.frag.getActivity(), "You just received " + receivedMoney + "$", Toast.LENGTH_SHORT).show();
+                            ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n" + money + "$");
+                        }
+                    }
+                }
+
                 break;
             case "uncoverUsed":
                 gameBoardUIViewModel.setUncoverEnabled(false);
+
+
+                String[] dataResponseSplit = data.split(":");
+
                 if (this.frag.getActivity().findViewById(R.id.uncover) != null) {
                     this.frag.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
                     this.frag.getActivity().findViewById(R.id.uncover).setEnabled(false);
+                    if(dataResponseSplit[0].equals("t")){
+                        Toast.makeText(this.frag.getActivity(),client+" successfully punished "+dataResponseSplit[1]+"!",Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(this.frag.getActivity(),client+" failed to punish "+dataResponseSplit[1]+"!",Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
             case "movePlayer":
@@ -339,7 +422,6 @@ public class UIHandler extends Handler {
                             Log.d("playerNumber: ", "" + playerNumber);
 
                             currentPosition[playerNumber] = currentPosition[playerNumber] - 40;
-                            // TODO get starting money
                             if (playerObjects.get(playerNumber).equals(clientObj.getUser().getUsername())) {
                                 Log.d("MoneyPlayer", "client = " + client);
                                 try {
@@ -350,6 +432,14 @@ public class UIHandler extends Handler {
                             }
                         }
                         Log.d("--", "" + currentPosition[playerNumber]);
+                        if (playerObjects.get(playerNumber).equals(clientObj.getUser().getUsername())) {
+                            Log.d("MoneyPlayer", "client = " + client);
+                            try {
+                                clientObj.writeToServer("GameBoardUI|checkRent|"+currentPosition[playerNumber]+"|" + clientObj.getUser().getUsername());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
 
                         uiHandlerViewModel.setCurrentPosition(currentPosition);
 
@@ -510,9 +600,8 @@ public class UIHandler extends Handler {
                 break;
 
             case "exitDiceFragment":
-                NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
-                //Thread.sleep(1000);
-
+                if(this.frag.getActivity().findViewById(R.id.continueButtonDiceFragment)!=null)
+                    NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
                 break;
 
             case "setStartTime":
@@ -573,8 +662,25 @@ public class UIHandler extends Handler {
                     ClientPropertyStorage.getInstance().addHotel(data);
                 break;
             case "updateOwner":
-                if (!clientObj.getUser().getUsername().equals(client))
+                if (!clientObj.getUser().getUsername().equals(client)) {
+
                     ClientPropertyStorage.getInstance().updateOwner(data, new Player(client, new Color(), 0, true));
+
+                    ClientPropertyStorage clientPropertyStorage = ClientPropertyStorage.getInstance();
+
+                    try {
+                        Field field = clientPropertyStorage.getProperty(Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()));
+                        try {               // check if field is buyable
+                            if (field.getOwner() != null || this.clientObj.getUser().getCapital() < field.getPrice())
+                                throw new IllegalFieldException();
+                        } catch (IllegalFieldException e) {
+                            this.frag.getActivity().findViewById(R.id.buy).setEnabled(false);
+                            this.frag.getActivity().findViewById(R.id.buy).setAlpha(0.5f);
+                        }
+                    }catch (IllegalFieldException e){}
+                }
+                else
+                    Toast.makeText(this.frag.getActivity(),"You just bought "+data,Toast.LENGTH_SHORT).show();
                 break;
         }
     }

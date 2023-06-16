@@ -70,7 +70,6 @@ public class GameBoardUI extends Fragment {
             }
 
         });
-
     }
 
     @Override
@@ -91,8 +90,6 @@ public class GameBoardUI extends Fragment {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
         binding = GameBoardBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -138,8 +135,8 @@ public class GameBoardUI extends Fragment {
 
         //binding.currentMoney.setText("Current Money \n"+uiHandlerViewModel.getCurrentMoney().getValue()+"$"); // dont redraw
 
-        binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
-                .navigate(R.id.action_GameBoard_to_FirstFragment));
+        /*binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
+                .navigate(R.id.action_GameBoard_to_FirstFragment));*/
 
         binding.uncover.setOnClickListener(view1 -> {
             try {
@@ -167,6 +164,12 @@ public class GameBoardUI extends Fragment {
                 throw new RuntimeException(e);
             }
         });
+
+        try {
+            client.writeToServer("GameBoardUI|setPlayers|" + HostGame.getPlayerCount() + "|" + this.client.getUser().getUsername());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         binding.showPropertiesButton.setOnClickListener(view1 -> {
             NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_ProperyCardFragment);
@@ -220,13 +223,10 @@ public class GameBoardUI extends Fragment {
 
 
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-
-
 
 
         //nsdClient.stopDiscovery();

@@ -90,6 +90,9 @@ public class PropertyStorage {
         return properties.containsKey(name);
     }
 
+    public String getOwnerName(String propertyId){
+        return properties.get(propertyId).getOwner().getUsername();
+    }
     public Player getOwner(String propertyId){
         return properties.get(propertyId).getOwner();
     }
@@ -112,4 +115,7 @@ public class PropertyStorage {
         return totalValue;
     }
 
+    public HashMap<String, Field> getProperties() {
+        return properties;
+    }
 }
