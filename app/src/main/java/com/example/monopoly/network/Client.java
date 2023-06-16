@@ -293,7 +293,7 @@ public class Client extends Thread {
             game = Game.getInstance();
             //Host should only join once
             if (responseSplit[1].equals("hostJoined") && game.getPlayers().isEmpty()) {       //Host should only join once
-                Player tempPlayer = new Player(dataResponseSplit[0], new Color(), 100, true);
+                Player tempPlayer = new Player(dataResponseSplit[0], new Color(), 1500, true);
                 Log.i("Dices", "Host gonna join: ");
                 game.addPlayer(tempPlayer);
             }
@@ -301,7 +301,7 @@ public class Client extends Thread {
                 synchronized (monopolyServer.getClients()) {
                     monopolyServer.broadCast("Lobby|userJoined|" + responseSplit[2]);
                     monopolyServer.broadCast("Lobby|hostJoined|" + monopolyServer.getClient().getUser().getUsername());
-                    Player tempPlayer = new Player(responseSplit[2], new Color(), 100, true);
+                    Player tempPlayer = new Player(responseSplit[2], new Color(), 1500, true);
                     Log.i("Dices", "Client Gonna join: ");
                     game.addPlayer(tempPlayer);
 
