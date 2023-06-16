@@ -15,7 +15,6 @@ import com.example.monopoly.network.MonopolyServer;
 public class EndGameFragment extends Fragment {
 
     private MonopolyServer monopolyServer = HostGame.getMonopolyServer();
-
     public EndGameFragment() {
         // Required empty public constructor
         Client.subscribe(this,"EndGameFragment");
@@ -39,7 +38,18 @@ public class EndGameFragment extends Fragment {
         // Inflate the layout for this fragment
         if (monopolyServer != null) {
             monopolyServer.closeConnectionsAndShutdown();
+            monopolyServer.stop();
         }
         return inflater.inflate(R.layout.fragment_end_game, container, false);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if(HostGame.getMonopolyServer()!=null){
+            monopolyServer.closeConnectionsAndShutdown();
+        }
+
     }
 }
