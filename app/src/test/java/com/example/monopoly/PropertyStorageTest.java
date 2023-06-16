@@ -7,7 +7,6 @@ import static org.mockito.Mockito.mock;
 
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.gamelogic.properties.IllegalFieldException;
-import com.example.monopoly.gamelogic.properties.PropertyField;
 import com.example.monopoly.gamelogic.properties.PropertyStorage;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -171,8 +170,9 @@ public class PropertyStorageTest {
     @Test
     void rentOnIllegalFieldTest(){
         propertyStorage.buyProperty("kelag", player);
-        assertThrows(IllegalFieldException.class, () -> {propertyStorage.getRentOnPropertyField("kelag", player2);});
+        assertEquals(150,propertyStorage.getRentOnPropertyField("kelag", player2));
         assertThrows(IllegalFieldException.class, () -> {propertyStorage.getRentOnPropertyField("dad", player2);});
+
     }
 
     @Test
