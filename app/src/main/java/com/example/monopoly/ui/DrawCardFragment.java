@@ -65,7 +65,7 @@ public class DrawCardFragment extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
             try {
                 //game.doAction(clientViewModel.getClientData().getValue().getUser().getCardID(),clientViewModel.getClientData().getValue());
-                clientViewModel.getClientData().getValue().doAction(clientViewModel.getClientData().getValue().getUser().getCardID());
+                clientViewModel.getClientData().getValue().doAction();
                 } catch (Exception e) {
                 throw new RuntimeException(e);
             }

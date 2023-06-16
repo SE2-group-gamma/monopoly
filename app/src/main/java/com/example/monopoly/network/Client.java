@@ -675,7 +675,7 @@ public class Client extends Thread {
         this.buttonCheck = buttonCheck;
     }
 
-    public void doAction(int cardID) throws Exception {
+    public void doAction() throws Exception {
 
         //Your building loan matures. Receive $150.
         if (getUser().getCardID() == R.drawable.chance3) {
