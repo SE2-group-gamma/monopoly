@@ -185,8 +185,6 @@ public class Game{
             endTurnProtocol();
         }
 
-        //cardDrawnProtocol(cardID);
-
     }
 
 
@@ -216,10 +214,5 @@ public class Game{
         //Log.i("Cards", "endTurnProtocol");
         client.writeToServer("GameBoardUI|turnEnd|:|");
     }
-
-    /*public void cardDrawnProtocol(int cardID) throws IOException {
-        //Log.i("Cards", "cardDrawn");
-        client.writeToServer("GameBoardUI|cardDrawn|"+ cardID + "|"+ currentPlayersTurn);
-    }*/
 
 }

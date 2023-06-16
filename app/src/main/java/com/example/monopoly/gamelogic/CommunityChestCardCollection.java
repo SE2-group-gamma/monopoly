@@ -170,9 +170,9 @@ public class CommunityChestCardCollection {
 
     public int generateRandom() {
         Random r = new Random();
-        if (communityChestCardDeck.size() == 0) {
-            return -1;
-        }
+        //if (communityChestCardDeck.size() == 0) {
+          //  return -1;
+        //}
         int random = r.nextInt(communityChestCardDeck.size());
         random--;
         if (random <= 0){
@@ -183,11 +183,11 @@ public class CommunityChestCardCollection {
 
     public CommunityChestCard drawFromDeck() {
         int random = generateRandom();
-        if (random >= 0) {
+        //if (random >= 0) {
             CommunityChestCard card = communityChestCardDeck.get(random);
             //removeCardFromDeck(random);
             return card;
-        } else return null;
+        //} else return null;
     }
 
     public void removeCardFromDeck(int index) {

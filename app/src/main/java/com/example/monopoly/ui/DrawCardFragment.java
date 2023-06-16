@@ -72,6 +72,24 @@ public class DrawCardFragment extends Fragment {
         return this.binding.getRoot();
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        /*Handler handler = new Handler(Looper.getMainLooper());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    clientViewModel.getClientData().getValue().writeToServer("GameBoardUI|cardDrawn|" + clientViewModel.getClientData().getValue().getUser().getCardID()
+                            + "|" + clientViewModel.getClientData().getValue().getUser().getUsername());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+        handler.postDelayed(runnable, 2000);*/
+    }
+
 
     private void checkField() throws IOException {
         if (Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()).equals("chance")) {

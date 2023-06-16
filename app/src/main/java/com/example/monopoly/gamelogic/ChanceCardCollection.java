@@ -174,23 +174,23 @@ public class ChanceCardCollection {
 
     public ChanceCard drawFromDeck() {
         int random = generateRandom();
-        if (random >= 0) {
+        //if (random >= 0) {
             ChanceCard card = chanceCardDeck.get(random);
             //removeCardFromDeck(random);
             return card;
-        } else return null;
+        //} else return null;
     }
 
     public int generateRandom() {
         Random r = new Random();
-        if (chanceCardDeck.size() == 0){
-            return -1;
-        }
+        //if (chanceCardDeck.size() == 0){
+          //  return -1;
+        //}
         int random = r.nextInt(chanceCardDeck.size());
         random --;
-        if (random <= 0){
-            return 0;
-        }
+       // if (random <= 0){
+         //   return 0;
+        //}
         return random;
     }
 

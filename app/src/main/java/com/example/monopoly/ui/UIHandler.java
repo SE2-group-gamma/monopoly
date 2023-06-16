@@ -168,7 +168,7 @@ public class UIHandler extends Handler {
                 break;
             case "cardDrawn":
                 int cardID = Integer.parseInt(data);
-                String cardFunction = "";
+                /*String cardFunction = "";
                 for (int i = 0; i < cardViewModel.getChanceCards().getValue().getAllChanceCards().size(); i++) {
                     if (cardID == cardViewModel.getChanceCards().getValue().getChanceCardDeck().get(i).getImageId()) {
                         cardFunction = cardViewModel.getChanceCards().getValue().getChanceCardDeck().get(i).getFunction();
@@ -176,10 +176,9 @@ public class UIHandler extends Handler {
                     if (cardID == cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().get(i).getId()) {
                         cardFunction = cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().get(i).getFunction();
                     }
-                }
-
-
-                Toast.makeText(frag.requireContext(), cardFunction, Toast.LENGTH_SHORT).show();
+                }*/
+                Toast toast = Toast.makeText(frag.requireActivity(), clientObj.getUser().getUsername()+" drew a card.", Toast.LENGTH_LONG);
+                toast.show();
                 break;
             case "hostJoined":
                 if (playerObjects.get(player1) == null) {

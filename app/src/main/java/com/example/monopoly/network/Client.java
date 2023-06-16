@@ -339,18 +339,6 @@ public class Client extends Thread {
                     monopolyServer.broadCast("GameBoardUI|movePlayer|" + responseSplit[2] + "|" + responseSplit[3]);      // broadcast with different action to not interfere with game logic
                 }
             }//}
-            /*if (responseSplit[1].equals("transferPlayerToPlayer")) {
-                //[Fragment]|transferPlayerToPlayer|[receiverID]:[amount]|[senderUserName]
-                int senderID = game.getPlayerIDByName(responseSplit[3]);
-                int receiverID = Integer.parseInt(dataResponseSplit[0]);
-                int amount = Integer.parseInt(dataResponseSplit[1]);
-                if (game.getCurrentPlayersTurn().equals(responseSplit[3])) {
-                    game.getPlayers().get(senderID).
-                            transferMoneyPlayerToPlayer(game.getPlayers().get(senderID), game.getPlayers().get(receiverID), amount);
-                    Log.i("MoneyTransfer", game.getPlayers().get(senderID).getUsername()
-                            + " -> " + game.getPlayers().get(receiverID).getUsername() + " : $" + amount);
-                }
-            }*/
             if (responseSplit[1].equals("outOfJailCounter")) {
                 //[Fragment]|outOfJailFree|[amount]|[senderUserName]
                 int playerID = game.getPlayerIDByName(responseSplit[3]);
@@ -479,28 +467,6 @@ public class Client extends Thread {
                     throw new RuntimeException(e);
                 }
             }
-            /*if (responseSplit[1].equals("removeCard")) {
-                //[Fragment]|removeCard|[CardID]:[CardType]|[senderUserName]
-
-                Context appContext = DrawCardFragment.getAppContext();
-                cardViewModel = new ViewModelProvider((ViewModelStoreOwner) appContext).get(CardViewModel.class);
-
-                int cardID = Integer.parseInt(dataResponseSplit[0]);
-                String cardType = dataResponseSplit[1];
-                if (cardType.equals("chance")) {
-                    ChanceCard card = cardViewModel.getChanceCards().getValue().getAllChanceCards().get(cardID);
-                    if (cardViewModel.getChanceCards().getValue().getChanceCardDeck().contains(card)) {
-                        cardViewModel.getChanceCards().getValue().getChanceCardDeck().
-                                remove(cardViewModel.getChanceCards().getValue().getChanceCardDeck().get(cardID));
-                    }
-                } else if (cardType.equals("community")) {
-                    CommunityChestCard card = cardViewModel.getCommunityCards().getValue().getAllCommunityChestCards().get(cardID);
-                    if (cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().contains(card)) {
-                        cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().
-                                remove(cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().get(cardID));
-                    }
-                }
-            }*/
         }
         return null;
     }
