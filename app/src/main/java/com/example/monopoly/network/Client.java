@@ -377,7 +377,9 @@ public class Client extends Thread {
                         if(game.getPlayers().get(tempID).getPosition() >= 10){
                             jailOffset = game.getPlayers().get(tempID).getPosition()-10;
                             game.incrementPlayerPosition(tempID, -jailOffset);
-                            monopolyServer.broadCast("GameBoardUI|movePlayer|" + -jailOffset + ":f:f|" + responseSplit[3]);
+                            Log.d("GOTOJAIL", "HALLLLO"+game.getPlayers().get(tempID).getPosition());
+                            monopolyServer.broadCast("GameBoardUI|jailMove|:|" + responseSplit[3]);
+
                         }
 
                         game.getPlayers().get(tempID).setInPrison(true);
@@ -393,14 +395,14 @@ public class Client extends Thread {
                             if(game.getPlayers().get(tempID).getPosition() >= 10){
                                 jailOffset = game.getPlayers().get(tempID).getPosition()-10;
                                 game.incrementPlayerPosition(tempID, -jailOffset);
-                                monopolyServer.broadCast("GameBoardUI|movePlayer|" + -jailOffset + ":f:f|" + responseSplit[3]);
+                                monopolyServer.broadCast("GameBoardUI|jailMove|:|" + responseSplit[3]);
                             }else{
                                 jailOffset = 10-game.getPlayers().get(tempID).getPosition();
                                 game.incrementPlayerPosition(tempID, jailOffset);
-                                monopolyServer.broadCast("GameBoardUI|movePlayer|" + jailOffset + ":f:f|" + responseSplit[3]);
+                                monopolyServer.broadCast("GameBoardUI|jailMove|:|" + responseSplit[3]);
                             }
 
-                            Log.d("InJail","JAILTIME");
+                            Log.d("GOTOJAIL","JAILTIME");
                             game.getPlayers().get(tempID).setInPrison(true);
                             game.getPlayers().get(tempID).setDoubletsCounter(0);
                             game.getPlayers().get(tempID).setDoubletsFirstChain(true);
