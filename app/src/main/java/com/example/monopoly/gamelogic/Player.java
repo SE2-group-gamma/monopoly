@@ -24,6 +24,8 @@ public class Player {
 
     private boolean doubletsFirstChain = true;
 
+    private int turnUnlockCounter = 0;
+
 
     public Player(String username, Color col, double capital, boolean alive) {
         this.username = username;
@@ -144,4 +146,11 @@ public class Player {
         receiver.setCapital(receiverMoney+amount);
     }
 
+    public int getTurnUnlockCounter() {
+        return turnUnlockCounter;
+    }
+
+    public void setTurnUnlockCounter(int turnUnlockCounter) {
+        this.turnUnlockCounter = turnUnlockCounter;
+    }
 }
