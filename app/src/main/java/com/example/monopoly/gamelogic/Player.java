@@ -23,7 +23,6 @@ public class Player {
     private PlayerMapPosition playerMapPosition;
 
     private boolean drewCard = false;
-    private int increment;
 
     public Player(String username, Color col, double capital, boolean alive) {
         this.username = username;
@@ -57,14 +56,6 @@ public class Player {
     }
     public boolean getDrewCard(){
         return drewCard;
-    }
-
-    public int getIncrement() {
-        return increment;
-    }
-
-    public void setIncrement(int increment) {
-        this.increment = increment;
     }
 
     public int getId() {

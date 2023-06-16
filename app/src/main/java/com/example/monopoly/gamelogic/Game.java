@@ -71,7 +71,7 @@ public class Game{
     }
 
 
-    public int doAction(int cardID, Client client) throws IOException {
+    public void doAction(int cardID, Client client) throws IOException {
         this.client = client;
         int playerID = getPlayerIDByName(getCurrentPlayersTurn());
         players.get(playerID).setCardID(cardID);
@@ -83,20 +83,18 @@ public class Game{
         //Advance to "Go".
         if (players.get(playerID).getCardID() == R.drawable.chance0 || players.get(playerID).getCardID() == R.drawable.community0) {
             int incr = Board.FELDER_ANZAHL - players.get(playerID).getPosition();
-            return incr;
-            //endTurnProtocol();
+            moveProtocol(incr);
+            endTurnProtocol();
         }
 
         //Advance to Strandbad. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance1) {
-            return 1;
-            //advanceTo("strandbad");
+            advanceTo("strandbad");
         }
 
         //Advance to Lindwurm. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance2) {
-            return 1;
-            //advanceTo("lindwurm");
+            advanceTo("lindwurm");
         }
 
         //Your building loan matures. Receive $150.
@@ -155,7 +153,7 @@ public class Game{
 
                 transferPlayerToPlayerProtocol(owner.getId(), amount);
             }*/
-            return incr;
+            moveProtocol(incr);
         }
 
         //Bank pays you dividend of $50.
@@ -172,12 +170,7 @@ public class Game{
 
         //Go back 3 spaces.
         if (players.get(playerID).getCardID() == R.drawable.chance7) {
-            return -3;
-        }
-
-        //Make general repairs on all your property: For each house pay $25, for each hotel pay $100.
-        if (players.get(playerID).getCardID() == R.drawable.chance8) {
-            //TODO
+            moveProtocol(-3);
         }
 
         //Take a trip to S-Bahn Wien.
@@ -186,7 +179,7 @@ public class Game{
             for (int i = 0; i < Board.FELDER_ANZAHL; i++) {
                 if (Board.getFieldName(i) == "s_bahn_wien") {
                     incr = players.get(playerID).getPosition() - i;
-                    return incr;
+                    moveProtocol(incr);
                 }
             }
         }
@@ -203,8 +196,7 @@ public class Game{
 
         //Advance to City Arkaden. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance11) {
-            return 1;
-            //advanceTo("city_arkaden");
+            advanceTo("city_arkaden");
         }
 
         //Go to Jail directly.
@@ -212,7 +204,7 @@ public class Game{
             for (int i = 0; i < Board.FELDER_ANZAHL; i++) {
                 if (Board.getFieldName(i) == "jail") {
                     int incr = i - players.get(playerID).getPosition();
-                    return incr;
+                    moveProtocol(incr);
                 }
             }
             endTurnProtocol();
@@ -226,7 +218,7 @@ public class Game{
 
         //Advance two spaces.
         if (players.get(playerID).getCardID() == R.drawable.chance15) {
-            return 2;
+            moveProtocol(2);
         }
 
         //Happy Birthday! Receive $100.
@@ -237,13 +229,12 @@ public class Game{
 
         //Go back one space.
         if (players.get(playerID).getCardID() == R.drawable.chance18) {
-            return -1;
+            moveProtocol(-1);
         }
 
         //Advance to Rathaus. If you pass Go, collect $200.
         if (players.get(playerID).getCardID() == R.drawable.chance19) {
-            return 1;
-            //advanceTo("rathaus");
+            advanceTo("rathaus");
         }
 
         //Bank error in your favor. Collect $200.
@@ -310,19 +301,6 @@ public class Game{
             endTurnProtocol();
         }
 
-        //You are assessed for street repair. $40 per house. $115 per hotel.
-        if (players.get(playerID).getCardID() == R.drawable.community13) {
-            /*int counterHotel = 0;
-            int counterHouse = 0;
-
-            for(int i = 0; i<fields.size(); i++){
-                if (fields.get(i).getOwner().getId() == playerID){
-                    counterHouse += fields.get(i).getHouses();
-                }
-            }*/
-            //TODO
-        }
-
         //You have won second prize in a beauty contest. Collect $10.
         if (players.get(playerID).getCardID() == R.drawable.community15) {
             transferToPlayerProtocol(10);
@@ -347,14 +325,7 @@ public class Game{
             endTurnProtocol();
         }
 
-        //Receive $100 compensation for pain and suffering from the next player.
-        if (players.get(playerID).getCardID() == R.drawable.community19) {
-            transferPlayerToPlayerProtocol(playerID + 1, 100);
-            endTurnProtocol();
-        }
-
         //cardDrawnProtocol(cardID);
-        return 0;
 
     }
 
@@ -374,7 +345,7 @@ public class Game{
         } else {
             incr = fieldId - players.get(playerID).getPosition();
         }
-        //moveProtocol(incr);
+        moveProtocol(incr);
 
         if (players.get(playerID).getPosition() == 0) {
             endTurnProtocol();
