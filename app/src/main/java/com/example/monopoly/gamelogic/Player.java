@@ -18,8 +18,11 @@ public class Player {
 
     private int totalAssetValue;
 
+    private int cardID;
+    private int outOfJailFreeCounter;
     private PlayerMapPosition playerMapPosition;
 
+    private boolean drewCard = false;
 
     public Player(String username, Color col, double capital, boolean alive) {
         this.username = username;
@@ -30,6 +33,29 @@ public class Player {
         this.position = 0;
         this.broke = false;
         this.totalAssetValue=0;
+    }
+
+    public int getCardID(){
+        return cardID;
+    }
+
+    public void setCardID(int cardID){
+        this.cardID = cardID;
+    }
+
+    public int getOutOfJailFreeCounter() {
+        return outOfJailFreeCounter;
+    }
+
+    public void setOutOfJailFreeCounter(int outOfJailFreeCounter){
+        this.outOfJailFreeCounter = outOfJailFreeCounter;
+    }
+
+    public void setDrewCard(boolean drewCard) {
+        this.drewCard = drewCard;
+    }
+    public boolean getDrewCard(){
+        return drewCard;
     }
 
     public int getId() {
@@ -123,5 +149,4 @@ public class Player {
         double receiverMoney = receiver.getCapital();
         receiver.setCapital(receiverMoney+amount);
     }
-
 }

@@ -8,12 +8,19 @@ import static org.mockito.Mockito.mock;
 import android.graphics.Color;
 
 import com.example.monopoly.gamelogic.Board;
+import com.example.monopoly.gamelogic.Field;
 import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.Player;
+import com.example.monopoly.network.Client;
+import com.example.monopoly.network.MonopolyServer;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.HashMap;
 import org.mockito.Mockito;
 
 public class GameTest {
@@ -21,6 +28,16 @@ public class GameTest {
     Game g;
     Player p;
     Player q;
+    static Color col;
+    static Board board;
+    Field field;
+    HashMap<Integer,Field> fields;
+
+    @Mock
+    MonopolyServer mockServer;
+    @Mock
+    Client mockClient;
+
     @BeforeEach
     void setup(){
         g = Game.getInstance();

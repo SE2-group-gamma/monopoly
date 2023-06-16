@@ -30,7 +30,7 @@ public class PropertyUtils {
 
         properties.put("pumpe", new PropertyField(R.drawable.pumpe,"pumpe", 260, PropertyFieldColors.YELLOW, new RentConfiguration(22, 44, 110, 330, 800, 975, 1150, 150)));
         properties.put("bollwerk", new PropertyField(R.drawable.bollwerk,"bollwerk", 260, PropertyFieldColors.YELLOW, new RentConfiguration(22, 44, 110, 330, 800, 975, 1150, 150)));
-        properties.put("molly_malone", new PropertyField(R.drawable.molly_malone,"molly_malone", 260, PropertyFieldColors.YELLOW, new RentConfiguration(22, 44, 110, 330, 800, 975, 1150, 150)));
+        properties.put("molly_malone", new PropertyField(R.drawable.molly_malone,"molly_malone", 280, PropertyFieldColors.YELLOW, new RentConfiguration(22, 44, 110, 330, 800, 975, 1150, 150)));
 
         properties.put("rathaus", new PropertyField(R.drawable.rathaus,"rathaus", 300, PropertyFieldColors.GREEN, new RentConfiguration(26, 52, 130, 390, 900, 1100, 1275, 200)));
         properties.put("kreuzbergl", new PropertyField(R.drawable.kreuzbergl,"kreuzbergl", 300, PropertyFieldColors.GREEN, new RentConfiguration(26, 52, 130, 390, 900, 1100, 1275, 200)));
