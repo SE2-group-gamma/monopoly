@@ -1,46 +1,35 @@
 package com.example.monopoly.ui;
 
-import android.content.Context;
-import android.media.MediaPlayer;
-import android.net.nsd.NsdManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
-import com.example.monopoly.databinding.FragmentFirstBinding;
 import com.example.monopoly.databinding.GameBoardBinding;
 import com.example.monopoly.gamelogic.Board;
-import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.gamelogic.properties.Field;
 import com.example.monopoly.gamelogic.properties.IllegalFieldException;
-import com.example.monopoly.databinding.SettingsBinding;
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.network.MonopolyServer;
-import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
 import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
 import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
 
 import java.io.IOException;
-import java.net.BindException;
 import java.net.Socket;
 
 public class GameBoardUI extends Fragment {
@@ -62,7 +51,7 @@ public class GameBoardUI extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Client.subscribe(this,"GameBoardUI");
         diceViewModel = new ViewModelProvider(requireActivity()).get(DiceViewModel.class);
         clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
         diceViewModel.getDicesData().observe(this, dices -> {
@@ -81,7 +70,6 @@ public class GameBoardUI extends Fragment {
             }
 
         });
-
     }
 
     @Override
@@ -89,57 +77,30 @@ public class GameBoardUI extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        Client.subscribe(this,"GameBoardUI");
+
 
         Log.d("MSG", "OnCreateView");
 
+        this.client = clientViewModel.getClientData().getValue();       // set client
+
+
+        //if(this.client.isHost()) {
+        try {
+            this.client.writeToServer("GameBoardUI|initializePlayerBottomRight| : |" + this.client.getUser().getUsername());      // needs to be sent only once
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         binding = GameBoardBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        this.client = clientViewModel.getClientData().getValue();       // set client
+
         Log.d("MSG", "OnViewCreated");
         this.clientPropertyStorage = ClientPropertyStorage.getInstance();
-        /**
-         * Reconstruction of GameBoardUI
-         */
-        try {
-            gameBoardUIViewModel = new ViewModelProvider(this.requireActivity()).get(GameBoardUIViewModel.class);   // restore GameBoardUI state
-            ((TextView)this.getActivity().findViewById(R.id.turn)).setText(gameBoardUIViewModel.getCurrentPlayer().getValue());     // set name for player turn
-            if (gameBoardUIViewModel.getUncoverEnabled().getValue()) {
-                this.getActivity().findViewById(R.id.uncover).setAlpha(1.0f);
-                this.getActivity().findViewById(R.id.uncover).setEnabled(true);
-                Log.d("uncover","Uncover Enabled restored");
-            } else {
-                this.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
-                this.getActivity().findViewById(R.id.uncover).setEnabled(false);
-                Log.d("uncover","Uncover Disabled restored");
-            }
-            if(gameBoardUIViewModel.getThrowDiceEnabled().getValue()){
-                this.getActivity().findViewById(R.id.throwdice).setAlpha(1.0f);
-                this.getActivity().findViewById(R.id.throwdice).setEnabled(true);
-            } else {
-                this.getActivity().findViewById(R.id.throwdice).setAlpha(0.5f);
-                this.getActivity().findViewById(R.id.throwdice).setEnabled(false);
-            }
-            if(gameBoardUIViewModel.getEndTurnEnabled().getValue()){
-                this.getActivity().findViewById(R.id.endTurn).setAlpha(1.0f);
-                this.getActivity().findViewById(R.id.endTurn).setEnabled(true);
-            }else{
-                this.getActivity().findViewById(R.id.endTurn).setAlpha(0.5f);
-                this.getActivity().findViewById(R.id.endTurn).setEnabled(false);
-            }
-            // TODO restore player position
-        }catch (Exception e){}
 
-        //if(this.client.isHost()) {
-            try {
-                this.client.writeToServer("GameBoardUI|initializePlayerBottomRight| : |" + this.client.getUser().getUsername());      // needs to be sent only once
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         //}
+
         // DisplayMetrics might still be useful, so keep them for now
 /*
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -171,10 +132,11 @@ public class GameBoardUI extends Fragment {
             }
         });
         UIHandlerViewModel uiHandlerViewModel = (new ViewModelProvider(requireActivity())).get(UIHandlerViewModel.class);
-        binding.currentMoney.setText("Current Money \n"+uiHandlerViewModel.getCurrentMoney().getValue()+"$");
 
-        binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
-                .navigate(R.id.action_GameBoard_to_FirstFragment));
+        //binding.currentMoney.setText("Current Money \n"+uiHandlerViewModel.getCurrentMoney().getValue()+"$"); // dont redraw
+
+        /*binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
+                .navigate(R.id.action_GameBoard_to_FirstFragment));*/
 
         binding.uncover.setOnClickListener(view1 -> {
             try {
@@ -186,6 +148,7 @@ public class GameBoardUI extends Fragment {
 
         binding.throwdice.setOnClickListener(view1 -> {
             showDiceFragment();
+            clientViewModel.getClientData().getValue().getUser().setDrewCard(false);
         });
 
         binding.endTurn.setOnClickListener(view1 -> {
@@ -201,6 +164,12 @@ public class GameBoardUI extends Fragment {
                 throw new RuntimeException(e);
             }
         });
+
+        try {
+            client.writeToServer("GameBoardUI|setPlayers|" + HostGame.getPlayerCount() + "|" + this.client.getUser().getUsername());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         binding.showPropertiesButton.setOnClickListener(view1 -> {
             NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_ProperyCardFragment);
@@ -227,7 +196,24 @@ public class GameBoardUI extends Fragment {
             binding.buy.setAlpha(0.5f);
             binding.buy.setEnabled(false);
         }
+
+
+        if(!clientViewModel.getClientData().getValue().getUser().getDrewCard()) {
+            if (Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()).equals("chance") ||
+                    Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()).equals("community")) {
+                Handler handler = new Handler(Looper.getMainLooper());
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        NavHostFragment.findNavController(GameBoardUI.this).navigate(R.id.action_GameBoardUI_to_DrawCardFragment);
+                    }
+                };
+                handler.postDelayed(runnable, 2000);
+                clientViewModel.getClientData().getValue().getUser().setDrewCard(true);
+            }
+        }
     }
+
 
     private void showDiceFragment(){
         NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_DiceFragment);
@@ -237,13 +223,10 @@ public class GameBoardUI extends Fragment {
 
 
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-
-
 
 
         //nsdClient.stopDiscovery();

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
@@ -14,25 +15,31 @@ public class EndGameFragment extends Fragment {
 
     public EndGameFragment() {
         // Required empty public constructor
-        Client.subscribe(this,"EndGameFragment");
+
     }
 
     public static EndGameFragment newInstance() {
         EndGameFragment fragment = new EndGameFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_end_game, container, false);
+
+        Client.subscribe(this, "EndGameFragment");
+        View view = inflater.inflate(R.layout.fragment_end_game, container, false);
+
+        Button closeButton = view.findViewById(R.id.closeButton);
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
+
+        return view;
     }
+
 }

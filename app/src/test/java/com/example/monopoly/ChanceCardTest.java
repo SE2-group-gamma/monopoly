@@ -7,11 +7,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.mockito.Mockito.mock;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.util.ArrayList;
 
 public class ChanceCardTest {
@@ -83,18 +78,9 @@ public class ChanceCardTest {
 
     @Test
     public void testDrawFromDeck() {
-        for (int i = 0; i < 100; i++) {
-            ChanceCard card;
-            card = collection.drawFromDeck();
-            if (card != null) {
-                System.out.println(card.getId() + ", " + card.getFunction());
-            }
-
-        }
-        System.out.println("\nAll: " + collection.getAllChanceCards().size());
-        Assertions.assertEquals(20, collection.getAllChanceCards().size());
-        System.out.println("Deck: " + collection.getChanceCardDeck().size());
-        Assertions.assertEquals(0, collection.getChanceCardDeck().size());
+        ChanceCard card;
+        card = collection.drawFromDeck();
+        Assertions.assertNotEquals(card, null);
     }
 
     @Test

@@ -80,6 +80,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
         this.userSetValue = false;
         this.diceViewModel = new ViewModelProvider(requireActivity()).get(DiceViewModel.class);
         this.clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
+        Client.subscribe(this,"DiceFragment");
     }
 
     @Override
@@ -174,6 +175,8 @@ public class DiceFragment extends Fragment implements SensorEventListener {
             case 6:
                 diceImage.setImageResource(R.drawable.dice_6);
                 break;
+            default:
+                diceImage.setImageResource(R.drawable.dice_0);
         }
     }
 

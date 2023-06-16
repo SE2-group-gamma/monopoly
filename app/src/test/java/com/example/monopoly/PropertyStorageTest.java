@@ -49,6 +49,16 @@ public class PropertyStorageTest {
     }
 
     @Test
+    void testGetOwnerName(){
+        String propertyId = "lindwurm";
+        Player newOwner = mock(Player.class);
+
+        propertyStorage.buyProperty(propertyId, newOwner);
+
+        assertEquals(newOwner.getUsername(), propertyStorage.getOwnerName(propertyId));
+    }
+
+    @Test
     void buyPropertyWithWrongNameTest() {
         String propertyId = "abc";
         Player newOwner = mock(Player.class);
@@ -160,8 +170,23 @@ public class PropertyStorageTest {
     @Test
     void rentOnIllegalFieldTest(){
         propertyStorage.buyProperty("kelag", player);
-        assertThrows(IllegalFieldException.class, () -> {propertyStorage.getRentOnPropertyField("kelag", player2);});
+        assertEquals(150,propertyStorage.getRentOnPropertyField("kelag", player2));
         assertThrows(IllegalFieldException.class, () -> {propertyStorage.getRentOnPropertyField("dad", player2);});
+
+    }
+
+    @Test
+    void getTotalAssetValue(){
+        propertyStorage.buyProperty("strandbad",player);
+        propertyStorage.buyProperty("xxxlutz",player);
+        propertyStorage.buyProperty("wappensaal",player);
+        propertyStorage.buyProperty("pumpe",player);
+        int totalValue = propertyStorage.getProperties().get("strandbad").getPrice()+
+                propertyStorage.getProperties().get("xxxlutz").getPrice()+
+                propertyStorage.getProperties().get("wappensaal").getPrice()+
+                propertyStorage.getProperties().get("pumpe").getPrice();
+
+        assertEquals(totalValue, propertyStorage.getTotalAssets(player));
     }
 
     private void buyAllPropertiesOfSameColor() {
@@ -179,4 +204,5 @@ public class PropertyStorageTest {
         for(int i = 0; i < 4; i++)
             propertyStorage.addHouse("strandbad", player);
     }
+
 }

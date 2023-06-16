@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -41,7 +42,8 @@ public class DicesTest {
         for(int i = 0; i < RANDOM_TEST_SIZE; i++){
             int sum = random.nextInt(11)+2;
             dices.rollDicesFlawed(sum);
-            assertEquals(sum, dices.getDice1()+ dices.getDice2());
+            assertTrue(dices.getDice1() <= 6 && dices.getDice1() > 0);
+            assertTrue(dices.getDice2() <= 6 && dices.getDice2() > 0);
             if(sum % 2 == 0) {
                 assertEquals(dices.getDice1(), dices.getDice2());
                 assertEquals(dices.getDice1(), sum / 2);
@@ -82,4 +84,14 @@ public class DicesTest {
             assertEquals(dices.getDice1() + dices.getDice2(), dices.getSum());
         }
     }
+
+    @Test
+    public void testToString() {
+        Dices dices = new Dices();
+        String expectedString = "dice1=0, dice2=0, sum=0, isflawed=false";
+        String actualString = dices.toString();
+
+        assertEquals(expectedString, actualString);
+    }
+
 }

@@ -105,6 +105,8 @@ public class ClientHandler extends Thread{
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -123,6 +125,7 @@ public class ClientHandler extends Thread{
             }
         }
     }
+
 
 
     /*public void endConn() throws IOException {

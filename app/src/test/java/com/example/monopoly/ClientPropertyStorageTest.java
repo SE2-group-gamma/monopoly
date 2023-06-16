@@ -6,12 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.gamelogic.properties.Field;
 import com.example.monopoly.gamelogic.properties.IllegalFieldException;
 import com.example.monopoly.gamelogic.properties.PropertyField;
+import com.example.monopoly.gamelogic.properties.PropertyFieldColors;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -94,6 +96,31 @@ public class ClientPropertyStorageTest {
         assertThrows(IllegalStateException.class, () -> {clientPropertyStorage.addHotel("strandbad");});
         assertThrows(IllegalFieldException.class, () -> {clientPropertyStorage.addHotel("ad");});
         assertThrows(IllegalFieldException.class, () -> {clientPropertyStorage.addHotel("s_bahn_tirol");});
+    }
+
+    @Test
+    void sortedPropertyListTest(){
+        Player player2 = mock(Player.class);
+        when(player.getUsername()).thenReturn("Clemens");
+        when(player2.getUsername()).thenReturn("Martin");
+
+        clientPropertyStorage.updateOwner("wappensaal", player);
+        clientPropertyStorage.updateOwner("billa", player2);
+        clientPropertyStorage.updateOwner("xxxlutz", player);
+        clientPropertyStorage.updateOwner("s_bahn_kaernten", player);
+        clientPropertyStorage.addHouse("xxxlutz");
+        clientPropertyStorage.addHouse("xxxlutz");
+        clientPropertyStorage.addHouse("wappensaal");
+
+        List<Field> sortedList = clientPropertyStorage.getSortedPropertyListByPlayer(player);
+        assertEquals("xxxlutz",sortedList.get(0).getName());
+        assertEquals("wappensaal",sortedList.get(1).getName());
+        assertEquals("billa",sortedList.get(2).getName());
+    }
+
+    @Test
+    public void testHasAllColours() {
+        assertEquals(false, clientPropertyStorage.hasAllColours(player, PropertyFieldColors.ORANGE));
     }
 
 }
