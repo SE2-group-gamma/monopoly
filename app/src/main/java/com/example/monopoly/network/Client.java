@@ -331,16 +331,48 @@ public class Client extends Thread {
                 // data: 8:t:f  => increment:cheated:double
                 int tempID = game.getPlayerIDByName(responseSplit[3]);
                 if(game.getCurrentPlayersTurn().equals(responseSplit[3])) {
-                    this.cheated = dataResponseSplit[1];
-                    this.lastPlayerMoved = responseSplit[3];
+
+                    if(dataResponseSplit[2].equals("t")&&game.getPlayers().get(tempID).isDoubletsFirstChain()==true){
+                        game.getPlayers().get(tempID).setDoubletsCounter(game.getPlayers().get(tempID).getDoubletsCounter()+1);
+                        game.getPlayers().get(tempID).setDoubletsFirstChain(false);
+                    }
+                    if(game.getPlayers().get(tempID).isDoubletsFirstChain()==false){
+                    if(game.getPlayers().get(tempID).getUsername().equals(this.lastPlayerMoved)){
+                        game.getPlayers().get(tempID).setDoubletsCounter(game.getPlayers().get(tempID).getDoubletsCounter()+1);
+                    }}
+
+                    if(!game.getPlayers().get(tempID).getUsername().equals(this.lastPlayerMoved)){
+                        game.getPlayers().get(game.getPlayerIDByName(this.lastPlayerMoved)).setDoubletsFirstChain(true);
+                        game.getPlayers().get(game.getPlayerIDByName(this.lastPlayerMoved)).setDoubletsCounter(0);
+                    }
+
+                    if(game.getPlayers().get(tempID).getDoubletsCounter()!=3){
+
+                    if(game.getPlayers().get(tempID).isInPrison()==false) {
+                        this.cheated = dataResponseSplit[1];
+                        this.lastPlayerMoved = responseSplit[3];
+                        try {
+                            game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                        //Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
+                        //Log.d("gameturnCurr", "currUser" + responseSplit[3]);
+                        monopolyServer.broadCast("GameBoardUI|movePlayer|" + responseSplit[2] + "|" + responseSplit[3]);      // broadcast with different action to not interfere with game logic
+                    }else if(game.getPlayers().get(tempID).getDoubletsCounter()==2){
+                            game.getPlayers().get(tempID).setInPrison(false);
+                            monopolyServer.broadCast("GameBoardUI|movePlayer|" + responseSplit[2] + "|" + responseSplit[3]);
+                        }
+
+                }}else{
                     try {
-                        game.incrementPlayerPosition(tempID, Integer.parseInt(dataResponseSplit[0]));
+                        game.getPlayers().get(tempID).setPosition(39);
+                        game.getPlayers().get(tempID).setInPrison(true);
+                        game.getPlayers().get(tempID).setDoubletsCounter(0);
+                        game.getPlayers().get(tempID).setDoubletsFirstChain(true);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                    //Log.d("gameturnCurr", "currPlayer" + game.getCurrentPlayersTurn());
-                    //Log.d("gameturnCurr", "currUser" + responseSplit[3]);
-                    monopolyServer.broadCast("GameBoardUI|movePlayer|" + responseSplit[2] + "|" + responseSplit[3]);      // broadcast with different action to not interfere with game logic
                 }
             }//}
 

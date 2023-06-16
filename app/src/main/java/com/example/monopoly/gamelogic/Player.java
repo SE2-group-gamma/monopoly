@@ -20,6 +20,10 @@ public class Player {
 
     private PlayerMapPosition playerMapPosition;
 
+    private int doubletsCounter = 0;
+
+    private boolean doubletsFirstChain = true;
+
 
     public Player(String username, Color col, double capital, boolean alive) {
         this.username = username;
@@ -82,6 +86,22 @@ public class Player {
 
     public double getCapital() {
         return capital;
+    }
+
+    public int getDoubletsCounter() {
+        return doubletsCounter;
+    }
+
+    public void setDoubletsCounter(int doubletsCounter) {
+        this.doubletsCounter = doubletsCounter;
+    }
+
+    public boolean isDoubletsFirstChain() {
+        return doubletsFirstChain;
+    }
+
+    public void setDoubletsFirstChain(boolean doubletsFirstChain) {
+        this.doubletsFirstChain = doubletsFirstChain;
     }
 
     public boolean isAlive() {
