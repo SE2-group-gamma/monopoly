@@ -31,7 +31,7 @@ public class GameTestNetwork {
     @Mock
     Client mockClient;
 
-    @BeforeEach
+  @BeforeEach
     void setup() {
         MockitoAnnotations.initMocks(this);
         g = Game.getInstance();
@@ -43,41 +43,161 @@ public class GameTestNetwork {
     }
 
     @Test
-    public void transferPlayer() throws IOException {
-        //g.getPlayers().get(0).setMyClient(mockClient);
-
-        g.transferToPlayerProtocol(10);
-        verify(mockClient).writeToServer("GameBoardUI|transferToPlayer|10|Test");
+    public void endTurn() throws IOException, IOException {
+        g.doAction(R.drawable.community8, mockClient);
+        g.endTurnProtocol();
+        verify(mockClient).writeToServer("GameBoardUI|turnEnd|:|");
     }
 
     @Test
     public void transferToBank() throws IOException {
-        g.transferToBankProtocol(10);
-        verify(mockClient).writeToServer("GameBoardUI|transferToBank|10|Test");
+        g.doAction(R.drawable.community11, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|transferToBank|-50|Test");
     }
-   @Test
-    public void testMove() throws IOException {
-        g.moveProtocol(1);
-        verify(mockClient).writeToServer("GameBoardUI|move|1|Test");
-    }
+
 
     @Test
     public void outOfJail() throws IOException {
-        g.outOfJailCounterProtocol(1);
+        g.doAction(R.drawable.chance6, mockClient);
         verify(mockClient).writeToServer("GameBoardUI|outOfJailCounter|1|Test");
     }
 
     @Test
-    public void endTurn() throws IOException {
-        g.endTurnProtocol();
-        verify(mockClient).writeToServer("GameBoardUI|turnEnd|Test");
+    public void chance3() throws IOException {
+        g.doAction(R.drawable.chance3, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|giveMoney|150|Test");
     }
+
     @Test
-    public void transferPlayerToPlayer() throws IOException {
-        Player player = new Player ("Test1", new Color(), 100.00, true);
-        player.setId(1);
-        g.addPlayer(player);
-        g.transferPlayerToPlayerProtocol(1,10);
-        verify(mockClient).writeToServer("GameBoardUI|transferPlayerToPlayer|1:10|Test");
+    public void chance5() throws IOException {
+        g.doAction(R.drawable.chance5, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|giveMoney|50|Test");
     }
+
+    @Test
+    public void chance6() throws IOException {
+        g.doAction(R.drawable.chance6, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|outOfJailCounter|1|Test");
+    }
+
+    @Test
+    public void chance12() throws IOException {
+        g.doAction(R.drawable.chance12, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|outOfJailCounter|1|Test");
+    }
+
+    @Test
+    public void chance14() throws IOException {
+        g.doAction(R.drawable.chance14, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|transferToBank|-15|Test");
+    }
+
+    @Test
+    public void chance17() throws IOException {
+        g.doAction(R.drawable.chance17, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|giveMoney|100|Test");
+    }
+
+    @Test
+    public void community1() throws IOException {
+        g.doAction(R.drawable.community1, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|giveMoney|200|Test");
+    }
+
+    @Test
+    public void community2() throws IOException {
+        g.doAction(R.drawable.community2, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|transferToBank|-50|Test");
+    }
+
+    @Test
+    public void community3() throws IOException {
+        g.doAction(R.drawable.community3, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|giveMoney|50|Test");
+    }
+
+    @Test
+    public void community4() throws IOException {
+        g.doAction(R.drawable.community4, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|outOfJailCounter|1|Test");
+    }
+
+    @Test
+    public void community6() throws IOException {
+        g.doAction(R.drawable.community6, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|giveMoney|100|Test");
+    }
+
+    @Test
+    public void community7() throws IOException {
+        g.doAction(R.drawable.community7, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|giveMoney|20|Test");
+    }
+
+    @Test
+    public void community9() throws IOException {
+        g.doAction(R.drawable.community9, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|giveMoney|100|Test");
+    }
+
+    @Test
+    public void community10() throws IOException {
+        g.doAction(R.drawable.community10, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|transferToBank|-100|Test");
+    }
+
+    @Test
+    public void community11() throws IOException {
+        g.doAction(R.drawable.community11, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|transferToBank|-50|Test");
+    }
+
+    @Test
+    public void community12() throws IOException {
+        g.doAction(R.drawable.community12, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|giveMoney|25|Test");
+    }
+
+    @Test
+    public void community14() throws IOException {
+        g.doAction(R.drawable.community14, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|transferToBank|-15|Test");
+    }
+
+    @Test
+    public void community15() throws IOException {
+        g.doAction(R.drawable.community15, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|giveMoney|10|Test");
+    }
+
+    @Test
+    public void community16() throws IOException {
+        g.doAction(R.drawable.community16, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|giveMoney|100|Test");
+    }
+
+    @Test
+    public void community17() throws IOException {
+        g.doAction(R.drawable.community17, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|giveMoney|50|Test");
+    }
+
+    @Test
+    public void community18() throws IOException {
+        g.doAction(R.drawable.community18, mockClient);
+        verify(mockClient).writeToServer("GameBoardUI|giveMoney|25|Test");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -125,6 +125,9 @@ public class DrawCardFragment extends Fragment {
         if (cardId == R.drawable.community19){
             cardId = R.drawable.community11;
         }
+        if (cardId == R.drawable.community5){
+            cardId = R.drawable.community15;
+        }
         binding.ImageCard.setImageResource(cardId);
         clientViewModel.getClientData().getValue().getUser().setCardID(cardId);
     }
