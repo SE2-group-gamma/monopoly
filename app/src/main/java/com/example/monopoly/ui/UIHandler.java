@@ -604,47 +604,51 @@ public class UIHandler extends Handler {
 
             case "setWinners6":
                 ((TextView) this.frag.getActivity().findViewById(R.id.w6)).setText(data);
-                this.frag.getActivity().findViewById(R.id.w6).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.bar6).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.p6).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.w6).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.bar6).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.p6).setVisibility(View.VISIBLE);
                 break;
 
             case "setWinners5":
                 ((TextView) this.frag.getActivity().findViewById(R.id.w5)).setText(data);
-                this.frag.getActivity().findViewById(R.id.w5).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.bar5).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.p5).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.w5).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.bar5).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.p5).setVisibility(View.VISIBLE);
                 break;
 
             case "setWinners4":
                 ((TextView) this.frag.getActivity().findViewById(R.id.w4)).setText(data);
-                this.frag.getActivity().findViewById(R.id.w4).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.bar4).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.p4).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.w4).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.bar4).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.p4).setVisibility(View.VISIBLE);
                 break;
 
             case "setWinners3":
                 ((TextView) this.frag.getActivity().findViewById(R.id.w3)).setText(data);
-                this.frag.getActivity().findViewById(R.id.w3).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.bar3).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.p3).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.w3).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.bar3).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.p3).setVisibility(View.VISIBLE);
                 break;
 
             case "setWinners2":
+                Log.d("revCount", "heyUser" + data);
                 ((TextView) this.frag.getActivity().findViewById(R.id.w2)).setText(data);
-                this.frag.getActivity().findViewById(R.id.w2).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.bar2).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.p2).setEnabled(true);
+                this.frag.getActivity().findViewById(R.id.w2).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.bar2).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.p2).setVisibility(View.VISIBLE);
                 break;
 
             case "setWinners1":
                 ((TextView) this.frag.getActivity().findViewById(R.id.w1)).setText(data);
-                this.frag.getActivity().findViewById(R.id.w1).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.bar1).setEnabled(true);
-                this.frag.getActivity().findViewById(R.id.p1).setEnabled(true);
+                ((TextView) this.frag.getActivity().findViewById(R.id.congratulationsText)).setText("Congratulations, "+data+", on your formidable victory!");
+                this.frag.getActivity().findViewById(R.id.w1).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.bar1).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.p1).setVisibility(View.VISIBLE);
+                this.frag.getActivity().findViewById(R.id.congratulationsText).setVisibility(View.VISIBLE);
                 break;
 
             case "endFrag":
+                Log.d("revCount", "heyEnd");
                 NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_EndGameFragment);
                 break;
             case "updateHouse":
