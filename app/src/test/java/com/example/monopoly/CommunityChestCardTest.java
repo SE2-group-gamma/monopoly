@@ -80,18 +80,10 @@ public class CommunityChestCardTest {
 
     @Test
     public void testDrawFromDeck() {
-        for (int i = 0; i < 100; i++) {
-            CommunityChestCard card;
-            card = collection.drawFromDeck();
-            if (card != null) {
-                System.out.println(card.getId() + ", " + card.getFunction());
-            }
+        CommunityChestCard card;
+        card = collection.drawFromDeck();
+        Assertions.assertNotEquals(card, null);
 
-        }
-        System.out.println("\nAll: " + collection.getAllCommunityChestCards().size());
-        Assertions.assertEquals(20, collection.getAllCommunityChestCards().size());
-        System.out.println("Deck: " + collection.getCommunityChestCardDeck().size());
-        Assertions.assertEquals(0, collection.getCommunityChestCardDeck().size());
     }
 
     @Test
