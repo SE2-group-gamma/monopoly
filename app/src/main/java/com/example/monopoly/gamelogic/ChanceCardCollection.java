@@ -187,7 +187,7 @@ public class ChanceCardCollection {
           //  return -1;
         //}
         int random = r.nextInt(chanceCardDeck.size());
-        random --;
+        //random --;
        // if (random <= 0){
          //   return 0;
         //}
