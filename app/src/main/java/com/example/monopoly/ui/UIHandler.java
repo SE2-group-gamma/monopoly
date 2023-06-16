@@ -427,7 +427,7 @@ public class UIHandler extends Handler {
                         if (playerObjects.get(playerNumber).equals(clientObj.getUser().getUsername())) {
                             Log.d("MoneyPlayer", "client = " + client);
                             try {
-                                clientObj.writeToServer("GameBoardUI|checkRent|"+currentPosition[playerNumber]+"|" + clientObj.getUser().getUsername());
+                                clientObj.writeToServer("GameBoardUI|checkRent|"+currentPosition[playerNumber]+":"+fieldsToMove+"|" + clientObj.getUser().getUsername());
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }

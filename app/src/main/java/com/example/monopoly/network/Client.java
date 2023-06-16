@@ -431,9 +431,11 @@ public class Client extends Thread {
             }
             if (responseSplit[1].equals("checkRent")) {
                 //Log.d("checkRent", "player " + responseSplit[3]);
-                Log.d("checkRent", "Expected field " + responseSplit[2]);
-                int propertyId = Integer.parseInt(responseSplit[2]);
+                String[] splitter = responseSplit[2].split(":");
+                Log.d("checkRent", "Expected field " + splitter[0]);
+                int propertyId = Integer.parseInt(splitter[0]);
                 int playerId = game.getPlayerIDByName(responseSplit[3]);
+                int fieldsToMove = Integer.parseInt(splitter[1]);
 
                 Player player = game.getPlayers().get(playerId);
                 String fieldName;
@@ -473,9 +475,28 @@ public class Client extends Thread {
                 Log.d("checkRent", "Player position " + player.getPosition());
 
                 if(propertyStorage.hasField(fieldName)){
-                    int rent = propertyStorage.getRentOnPropertyField(fieldName,player);
+                    int rent = 0;
+                    if((Objects.equals(fieldName, "water_works") || Objects.equals(fieldName, "kelag")) && propertyStorage.getOwner("water_works")!=null && propertyStorage.getOwner("water_works").equals(propertyStorage.getOwner("kelag"))){
+                        rent = fieldsToMove*10;
+                    }
+                    else if(Objects.equals(fieldName, "water_works")){
+                        if(propertyStorage.getOwner("water_works")!=null){
+                            rent = fieldsToMove*4;
+                        } else{
+                            rent = 0;
+                        }
+                    } else if (Objects.equals(fieldName, "kelag")) {
+                        if(propertyStorage.getOwner("kelag")!=null){
+                            rent = fieldsToMove*4;
+                        } else{
+                            rent = 0;
+                        }
+                    } else {
+                        rent = propertyStorage.getRentOnPropertyField(fieldName,player);
+                    }
+
                     //Log.d("checkRent", "fieldName " + fieldName);
-                    //Log.d("checkRent", "rent " + rent);
+                    Log.d("checkRent1", "rent " + rent);
 
                     if(rent!=0){
                         double capital = player.getCapital();
