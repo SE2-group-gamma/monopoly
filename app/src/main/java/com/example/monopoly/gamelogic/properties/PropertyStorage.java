@@ -51,6 +51,8 @@ public class PropertyStorage {
                 default:
                     return 0;
             }
+        } else if(property instanceof UtilityField){
+            return 150;
         }
         throw new IllegalFieldException("Field is not a colored property or train station");
     }

@@ -173,7 +173,6 @@ public class GameBoardUI extends Fragment {
         binding.showPropertiesButton.setOnClickListener(view1 -> {
             NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_ProperyCardFragment);
         });
-        //leaveGame();
 
         try{
             Log.d("gameboardBuy", Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()));
@@ -244,12 +243,12 @@ public class GameBoardUI extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-
-        //closeServerConnection();
+        /*
         closeClientConnection();
         if(HostGame.getMonopolyServer()!=null){
             monopoly.closeConnectionsAndShutdown();
         }
-        nsdClient.stopDiscovery();
+        nsdClient.stopDiscovery();*/
     }
+
 }

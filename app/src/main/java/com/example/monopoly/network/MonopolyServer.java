@@ -104,6 +104,7 @@ public class MonopolyServer extends Thread{
         //Log.d("",""+this.maxNumberOfClients);
         while(isListening() && this.clients.size() < maxNumberOfClients){
             ClientHandler clientHandler = null;
+
             try {
                 // serverSocket.accept() waits for Clients to connect
                 Socket socket = serverSocket.accept();
@@ -161,19 +162,12 @@ public class MonopolyServer extends Thread{
             //clientHandler.getSocket().close();
             //clientHandler.server.broadCast("Server down");
             this.broadCast("GameBoardUI|endFrag");
-            stopListening();
             clients.clear();
             keyedHandlers.clear();
-            //serverSocket.close();
+            stopListening();
             Log.i("MonopolyServer", "Server shutdown complete");
         } catch (IOException e) {
             Log.e("MonopolyServer", "Error while closing connections and shutting down server", e);
         }
     }
-
-    public HashMap<Integer, ClientHandler> getKeyedHandlers() {
-        return keyedHandlers;
-    }
-
-
 }

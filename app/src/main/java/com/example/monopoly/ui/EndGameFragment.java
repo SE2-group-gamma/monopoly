@@ -35,21 +35,6 @@ public class EndGameFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        if (monopolyServer != null) {
-            monopolyServer.closeConnectionsAndShutdown();
-            monopolyServer.stop();
-        }
         return inflater.inflate(R.layout.fragment_end_game, container, false);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        if(HostGame.getMonopolyServer()!=null){
-            monopolyServer.closeConnectionsAndShutdown();
-        }
-
     }
 }
