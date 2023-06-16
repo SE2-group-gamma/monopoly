@@ -242,7 +242,7 @@ public class Client extends Thread {
                     turnProcess();
                 }
                 if (gameStart == true&&isHost) {
-                    setRanks(HostGame.getMonopolyServer().getClients().size());
+                    setRanks(HostGame.getPlayerCount());
                     //Log.d("GGLOLWP", "maxplayersize"+HostGame.getMonopolyServer().getClients().size());
                 }
             }
