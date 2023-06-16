@@ -60,4 +60,12 @@ public class Board {
     public static String getFieldName(int id){
             return fieldNames.get(id);
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public ArrayList<Field> getFields() {
+        return fields;
+    }
 }

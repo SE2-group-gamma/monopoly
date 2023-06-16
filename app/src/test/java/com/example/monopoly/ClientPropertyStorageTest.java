@@ -13,6 +13,7 @@ import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.gamelogic.properties.Field;
 import com.example.monopoly.gamelogic.properties.IllegalFieldException;
 import com.example.monopoly.gamelogic.properties.PropertyField;
+import com.example.monopoly.gamelogic.properties.PropertyFieldColors;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -115,6 +116,11 @@ public class ClientPropertyStorageTest {
         assertEquals("xxxlutz",sortedList.get(0).getName());
         assertEquals("wappensaal",sortedList.get(1).getName());
         assertEquals("billa",sortedList.get(2).getName());
+    }
+
+    @Test
+    public void testHasAllColours() {
+        assertEquals(false, clientPropertyStorage.hasAllColours(player, PropertyFieldColors.ORANGE));
     }
 
 }
