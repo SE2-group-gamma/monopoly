@@ -16,6 +16,7 @@ public class Field {
     private int mortgageValue;
     private int mortgageCancellationValue;
     private Image img;
+    private int imageId;
 
     public Field(int id, String name, String type, Color col, int cost, int houses, Player owner, int houseCost, int mortgageValue, int mortgageCancellationValue, Image img) {
         this.id = id;
@@ -81,6 +82,14 @@ public class Field {
 
     public Player getOwner() {
         return owner;
+    }
+
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
     }
 }
 

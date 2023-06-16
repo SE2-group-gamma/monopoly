@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import com.example.monopoly.gamelogic.Player;
@@ -107,6 +109,28 @@ class PlayerTest {
         player.setPlayerMapPosition(expectedPosition2);
         PlayerMapPosition actualPosition2 = player.getPlayerMapPosition();
         assertEquals(expectedPosition2, actualPosition2);
+    }
+
+    @Test
+    public void testIsBrokeAndSetBroke() {
+        assertFalse(player.isBroke());
+
+        player.setBroke(true);
+        assertTrue(player.isBroke());
+
+        player.setBroke(false);
+        assertFalse(player.isBroke());
+    }
+
+    @Test
+    public void testGetTotalAssetValueAndSetTotalAssetValue() {
+        assertEquals(0, player.getTotalAssetValue());
+
+        player.setTotalAssetValue(500);
+        assertEquals(500, player.getTotalAssetValue());
+
+        player.setTotalAssetValue(1000);
+        assertEquals(1000, player.getTotalAssetValue());
     }
 
 

@@ -2,6 +2,7 @@ package com.example.monopoly.ui;
 
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,10 +22,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.monopoly.R;
+import com.example.monopoly.gamelogic.Board;
 import com.example.monopoly.gamelogic.Player;
 import com.example.monopoly.gamelogic.PlayerMapPosition;
 import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
+import com.example.monopoly.gamelogic.properties.Field;
+import com.example.monopoly.gamelogic.properties.IllegalFieldException;
 import com.example.monopoly.network.Client;
+import com.example.monopoly.ui.viewmodels.CardViewModel;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
 import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
@@ -42,8 +47,12 @@ public class UIHandler extends Handler {
     private Client clientObj;
     private ClientViewModel clientViewModel;
     private GameBoardUIViewModel gameBoardUIViewModel;
+    private CardViewModel cardViewModel;
 
     private UIHandlerViewModel uiHandlerViewModel;
+
+    private boolean hostJoinCounter = true;
+
 
 
     public int player1 = 1;
@@ -75,6 +84,7 @@ public class UIHandler extends Handler {
         this.frag = app;
         playerObjects = new HashMap<>();
         currentPosition = new int[7];
+        cardViewModel = new ViewModelProvider(frag.requireActivity()).get(CardViewModel.class);
         uiHandlerViewModel = new ViewModelProvider(frag.requireActivity()).get(UIHandlerViewModel.class);
         if (uiHandlerViewModel.getCurrentMoney().getValue() == null) {
             currentMoney = 1500;
@@ -128,45 +138,58 @@ public class UIHandler extends Handler {
             case "changeText":
                 ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
                 break;
-            case "userJoined":
-                switch (counter) {
-                    case 2:
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1Name)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
-                        playerObjects.put(player2, data);
-                        break;
-                    case 3:
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2Name)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setText(data);
-                        playerObjects.put(player3, data);
-                        break;
-                    case 4:
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3Name)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setText(data);
-                        playerObjects.put(player4, data);
-                        break;
-                    case 5:
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4Name)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setText(data);
-                        playerObjects.put(player5, data);
-                        break;
-                    case 6:
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5Name)).setVisibility(View.VISIBLE);
-                        ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setText(data);
-                        playerObjects.put(player6, data);
-                        break;
+
+            case "userJoined1":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1Name)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser1)).setText(data);
+                playerObjects.put(player2, data);
+                break;
+            case "userJoined2":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2Name)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser2)).setText(data);
+                playerObjects.put(player3, data);
+                break;
+            case "userJoined3":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3Name)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser3)).setText(data);
+                playerObjects.put(player4, data);
+                break;
+            case "userJoined4":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4Name)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser4)).setText(data);
+                playerObjects.put(player5, data);
+                break;
+            case "userJoined5":
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5Name)).setVisibility(View.VISIBLE);
+                ((TextView) this.frag.getActivity().findViewById(R.id.textViewUser5)).setText(data);
+                playerObjects.put(player6, data);
+                break;
+            case "cardDrawn":
+                int cardID = Integer.parseInt(data);
+                String cardFunction = "";
+                for (int i = 0; i < cardViewModel.getChanceCards().getValue().getAllChanceCards().size(); i++) {
+                    if (cardID == cardViewModel.getChanceCards().getValue().getChanceCardDeck().get(i).getImageId()) {
+                        cardFunction = cardViewModel.getChanceCards().getValue().getChanceCardDeck().get(i).getFunction();
+                    }
+                    if (cardID == cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().get(i).getId()) {
+                        cardFunction = cardViewModel.getCommunityCards().getValue().getCommunityChestCardDeck().get(i).getFunction();
+                    }
                 }
-                counter++;
+                Toast toast = Toast.makeText(frag.requireActivity(), cardFunction, Toast.LENGTH_LONG);
+                toast.show();
                 break;
             case "hostJoined":
                 if (playerObjects.get(player1) == null) {
                     playerObjects.put(player1, data);
-                    counter++;
+                    if(hostJoinCounter) {
+                        counter++;
+                        hostJoinCounter=false;
+                    }
                 }
                 if (!HostGame.lobbyname.equals(" ")) {
                     ((TextView) this.frag.getActivity().findViewById(R.id.textViewLobby)).setText("Lobby: " + HostGame.lobbyname);
@@ -174,7 +197,7 @@ public class UIHandler extends Handler {
                 ((TextView) this.frag.getActivity().findViewById(R.id.textViewHost)).setText(data);
                 break;
             case "keyFromLobby":
-                if (data.equals("1")) {
+                if (data.equals("1")&&client.equals(this.clientObj.getUser().getUsername())) {
                     NavHostFragment.findNavController(frag).navigate(R.id.action_JoinGame_to_Lobby);
                 } else {
                     Log.d("", "gib toast");
@@ -203,6 +226,9 @@ public class UIHandler extends Handler {
                 Log.d("------------", "initializePlayerBottomRight");
 
                 Log.d("hostPosition", "Initialize Host");
+
+                Log.d("playerCount","I am "+client);
+                Log.d("playerCount","I am with obj "+clientObj.getUser().getUsername());
                 if (uiHandlerViewModel.getCheckFirst().getValue()) {
 
                     gameBoardUIViewModel.setUncoverEnabled(this.frag.getActivity().findViewById(R.id.uncover).isEnabled());     // save uncover status on first turn
@@ -269,20 +295,79 @@ public class UIHandler extends Handler {
                 }
 
                 break;
+
             case "displayKey":
                 if (HostGame.key != 0) {
                     ((TextView) this.frag.getActivity().findViewById(R.id.textViewKey)).setText("Game-Key: " + HostGame.key);
                 }
                 break;
+            case "setPlayerCount":
+                int playerCount = Integer.parseInt(data);
+                Log.d("playerCount",""+playerCount);
+
+                if(layerDrawable==null)
+                    return;
+
+                Drawable player6Drawable = layerDrawable.findDrawableByLayerId(R.id.player6);
+                Drawable player5Drawable = layerDrawable.findDrawableByLayerId(R.id.player5);
+                Drawable player4Drawable = layerDrawable.findDrawableByLayerId(R.id.player4);
+                Drawable player3Drawable = layerDrawable.findDrawableByLayerId(R.id.player3);
+                switch (playerCount){
+                    case 5:
+                        player6Drawable.setAlpha(0);
+                        break;
+                    case 4:
+                        player6Drawable.setAlpha(0);
+                        player5Drawable.setAlpha(0);
+                        break;
+                    case 3:
+                        player6Drawable.setAlpha(0);
+                        player5Drawable.setAlpha(0);
+                        player4Drawable.setAlpha(0);
+                        break;
+                    case 2:
+                        player6Drawable.setAlpha(0);
+                        player5Drawable.setAlpha(0);
+                        player4Drawable.setAlpha(0);
+                        player3Drawable.setAlpha(0);
+                        break;
+                    default:
+                        Log.d("playerCount",""+playerCount);
+                }
+                break;
             case "changeCapital":
                 if (clientObj.getUser().getUsername().equals(client)) {
-                    int money = currentMoney + Integer.parseInt(data.split(":")[0]);
+                    int payedMoney = Integer.parseInt(data.split(":")[0]);
+                    int money = currentMoney + payedMoney;
+                    Log.d("checkRent"," moneyFromPlayer "+money);
                     uiHandlerViewModel.setCurrentMoney(money);
-                    if (((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null)
+                    if (((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null) {
+                        if(payedMoney<0){
+                            payedMoney = payedMoney * (-1);
+                            Toast.makeText(this.frag.getActivity(), "You just payed " + payedMoney + "$", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(this.frag.getActivity(), "You just received " + payedMoney + "$", Toast.LENGTH_SHORT).show();
+                        }
                         ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n" + money + "$");
+                    }
                     Log.d("MoneyPlayer", "" + money);
                     Log.d("MoneyPlayer", "" + client);
                 }
+                String[] playerArray = data.split(":");
+                if(playerArray.length==2){
+                    if (clientObj.getUser().getUsername().equals(playerArray[1])) {
+                        int receivedMoney = Integer.parseInt(data.split(":")[0]);
+                        int money = currentMoney - receivedMoney;
+                        Log.d("checkRent"," moneyFromOwner "+money);
+                        uiHandlerViewModel.setCurrentMoney(money);
+                        if (((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null) {
+                            receivedMoney = receivedMoney * (-1);
+                            Toast.makeText(this.frag.getActivity(), "You just received " + receivedMoney + "$", Toast.LENGTH_SHORT).show();
+                            ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n" + money + "$");
+                        }
+                    }
+                }
+
                 break;
             case "uncoverUsed":
                 gameBoardUIViewModel.setUncoverEnabled(false);
@@ -294,9 +379,9 @@ public class UIHandler extends Handler {
                     this.frag.getActivity().findViewById(R.id.uncover).setAlpha(0.5f);
                     this.frag.getActivity().findViewById(R.id.uncover).setEnabled(false);
                     if(dataResponseSplit[0].equals("t")){
-                        Toast.makeText(this.frag.getActivity(),dataResponseSplit[1]+" successfully punished "+client+"!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this.frag.getActivity(),client+" successfully punished "+dataResponseSplit[1]+"!",Toast.LENGTH_SHORT).show();
                     }else{
-                        Toast.makeText(this.frag.getActivity(),dataResponseSplit[1]+" failed to punish "+client+"!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this.frag.getActivity(),client+" failed to punish "+dataResponseSplit[1]+"!",Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
@@ -331,7 +416,6 @@ public class UIHandler extends Handler {
                             Log.d("playerNumber: ", "" + playerNumber);
 
                             currentPosition[playerNumber] = currentPosition[playerNumber] - 40;
-                            // TODO get starting money
                             if (playerObjects.get(playerNumber).equals(clientObj.getUser().getUsername())) {
                                 Log.d("MoneyPlayer", "client = " + client);
                                 try {
@@ -342,6 +426,14 @@ public class UIHandler extends Handler {
                             }
                         }
                         Log.d("--", "" + currentPosition[playerNumber]);
+                        if (playerObjects.get(playerNumber).equals(clientObj.getUser().getUsername())) {
+                            Log.d("MoneyPlayer", "client = " + client);
+                            try {
+                                clientObj.writeToServer("GameBoardUI|checkRent|"+currentPosition[playerNumber]+":"+fieldsToMove+"|" + clientObj.getUser().getUsername());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
 
                         uiHandlerViewModel.setCurrentPosition(currentPosition);
 
@@ -502,9 +594,8 @@ public class UIHandler extends Handler {
                 break;
 
             case "exitDiceFragment":
-                NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
-                //Thread.sleep(1000);
-
+                if(this.frag.getActivity().findViewById(R.id.continueButtonDiceFragment)!=null)
+                    NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_GameBoardUI);
                 break;
 
             case "setStartTime":
@@ -569,8 +660,23 @@ public class UIHandler extends Handler {
                     ClientPropertyStorage.getInstance().addHotel(data);
                 break;
             case "updateOwner":
-                if (!clientObj.getUser().getUsername().equals(client))
+                if (!clientObj.getUser().getUsername().equals(client)) {
+
                     ClientPropertyStorage.getInstance().updateOwner(data, new Player(client, new Color(), 0, true));
+
+                    ClientPropertyStorage clientPropertyStorage = ClientPropertyStorage.getInstance();
+
+                    try {
+                        Field field = clientPropertyStorage.getProperty(Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()));
+                        try {               // check if field is buyable
+                            if (field.getOwner() != null || this.clientObj.getUser().getCapital() < field.getPrice())
+                                throw new IllegalFieldException();
+                        } catch (IllegalFieldException e) {
+                            this.frag.getActivity().findViewById(R.id.buy).setEnabled(false);
+                            this.frag.getActivity().findViewById(R.id.buy).setAlpha(0.5f);
+                        }
+                    }catch (IllegalFieldException e){}
+                }
                 else
                     Toast.makeText(this.frag.getActivity(),"You just bought "+data,Toast.LENGTH_SHORT).show();
                 break;
