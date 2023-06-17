@@ -2,9 +2,13 @@ package com.example.monopoly.network;
 
 import android.util.Log;
 
+import com.example.monopoly.ui.HostGame;
+import com.example.monopoly.ui.NSD_Client;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,13 +98,11 @@ public class MonopolyServer extends Thread{
     public void run() {
         this.isListening = true;
         int count = 0;
-
-
-
         //game = new Game();
         //Log.d("",""+this.maxNumberOfClients);
         while(isListening() && this.clients.size() < maxNumberOfClients){
             ClientHandler clientHandler = null;
+
             try {
                 // serverSocket.accept() waits for Clients to connect
                 Socket socket = serverSocket.accept();
@@ -112,6 +114,10 @@ public class MonopolyServer extends Thread{
                         + socket.getInetAddress() + ":"
                         + socket.getPort() + "\n";
                 //Log.d("SocketConn",message);
+            } catch (SocketException e) {
+                if (!serverSocket.isClosed()) {
+                    Log.e("MonopolyServer", "Error accepting socket connection", e);
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -148,5 +154,37 @@ public class MonopolyServer extends Thread{
         return localPort;
     }
 
+    public synchronized void closeConnectionsAndShutdown() {
+        try {
 
+            //clientHandler.getSocket().close();
+            //clientHandler.server.broadCast("Server down");
+            this.broadCast("GameBoardUI|endFrag");
+            clients.clear();
+            keyedHandlers.clear();
+            stopListening();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void closeClientConnection() {
+        ClientHandler clientHandler= null;
+
+        try{
+            Socket socket = new Socket();
+            clientHandler = new ClientHandler(socket);
+            clientHandler.getSocket().close();
+            //clientHandler.endConn();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        NSD_Client nsdClient = new NSD_Client();
+        nsdClient.stopDiscovery();
+
+    }
+
+    //for testing
+    public void setNSDClient(NSD_Client mockNSDClient) {
+    }
 }

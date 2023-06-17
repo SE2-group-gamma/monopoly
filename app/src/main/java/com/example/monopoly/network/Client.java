@@ -252,6 +252,15 @@ public class Client extends Thread {
         } catch (Exception e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException();
+        } finally {
+            try {
+                if (clientSocket != null) {
+                    clientSocket.close();
+                    monopolyServer.closeConnectionsAndShutdown();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -624,6 +633,7 @@ public class Client extends Thread {
                 new TimerTask() {
                     @Override
                     public void run() {
+
                         turnEnd = true;
                         Log.i("GameBoardUI","inside timer");
                         monopolyServer.broadCast("DiceFragment|exitDiceFragment|:|");
@@ -655,10 +665,6 @@ public class Client extends Thread {
 
         timer.cancel();
         turnProcess();
-    }
-
-    private boolean isButtonCheck() {
-        return buttonCheck;
     }
 
     public void setRanks(int maxPlayers) {

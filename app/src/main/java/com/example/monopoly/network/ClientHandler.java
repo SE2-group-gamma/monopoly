@@ -126,8 +126,6 @@ public class ClientHandler extends Thread{
         }
     }
 
-
-
     /*public void endConn() throws IOException {
         socket.close();
         Log.i("ClientHandler","Clienthandler gone");

@@ -43,10 +43,8 @@ public class GameBoardUI extends Fragment {
     private GameBoardUIViewModel gameBoardUIViewModel;
     private ClientPropertyStorage clientPropertyStorage;
 
-    private NSD_Client nsdClient;
-    private MonopolyServer monopoly;
-    private ClientHandler clientHandler;
-    private Socket socket;
+    private MonopolyServer monopoly = HostGame.getMonopolyServer();
+    private NSD_Client nsdClient = new NSD_Client();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,7 +66,6 @@ public class GameBoardUI extends Fragment {
                 }
                 diceViewModel.setContinuePressed(false);
             }
-
         });
     }
 
@@ -219,26 +216,21 @@ public class GameBoardUI extends Fragment {
         NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_DiceFragment);
     }
 
-
-
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
 
 
-        //nsdClient.stopDiscovery();
-        /*try {
-            monopoly.shutdownServer();
-            clientHandler.getClient().close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        monopoly.closeClientConnection();
+        if(HostGame.getMonopolyServer() != null){
+            monopoly.closeConnectionsAndShutdown();
         }
-        nsdServ.stopNSD();
+        nsdClient.stopDiscovery();
 
-        Log.i("GameBoardUI", "Conections done");
-        monopoly=null;*/
     }
 }

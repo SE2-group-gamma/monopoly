@@ -29,6 +29,7 @@ import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.gamelogic.properties.Field;
 import com.example.monopoly.gamelogic.properties.IllegalFieldException;
 import com.example.monopoly.network.Client;
+import com.example.monopoly.network.MonopolyServer;
 import com.example.monopoly.ui.viewmodels.CardViewModel;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
