@@ -175,7 +175,6 @@ public class MonopolyServer extends Thread{
             clientHandler = new ClientHandler(socket);
             clientHandler.getSocket().close();
             //clientHandler.endConn();
-            Log.i("Monopoly","Client inside");
         }catch (IOException e){
             e.printStackTrace();
         }
