@@ -44,6 +44,7 @@ public class GameBoardUI extends Fragment {
     private ClientPropertyStorage clientPropertyStorage;
 
     private MonopolyServer monopoly = HostGame.getMonopolyServer();
+    private NSD_Client nsdClient = new NSD_Client();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -219,12 +220,17 @@ public class GameBoardUI extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        /*
-        closeClientConnection();
-        if(HostGame.getMonopolyServer()!=null){
+
+
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        monopoly.closeClientConnection();
+        if(HostGame.getMonopolyServer() != null){
             monopoly.closeConnectionsAndShutdown();
         }
-        nsdClient.stopDiscovery();*/
-    }
+        nsdClient.stopDiscovery();
 
+    }
 }
