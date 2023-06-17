@@ -3,6 +3,7 @@ package com.example.monopoly.network;
 import android.util.Log;
 
 import com.example.monopoly.ui.HostGame;
+import com.example.monopoly.ui.NSD_Client;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -169,5 +170,24 @@ public class MonopolyServer extends Thread{
         } catch (IOException e) {
             Log.e("MonopolyServer", "Error while closing connections and shutting down server", e);
         }
+    }
+    public void closeClientConnection() {
+        ClientHandler clientHandler = null;
+
+        try{
+            Socket socket = new Socket();
+            clientHandler = new ClientHandler(socket);
+            clientHandler.getSocket().close();
+            //clientHandler.endConn();
+            Log.i("ClientActivity", "Client closed 1");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        NSD_Client nsdClient = new NSD_Client();
+        nsdClient.stopDiscovery();
+
+
+        Log.i("ClientActivity","Client closed 3");
     }
 }

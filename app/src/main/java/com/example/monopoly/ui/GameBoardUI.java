@@ -43,10 +43,7 @@ public class GameBoardUI extends Fragment {
     private GameBoardUIViewModel gameBoardUIViewModel;
     private ClientPropertyStorage clientPropertyStorage;
 
-    private NSD_Client nsdClient;
     private MonopolyServer monopoly = HostGame.getMonopolyServer();
-    private ClientHandler clientHandler;
-    private Socket socket;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -217,27 +214,6 @@ public class GameBoardUI extends Fragment {
     private void showDiceFragment(){
         NavHostFragment.findNavController(this).navigate(R.id.action_GameBoardUI_to_DiceFragment);
     }
-
-
-    private void closeClientConnection() {
-
-            try{
-                Socket socket = new Socket();
-                clientHandler = new ClientHandler(socket);
-                clientHandler.getSocket().close();
-                //clientHandler.endConn();
-                Log.i("ClientActivity", "Client closed 1");
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-
-        nsdClient = new NSD_Client();
-        nsdClient.stopDiscovery();
-
-
-        Log.i("ClientActivity","Client closed 3");
-    }
-
 
     @Override
     public void onDestroyView() {
