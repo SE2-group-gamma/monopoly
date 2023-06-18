@@ -82,16 +82,7 @@ public class GameBoardUI extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         this.clientPropertyStorage = ClientPropertyStorage.getInstance();
-
         super.onViewCreated(view, savedInstanceState);
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-
-            }
-        });
-        UIHandlerViewModel uiHandlerViewModel = (new ViewModelProvider(requireActivity())).get(UIHandlerViewModel.class);
-
 
         binding.uncover.setOnClickListener(view1 -> {
             try {
