@@ -2,6 +2,8 @@ package com.example.monopoly.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +17,8 @@ import com.example.monopoly.databinding.FragmentDrawcardBinding;
 import com.example.monopoly.gamelogic.Board;
 import com.example.monopoly.gamelogic.ChanceCardCollection;
 import com.example.monopoly.gamelogic.CommunityChestCardCollection;
-import com.example.monopoly.gamelogic.Game;
 import com.example.monopoly.ui.viewmodels.CardViewModel;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
-import com.example.monopoly.ui.viewmodels.DiceViewModel;
 
 import java.io.IOException;
 
@@ -27,10 +27,9 @@ public class DrawCardFragment extends Fragment {
     private ChanceCardCollection chanceCards;
     private CommunityChestCardCollection communityCards;
     private FragmentDrawcardBinding binding;
-    private DiceViewModel diceViewModel;
     private CardViewModel cardViewModel;
-    private Game game = Game.getInstance();
     private ClientViewModel clientViewModel;
+    private boolean buttonClicked = false;
 
 
     public static Context context;
@@ -55,11 +54,32 @@ public class DrawCardFragment extends Fragment {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        if (buttonClicked == false) {
+            Handler handler = new Handler(Looper.getMainLooper());
+            this.cardViewModel.setChanceCards(this.chanceCards);
+            this.cardViewModel.setCommunityCards(this.communityCards);
+
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    NavHostFragment.findNavController(DrawCardFragment.this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
+                }
+            };
+            handler.postDelayed(runnable, 5000);
+            try {
+                clientViewModel.getClientData().getValue().doAction();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         binding.buttonContinueDrawCard.setOnClickListener(view -> {
+            buttonClicked = true;
             this.cardViewModel.setChanceCards(this.chanceCards);
             this.cardViewModel.setCommunityCards(this.communityCards);
             NavHostFragment.findNavController(this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);

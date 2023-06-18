@@ -1,9 +1,7 @@
 package com.example.monopoly.gamelogic;
 
-import com.example.monopoly.R;
 import com.example.monopoly.network.Client;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 

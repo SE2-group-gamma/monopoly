@@ -3,7 +3,6 @@ package com.example.monopoly.ui;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import com.example.monopoly.gamelogic.properties.ClientPropertyStorage;
 import com.example.monopoly.gamelogic.properties.Field;
 import com.example.monopoly.gamelogic.properties.IllegalFieldException;
 import com.example.monopoly.network.Client;
-import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.network.MonopolyServer;
 import com.example.monopoly.ui.viewmodels.ClientViewModel;
 import com.example.monopoly.ui.viewmodels.DiceViewModel;
@@ -30,7 +28,6 @@ import com.example.monopoly.ui.viewmodels.GameBoardUIViewModel;
 import com.example.monopoly.ui.viewmodels.UIHandlerViewModel;
 
 import java.io.IOException;
-import java.net.Socket;
 
 public class GameBoardUI extends Fragment {
 
@@ -159,7 +156,7 @@ public class GameBoardUI extends Fragment {
                         NavHostFragment.findNavController(GameBoardUI.this).navigate(R.id.action_GameBoardUI_to_DrawCardFragment);
                     }
                 };
-                handler.postDelayed(runnable, 2000);
+                handler.postDelayed(runnable, 500);
                 clientViewModel.getClientData().getValue().getUser().setDrewCard(true);
             }
         }
