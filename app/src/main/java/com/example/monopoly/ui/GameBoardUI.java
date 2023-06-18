@@ -54,13 +54,10 @@ public class GameBoardUI extends Fragment {
         clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
         diceViewModel.getDicesData().observe(this, dices -> {
             if(diceViewModel.getContinuePressedData().getValue()) {     // if fragment is exited upon clicking the continue button (not via command)
-                Log.i("Dices", dices.toString());
                 String cheated = dices.isLastRollFlawed() == true ? "t" : "f";
                 String doublets = (dices.getDice1() == dices.getDice2()) == true ? "t" : "f";       // 3 doubles in a row mean jail!!!
-                //String passedStartField = dices.isLastRollFlawed()==true?"t":"f";
                 try {
                     client.writeToServer("GameBoardUI|move|" + dices.getSum() + ":" + cheated + ":" + doublets + "|" + this.client.getUser().getUsername());
-                    Log.d("gameboardBuy", "After dice: " + Board.getFieldName(this.client.getUser().getPosition()));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -75,13 +72,8 @@ public class GameBoardUI extends Fragment {
             Bundle savedInstanceState
     ) {
 
-
-        Log.d("MSG", "OnCreateView");
-
         this.client = clientViewModel.getClientData().getValue();       // set client
 
-
-        //if(this.client.isHost()) {
         try {
             this.client.writeToServer("GameBoardUI|initializePlayerBottomRight| : |" + this.client.getUser().getUsername());      // needs to be sent only once
         } catch (IOException e) {
@@ -92,34 +84,7 @@ public class GameBoardUI extends Fragment {
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-
-        Log.d("MSG", "OnViewCreated");
         this.clientPropertyStorage = ClientPropertyStorage.getInstance();
-
-        //}
-
-        // DisplayMetrics might still be useful, so keep them for now
-/*
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        ((Activity) getContext()).getWindowManager()
-                .getDefaultDisplay()
-                .getRealMetrics(displayMetrics);
-        double height = displayMetrics.heightPixels;
-        double width = displayMetrics.widthPixels;
-
-        // Tried relative calculation with dp
-        //double heightRatio = (double) height / 411.4285583496094;
-        //double widthRatio = (double) width / 891.4285888671875;
-
-        //double heightRatio = (double) height / 1440;
-        //double widthRatio = (double) width / 3120;
-        //heightRatio = heightRatio * (3.5/displayMetrics.density);
-        //widthRatio = widthRatio * (3.5/displayMetrics.density);
-
-        double heightRatio = layerDrawable.getMinimumHeight()/(double)21000;
-        double widthRatio = layerDrawable.getMinimumWidth()/(double)21000;
-*/
-
 
         super.onViewCreated(view, savedInstanceState);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -130,10 +95,6 @@ public class GameBoardUI extends Fragment {
         });
         UIHandlerViewModel uiHandlerViewModel = (new ViewModelProvider(requireActivity())).get(UIHandlerViewModel.class);
 
-        //binding.currentMoney.setText("Current Money \n"+uiHandlerViewModel.getCurrentMoney().getValue()+"$"); // dont redraw
-
-        /*binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(GameBoardUI.this)
-                .navigate(R.id.action_GameBoard_to_FirstFragment));*/
 
         binding.uncover.setOnClickListener(view1 -> {
             try {
@@ -149,12 +110,6 @@ public class GameBoardUI extends Fragment {
         });
 
         binding.endTurn.setOnClickListener(view1 -> {
-            /*this.client = clientViewModel.getClientData().getValue();
-            this.client.endTurnPressed();*/
-
-            Log.d("endTurn",clientViewModel.getClientData().getValue().getUser().getUsername());
-            //clientViewModel.getClientData().getValue().endTurnPressed();
-            //clientViewModel.getClientData().getValue().endTurnPressedBroadCast();
             try {
                 this.client.writeToServer("GameBoardUI|turnEnd|:|");
             } catch (IOException e) {
@@ -173,7 +128,6 @@ public class GameBoardUI extends Fragment {
         });
 
         try{
-            Log.d("gameboardBuy", Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()));
             Field field = clientPropertyStorage.getProperty(Board.getFieldName(clientViewModel.getClientData().getValue().getUser().getPosition()));
             if(field.getOwner() != null || this.client.getUser().getCapital() < field.getPrice()) throw new IllegalFieldException();
             binding.buy.setAlpha(1f);

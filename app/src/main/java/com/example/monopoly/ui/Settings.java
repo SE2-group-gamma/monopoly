@@ -56,27 +56,12 @@ public class Settings extends Fragment {
 
         binding.backButton.setOnClickListener(view1 -> NavHostFragment.findNavController(Settings.this)
                 .navigate(R.id.action_Settings_to_FirstFragment));
-        /*binding.switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sound=isChecked;
-                if(isChecked){
-                    playSong();
-                }else{
-                    pauseSong();
-                }
-            }
-        });*/
         binding.saveButton.setOnClickListener(view12 -> {
-            // TODO: Save Settings here
             SharedPreferences sharedSets = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
             SharedPreferences.Editor edit = sharedSets.edit();
             edit.putBoolean("sound",binding.switch1.isChecked());
             edit.putBoolean("placeholder",binding.switch2.isChecked());
             edit.apply();
-            /*
-            sound = binding.switch1.isChecked();
-            boolean placeholder = binding.switch2.isChecked();*/
 
             NavHostFragment.findNavController(Settings.this)
                     .navigate(R.id.action_Settings_to_FirstFragment);

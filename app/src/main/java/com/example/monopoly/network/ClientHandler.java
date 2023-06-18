@@ -48,7 +48,6 @@ public class ClientHandler extends Thread{
         this.hostname = hostname;
         this.socket=socket;
         this.client=client;
-        //this.clientName=client.getName();
         this.msgBuffer=new ArrayList<>();
         this.playerActive=true;
     }
@@ -95,10 +94,7 @@ public class ClientHandler extends Thread{
                     String[] response = client.handleMessage(strings);
                     if(response!=null){
                         for (String str: response) {
-
                             server.broadCast(str.replaceAll("REPLACER",hostname));
-                            //server.broadCastExceptSelf(str.replaceAll("REPLACER",hostname),this);
-
                         }
                     }
                 }
@@ -125,12 +121,4 @@ public class ClientHandler extends Thread{
             }
         }
     }
-
-    /*public void endConn() throws IOException {
-        socket.close();
-        Log.i("ClientHandler","Clienthandler gone");
-
-    }*/
-
-
 }

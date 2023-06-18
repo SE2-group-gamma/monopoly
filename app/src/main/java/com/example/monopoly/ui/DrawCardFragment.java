@@ -64,7 +64,6 @@ public class DrawCardFragment extends Fragment {
             this.cardViewModel.setCommunityCards(this.communityCards);
             NavHostFragment.findNavController(this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
             try {
-                //game.doAction(clientViewModel.getClientData().getValue().getUser().getCardID(),clientViewModel.getClientData().getValue());
                 clientViewModel.getClientData().getValue().doAction();
                 } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -76,19 +75,6 @@ public class DrawCardFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        /*Handler handler = new Handler(Looper.getMainLooper());
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    clientViewModel.getClientData().getValue().writeToServer("GameBoardUI|cardDrawn|" + clientViewModel.getClientData().getValue().getUser().getCardID()
-                            + "|" + clientViewModel.getClientData().getValue().getUser().getUsername());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        };
-        handler.postDelayed(runnable, 2000);*/
     }
 
 

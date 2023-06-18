@@ -56,7 +56,6 @@ public class EndGameFragment extends Fragment {
                 clientHandler=new ClientHandler(socket);
                 Navigation.findNavController(v).navigate(R.id.FirstFragment);
                 monopolyServer.closeClientConnection();
-                Log.i("ServerAct","CLOSED!!");
             }
         });
 

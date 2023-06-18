@@ -20,13 +20,9 @@ public class MonopolyServer extends Thread{
     private int localPort;
     private int maxNumberOfClients;
     private boolean isListening;
-
-    //private Game game;
     private String hostname;
     private Client client;
     private int counter=1;
-
-
 
 
     private HashMap<Integer, ClientHandler> keyedHandlers;
@@ -47,7 +43,6 @@ public class MonopolyServer extends Thread{
 
     public void setClient(Client client){
         synchronized (this.clients){
-            //Log.i("",client.isHost()+"");
             this.client=client;
 
             for (ClientHandler handler:this.clients) {
@@ -98,8 +93,6 @@ public class MonopolyServer extends Thread{
     public void run() {
         this.isListening = true;
         int count = 0;
-        //game = new Game();
-        //Log.d("",""+this.maxNumberOfClients);
         while(isListening() && this.clients.size() < maxNumberOfClients){
             ClientHandler clientHandler = null;
 
@@ -113,7 +106,6 @@ public class MonopolyServer extends Thread{
                 String message = "#" + count + " from "
                         + socket.getInetAddress() + ":"
                         + socket.getPort() + "\n";
-                //Log.d("SocketConn",message);
             } catch (SocketException e) {
                 if (!serverSocket.isClosed()) {
                     Log.e("MonopolyServer", "Error accepting socket connection", e);
@@ -124,7 +116,6 @@ public class MonopolyServer extends Thread{
             clientHandler.start();
             synchronized (this.clients){
                 this.clients.add(clientHandler);
-                //Log.d("clientcheck1324", "add Client Handler"+ clientHandler.getClientClient().getName());
                 keyedHandlers.put(counter++,clientHandler);
             }
 
@@ -156,9 +147,6 @@ public class MonopolyServer extends Thread{
 
     public synchronized void closeConnectionsAndShutdown() {
         try {
-
-            //clientHandler.getSocket().close();
-            //clientHandler.server.broadCast("Server down");
             this.broadCast("GameBoardUI|endFrag");
             clients.clear();
             keyedHandlers.clear();
@@ -174,7 +162,6 @@ public class MonopolyServer extends Thread{
             Socket socket = new Socket();
             clientHandler = new ClientHandler(socket);
             clientHandler.getSocket().close();
-            //clientHandler.endConn();
         }catch (IOException e){
             e.printStackTrace();
         }
