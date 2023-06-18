@@ -118,7 +118,6 @@ public class MonopolyServerTest {
         Socket mockSocket = mock(Socket.class);
         doNothing().when(mockSocket).close();
         NSD_Client mockNSDClient = mock(NSD_Client.class);
-        ms.setNSDClient(mockNSDClient);
 
         ms.closeConnectionsAndShutdown();
 
@@ -133,7 +132,6 @@ public class MonopolyServerTest {
         MonopolyServer ms = initServer(1);
         ClientHandler clientHandler = new ClientHandler(mockSocket);
         NSD_Client mockNSDClient = mock(NSD_Client.class);
-        ms.setNSDClient(mockNSDClient);
 
         doNothing().when(mockSocket).close();
         doNothing().when(mockNSDClient).stopDiscovery();
