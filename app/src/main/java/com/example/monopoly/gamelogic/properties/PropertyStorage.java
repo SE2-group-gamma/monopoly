@@ -5,6 +5,8 @@ import com.example.monopoly.gamelogic.Player;
 import java.util.HashMap;
 
 public class PropertyStorage {
+    private static final String INVALID_FIELD_NAME = "Invalid field name: ";
+    private static final String FIELD_IS_NOT_A_PROPERTY_FIELD = "Field is not a PropertyField";
     private HashMap<String, Field> properties;
     private static PropertyStorage instance;
 
@@ -18,7 +20,7 @@ public class PropertyStorage {
     }
 
     public int getRentOnPropertyField(String propertyId, Player player) {
-        if(!hasField(propertyId)) throw new IllegalFieldException("Invalid field name: " + propertyId);
+        if(!hasField(propertyId)) throw new IllegalFieldException(INVALID_FIELD_NAME + propertyId);
         Field property = properties.get(propertyId);
         if(property.getOwner() == null || property.getOwner().equals(player)) return 0;
         if(property instanceof PropertyField){
@@ -58,14 +60,14 @@ public class PropertyStorage {
     }
 
     public void buyProperty(String propertyId, Player owner) {
-        if(!hasField(propertyId)) throw new IllegalFieldException("Invalid field name: " + propertyId);
+        if(!hasField(propertyId)) throw new IllegalFieldException(INVALID_FIELD_NAME + propertyId);
         this.properties.get(propertyId).setOwner(owner);
     }
 
     public int addHouse(String propertyId, Player player){
         if(!hasField(propertyId)) throw new IllegalFieldException();
         Field field = this.properties.get(propertyId);
-        if(!(field instanceof PropertyField)) throw new IllegalFieldException("Field is not a PropertyField");
+        if(!(field instanceof PropertyField)) throw new IllegalFieldException(FIELD_IS_NOT_A_PROPERTY_FIELD);
         if(!hasAllColours(field.getOwner(), ((PropertyField) field).getColor())) throw new IllegalStateException("Owner does not have all colors");
         ((PropertyField) field).addHouse();
         player.setCapital(player.getCapital()-((PropertyField) field).getRent().getPriceHouseOrHotel());
@@ -73,9 +75,9 @@ public class PropertyStorage {
     }
 
     public void addHotel(String propertyId, Player player){
-        if(!hasField(propertyId)) throw new IllegalFieldException("Invalid field name: " + propertyId);
+        if(!hasField(propertyId)) throw new IllegalFieldException(INVALID_FIELD_NAME + propertyId);
         Field field = this.properties.get(propertyId);
-        if(!(field instanceof PropertyField)) throw new IllegalFieldException("Field is not a PropertyField");
+        if(!(field instanceof PropertyField)) throw new IllegalFieldException(FIELD_IS_NOT_A_PROPERTY_FIELD);
         player.setCapital(player.getCapital()-((PropertyField) field).getRent().getPriceHouseOrHotel());
         ((PropertyField) field).addHotel();
     }
