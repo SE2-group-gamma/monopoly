@@ -17,11 +17,9 @@ public class ClientHandler extends Thread{
 
     private String hostname;
     private Client client;
-    private String clientName;
     public ArrayList<String> msgBuffer;
 
     public MonopolyServer server;
-    private boolean playerActive;
 
     public void setSocket(Socket socket) {
         this.socket = socket;
@@ -49,12 +47,8 @@ public class ClientHandler extends Thread{
         this.socket=socket;
         this.client=client;
         this.msgBuffer=new ArrayList<>();
-        this.playerActive=true;
     }
 
-    public String getClientName() {
-        return clientName;
-    }
 
     public Socket getSocket() {
         return socket;
@@ -71,7 +65,7 @@ public class ClientHandler extends Thread{
             this.bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             while(true){
                 replacer();
-                msgBuffer();
+                readMsgBuffer();
 
             }
         } catch (IOException e){
@@ -106,7 +100,7 @@ public class ClientHandler extends Thread{
         }
     }
 
-    public void msgBuffer(){
+    public void readMsgBuffer(){
         synchronized (msgBuffer) {
             if (msgBuffer.size() != 0) {
                 for (int i = msgBuffer.size() - 1; i >= 0; i--) {
