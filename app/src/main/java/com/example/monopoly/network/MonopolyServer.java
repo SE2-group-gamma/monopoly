@@ -94,9 +94,6 @@ public class MonopolyServer extends Thread{
                 clientHandler.setServer(this);
                 count++;
 
-                String message = "#" + count + " from "
-                        + socket.getInetAddress() + ":"
-                        + socket.getPort() + "\n";
             } catch (SocketException e) {
                 if (!serverSocket.isClosed()) {
                     Log.e("MonopolyServer", "Error accepting socket connection", e);
@@ -162,7 +159,4 @@ public class MonopolyServer extends Thread{
 
     }
 
-    //for testing
-    public void setNSDClient(NSD_Client mockNSDClient) {
-    }
 }
