@@ -156,8 +156,6 @@ public class HostGame extends Fragment {
                 } catch (IOException e) {
                     Log.e("MonopolyServer", "Server creation failed");
                 }
-
-                // TODO: create Lobby with key here (Server Side)
                 ms.start();
 
                 try {
@@ -178,9 +176,6 @@ public class HostGame extends Fragment {
 
                 Player player = new Player(user, new Color(),1500.00,true);
 
-
-                //Client c = new Client(null,0,player);
-                //Client c = new Client(ms.getClients().get(0).getClient().getInetAddress(),ms.getClients().get(0).getClient().getPort(),player);
 
                 while(!nsd.isReady()){
                     try {
@@ -210,9 +205,6 @@ public class HostGame extends Fragment {
                     throw new RuntimeException(e);
                 }
 
-                //Bundle bundle = new Bundle();
-                //bundle.putParcelable("server", (Parcelable) ms);
-
                 NavHostFragment.findNavController(HostGame.this)
                         .navigate(R.id.action_HostGame_to_Lobby);
             }
@@ -241,14 +233,7 @@ public class HostGame extends Fragment {
             width -= seekBar.getThumbOffset();
         }
         int val = (progress * (width - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
-        /*
-        Log.d("seekbarWidth",""+width);
-        Log.d("seekbarThumbOffset",""+seekBar.getThumbOffset());
-        Log.d("seekbarMax",""+seekBar.getMax());
-        Log.d("val",""+val);
-        Log.d("getX",""+seekBar.getX());
-        Log.d("setX",""+ (seekBar.getX() + val + seekBar.getThumbOffset() / 2));
-        */
+
         if(seekBar.equals(binding.seekBar)){
             textView.setText("" + (progress+2));
         }else if(progress==10){

@@ -45,7 +45,6 @@ public class JoinGame extends Fragment {
                 .navigate(R.id.action_JoinGame_to_FirstFragment));
 
         binding.joinButton.setOnClickListener(view12 -> {
-            // TODO: join into Lobby (Client Side)
             String user = binding.userInput.getText().toString();
             String keyString = binding.keyInput.getText().toString();
 

@@ -27,9 +27,6 @@ public class Lobby extends Fragment {
 
     private LobbyBinding binding;
 
-    private int key;
-    private String lobbyname;
-    private Game game;
     private Client client;
     private ClientViewModel clientViewModel;
 
@@ -38,8 +35,6 @@ public class Lobby extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
-        Client.subscribe(this,"GameBoardUI");
-
     }
 
     private ChanceCardCollection chanceCards;
@@ -72,7 +67,6 @@ public class Lobby extends Fragment {
             @Override
             public void onGlobalLayout() {
                 MonopolyServer x = HostGame.getMonopolyServer();
-                // TODO: Set textView with key from Lobby
             }
 
         });

@@ -58,7 +58,7 @@ public class DiceFragment extends Fragment implements SensorEventListener {
      *
      * @return A new instance of fragment DiceFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static DiceFragment newInstance() {
         DiceFragment fragment = new DiceFragment();
         Bundle args = new Bundle();

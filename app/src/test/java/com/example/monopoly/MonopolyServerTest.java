@@ -6,17 +6,26 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import com.example.monopoly.network.Client;
 import com.example.monopoly.network.ClientHandler;
 import com.example.monopoly.network.MonopolyServer;
+import com.example.monopoly.ui.NSD_Client;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -32,8 +41,8 @@ import java.util.Random;
 
 public class MonopolyServerTest {
     ServerSocket serverSocket;
+    @Mock
     Socket socket;
-
 
     private MonopolyServer initServer(int maxNumOfClients){
         MonopolyServer ms = null;
@@ -97,5 +106,43 @@ public class MonopolyServerTest {
         assertEquals(numOfClients, ms.getNumberOfClients());
 
     }
+    @Test
+    public void closeConnectionsAndShutdownTest() throws IOException {
+        MonopolyServer ms = initServer(1);
+        assertNotNull(ms);
+        ms.start();
+        while (ms.isAlive()) ;
+        ClientHandler clientHandler = ms.getClients().get(0);
+        assertNotNull(clientHandler);
+
+        Socket mockSocket = mock(Socket.class);
+        doNothing().when(mockSocket).close();
+        NSD_Client mockNSDClient = mock(NSD_Client.class);
+        ms.setNSDClient(mockNSDClient);
+
+        ms.closeConnectionsAndShutdown();
+
+        verify(mockSocket, never()).close();
+        assertEquals(0, ms.getNumberOfClients());
+
+    }
+    @Test
+    public void closeClientConnectionTest() throws IOException {
+        Socket mockSocket = mock(Socket.class);
+
+        MonopolyServer ms = initServer(1);
+        ClientHandler clientHandler = new ClientHandler(mockSocket);
+        NSD_Client mockNSDClient = mock(NSD_Client.class);
+        ms.setNSDClient(mockNSDClient);
+
+        doNothing().when(mockSocket).close();
+        doNothing().when(mockNSDClient).stopDiscovery();
+
+        ms.closeClientConnection();
+        clientHandler.getSocket().close();
+
+        verify(mockSocket, times(1)).close();
+    }
+
 
 }
