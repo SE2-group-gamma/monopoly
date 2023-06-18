@@ -32,6 +32,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Client extends Thread {
+    private static final String GAME_BOARD_UI_CHANGE_CAPITAL = "GameBoardUI|changeCapital|";
+    private static final String WATER_WORKS = "water_works";
+    private static final String KELAG = "kelag";
     private InetAddress host;
     private int id;     //Useless I think
     private int port;
@@ -79,16 +82,8 @@ public class Client extends Thread {
 
     private ArrayList<String> lobbyref = new ArrayList<String>();
 
-    public MonopolyServer getMonopolyServer() {
-        return monopolyServer;
-    }
-
     public void setMonopolyServer(MonopolyServer monopolyServer) {
         this.monopolyServer = monopolyServer;
-    }
-
-    public boolean isGameover() {
-        return gameover;
     }
 
     public void setGameover(boolean gameover) {
@@ -149,10 +144,6 @@ public class Client extends Thread {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getIdClient() {
-        return id;
     }
 
     public void setRequest(String request) {
@@ -348,7 +339,7 @@ public class Client extends Thread {
                 int money = Integer.parseInt(dataResponseSplit[0]);
                 double capital = player.getCapital();
                 player.setCapital(capital + money);
-                monopolyServer.broadCast("GameBoardUI|changeCapital|" + responseSplit[2] + "|" + responseSplit[3]);
+                monopolyServer.broadCast(GAME_BOARD_UI_CHANGE_CAPITAL + responseSplit[2] + "|" + responseSplit[3]);
             }
             if (responseSplit[1].equals("gameStart")) {
                 turnProcess();
@@ -373,18 +364,18 @@ public class Client extends Thread {
                         monopolyServer.broadCast("GameBoardUI|uncoverUsed|t:"+this.lastPlayerMoved+"|"+responseSplit[3]);   // punish success
 
                         punished.setCapital(punished.getCapital()-200);
-                        monopolyServer.broadCast("GameBoardUI|changeCapital|-200|"+this.lastPlayerMoved);
+                        monopolyServer.broadCast(GAME_BOARD_UI_CHANGE_CAPITAL + "-200|" +this.lastPlayerMoved);
 
                         punisher.setCapital(punisher.getCapital()+200);
-                        monopolyServer.broadCast("GameBoardUI|changeCapital|200|"+responseSplit[3]);
+                        monopolyServer.broadCast(GAME_BOARD_UI_CHANGE_CAPITAL + "200|" +responseSplit[3]);
                     } else {                                    // punish sender
                         monopolyServer.broadCast("GameBoardUI|uncoverUsed|f:"+this.lastPlayerMoved+"|"+responseSplit[3]);   // punish failed
 
                         punished.setCapital(punished.getCapital()+200);
-                        monopolyServer.broadCast("GameBoardUI|changeCapital|200|"+this.lastPlayerMoved);
+                        monopolyServer.broadCast(GAME_BOARD_UI_CHANGE_CAPITAL + "200|" +this.lastPlayerMoved);
 
                         punisher.setCapital(punisher.getCapital()-200);
-                        monopolyServer.broadCast("GameBoardUI|changeCapital|-200|"+responseSplit[3]);
+                        monopolyServer.broadCast(GAME_BOARD_UI_CHANGE_CAPITAL + "-200|" +responseSplit[3]);
                     }
                 } catch (Exception e) {
 
@@ -399,7 +390,7 @@ public class Client extends Thread {
 
                 player.setCapital(capital + money);
 
-                monopolyServer.broadCast("GameBoardUI|changeCapital|" + responseSplit[2] + "|" + responseSplit[3]);
+                monopolyServer.broadCast(GAME_BOARD_UI_CHANGE_CAPITAL + responseSplit[2] + "|" + responseSplit[3]);
 
             }
             if (responseSplit[1].equals("checkRent")) {
@@ -432,27 +423,27 @@ public class Client extends Thread {
                         player.setCapital(capital * 0.9);
                         newCapital = (int) (capital * 0.1);
                     }
-                    monopolyServer.broadCast("GameBoardUI|changeCapital|-"+newCapital+"|" + responseSplit[3]);
+                    monopolyServer.broadCast(GAME_BOARD_UI_CHANGE_CAPITAL + "-" +newCapital+"|" + responseSplit[3]);
                 }
                 if(Objects.equals(fieldName, "luxury_tax")){
                     double capital = player.getCapital();
                     player.setCapital(capital - 75);
-                    monopolyServer.broadCast("GameBoardUI|changeCapital|-"+75+"|" + responseSplit[3]);
+                    monopolyServer.broadCast(GAME_BOARD_UI_CHANGE_CAPITAL + "-" +75+"|" + responseSplit[3]);
                 }
 
                 if(propertyStorage.hasField(fieldName)){
                     int rent = 0;
-                    if((Objects.equals(fieldName, "water_works") || Objects.equals(fieldName, "kelag")) && propertyStorage.getOwner("water_works")!=null && propertyStorage.getOwner("water_works").equals(propertyStorage.getOwner("kelag"))){
+                    if((Objects.equals(fieldName, WATER_WORKS) || Objects.equals(fieldName, KELAG)) && propertyStorage.getOwner(WATER_WORKS)!=null && propertyStorage.getOwner(WATER_WORKS).equals(propertyStorage.getOwner(KELAG))){
                         rent = fieldsToMove*10;
                     }
-                    else if(Objects.equals(fieldName, "water_works")){
-                        if(propertyStorage.getOwner("water_works")!=null){
+                    else if(Objects.equals(fieldName, WATER_WORKS)){
+                        if(propertyStorage.getOwner(WATER_WORKS)!=null){
                             rent = fieldsToMove*4;
                         } else{
                             rent = 0;
                         }
-                    } else if (Objects.equals(fieldName, "kelag")) {
-                        if(propertyStorage.getOwner("kelag")!=null){
+                    } else if (Objects.equals(fieldName, KELAG)) {
+                        if(propertyStorage.getOwner(KELAG)!=null){
                             rent = fieldsToMove*4;
                         } else{
                             rent = 0;
@@ -472,7 +463,7 @@ public class Client extends Thread {
                                 double capitalOwner = owner.getCapital();
                                 owner.setCapital(capitalOwner + rent);
                                 rent=rent*(-1);
-                                monopolyServer.broadCast("GameBoardUI|changeCapital|" + rent + ":"+playerOwner+"|" + responseSplit[3]);
+                                monopolyServer.broadCast(GAME_BOARD_UI_CHANGE_CAPITAL + rent + ":"+playerOwner+"|" + responseSplit[3]);
                             }
                         }
                     }
