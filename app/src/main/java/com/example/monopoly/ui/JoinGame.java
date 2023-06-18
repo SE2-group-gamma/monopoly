@@ -24,6 +24,7 @@ import com.example.monopoly.ui.viewmodels.ClientViewModel;
 
 public class JoinGame extends Fragment {
 
+    private static final String NO_INPUT = "No Input";
     private JoinGameBinding binding;
     private ClientViewModel clientViewModel;
 
@@ -51,12 +52,12 @@ public class JoinGame extends Fragment {
             int key = Integer.parseInt(keyString);
 
             if (user.isEmpty() && key == 0) {
-                binding.userInput.setError("No Input");
-                binding.keyInput.setError("No Input");
+                binding.userInput.setError(NO_INPUT);
+                binding.keyInput.setError(NO_INPUT);
             } else if (user.isEmpty()) {
-                binding.userInput.setError("No Input");
+                binding.userInput.setError(NO_INPUT);
             } else if (key == 0) {
-                binding.keyInput.setError("No Input");
+                binding.keyInput.setError(NO_INPUT);
             } else if (key < 1000 || key > 9999) {
                 binding.keyInput.setError("Not a valid Key");
             } else {
