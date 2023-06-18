@@ -55,40 +55,39 @@ public class DrawCardFragment extends Fragment {
             throw new RuntimeException(e);
         }
 
-        if (buttonClicked == false) {
-            Handler handler = new Handler(Looper.getMainLooper());
-            this.cardViewModel.setChanceCards(this.chanceCards);
-            this.cardViewModel.setCommunityCards(this.communityCards);
 
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    NavHostFragment.findNavController(DrawCardFragment.this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
-                }
-            };
-            handler.postDelayed(runnable, 5000);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+      
+        binding.buttonContinueDrawCard.setOnClickListener(view -> {
+
+            NavHostFragment.findNavController(DrawCardFragment.this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
             try {
                 clientViewModel.getClientData().getValue().doAction();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        binding.buttonContinueDrawCard.setOnClickListener(view -> {
-            buttonClicked = true;
-            this.cardViewModel.setChanceCards(this.chanceCards);
-            this.cardViewModel.setCommunityCards(this.communityCards);
-            NavHostFragment.findNavController(this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
-            try {
-                clientViewModel.getClientData().getValue().doAction();
-                } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
         });
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (DrawCardFragment.this.getActivity().findViewById(R.id.buttonContinueDrawCard) != null) {
+                    NavHostFragment.findNavController(DrawCardFragment.this).navigate(R.id.action_DrawCardFragment_to_GameBoardUI);
+                }
+
+            }
+        };
+        handler.postDelayed(runnable, 5000);
+        try {
+            clientViewModel.getClientData().getValue().doAction();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         return this.binding.getRoot();
     }
 
@@ -129,6 +128,9 @@ public class DrawCardFragment extends Fragment {
             cardId = R.drawable.chance6;
         }
 
+        this.cardViewModel.setChanceCards(this.chanceCards);
+        this.cardViewModel.setCommunityCards(this.communityCards);
+
         binding.ImageCard.setImageResource(cardId);
         clientViewModel.getClientData().getValue().getUser().setCardID(cardId);
     }
@@ -153,6 +155,9 @@ public class DrawCardFragment extends Fragment {
         if (cardId == R.drawable.community5){
             cardId = R.drawable.community15;
         }
+        this.cardViewModel.setChanceCards(this.chanceCards);
+        this.cardViewModel.setCommunityCards(this.communityCards);
+
         binding.ImageCard.setImageResource(cardId);
         clientViewModel.getClientData().getValue().getUser().setCardID(cardId);
     }
