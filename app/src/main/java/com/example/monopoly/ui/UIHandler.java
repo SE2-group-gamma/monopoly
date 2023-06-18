@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class UIHandler extends Handler {
+    private static final String CURRENT_MONEY = "Current Money \n";
     private Fragment frag;
     private int counter = 1;
 
@@ -99,7 +100,7 @@ public class UIHandler extends Handler {
         if (uiHandlerViewModel.getPlayerPositionX().getValue() != null) {
             playersX = uiHandlerViewModel.getPlayerPositionX().getValue();
             playersY = uiHandlerViewModel.getPlayerPositionY().getValue();
-            Log.d("hostPosition", "X Pos: " + playersX[1] + "; Y Pos: " + playersY[1]);
+
         }
         if (uiHandlerViewModel.getCurrentMoney().getValue() != null) {
             currentMoney = uiHandlerViewModel.getCurrentMoney().getValue();
@@ -200,12 +201,12 @@ public class UIHandler extends Handler {
                 if (data.equals("1")&&client.equals(this.clientObj.getUser().getUsername())) {
                     NavHostFragment.findNavController(frag).navigate(R.id.action_JoinGame_to_Lobby);
                 } else {
-                    Log.d("", "gib toast");
+
                     Toast.makeText(this.frag.getActivity(), "Key rejected", Toast.LENGTH_LONG).show();
                 }
                 break;
             case "gameStart":
-                Log.d("------------", "gameStart");
+
                 Bundle bundle = new Bundle();
                 bundle.putString("client", client);
                 Log.i("Dices", "gameStart!!!!!");
@@ -221,12 +222,7 @@ public class UIHandler extends Handler {
 
                 break;
             case "initializePlayerBottomRight1":
-                Log.d("------------", "initializePlayerBottomRight");
 
-                Log.d("hostPosition", "Initialize Host");
-
-                Log.d("playerCount","I am "+client);
-                Log.d("playerCount","I am with obj "+clientObj.getUser().getUsername());
                 if (uiHandlerViewModel.getCheckFirst().getValue()) {
 
                     gameBoardUIViewModel.setUncoverEnabled(this.frag.getActivity().findViewById(R.id.uncover).isEnabled());     // save uncover status on first turn
@@ -240,7 +236,7 @@ public class UIHandler extends Handler {
                     heightRatio = layerDrawable.getMinimumHeight() / (double) 21000;
                     widthRatio = layerDrawable.getMinimumWidth() / (double) 21000;
 
-                    Log.d("gameTurnCheck", layerDrawable.getMinimumHeight() + "");
+
 
                     playersX[1] = (double) 1100 * widthRatio;
                     playersX[2] = (double) 1100 * widthRatio;
@@ -262,7 +258,7 @@ public class UIHandler extends Handler {
 
                     uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
 
-                    Log.d("hostPosition", "Host redraw at start");
+
 
 
                     layerDrawable.setLayerGravity(player1, playerGravity[1]);
@@ -279,7 +275,7 @@ public class UIHandler extends Handler {
                     layerDrawable.setLayerInset(player5, 0, 0, (int) playersX[5], (int) playersY[5]);
                     layerDrawable.setLayerInset(player6, 0, 0, (int) playersX[6], (int) playersY[6]);
 
-                    Log.d("------------", "initializePlayerBottomRightFinished");
+
 
                     setPlayerPositions();
 
@@ -288,7 +284,7 @@ public class UIHandler extends Handler {
                     uiHandlerViewModel.setCheckFirst(false);
                 } else {
                     restore();
-                    Log.d("gameTurnCheck", "I restored: " + clientObj.getUser().getUsername());
+
                 }
 
                 break;
@@ -300,7 +296,7 @@ public class UIHandler extends Handler {
                 break;
             case "setPlayerCount":
                 int playerCount = Integer.parseInt(data);
-                Log.d("playerCount",""+playerCount);
+
 
                 if(layerDrawable==null)
                     return;
@@ -329,7 +325,7 @@ public class UIHandler extends Handler {
                         player3Drawable.setAlpha(0);
                         break;
                     default:
-                        Log.d("playerCount",""+playerCount);
+
                 }
                 break;
             case "changeCapital":
@@ -337,7 +333,7 @@ public class UIHandler extends Handler {
                     currentMoney = uiHandlerViewModel.getCurrentMoney().getValue();
                     int payedMoney = Integer.parseInt(data.split(":")[0]);
                     int money = currentMoney + payedMoney;
-                    Log.d("checkRent"," moneyFromPlayer "+money);
+
                     uiHandlerViewModel.setCurrentMoney(money);
                     if (((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null) {
                         if(payedMoney<0){
@@ -346,22 +342,21 @@ public class UIHandler extends Handler {
                         }else{
                             Toast.makeText(this.frag.getActivity(), "You just received " + payedMoney + "$", Toast.LENGTH_SHORT).show();
                         }
-                        ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n" + money + "$");
+                        ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText(CURRENT_MONEY + money + "$");
                     }
-                    Log.d("MoneyPlayer", "" + money);
-                    Log.d("MoneyPlayer", "" + client);
+
                 }
                 String[] playerArray = data.split(":");
                 if(playerArray.length==2){
                     if (clientObj.getUser().getUsername().equals(playerArray[1])) {
                         int receivedMoney = Integer.parseInt(data.split(":")[0]);
                         int money = currentMoney - receivedMoney;
-                        Log.d("checkRent"," moneyFromOwner "+money);
+
                         uiHandlerViewModel.setCurrentMoney(money);
                         if (((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null) {
                             receivedMoney = receivedMoney * (-1);
                             Toast.makeText(this.frag.getActivity(), "You just received " + receivedMoney + "$", Toast.LENGTH_SHORT).show();
-                            ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n" + money + "$");
+                            ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText(CURRENT_MONEY + money + "$");
                         }
                     }
                 }
@@ -369,7 +364,6 @@ public class UIHandler extends Handler {
                 break;
             case "uncoverUsed":
                 gameBoardUIViewModel.setUncoverEnabled(false);
-
 
                 String[] dataResponseSplit = data.split(":");
 
@@ -388,25 +382,21 @@ public class UIHandler extends Handler {
                     movePlayer(data);   // disable ui and viewModel entries
                 }
 
-                Log.d("move", data); //Data for move distance and player name
+                 //Data for move distance and player name
                 String[] dataResponse = data.split(":");
                 int fieldsToMove = Integer.parseInt(dataResponse[0]);
 
-
-
                 for (int playerNumber = 1; playerNumber <= 6; playerNumber++) {
                     if (Objects.equals(playerObjects.get(playerNumber), client)) {
-                        Log.d("CURRENT POSITION X ", "" + uiHandlerViewModel.getPlayerPositionX().getValue()[playerNumber]);
-                        Log.d("CURRENT POSITION Y ", "" + uiHandlerViewModel.getPlayerPositionY().getValue()[playerNumber]);
+
                         int positionBefore = currentPosition[playerNumber];
                         currentPosition[playerNumber] = currentPosition[playerNumber] + fieldsToMove;
-                        Log.d("--", "" + currentPosition[playerNumber]);
+
                         if (currentPosition[playerNumber] >= 40) {
-                            Log.d("playerNumber: ", "" + playerNumber);
 
                             currentPosition[playerNumber] = currentPosition[playerNumber] - 40;
                             if (playerObjects.get(playerNumber).equals(clientObj.getUser().getUsername())) {
-                                Log.d("MoneyPlayer", "client = " + client);
+
                                 try {
                                     clientObj.writeToServer("GameBoardUI|giveMoney|200:|" + clientObj.getUser().getUsername());
                                 } catch (IOException e) {
@@ -414,9 +404,9 @@ public class UIHandler extends Handler {
                                 }
                             }
                         }
-                        Log.d("--", "" + currentPosition[playerNumber]);
+
                         if (playerObjects.get(playerNumber).equals(clientObj.getUser().getUsername())) {
-                            Log.d("MoneyPlayer", "client = " + client);
+
                             try {
                                 clientObj.writeToServer("GameBoardUI|checkRent|"+currentPosition[playerNumber]+":"+fieldsToMove+"|" + clientObj.getUser().getUsername());
                             } catch (IOException e) {
@@ -467,14 +457,14 @@ public class UIHandler extends Handler {
                         } else if (positionBefore >= 20 && currentPosition[playerNumber] <= 30 && currentPosition[playerNumber] > 20) {
                             goFieldTop(imageView, playerNumber, fieldsToMove);
                         } else if (positionBefore >= 20 && currentPosition[playerNumber] > 30 && positionBefore <= 30) {
-                            Log.d("-------------------", "Im here-------------");
+
                             int moveTo = 30 - positionBefore;
-                            Log.d("-------------------", "moveTo" + moveTo);
+
                             goFieldTop(imageView, playerNumber, moveTo);
                             initializePlayerTopRight(imageView, playerNumber);
                             if (currentPosition[playerNumber] > 31 && currentPosition[playerNumber] < 40) {
                                 int move = currentPosition[playerNumber] - 31;
-                                Log.d("-------------------", "move" + move);
+
                                 goFieldRight(imageView, playerNumber, move);
                             }
                         } else if (positionBefore <= 30 && currentPosition[playerNumber] < 5) {
@@ -502,8 +492,6 @@ public class UIHandler extends Handler {
                         }
                     }
                 }
-                Log.d("gameTurnCheck", "Host move to: " +
-                        layerDrawable.getLayerInsetRight(1));
 
                 gameBoardUIViewModel.setUncoverEnabled(true);
 
@@ -541,9 +529,9 @@ public class UIHandler extends Handler {
                 }
                 ((TextView) this.frag.getActivity().findViewById(R.id.turn)).setText(data + "'s turn");
 
-                Log.d("ButtonGreyCheck", "Here is Button" + this.clientObj.getUser().getUsername());
+
                 if (data.equals(this.clientObj.getUser().getUsername())) {     // your turn
-                    Log.d("ButtonGreyCheck2", "VERY NICE INDEED");
+
                     this.frag.getActivity().findViewById(R.id.throwdice).setAlpha(1.0f);
                     this.frag.getActivity().findViewById(R.id.throwdice).setEnabled(true);
                     this.frag.getActivity().findViewById(R.id.endTurn).setAlpha(1.0f);
@@ -594,7 +582,7 @@ public class UIHandler extends Handler {
                 break;
 
             case "setWinners2":
-                Log.d("revCount", "heyUser" + data);
+
                 ((TextView) this.frag.getActivity().findViewById(R.id.w2)).setText(data);
                 this.frag.getActivity().findViewById(R.id.w2).setVisibility(View.VISIBLE);
                 this.frag.getActivity().findViewById(R.id.bar2).setVisibility(View.VISIBLE);
@@ -611,7 +599,7 @@ public class UIHandler extends Handler {
                 break;
 
             case "endFrag":
-                Log.d("revCount", "heyEnd");
+
                 NavHostFragment.findNavController(this.frag).navigate(R.id.move_to_EndGameFragment);
                 break;
             case "updateHouse":
@@ -649,8 +637,8 @@ public class UIHandler extends Handler {
     public void setPlayerPositions() {
         uiHandlerViewModel.setPlayerPositionX(playersX);
         uiHandlerViewModel.setPlayerPositionY(playersY);
-        Log.d("CURRENT POSITION X in setPlayer ", "" + uiHandlerViewModel.getPlayerPositionX().getValue()[1]);
-        Log.d("CURRENT POSITION Y in setPlayer ", "" + uiHandlerViewModel.getPlayerPositionY().getValue()[1]);
+
+
     }
 
     public void initializePlayerBottomRight(ImageView imageView, int player) {
@@ -685,16 +673,16 @@ public class UIHandler extends Handler {
 
         goOneSmallField = (double) 1700 * widthRatio;
 
-        Log.d("CURRENT playersX before", "" + playersX[player]);
+
         playersX[player] = playersX[player] + (goOneSmallField * move);
-        Log.d("CURRENT playersX after", "" + playersX[player]);
+
         playerGravity[player] = Gravity.BOTTOM | Gravity.RIGHT;
         uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
 
-        Log.d("------------", "" + player);
-        Log.d("---playersXAfter---", "" + playersX[player]);
-        Log.d("---playersYAfter---", "" + playersY[player]);
-        Log.d("------------", "goLeftBottomMethod");
+
+
+
+
 
         setPlayerPositions();
     }
@@ -723,9 +711,9 @@ public class UIHandler extends Handler {
             playersY[player] = playersY[player] + initializeLeftY;
             playerGravity[player] = Gravity.BOTTOM | Gravity.RIGHT;
             uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
-            Log.d("---x---", "" + player);
-            Log.d("---playersXAfter---", "" + playersX[player]);
-            Log.d("---playersYAfter---", "" + playersY[player]);
+
+
+
         }
 
         setPlayerPositions();
@@ -738,7 +726,7 @@ public class UIHandler extends Handler {
         goOneSmallField = (double) 1700 * widthRatio;
 
         playersY[player] = playersY[player] + (goOneSmallField * move);
-        Log.d("------MOVING--", "" + move);
+
         playerGravity[player] = Gravity.BOTTOM | Gravity.RIGHT;
         uiHandlerViewModel.setPlayerGravityLiveData(playerGravity);
 
@@ -839,15 +827,13 @@ public class UIHandler extends Handler {
     }
 
     private void restore() {
-        Log.d("MoneyPlayer", "I am: " + clientObj.getUser().getUsername());
-        Log.d("MoneyPlayer", "curr money: " + currentMoney);
 
         if (this.frag.getActivity().findViewById(R.id.currentMoney) == null)            //check if open
             return;
 
         currentMoney = uiHandlerViewModel.getCurrentMoney().getValue();
 
-        ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n" + currentMoney + "$");
+        ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText(CURRENT_MONEY + currentMoney + "$");
         ((TextView) this.frag.getActivity().findViewById(R.id.turn)).setText(gameBoardUIViewModel.getCurrentPlayer().getValue());
 
         /**

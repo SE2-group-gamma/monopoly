@@ -31,16 +31,14 @@ import java.text.DecimalFormatSymbols;
 
 public class HostGame extends Fragment {
 
+    private static final String NO_INPUT = "No Input";
     private HostGameBinding binding;
     private static MonopolyServer ms;
 
     public static int key = 0;
     public static String lobbyname = " ";
     private ClientViewModel clientViewModel;
-    private static Game game;
-
     private static int maxTimeMin;
-
     private static int playerCount;
 
     @Override
@@ -57,24 +55,12 @@ public class HostGame extends Fragment {
         return ms;
     }
 
-    public static Game getGame() {
-        return game;
-    }
-
     public static int getMaxTimeMin() {
         return maxTimeMin;
     }
 
-    public static void setMaxTimeMin(int maxTimeMin) {
-        HostGame.maxTimeMin = maxTimeMin;
-    }
-
     public static int getPlayerCount() {
         return playerCount;
-    }
-
-    public static void setPlayerCount(int playerCount) {
-        HostGame.playerCount = playerCount;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -135,13 +121,13 @@ public class HostGame extends Fragment {
             maxTimeMin = (binding.seekBar2.getProgress()*5)+10;
             Log.d("MaxTimeCheck", "Look here !!"+maxTimeMin);
             if(user.isEmpty() && lobby.isEmpty()){
-                binding.userInput.setError("No Input");
-                binding.lobbyInput.setError("No Input");
+                binding.userInput.setError(NO_INPUT);
+                binding.lobbyInput.setError(NO_INPUT);
             }
             else if(user.isEmpty()){
-                binding.userInput.setError("No Input");
+                binding.userInput.setError(NO_INPUT);
             } else if (lobby.isEmpty()) {
-                binding.lobbyInput.setError("No Input");
+                binding.lobbyInput.setError(NO_INPUT);
             } else {
                 LobbyKey lobbyKey = new LobbyKey();
                 key = lobbyKey.generateKey();

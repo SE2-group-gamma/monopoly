@@ -123,7 +123,7 @@ class ClientHandlerTest {
         msgBuffer.add("Test|testMessage2");
         msgBuffer.add("Test|testMessage3");
 
-        clientHandler.msgBuffer();
+        clientHandler.readMsgBuffer();
         verify(bw).write("Test|testMessage3" + System.lineSeparator());
         verify(bw).write("Test|testMessage2" + System.lineSeparator());
         verify(bw).write("Test|testMessage1" + System.lineSeparator());

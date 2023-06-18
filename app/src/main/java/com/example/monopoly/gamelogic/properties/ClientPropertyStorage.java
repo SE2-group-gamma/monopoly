@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ClientPropertyStorage {
+    private static final String INVALID_FIELD_ID = "Invalid field id";
+    private static final String FIELD_IS_NOT_A_PROPERTY_FIELD = "Field is not a property field";
     private HashMap<String, Field> properties;
     private static ClientPropertyStorage instance;
 
@@ -67,21 +69,21 @@ public class ClientPropertyStorage {
     }
 
     public Field getProperty(String id){
-        if(!this.properties.containsKey(id)) throw new IllegalFieldException("Invalid field id");
+        if(!this.properties.containsKey(id)) throw new IllegalFieldException(INVALID_FIELD_ID);
         return this.properties.get(id);
     }
 
     public void addHouse(String id){
-        if(!this.properties.containsKey(id)) throw new IllegalFieldException("Invalid field id");
+        if(!this.properties.containsKey(id)) throw new IllegalFieldException(INVALID_FIELD_ID);
         Field f = properties.get(id);
-        if(!(f instanceof PropertyField)) throw new IllegalFieldException("Field is not a property field");
+        if(!(f instanceof PropertyField)) throw new IllegalFieldException(FIELD_IS_NOT_A_PROPERTY_FIELD);
         ((PropertyField) f).addHouse();
     }
 
     public void addHotel(String id){
-        if(!this.properties.containsKey(id)) throw new IllegalFieldException("Invalid field id");
+        if(!this.properties.containsKey(id)) throw new IllegalFieldException(INVALID_FIELD_ID);
         Field f = properties.get(id);
-        if(!(f instanceof PropertyField)) throw new IllegalFieldException("Field is not a property field");
+        if(!(f instanceof PropertyField)) throw new IllegalFieldException(FIELD_IS_NOT_A_PROPERTY_FIELD);
         ((PropertyField) f).addHotel();
     }
 
