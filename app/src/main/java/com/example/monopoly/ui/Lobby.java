@@ -35,8 +35,6 @@ public class Lobby extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         clientViewModel = new ViewModelProvider(requireActivity()).get(ClientViewModel.class);
-        Client.subscribe(this,"GameBoardUI");
-
     }
 
     private ChanceCardCollection chanceCards;

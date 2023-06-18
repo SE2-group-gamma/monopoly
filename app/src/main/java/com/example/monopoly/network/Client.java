@@ -567,7 +567,7 @@ public class Client extends Thread {
     public void setRanks(int maxPlayers) {
             int revCounter = maxPlayers;
             for (Player player : this.playerList) {
-                if ((player.getCapital() < 0 && player.isBroke() == false && winnerList.size() < maxPlayers - 1)) {
+                if ((player.getCapital() <= 0 && player.isBroke() == false && winnerList.size() < maxPlayers - 1)) {
                     player.setBroke(true);
                     this.winnerList.add(player);
                     if (winnerList.size() == maxPlayers - 1) {

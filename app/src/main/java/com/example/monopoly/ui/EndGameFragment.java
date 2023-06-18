@@ -23,8 +23,6 @@ public class EndGameFragment extends Fragment {
 
     private MonopolyServer monopolyServer = HostGame.getMonopolyServer();
     private NSD_Client nsdClient = new NSD_Client();
-    private Socket socket;
-    private ClientHandler clientHandler;
 
     public EndGameFragment() {
         // Required empty public constructor
@@ -52,10 +50,7 @@ public class EndGameFragment extends Fragment {
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                socket=new Socket();
-                clientHandler=new ClientHandler(socket);
-                Navigation.findNavController(v).navigate(R.id.FirstFragment);
-                monopolyServer.closeClientConnection();
+                System.exit(0);
             }
         });
 
@@ -69,12 +64,6 @@ public class EndGameFragment extends Fragment {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        if(HostGame.getMonopolyServer() != null){
-            monopolyServer.closeConnectionsAndShutdown();
-            monopolyServer.closeClientConnection();
-            nsdClient.stopDiscovery();
-        }
-
     }
 
 }

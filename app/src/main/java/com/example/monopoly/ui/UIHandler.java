@@ -334,6 +334,7 @@ public class UIHandler extends Handler {
                 break;
             case "changeCapital":
                 if (clientObj.getUser().getUsername().equals(client)) {
+                    currentMoney = uiHandlerViewModel.getCurrentMoney().getValue();
                     int payedMoney = Integer.parseInt(data.split(":")[0]);
                     int money = currentMoney + payedMoney;
                     Log.d("checkRent"," moneyFromPlayer "+money);
