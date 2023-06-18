@@ -80,15 +80,6 @@ public class MonopolyServer extends Thread{
         }
     }
 
-    public void broadCastExceptSelf(String msg, ClientHandler hostHandler){
-        synchronized (this.clients) {
-            for (ClientHandler clientHandler : clients) {
-                if(hostHandler != clientHandler)
-                    clientHandler.writeToClient(msg);
-            }
-        }
-    }
-
     @Override
     public void run() {
         this.isListening = true;
