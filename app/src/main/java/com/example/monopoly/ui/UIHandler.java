@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class UIHandler extends Handler {
+    private static final String CURRENT_MONEY = "Current Money \n";
     private Fragment frag;
     private int counter = 1;
 
@@ -222,11 +223,6 @@ public class UIHandler extends Handler {
                 break;
             case "initializePlayerBottomRight1":
 
-
-
-
-
-
                 if (uiHandlerViewModel.getCheckFirst().getValue()) {
 
                     gameBoardUIViewModel.setUncoverEnabled(this.frag.getActivity().findViewById(R.id.uncover).isEnabled());     // save uncover status on first turn
@@ -346,9 +342,8 @@ public class UIHandler extends Handler {
                         }else{
                             Toast.makeText(this.frag.getActivity(), "You just received " + payedMoney + "$", Toast.LENGTH_SHORT).show();
                         }
-                        ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n" + money + "$");
+                        ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText(CURRENT_MONEY + money + "$");
                     }
-
 
                 }
                 String[] playerArray = data.split(":");
@@ -361,7 +356,7 @@ public class UIHandler extends Handler {
                         if (((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)) != null) {
                             receivedMoney = receivedMoney * (-1);
                             Toast.makeText(this.frag.getActivity(), "You just received " + receivedMoney + "$", Toast.LENGTH_SHORT).show();
-                            ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n" + money + "$");
+                            ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText(CURRENT_MONEY + money + "$");
                         }
                     }
                 }
@@ -369,7 +364,6 @@ public class UIHandler extends Handler {
                 break;
             case "uncoverUsed":
                 gameBoardUIViewModel.setUncoverEnabled(false);
-
 
                 String[] dataResponseSplit = data.split(":");
 
@@ -392,17 +386,13 @@ public class UIHandler extends Handler {
                 String[] dataResponse = data.split(":");
                 int fieldsToMove = Integer.parseInt(dataResponse[0]);
 
-
-
                 for (int playerNumber = 1; playerNumber <= 6; playerNumber++) {
                     if (Objects.equals(playerObjects.get(playerNumber), client)) {
-
 
                         int positionBefore = currentPosition[playerNumber];
                         currentPosition[playerNumber] = currentPosition[playerNumber] + fieldsToMove;
 
                         if (currentPosition[playerNumber] >= 40) {
-
 
                             currentPosition[playerNumber] = currentPosition[playerNumber] - 40;
                             if (playerObjects.get(playerNumber).equals(clientObj.getUser().getUsername())) {
@@ -843,7 +833,7 @@ public class UIHandler extends Handler {
 
         currentMoney = uiHandlerViewModel.getCurrentMoney().getValue();
 
-        ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText("Current Money \n" + currentMoney + "$");
+        ((TextView) this.frag.getActivity().findViewById(R.id.currentMoney)).setText(CURRENT_MONEY + currentMoney + "$");
         ((TextView) this.frag.getActivity().findViewById(R.id.turn)).setText(gameBoardUIViewModel.getCurrentPlayer().getValue());
 
         /**
